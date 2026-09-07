@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/events/app_event_bus.dart';
-import 'package:petrimonium_wallet/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/domain/entities/pet_accessory.dart';
 import 'package:petrimonium_wallet/features/pet/domain/entities/pet_evolution_rule.dart';
 import 'package:petrimonium_wallet/features/pet/domain/entities/pet_profile.dart';

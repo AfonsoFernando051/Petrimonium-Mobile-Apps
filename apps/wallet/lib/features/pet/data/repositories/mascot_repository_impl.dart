@@ -1,7 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium_wallet/features/game/data/datasources/gamification_remote_datasource.dart';
-import 'package:petrimonium_wallet/features/game/domain/entities/gamification_summary.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/data/datasources/pet_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
 import 'package:petrimonium_wallet/features/pet/domain/entities/pet_profile.dart';

@@ -11,9 +11,7 @@ import 'package:petrimonium_academy/features/academy/data/repositories/academy_p
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_academy/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_academy/features/dashboard/presentation/screens/dashboard_screen.dart';
-import 'package:petrimonium_academy/features/game/data/datasources/gamification_remote_datasource.dart';
-import 'package:petrimonium_academy/features/game/data/repositories/gamification_repository.dart';
-import 'package:petrimonium_academy/features/game/domain/entities/gamification_summary.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/portfolio_choice_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_state_repository.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/journey_ready_screen.dart';

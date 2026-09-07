@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium_wallet/core/constants/api_constants.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium_wallet/features/game/data/datasources/gamification_remote_datasource.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 
@@ -35,7 +34,7 @@ void main() {
 
       expect(result['totalXp'], 40);
       expect(result['currentStreak'], 2);
-      verify(() => mockApiClient.get(ApiConstants.gamificationSummaryEndpoint)).called(1);
+      verify(() => mockApiClient.get(GamificationRemoteDataSource.summaryEndpoint)).called(1);
     });
 
     test('throws with the backend detail on a non-200 response', () async {

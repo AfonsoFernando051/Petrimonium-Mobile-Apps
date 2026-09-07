@@ -10,9 +10,7 @@ import 'package:petrimonium_academy/features/academy/presentation/screens/all_mo
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
 import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium_academy/features/game/data/datasources/gamification_remote_datasource.dart';
-import 'package:petrimonium_academy/features/game/data/repositories/gamification_repository.dart';
-import 'package:petrimonium_academy/features/game/domain/entities/gamification_summary.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/home/presentation/screens/home_screen.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/next_action_card.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';

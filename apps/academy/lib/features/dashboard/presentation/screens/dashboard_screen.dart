@@ -13,7 +13,7 @@ import '../../../../core/events/app_event.dart';
 import '../../../../core/events/app_event_bus.dart';
 import '../../../academy/presentation/screens/academy_home_screen.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
-import '../../../game/domain/services/level_calculator.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../pet/presentation/mascot/controllers/mascot_controller.dart';
 import '../../../portfolio/domain/entities/achievement.dart';

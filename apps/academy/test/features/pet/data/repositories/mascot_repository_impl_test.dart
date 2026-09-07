@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium_academy/features/game/data/datasources/gamification_remote_datasource.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/data/datasources/pet_remote_datasource.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
 import 'package:petrimonium_academy/features/pet/data/repositories/mascot_repository_impl.dart';

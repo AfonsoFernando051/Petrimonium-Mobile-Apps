@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   group('LevelCalculator.fromXp', () {

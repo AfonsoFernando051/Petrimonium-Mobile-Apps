@@ -502,6 +502,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0"
+  petrimonium_shared_features:
+    dependency: "direct main"
+    description:
+      path: "../../packages/petrimonium_shared_features"
+      relative: true
+    source: path
+    version: "0.1.0"
   petrimonium_ui:
     dependency: "direct main"
     description:

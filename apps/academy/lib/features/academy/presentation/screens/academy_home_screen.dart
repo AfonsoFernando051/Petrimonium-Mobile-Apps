@@ -17,7 +17,7 @@ import 'package:petrimonium_academy/features/academy/presentation/widgets/academ
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_mastery_section.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_review_card.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/financial_lab_entry_card.dart';
-import 'package:petrimonium_academy/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';

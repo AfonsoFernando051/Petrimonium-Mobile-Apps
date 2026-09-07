@@ -1,5 +1,7 @@
-import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
 
 /// Product-facing tier name for a numeric level (`docs/FEATURES.md`'s
 /// "Levels" target copy table) — presentational only, derived from the real
@@ -7,18 +9,22 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 /// motivational milestone, never a certification of financial competence
 /// (`docs/PRODUCT_VISION.md` §9) — copy must stay generic ("Learner",
 /// "Explorer"...), never imply investing skill.
+///
+/// The tier *boundaries* live in `petrimonium_shared_features` because global
+/// level is one ecosystem-wide number; only the copy is resolved here, through
+/// this product's own string catalog.
 class LevelTitle {
   const LevelTitle._();
 
   static String forLevel(int level) {
-    final key = switch (level) {
-      < 5 => AppStrings.levelTierBeginner,
-      < 10 => AppStrings.levelTierLearner,
-      < 15 => AppStrings.levelTierExplorer,
-      < 20 => AppStrings.levelTierInvestor,
-      < 30 => AppStrings.levelTierAnalyst,
-      < 40 => AppStrings.levelTierStrategist,
-      _ => AppStrings.levelTierSpecialist,
+    final key = switch (LevelTier.forLevel(level)) {
+      LevelTier.beginner => AppStrings.levelTierBeginner,
+      LevelTier.learner => AppStrings.levelTierLearner,
+      LevelTier.explorer => AppStrings.levelTierExplorer,
+      LevelTier.investor => AppStrings.levelTierInvestor,
+      LevelTier.analyst => AppStrings.levelTierAnalyst,
+      LevelTier.strategist => AppStrings.levelTierStrategist,
+      LevelTier.specialist => AppStrings.levelTierSpecialist,
     };
     return Translator.translate(key);
   }

@@ -4,7 +4,7 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/portfolio_choice_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/onboarding_constants.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/mission_reward_card.dart';

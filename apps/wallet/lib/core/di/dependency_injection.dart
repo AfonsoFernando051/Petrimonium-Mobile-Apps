@@ -5,8 +5,7 @@ import 'package:petrimonium_wallet/features/academy/data/repositories/academy_ca
 import 'package:petrimonium_wallet/features/academy/data/repositories/academy_progress_local_repository.dart';
 import 'package:petrimonium_wallet/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium_wallet/features/game/data/datasources/gamification_remote_datasource.dart';
-import 'package:petrimonium_wallet/features/game/data/repositories/gamification_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/datasources/onboarding_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_state_repository.dart';

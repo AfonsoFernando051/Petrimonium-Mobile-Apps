@@ -1,6 +1,6 @@
 import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
-import 'package:petrimonium_academy/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/game/domain/services/level_title.dart';
 import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
 import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';

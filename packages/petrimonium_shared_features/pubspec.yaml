@@ -1,0 +1,20 @@
+name: petrimonium_shared_features
+description: "Feature-level code that is genuinely shared across the Petrimonium products, starting with the ecosystem-wide gamification (XP/level) feature."
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.1
+  petrimonium_flutter_core:
+    path: ../petrimonium_flutter_core
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.3

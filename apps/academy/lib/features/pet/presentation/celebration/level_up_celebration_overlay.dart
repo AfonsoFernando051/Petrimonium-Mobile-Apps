@@ -9,7 +9,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/utils/widget_image_capture.dart';
-import 'package:petrimonium_academy/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/celebration/level_up_share_card.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:share_plus/share_plus.dart';

@@ -3,7 +3,7 @@ import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/game/domain/entities/player_level.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// The self-contained, capturable visual for social sharing (Instagram
 /// story/feed, WhatsApp, etc.) — see `LevelUpCelebrationOverlay`, the only
