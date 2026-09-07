@@ -47,6 +47,13 @@ class Translator {
 
   static const Map<String, Map<String, String>> _localizedValues = {
     'pt': {
+      AppStrings.petSpecieDog: "Cachorro",
+      AppStrings.petSpecieCat: "Gato",
+      AppStrings.petSpecieWolf: "Lobo",
+      AppStrings.petSpecieFox: "Raposa",
+      AppStrings.petSpecieBear: "Urso",
+      AppStrings.petSpecieLion: "Leão",
+      AppStrings.petSpecieOwl: "Coruja",
       AppStrings.welcomeBack: "Bem-vindo de volta",
       AppStrings.loginToContinue: "Faça login para continuar",
       AppStrings.emailOrUserHint: "E-mail ou Usuário",
@@ -732,6 +739,7 @@ class Translator {
     // maior parte da língua, e uma chave em falta não é um buraco de tradução.
     // O teste 'pt_PT só define chaves que pt também define' impede órfãs.
     'pt_PT': {
+      AppStrings.petSpecieDog: "Cão",
       AppStrings.brandTagline: "Aprenda a investir a jogar",
       AppStrings.gamificationIntroCompareRuleBody:
           "O seu progresso é só seu. Não existe ranking de património ou retorno aqui.",
@@ -759,6 +767,13 @@ class Translator {
     },
 
     'en': {
+      AppStrings.petSpecieDog: "Dog",
+      AppStrings.petSpecieCat: "Cat",
+      AppStrings.petSpecieWolf: "Wolf",
+      AppStrings.petSpecieFox: "Fox",
+      AppStrings.petSpecieBear: "Bear",
+      AppStrings.petSpecieLion: "Lion",
+      AppStrings.petSpecieOwl: "Owl",
       AppStrings.welcomeBack: "Welcome back",
       AppStrings.loginToContinue: "Login to continue",
       AppStrings.emailOrUserHint: "Email or Username",
@@ -1433,6 +1448,13 @@ class Translator {
           "Want to know more about {assetName}?",
     },
     'es': {
+      AppStrings.petSpecieDog: "Perro",
+      AppStrings.petSpecieCat: "Gato",
+      AppStrings.petSpecieWolf: "Lobo",
+      AppStrings.petSpecieFox: "Zorro",
+      AppStrings.petSpecieBear: "Oso",
+      AppStrings.petSpecieLion: "León",
+      AppStrings.petSpecieOwl: "Búho",
       AppStrings.welcomeBack: "Bienvenido de nuevo",
       AppStrings.loginToContinue: "Inicia sesión para continuar",
       AppStrings.emailOrUserHint: "Correo o Usuario",

@@ -74,7 +74,7 @@ class Translator {
           "Se você já estudou na Academy, seu Pet e progresso aparecem sozinhos aqui — esta etapa não é necessária.",
       AppStrings.petSetupCta: "Criar meu Pet e continuar",
       AppStrings.petSetupFailedSnack: "Não foi possível criar seu Pet. Tente novamente.",
-      AppStrings.petSpecieDog: "Cão",
+      AppStrings.petSpecieDog: "Cachorro",
       AppStrings.petSpecieCat: "Gato",
       AppStrings.petSpecieWolf: "Lobo",
       AppStrings.petSpecieFox: "Raposa",
@@ -765,6 +765,7 @@ class Translator {
     // maior parte da língua, e uma chave em falta não é um buraco de tradução.
     // O teste 'pt_PT só define chaves que pt também define' impede órfãs.
     'pt_PT': {
+      AppStrings.petSpecieDog: "Cão",
       AppStrings.brandTagline: "O seu património, com clareza",
       AppStrings.quickSetupSaveCta: "Guardar",
       AppStrings.mentorSourceClientScreen: "O ecrã que está a ver",

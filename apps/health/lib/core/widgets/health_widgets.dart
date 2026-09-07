@@ -5,6 +5,34 @@ import '../theme/health_theme.dart';
 /// The pill-shaped primary CTA used across every screen in the design
 /// (login, pet setup, quick setup, add debt/income). Disabled state matches
 /// the prototype: flat gray fill, no shadow, 55% opacity.
+/// Largura máxima da coluna de conteúdo, em qualquer ecrã da Health.
+///
+/// Os artboards do canvas são desenhados a 390px com margens de 24, ou seja
+/// 342px de conteúdo. Sem este limite a app estica numa janela de desktop —
+/// a grelha de espécies do onboarding chegava a cartões de ~480px de largura.
+class HealthContent extends StatelessWidget {
+  const HealthContent({super.key, required this.child, this.width = frameWidth});
+
+  /// Largura do artboard (conteúdo + as duas margens de 24).
+  static const double frameWidth = 390;
+
+  /// Só o conteúdo, para ecrãs que aplicam as margens por fora.
+  static const double bodyWidth = 342;
+
+  final Widget child;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: width),
+        child: child,
+      ),
+    );
+  }
+}
+
 class HealthPrimaryButton extends StatelessWidget {
   const HealthPrimaryButton({
     super.key,

@@ -4,58 +4,62 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
 
-/// `PetConfigurationScreen`'s species picker — a 2-column grid of cards
-/// (portrait + label), matching the Notion mockup's "Escolha seu parceiro
-/// de jornada" layout. Built from plain `Column`/`Row` rather than
-/// `GridView` — `PetConfigurationScreen`'s wide-layout branch wraps this in
-/// an `IntrinsicHeight`, which a sliver-based `GridView` can't answer
-/// ("does not support returning intrinsic dimensions"); `Row`/`Column` do.
+/// Seletor de espécie do onboarding, conforme o artboard `PetAcademy` do
+/// canvas de design: grelha de 4 colunas, as 7 espécies na ordem do design
+/// (raposa, cachorro, gato, coruja, lobo, urso, leão) e a arte assente direta
+/// sobre o cartão — sem recorte circular, que cortava o mascote.
 ///
-/// [PetSpecieEnum]'s 7 values mirror the backend's wire format 1:1 (see
-/// that enum's own doc comment), so every one of them stays selectable
-/// here even though the mockup's screenshot only shows 4 — this grid just
-/// presents the same real catalog in the mockup's visual style, it doesn't
-/// cut species the backend and existing pets still support.
+/// Construído com `Column`/`Row` e não com `GridView`: o ramo de layout largo
+/// do `PetConfigurationScreen` embrulha este widget num `IntrinsicHeight`, e
+/// um `GridView` baseado em slivers não sabe responder a dimensões
+/// intrínsecas ("does not support returning intrinsic dimensions"); `Row` e
+/// `Column` sabem.
+///
+/// A ordem vem de [PetSpecieEnumExtension.displayOrder] e não de
+/// `PetSpecieEnum.values`: esta última segue o wire format do backend e não
+/// pode ser reordenada sem quebrar a serialização.
 class PetSpeciesSelector extends StatelessWidget {
   const PetSpeciesSelector({super.key, required this.selected, required this.onSelected});
+
+  static const int _columns = 4;
+  static const double _gap = 8;
 
   final PetSpecieEnum selected;
   final ValueChanged<PetSpecieEnum> onSelected;
 
   @override
   Widget build(BuildContext context) {
-    final species = PetSpecieEnum.values;
+    const species = PetSpecieEnumExtension.displayOrder;
     final rows = <Widget>[];
-    for (var i = 0; i < species.length; i += 2) {
-      final second = i + 1 < species.length ? species[i + 1] : null;
+    for (var start = 0; start < species.length; start += _columns) {
+      final isLastRow = start + _columns >= species.length;
       rows.add(
         Padding(
-          padding: EdgeInsets.only(bottom: i + 2 < species.length ? AppSpacing.md : 0),
+          padding: EdgeInsets.only(bottom: isLastRow ? 0 : _gap),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: _SpeciesCard(
-                  specie: species[i],
-                  isSelected: selected == species[i],
-                  onTap: () => onSelected(species[i]),
+              for (var column = 0; column < _columns; column++) ...[
+                if (column > 0) const SizedBox(width: _gap),
+                Expanded(
+                  child: start + column < species.length
+                      ? _SpeciesCard(
+                          specie: species[start + column],
+                          isSelected: selected == species[start + column],
+                          onTap: () => onSelected(species[start + column]),
+                        )
+                      // A última linha fica incompleta (7 não é múltiplo de 4);
+                      // os lugares vazios mantêm a largura das colunas para as
+                      // espécies não esticarem.
+                      : const SizedBox.shrink(),
                 ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: second == null
-                    ? const SizedBox.shrink()
-                    : _SpeciesCard(
-                        specie: second,
-                        isSelected: selected == second,
-                        onTap: () => onSelected(second),
-                      ),
-              ),
+              ],
             ],
           ),
         ),
       );
     }
-    return Column(children: rows);
+    return Column(mainAxisSize: MainAxisSize.min, children: rows);
   }
 }
 
@@ -71,33 +75,40 @@ class _SpeciesCard extends StatelessWidget {
     final tokens = context.colors;
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.neonCyan.withValues(alpha: 0.14) : tokens.textPrimary.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(AppRadii.lg),
+          // Não-selecionado é totalmente transparente (o artboard usa
+          // `transparent` no contorno e no fundo), para a grelha não virar
+          // uma grade de caixas.
+          color: isSelected ? tokens.textPrimary.withValues(alpha: 0.06) : Colors.transparent,
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected ? AppColors.neonCyan : tokens.textPrimary.withValues(alpha: 0.12),
-            width: isSelected ? 1.5 : 1,
+            color: isSelected ? AppColors.neonCyan : Colors.transparent,
+            width: 1.5,
           ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ClipOval(
-              child: Image.asset(
-                PetAssets.imageFor(specie.name),
-                width: 56,
-                height: 56,
-                fit: BoxFit.cover,
-              ),
+            Image.asset(
+              PetAssets.imageFor(specie.name),
+              height: 46,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(Icons.pets, size: 32, color: tokens.textSecondary);
+              },
             ),
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: 4),
             Text(
-              specie.name[0].toUpperCase() + specie.name.substring(1).toLowerCase(),
-              style: AppTextStyles.label.copyWith(
-                color: isSelected ? tokens.textPrimary : tokens.textSecondary,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              specie.displayLabel,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 10.5,
+                color: tokens.textSecondary,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
               ),
             ),
           ],

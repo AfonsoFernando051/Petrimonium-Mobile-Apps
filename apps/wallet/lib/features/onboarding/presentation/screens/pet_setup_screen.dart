@@ -6,7 +6,6 @@ import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_wallet/core/utils/game_snack.dart';
 import 'package:petrimonium_wallet/core/utils/pet_assets.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/core/widgets/select_field.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
@@ -25,7 +24,9 @@ class PetSetupScreen extends StatefulWidget {
 
 class _PetSetupScreenState extends State<PetSetupScreen> {
   final TextEditingController _nameController = TextEditingController();
-  PetSpecieEnum _selectedSpecie = PetSpecieEnum.FOX;
+  // Cão por omissão: é o mascote da Wallet (o mesmo do ecrã de login) e é
+  // o que o artboard `PetWallet` do canvas mostra pré-selecionado.
+  PetSpecieEnum _selectedSpecie = PetSpecieEnum.DOG;
   bool _isLoading = false;
 
   @override
@@ -94,9 +95,18 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
           const SizedBox(height: 8),
           _PetNameField(controller: _nameController),
           const SizedBox(height: 16),
-          Text(
-            Translator.translate(AppStrings.petSetupFooterNote),
-            style: TextStyle(color: context.colors.textTertiary, fontSize: 12, height: 1.4),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: context.colors.textPrimary.withValues(alpha: 0.03),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: context.colors.textPrimary.withValues(alpha: 0.12)),
+            ),
+            child: Text(
+              Translator.translate(AppStrings.petSetupFooterNote),
+              style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.45),
+            ),
           ),
         ],
       ),
@@ -116,11 +126,11 @@ class _SpeciesGrid extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 4,
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
       childAspectRatio: 0.85,
       children: [
-        for (final specie in PetSpecieEnum.values)
+        for (final specie in PetSpecieEnumExtension.displayOrder)
           _SpeciesCard(
             specie: specie,
             selected: specie == selected,
@@ -145,31 +155,35 @@ class _SpeciesCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(14),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
         decoration: BoxDecoration(
-          color: selected ? tokens.primaryContainer : tokens.surface,
+          // Não-selecionado é totalmente transparente (o artboard usa
+          // `transparent` no contorno e no fundo), para a grelha não virar
+          // uma grade de caixas.
+          color: selected ? tokens.textPrimary.withValues(alpha: 0.06) : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: selected ? tokens.primary : tokens.border, width: selected ? 1.5 : 1),
+          border: Border.all(color: selected ? tokens.primary : Colors.transparent, width: 1.5),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
               PetAssets.imageFor(specie.name),
-              width: 38,
-              height: 38,
+              height: 46,
               fit: BoxFit.contain,
               errorBuilder: (context, error, stackTrace) {
                 return Icon(Icons.pets, size: 28, color: tokens.textSecondary);
               },
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
               specie.displayLabel,
               style: TextStyle(
-                color: selected ? tokens.textPrimary : tokens.textSecondary,
-                fontSize: 11,
-                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                // Só o peso muda com a selecção: no artboard a cor do rótulo
+                // é a mesma nas sete espécies.
+                color: tokens.textSecondary,
+                fontSize: 10.5,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

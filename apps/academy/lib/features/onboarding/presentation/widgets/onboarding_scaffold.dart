@@ -103,11 +103,14 @@ class OnboardingScaffold extends StatelessWidget {
                         if (title != null) ...[
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 24),
+                            // Alinhado à esquerda: nenhum artboard de
+                            // onboarding do canvas centra título ou
+                            // subtítulo, nos três apps.
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   title!,
-                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: tokens.textPrimary,
                                     fontSize: 26,
@@ -119,7 +122,6 @@ class OnboardingScaffold extends StatelessWidget {
                                   const SizedBox(height: 8),
                                   Text(
                                     subtitle!,
-                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: tokens.textSecondary,
                                       fontSize: 14,
