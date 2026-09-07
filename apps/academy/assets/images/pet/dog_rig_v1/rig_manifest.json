@@ -1,0 +1,60 @@
+{
+  "name": "dog_rig_v1",
+  "source": "generated_dog.png",
+  "atlas": "dog_rig_atlas.png",
+  "artboard": {
+    "name": "DogCompanion",
+    "width": 420,
+    "height": 560
+  },
+  "drawOrderBackToFront": [
+    "ground_shadow",
+    "tail",
+    "rear_haunch",
+    "torso",
+    "front_leg_right",
+    "front_leg_left",
+    "collar",
+    "head",
+    "ear_right",
+    "ear_left",
+    "muzzle",
+    "eye_right",
+    "eye_left",
+    "eyebrow_right",
+    "eyebrow_left",
+    "medallion"
+  ],
+  "pivots": {
+    "head": [0.50, 0.86],
+    "ear_left": [0.82, 0.12],
+    "ear_right": [0.18, 0.12],
+    "eye_left": [0.50, 0.50],
+    "eye_right": [0.50, 0.50],
+    "eyebrow_left": [0.50, 0.50],
+    "eyebrow_right": [0.50, 0.50],
+    "muzzle": [0.50, 0.50],
+    "torso": [0.50, 0.10],
+    "front_leg_left": [0.50, 0.12],
+    "front_leg_right": [0.50, 0.12],
+    "rear_haunch": [0.50, 0.72],
+    "tail": [0.82, 0.82],
+    "collar": [0.50, 0.50],
+    "medallion": [0.50, 0.12],
+    "ground_shadow": [0.50, 0.50]
+  },
+  "stateMachine": {
+    "name": "Companion",
+    "inputs": {
+      "state": "number",
+      "reducedMotion": "boolean",
+      "interacting": "boolean"
+    },
+    "states": {
+      "0": "idle",
+      "1": "blink",
+      "2": "think",
+      "3": "celebrate"
+    }
+  }
+}
