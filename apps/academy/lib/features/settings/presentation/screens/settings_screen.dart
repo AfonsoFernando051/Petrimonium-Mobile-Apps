@@ -13,6 +13,8 @@ import 'package:petrimonium_academy/features/auth/presentation/screens/login_scr
 import 'package:petrimonium_academy/features/settings/presentation/widgets/account_section.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/appearance_section.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/companion_section.dart';
+import 'package:petrimonium_academy/core/preferences/country_preference.dart';
+import 'package:petrimonium_academy/features/settings/presentation/widgets/country_section.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/language_section.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/notifications_section.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/privacy_section.dart';
@@ -133,6 +135,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await prefs.setBool(key, value);
   }
 
+  Future<void> _handleCountrySelected(String countryCode) async {
+    if (countryCode == CountryPreference.current) return;
+    HapticFeedback.selectionClick();
+    await CountryPreference.setCountry(countryCode);
+    await DI.settingsRepository.syncCountry(countryCode);
+  }
+
   Future<void> _handleLanguageSelected(String language) async {
     if (language == Translator.currentLanguage) return;
     HapticFeedback.selectionClick();
@@ -213,6 +222,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       CompanionSection(sectionLabel: _sectionLabel, petName: _petName, onRename: _handleRenamePet),
                       const SizedBox(height: AppSpacing.xl),
                       LanguageSection(sectionLabel: _sectionLabel, onLanguageSelected: _handleLanguageSelected),
+                      const SizedBox(height: AppSpacing.xl),
+                      CountrySection(sectionLabel: _sectionLabel, onCountrySelected: _handleCountrySelected),
                       const SizedBox(height: AppSpacing.xl),
                       AppearanceSection(sectionLabel: _sectionLabel),
                       const SizedBox(height: AppSpacing.xl),

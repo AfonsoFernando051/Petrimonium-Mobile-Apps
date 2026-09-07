@@ -56,6 +56,7 @@ class ApiConstants {
   static const String onboardingStatusEndpoint = '/api/onboarding/status';
 
   static const String settingsLanguageEndpoint = '/api/settings/language';
+  static const String settingsCountryEndpoint = '/api/settings/country';
 
   static const String mentorChatEndpoint = '/api/mentor/chat';
   static String mentorSuggestionsEndpoint(String language) =>

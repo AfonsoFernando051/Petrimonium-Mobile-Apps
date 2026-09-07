@@ -11,6 +11,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_wallet/core/navigation/start_route_resolver.dart';
+import 'package:petrimonium_wallet/core/preferences/country_preference.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_wallet/features/dashboard/presentation/screens/dashboard_screen.dart';
@@ -44,6 +45,7 @@ void main() async {
     // blank screen.
     appRunner: () async {
       await Translator.load();
+      await CountryPreference.load();
       await ThemeController.load();
       await DI.onboardingStateRepository.incrementSessionCount();
       runApp(const MyApp());

@@ -315,6 +315,9 @@ class AppStrings {
   static const String settingsSubtitle = "settingsSubtitle";
   static const String languageSectionTitle = "languageSectionTitle";
   static const String languagePt = "languagePt";
+  static const String countrySectionTitle = "countrySectionTitle";
+  static const String countryBrazil = "countryBrazil";
+  static const String countryPortugal = "countryPortugal";
   static const String languagePtPt = "languagePtPt";
   static const String languageEn = "languageEn";
   static const String languageEs = "languageEs";
