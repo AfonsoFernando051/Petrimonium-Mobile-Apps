@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import '../test_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   setUp(() {
-    Translator.currentLanguage = 'pt';
   });
 
   Widget buildTestableWidget({
@@ -17,10 +14,10 @@ void main() {
     ErrorStateStyle style = ErrorStateStyle.standard,
   }) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
         body: ErrorStateView(
-            retryLabel: Translator.translate(AppStrings.retryButtonLabel),title: title, message: message, onRetry: onRetry, style: style),
+            retryLabel: 'Tentar novamente',title: title, message: message, onRetry: onRetry, style: style),
       ),
     );
   }

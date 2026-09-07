@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
+import '../test_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   Widget wrap(Widget child, {ThemeData? theme}) =>
-      MaterialApp(theme: theme ?? AppTheme.dark, home: Scaffold(body: child));
+      MaterialApp(theme: theme ?? TestTheme.dark, home: Scaffold(body: child));
 
   group('GlassCard', () {
     testWidgets('renders its child', (tester) async {
@@ -47,7 +47,7 @@ void main() {
       for (final surface in CardSurface.values) {
         await tester.pumpWidget(wrap(
           GlassCard(surface: surface, child: const Text('inside')),
-          theme: AppTheme.light,
+          theme: TestTheme.light,
         ));
         expect(find.text('inside'), findsOneWidget);
       }

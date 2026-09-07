@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import '../test_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   setUp(() {
-    Translator.currentLanguage = 'pt';
   });
 
   Widget buildTestableWidget(void Function(bool?) onResult) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
         body: Builder(
           builder: (context) => ElevatedButton(
             onPressed: () async {
               final result = await ConfirmLogoutDialog.show(
         context,
-        title: Translator.translate(AppStrings.logoutConfirmTitle),
-        message: Translator.translate(AppStrings.logoutConfirmMessage),
-        cancelLabel: Translator.translate(AppStrings.cancelButton),
-        confirmLabel: Translator.translate(AppStrings.logoutButton),
+        title: 'Sair da conta?',
+        message: 'Você precisará entrar novamente.',
+        cancelLabel: 'Cancelar',
+        confirmLabel: 'Sair',
       );
               onResult(result);
             },

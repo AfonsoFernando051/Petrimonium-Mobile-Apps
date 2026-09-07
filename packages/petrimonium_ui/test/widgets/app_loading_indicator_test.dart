@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
+import '../test_theme.dart';
 
 void main() {
   Widget buildTestableWidget({double? strokeWidth}) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
         body: strokeWidth == null
             ? const AppLoadingIndicator()
@@ -41,7 +41,7 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
 
       final indicator = tester.widget<CircularProgressIndicator>(find.byType(CircularProgressIndicator));
-      expect(indicator.color, AppTheme.dark.extension<AppColorTokens>()?.primary);
+      expect(indicator.color, TestTheme.dark.extension<AppColorTokens>()?.primary);
     });
   });
 }
