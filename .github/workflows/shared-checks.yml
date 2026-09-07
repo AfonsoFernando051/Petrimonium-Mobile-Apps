@@ -53,23 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: No shared package may import an application
-        run: |
-          if grep -rn --include='*.dart' -E "package:petrimonium_(academy|wallet|health)/" packages/; then
-            echo "::error::A package under packages/ imports an application. Dependencies must only ever point apps -> packages."
-            exit 1
-          fi
-          echo "OK: no package imports an app."
-      - name: No app may import another app
-        run: |
-          fail=0
-          for app in academy wallet health; do
-            for other in academy wallet health; do
-              [ "$app" = "$other" ] && continue
-              if grep -rn --include='*.dart' "package:petrimonium_$other/" "apps/$app" 2>/dev/null; then
-                echo "::error::apps/$app imports petrimonium_$other. Cross-product imports are not allowed."
-                fail=1
-              fi
-            done
-          done
-          exit $fail
+      - name: Check dependency direction
+        # One definition of the rule, shared with developers - see
+        # tooling/check_dependency_direction.sh
+        run: ./tooling/check_dependency_direction.sh
