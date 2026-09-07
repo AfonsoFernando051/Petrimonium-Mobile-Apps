@@ -1,6 +1,6 @@
-import 'package:petrimonium/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
-import 'package:petrimonium/features/portfolio/domain/enums/history_range.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/history_point.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/enums/history_range.dart';
 
 /// Client-side mirror of the backend's `GetPortfolioHistoryUseCaseImpl`
 /// cost-basis → current-value interpolation. The backend endpoint is the

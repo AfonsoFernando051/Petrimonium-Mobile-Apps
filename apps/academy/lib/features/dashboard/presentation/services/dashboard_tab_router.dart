@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
 
 /// Pure tab-index → behavior mappings for [DashboardScreen]'s 4 bottom-nav
 /// tabs (Home/Academy/Wallet/Mentor). The `dashboard` feature has no domain

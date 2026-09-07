@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_order_side.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_order_side.dart';
 
 /// One executed simulated buy/sell — never a real order, never sent to any
 /// broker/bank/exchange. Mirrors the backend's `SimulatedOrderDTO`.

@@ -1,6 +1,6 @@
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
 
 /// Translated category labels for [InvestmentTypeEnum] — the real
 /// Portfolio tab's `InvestmentTypeDisplay.label` is hardcoded Portuguese

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/pet_assets.dart';
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/core/utils/pet_assets.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Renders the gamified pet mascot: an aura layer, the base evolution
 /// animation (Lottie, falling back to a static PNG per stage), and any

@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/core/events/app_event_bus.dart';
-import 'package:petrimonium/features/academy/domain/services/academy_pet_behavior.dart';
-import 'package:petrimonium/features/pet/data/repositories/pet_companion_preferences_repository.dart';
-import 'package:petrimonium/features/pet/domain/behavior/core_pet_behavior.dart';
-import 'package:petrimonium/features/pet/domain/behavior/pet_behavior.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium/features/portfolio/domain/services/portfolio_pet_behavior.dart';
+import 'package:petrimonium_academy/core/events/app_event.dart';
+import 'package:petrimonium_academy/core/events/app_event_bus.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_pet_behavior.dart';
+import 'package:petrimonium_academy/features/pet/data/repositories/pet_companion_preferences_repository.dart';
+import 'package:petrimonium_academy/features/pet/domain/behavior/core_pet_behavior.dart';
+import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio_pet_behavior.dart';
 
 /// The Pet's reaction scripts, tried in order for every [pageEnter]/event —
 /// first non-null result wins. `CorePetBehavior` owns identity/gamification

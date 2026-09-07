@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/onboarding/data/models/option_model.dart';
-import 'package:petrimonium/features/onboarding/data/models/question_model.dart';
+import 'package:petrimonium_academy/features/onboarding/data/models/option_model.dart';
+import 'package:petrimonium_academy/features/onboarding/data/models/question_model.dart';
 
 void main() {
   group('QuestionModel.fromJson', () {

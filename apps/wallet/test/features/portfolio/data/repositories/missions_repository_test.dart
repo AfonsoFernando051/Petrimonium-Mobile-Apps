@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/features/portfolio/data/datasources/missions_remote_datasource.dart';
-import 'package:petrimonium/features/portfolio/data/repositories/missions_repository.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/datasources/missions_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/repositories/missions_repository.dart';
 
 class MockMissionsRemoteDataSource extends Mock implements MissionsRemoteDataSource {}
 

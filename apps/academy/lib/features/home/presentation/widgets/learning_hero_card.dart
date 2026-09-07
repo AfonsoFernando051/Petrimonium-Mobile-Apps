@@ -4,20 +4,20 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/core/events/app_event_bus.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/events/app_event.dart';
+import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/pet_assets.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/game/domain/entities/player_level.dart';
-import 'package:petrimonium/features/game/domain/services/level_calculator.dart';
-import 'package:petrimonium/features/game/domain/services/level_title.dart';
-import 'package:petrimonium/features/pet/domain/entities/pet_evolution_rule.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_academy/core/utils/pet_assets.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/game/domain/entities/player_level.dart';
+import 'package:petrimonium_academy/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_academy/features/game/domain/services/level_title.dart';
+import 'package:petrimonium_academy/features/pet/domain/entities/pet_evolution_rule.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 
 /// Home's "where am I, and how is my companion doing" hero
 /// (`docs/PRODUCT_VISION.md` §8 #2 and #3): level + XP progress toward the

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/experience_level_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/experience_level_screen.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_academy/features/pet/data/models/investment_horizon_enum.dart';
 
 /// Onboarding's Time Horizon step — split out of the old `FinancialGoalScreen`
 /// (which buried this behind a bottom-sheet picker) into its own deliberate

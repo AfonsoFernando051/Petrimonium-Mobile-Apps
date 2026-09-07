@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/game/domain/services/level_title.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/game/domain/services/level_title.dart';
 
 void main() {
   setUp(() {

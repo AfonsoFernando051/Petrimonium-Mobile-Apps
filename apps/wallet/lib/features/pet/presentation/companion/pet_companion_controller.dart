@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/core/events/app_event_bus.dart';
-import 'package:petrimonium/features/pet/data/repositories/pet_companion_preferences_repository.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message_catalog.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_wallet/core/events/app_event.dart';
+import 'package:petrimonium_wallet/core/events/app_event_bus.dart';
+import 'package:petrimonium_wallet/features/pet/data/repositories/pet_companion_preferences_repository.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message_catalog.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// How long a [PetMessageTrigger.pageEnter] nudge stays cooled down after
 /// being shown, so returning to the same tab a minute later doesn't repeat

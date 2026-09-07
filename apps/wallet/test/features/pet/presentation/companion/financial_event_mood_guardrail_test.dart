@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message_catalog.dart';
+import 'package:petrimonium_wallet/core/events/app_event.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message_catalog.dart';
 
 /// PRD guardrail (§10.3, §12.2, FR-MEN-002): the Pet's celebratory moods are
 /// reserved for educational milestones. A financial event — an aporte, a

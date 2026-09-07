@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/portfolio_summary.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_summary.dart';
 
 void main() {
   group('PortfolioSummary', () {

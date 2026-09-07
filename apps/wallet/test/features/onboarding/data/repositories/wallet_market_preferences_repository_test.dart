@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/features/onboarding/data/models/wallet_base_currency_enum.dart';
-import 'package:petrimonium/features/onboarding/data/models/wallet_market_enum.dart';
-import 'package:petrimonium/features/onboarding/data/repositories/wallet_market_preferences_repository.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_base_currency_enum.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_market_enum.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/repositories/wallet_market_preferences_repository.dart';
 
 void main() {
   late WalletMarketPreferencesRepository repository;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_progress_bar.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_progress_bar.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 
 void main() {
   Widget buildTestableWidget({

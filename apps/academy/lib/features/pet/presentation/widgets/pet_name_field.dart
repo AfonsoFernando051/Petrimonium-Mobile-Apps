@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
 
 /// `PetConfigurationScreen`'s name entry: free-text field plus quick-pick
 /// suggestion chips. State (the controller, whether to show the "required"

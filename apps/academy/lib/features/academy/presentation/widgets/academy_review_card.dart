@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
 
 /// "Today's Review" (`docs/ACADEMY_ENGINE.md` §3d, brief §25) — a compact
 /// nudge to revisit the lessons in `AcademyController.reviewQueue`

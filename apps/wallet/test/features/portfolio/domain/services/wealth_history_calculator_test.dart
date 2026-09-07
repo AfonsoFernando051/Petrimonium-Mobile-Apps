@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/portfolio/domain/enums/history_range.dart';
-import 'package:petrimonium/features/portfolio/domain/services/wealth_history_calculator.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/enums/history_range.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/services/wealth_history_calculator.dart';
 
 import 'portfolio_test_fixtures.dart';
 

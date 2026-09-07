@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/pet_assets.dart';
+import 'package:petrimonium_wallet/core/utils/pet_assets.dart';
 
 /// The animated pet + speech bubble that reacts to portfolio-setup
 /// progress — the emotional guide through onboarding, per the brief. Reuses

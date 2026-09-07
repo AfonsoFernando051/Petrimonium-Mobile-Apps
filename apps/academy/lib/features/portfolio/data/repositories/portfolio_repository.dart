@@ -1,11 +1,11 @@
-import 'package:petrimonium/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/dividend_event.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/portfolio_summary.dart';
-import 'package:petrimonium/features/portfolio/domain/enums/history_range.dart';
+import 'package:petrimonium_academy/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/allocation_slice.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/history_point.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_summary.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/enums/history_range.dart';
 
 class PortfolioRepository {
   final PortfolioRemoteDataSource remoteDataSource;

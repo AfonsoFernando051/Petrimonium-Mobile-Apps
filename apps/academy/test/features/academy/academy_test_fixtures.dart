@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/academy/domain/entities/school.dart';
+import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/school.dart';
 
 /// A small but structurally realistic [AcademyCatalogSnapshot] for tests
 /// that used to exercise the real (now-deleted) hardcoded `AcademyCatalog`:

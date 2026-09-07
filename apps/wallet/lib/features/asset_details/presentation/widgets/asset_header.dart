@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// The top section of the asset details screen — immediately communicates

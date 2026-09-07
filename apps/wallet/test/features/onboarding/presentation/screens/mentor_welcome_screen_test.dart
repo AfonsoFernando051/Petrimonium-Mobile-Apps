@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/onboarding/data/repositories/onboarding_state_repository.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/quick_setup_screen.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_state_repository.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/screens/quick_setup_screen.dart';
 
 void main() {
   setUp(() {

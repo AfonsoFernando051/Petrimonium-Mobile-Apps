@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/time_horizon_screen.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/time_horizon_screen.dart';
 
 /// Onboarding's "Choose Your Financial Goal" step — framed as the player's
 /// first mission (per the redesign) rather than a risk/strategy question, so

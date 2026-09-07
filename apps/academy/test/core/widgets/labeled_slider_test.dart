@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/widgets/labeled_slider.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/widgets/labeled_slider.dart';
 
 void main() {
   Widget wrap(Widget child) =>

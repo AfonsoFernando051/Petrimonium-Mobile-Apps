@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
 
 void main() {
   test('has exactly the 5 real top-level destinations', () {

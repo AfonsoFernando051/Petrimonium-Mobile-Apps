@@ -1,5 +1,5 @@
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 
 /// Product-facing tier name for a numeric level (`docs/FEATURES.md`'s
 /// "Levels" target copy table) — presentational only, derived from the real

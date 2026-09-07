@@ -1,9 +1,9 @@
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
-import 'package:petrimonium/features/academy/domain/entities/knowledge_level.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/knowledge_level.dart';
 
 /// Derives **Knowledge Progress** — how much of the curriculum the learner
 /// has actually completed — kept deliberately separate from Game Level

@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/friendly_error_message.dart';
-import 'package:petrimonium/core/utils/game_snack.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/features/auth/presentation/screens/login_screen.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/account_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/appearance_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/companion_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/language_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/notifications_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/privacy_section.dart';
+import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
+import 'package:petrimonium_wallet/core/utils/game_snack.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
+import 'package:petrimonium_wallet/features/auth/presentation/screens/login_screen.dart';
+import 'package:petrimonium_wallet/features/settings/presentation/widgets/account_section.dart';
+import 'package:petrimonium_wallet/features/settings/presentation/widgets/appearance_section.dart';
+import 'package:petrimonium_wallet/features/settings/presentation/widgets/companion_section.dart';
+import 'package:petrimonium_wallet/features/settings/presentation/widgets/language_section.dart';
+import 'package:petrimonium_wallet/features/settings/presentation/widgets/notifications_section.dart';
+import 'package:petrimonium_wallet/features/settings/presentation/widgets/privacy_section.dart';
 
 /// Settings screen — owns the persisted local prefs + account/pet state and
 /// composes the per-section widgets under `presentation/widgets/`. Kept as

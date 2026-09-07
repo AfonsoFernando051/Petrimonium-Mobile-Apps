@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/mentor/domain/services/wallet_mentor_reply_layers.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/services/wallet_mentor_reply_layers.dart';
 
 void main() {
   group('WalletMentorReplyLayers.tryParse', () {

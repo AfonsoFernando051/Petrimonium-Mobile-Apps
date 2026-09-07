@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
-import 'package:petrimonium/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium/features/portfolio/domain/enums/history_range.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/repositories/portfolio_repository.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/enums/history_range.dart';
 
 class MockPortfolioRemoteDataSource extends Mock implements PortfolioRemoteDataSource {}
 

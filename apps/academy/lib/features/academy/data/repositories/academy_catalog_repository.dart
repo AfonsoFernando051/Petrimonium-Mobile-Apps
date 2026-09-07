@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:petrimonium/core/constants/api_constants.dart';
+import 'package:petrimonium_academy/core/constants/api_constants.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
+import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Top-level (not a method) so [compute] can run it on a background isolate —

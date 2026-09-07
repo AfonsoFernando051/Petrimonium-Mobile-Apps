@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium/features/auth/presentation/widgets/login_card.dart';
-import 'package:petrimonium/features/auth/presentation/widgets/login_form.dart';
-import 'package:petrimonium/features/auth/presentation/widgets/signup_form.dart';
-import 'package:petrimonium/features/onboarding/data/repositories/onboarding_repository.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
+import 'package:petrimonium_academy/features/auth/presentation/widgets/login_card.dart';
+import 'package:petrimonium_academy/features/auth/presentation/widgets/login_form.dart';
+import 'package:petrimonium_academy/features/auth/presentation/widgets/signup_form.dart';
+import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
 
 void main() {
   group('AcademyModule', () {

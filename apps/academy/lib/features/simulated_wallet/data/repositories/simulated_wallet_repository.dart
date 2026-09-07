@@ -1,8 +1,8 @@
-import 'package:petrimonium/features/simulated_wallet/data/datasources/simulated_wallet_remote_datasource.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/asset_quote.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_order.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_order_side.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_portfolio_summary.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/data/datasources/simulated_wallet_remote_datasource.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/asset_quote.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_order.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_order_side.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_portfolio_summary.dart';
 
 class SimulatedWalletRepository {
   final SimulatedWalletRemoteDataSource remoteDataSource;

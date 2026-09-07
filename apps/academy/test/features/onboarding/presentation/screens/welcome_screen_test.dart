@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/welcome_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/pet_configuration_screen.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/welcome_screen.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/pet_configuration_screen.dart';
 
 void main() {
   setUp(() {

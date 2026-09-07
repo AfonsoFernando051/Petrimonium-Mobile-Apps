@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/features/academy/domain/entities/mastery_tier.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/mastery_tier.dart';
 
 /// Shared tier → copy/color mapping, reused by every widget that displays a
 /// [MasteryTier] (`MasteryBarRow`, `SchoolDetailScreen`), so the visual

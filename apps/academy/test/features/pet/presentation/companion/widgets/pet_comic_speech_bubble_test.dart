@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/presentation/companion/enums/pet_speech_bubble_state.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/comic_bubble_painter.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_comic_speech_bubble.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/enums/pet_speech_bubble_state.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/comic_bubble_painter.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_comic_speech_bubble.dart';
 
 void main() {
   setUp(() {

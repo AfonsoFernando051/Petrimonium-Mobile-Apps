@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/academy/domain/services/lesson_question_shuffler.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/lesson_question_shuffler.dart';
 
 class _SequenceRandom implements Random {
   _SequenceRandom(this._values);

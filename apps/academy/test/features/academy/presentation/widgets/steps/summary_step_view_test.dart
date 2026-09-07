@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/steps/summary_step_view.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/steps/summary_step_view.dart';
 
 void main() {
   group('SummaryStepView', () {

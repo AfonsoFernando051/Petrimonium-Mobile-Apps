@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/experience_level_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/journey_ready_screen.dart';
-import 'package:petrimonium/features/pet/data/models/experience_level_enum.dart';
-import 'package:petrimonium/features/pet/data/repositories/pet_preferences_repository.dart';
-import 'package:petrimonium/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/experience_level_screen.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/journey_ready_screen.dart';
+import 'package:petrimonium_academy/features/pet/data/models/experience_level_enum.dart';
+import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferences_repository.dart';
+import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
 
 /// Minimal in-memory MascotRepository double — further down the onboarding
 /// chain, JourneyReadyScreen calls `loadProfile` in its own initState, and

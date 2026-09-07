@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.dart';
 
 void main() {
   group('PetAccessoryId.slot', () {

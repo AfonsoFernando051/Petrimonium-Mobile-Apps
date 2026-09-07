@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 
 /// Educational concentration warning — shown when an asset represents a
 /// significant portion of the user's portfolio. This is descriptive,

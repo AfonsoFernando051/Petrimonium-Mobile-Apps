@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/suggested_prompt_chip.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/suggested_prompt_chip.dart';
 
 void main() {
   Widget buildTestableWidget({required String label, required VoidCallback onTap}) {

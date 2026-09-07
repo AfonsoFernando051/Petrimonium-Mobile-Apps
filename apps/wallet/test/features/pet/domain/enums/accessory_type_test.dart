@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart';
 
 void main() {
   test('AccessoryType has exactly the 3 expected slots', () {

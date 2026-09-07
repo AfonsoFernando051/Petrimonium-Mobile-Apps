@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium/features/auth/presentation/screens/forgot_password_screen.dart';
-import 'package:petrimonium/features/auth/presentation/screens/reset_password_screen.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
+import 'package:petrimonium_academy/features/auth/presentation/screens/forgot_password_screen.dart';
+import 'package:petrimonium_academy/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}

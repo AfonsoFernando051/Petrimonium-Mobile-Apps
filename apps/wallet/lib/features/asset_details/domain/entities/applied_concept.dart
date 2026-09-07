@@ -1,5 +1,5 @@
-import 'package:petrimonium/features/asset_details/domain/entities/asset_indicator.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/educational_explanation.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_indicator.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/educational_explanation.dart';
 
 /// A portfolio concept the user has already learned (via a completed Academy
 /// lesson) that genuinely applies to the asset currently being viewed — the

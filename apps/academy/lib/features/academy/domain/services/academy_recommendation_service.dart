@@ -1,8 +1,8 @@
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/academy/domain/services/academy_progress_calculator.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 
 /// A rough per-lesson time estimate for the Review card ("~N min"). No real
 /// per-lesson duration field exists yet — this is a documented

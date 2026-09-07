@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/achievement.dart';
+import 'package:petrimonium_wallet/core/events/app_event.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/achievement.dart';
 
 void main() {
   const achievement = Achievement(

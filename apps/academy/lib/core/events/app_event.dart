@@ -1,5 +1,5 @@
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/achievement.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/achievement.dart';
 
 /// Something the Financial Engine or Game Engine did that other systems
 /// (character reactions, notifications, a future AI Mentor) may want to

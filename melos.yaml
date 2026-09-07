@@ -1,0 +1,67 @@
+name: petrimonium_mobile
+
+packages:
+  - apps/*
+  - packages/*
+
+# Melos 6, not 7/8, on purpose.
+#
+# Melos 7 moved to Dart's Pub workspaces feature, which forces ONE shared
+# dependency resolution and one root lockfile for every package in the repo.
+# That was tried here and rejected on evidence:
+#
+#   1. `dart pub get` fails outright - Health is on google_fonts ^6.2.1 while
+#      Academy and Wallet are on ^8.2.1, so a single resolution cannot exist
+#      without dragging Health through a major upgrade it never asked for.
+#   2. A workspace allows dependency_overrides only at the root, so each app's
+#      toolchain-specific pins (path_provider, for a missing ld.lld) would
+#      become workspace-wide facts.
+#   3. A shared lockfile couples the three release lines: bumping a dependency
+#      for a Wallet release would silently change what Academy and Health
+#      resolve. The whole point of this repository is that a Wallet release
+#      does not require touching Academy or Health.
+#
+# Melos 6's path-dependency model keeps each app resolving and locking
+# independently, which is what the architecture requires. Revisit if the three
+# apps' dependency sets ever converge.
+
+command:
+  bootstrap:
+    runPubGetInParallel: true
+
+scripts:
+  analyze:
+    description: Run `flutter analyze` in every app and package.
+    run: melos exec -- flutter analyze
+
+  test:
+    description: Run the test suite of every package that has one.
+    run: melos exec --dir-exists="test" -- flutter test
+
+  format:
+    description: Format all Dart sources in place.
+    run: dart format --line-length 120 apps packages
+
+  format-check:
+    description: Fail if any Dart source is not formatted.
+    run: dart format --line-length 120 --set-exit-if-changed --output none apps packages
+
+  verify:
+    description: Analyze plus test everything. What CI runs for a shared-package change.
+    run: melos run analyze && melos run test
+
+  test:packages:
+    description: Test only the shared packages.
+    run: melos exec --scope="petrimonium_ui,petrimonium_flutter_core" -- flutter test
+
+  build:academy:
+    description: Release bundle for Academy only. Wallet and Health are untouched.
+    run: melos exec --scope="petrimonium_academy" -- flutter build appbundle --release
+
+  build:wallet:
+    description: Release bundle for Wallet only. Academy and Health are untouched.
+    run: melos exec --scope="petrimonium_wallet" -- flutter build appbundle --release
+
+  build:health:
+    description: Release bundle for Health only. Academy and Wallet are untouched.
+    run: melos exec --scope="petrimonium_health" -- flutter build appbundle --release

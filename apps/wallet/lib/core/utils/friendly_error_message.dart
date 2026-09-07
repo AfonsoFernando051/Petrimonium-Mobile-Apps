@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
 
 /// Maps a caught error into copy that's safe and clear to show a user —
 /// never the raw `Exception: ...` text, and something more useful than that

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/price_status.dart';
+import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/price_status.dart';
 
 InvestmentLot _lot({
   required double purchasePrice,

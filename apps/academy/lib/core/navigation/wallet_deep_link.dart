@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/academy/domain/entities/lab_simulator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
 
 /// Academy → Wallet cross-app deep-link scheme — **a proposal, not yet a
 /// working link** (see the cross-repo contract proposal doc). This repo has

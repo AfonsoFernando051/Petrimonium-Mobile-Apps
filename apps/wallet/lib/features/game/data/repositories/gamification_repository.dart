@@ -1,5 +1,5 @@
-import 'package:petrimonium/features/game/data/datasources/gamification_remote_datasource.dart';
-import 'package:petrimonium/features/game/domain/entities/gamification_summary.dart';
+import 'package:petrimonium_wallet/features/game/data/datasources/gamification_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/game/domain/entities/gamification_summary.dart';
 
 class GamificationRepository {
   final GamificationRemoteDataSource remoteDataSource;

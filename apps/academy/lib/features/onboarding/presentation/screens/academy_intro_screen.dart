@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/pet_assets.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
-import 'package:petrimonium/features/academy/domain/services/academy_progress_calculator.dart';
-import 'package:petrimonium/features/academy/presentation/controllers/academy_controller.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/gamification_intro_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/financial_goal_screen.dart';
+import 'package:petrimonium_academy/core/utils/pet_assets.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
+import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/gamification_intro_screen.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/financial_goal_screen.dart';
 
 /// Onboarding's "here's your track" beat — a vertical, locked/unlocked
 /// sequence of the first real Academy modules (matching the Notion

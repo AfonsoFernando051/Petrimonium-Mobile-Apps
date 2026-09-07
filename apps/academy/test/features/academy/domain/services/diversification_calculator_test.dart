@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/academy/domain/services/diversification_calculator.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/diversification_calculator.dart';
+import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
 
 void main() {
   group('DiversificationCalculator.evaluate', () {

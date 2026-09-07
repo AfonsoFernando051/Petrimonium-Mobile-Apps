@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/features/onboarding/data/models/wallet_base_currency_enum.dart';
-import 'package:petrimonium/features/onboarding/data/models/wallet_market_enum.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_base_currency_enum.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_market_enum.dart';
 
 /// Persists the user's chosen market/base-currency from the Wallet's
 /// quick-setup screen. Local-only (SharedPreferences), mirroring

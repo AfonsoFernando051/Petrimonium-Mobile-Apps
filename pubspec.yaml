@@ -1,0 +1,11 @@
+name: petrimonium_mobile
+description: "Workspace root for the Petrimonium mobile monorepo. Not a package anyone depends on - it exists so Melos has a home."
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.1
+
+dev_dependencies:
+  # Pinned to the 6.x line deliberately - see the rationale at the top of
+  # melos.yaml. 7+ requires Pub workspaces, which this repository cannot use.
+  melos: ^6.3.2

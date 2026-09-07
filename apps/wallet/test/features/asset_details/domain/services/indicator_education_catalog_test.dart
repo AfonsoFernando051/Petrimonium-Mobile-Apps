@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
-import 'package:petrimonium/features/asset_details/domain/services/indicator_education_catalog.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/services/indicator_education_catalog.dart';
 
 void main() {
   group('getExplanation / allExplanations', () {

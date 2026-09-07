@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/steps/choice_question_step_view.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/steps/choice_question_step_view.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// A simulator's "what did you learn?" moment — a thin stateful wrapper
 /// around the existing, already-built `ChoiceQuestionStepView` (the same

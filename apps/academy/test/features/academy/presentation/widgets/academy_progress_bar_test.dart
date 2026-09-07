@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_progress_bar.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_progress_bar.dart';
 
 void main() {
   Widget buildTestable(Widget child) {

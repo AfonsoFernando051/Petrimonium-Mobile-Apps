@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/features/pet/data/repositories/pet_companion_preferences_repository.dart';
+import 'package:petrimonium_academy/features/pet/data/repositories/pet_companion_preferences_repository.dart';
 
 void main() {
   late PetCompanionPreferencesRepository repository;

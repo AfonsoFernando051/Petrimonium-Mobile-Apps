@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/onboarding/data/models/onboarding_status_model.dart';
+import 'package:petrimonium_academy/features/onboarding/data/models/onboarding_status_model.dart';
 
 void main() {
   group('OnboardingStatusModel.fromJson', () {

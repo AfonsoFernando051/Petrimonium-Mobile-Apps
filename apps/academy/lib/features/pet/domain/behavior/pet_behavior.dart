@@ -1,6 +1,6 @@
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_academy/core/events/app_event.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
 
 /// The shared contract between the Pet's communication layer
 /// (`PetCompanionController`) and each app's own reaction script. Shaped so

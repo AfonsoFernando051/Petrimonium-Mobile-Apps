@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/labeled_slider.dart';
-import 'package:petrimonium/core/widgets/stat_card.dart';
-import 'package:petrimonium/features/academy/domain/entities/lab_simulator.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/academy/domain/services/inflation_calculator.dart';
-import 'package:petrimonium/features/academy/presentation/controllers/lab_completion_controller.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/widgets/lab_comprehension_check.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/widgets/lab_completion_footer.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/widgets/lab_data_table_disclosure.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/widgets/lab_line_chart.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/widgets/lab_narrative_card.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/widgets/labeled_slider.dart';
+import 'package:petrimonium_academy/core/widgets/stat_card.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/inflation_calculator.dart';
+import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_comprehension_check.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_completion_footer.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_data_table_disclosure.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_line_chart.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_narrative_card.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// The Financial Lab's Inflation simulator (`docs/DECISIONS.md`
 /// DECISION-037) — demonstrates that inflation erodes purchasing power even

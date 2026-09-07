@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/mission_status.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
 
 void main() {
   group('MissionStatus.fromJson', () {

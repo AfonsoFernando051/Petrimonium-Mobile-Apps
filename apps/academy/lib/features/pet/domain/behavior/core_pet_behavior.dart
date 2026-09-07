@@ -1,12 +1,12 @@
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/features/game/domain/services/level_calculator.dart';
-import 'package:petrimonium/features/game/domain/services/level_title.dart';
-import 'package:petrimonium/features/pet/domain/behavior/pet_behavior.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_academy/core/events/app_event.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_academy/features/game/domain/services/level_title.dart';
+import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
 
 /// Reactions to the Pet's own identity/gamification state — XP, level,
 /// evolution — which the backend `pet` module owns and both apps share (see

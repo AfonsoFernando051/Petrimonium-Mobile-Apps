@@ -1,5 +1,5 @@
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
 
 /// How strongly a [PetMessage] should compete for the single visible speech
 /// bubble slot. A [high] message (level-up, evolution) replaces whatever is

@@ -1,6 +1,6 @@
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_indicator.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/educational_explanation.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_indicator.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/educational_explanation.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// Static catalog of indicator explanations and asset-type-aware indicator

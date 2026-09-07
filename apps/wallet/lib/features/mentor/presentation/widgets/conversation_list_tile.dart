@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/entities/conversation_summary.dart';
 
 class ConversationListTile extends StatelessWidget {
   const ConversationListTile({

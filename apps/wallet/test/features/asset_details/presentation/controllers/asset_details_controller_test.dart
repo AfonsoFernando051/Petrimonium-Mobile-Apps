@@ -2,20 +2,20 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/utils/friendly_error_message.dart';
-import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium/features/academy/data/repositories/academy_progress_local_repository.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/asset_details/data/repositories/asset_details_repository.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_data_status.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
-import 'package:petrimonium/features/asset_details/presentation/controllers/asset_details_controller.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
+import 'package:petrimonium_wallet/features/academy/data/models/academy_catalog_snapshot.dart';
+import 'package:petrimonium_wallet/features/academy/data/repositories/academy_catalog_repository.dart';
+import 'package:petrimonium_wallet/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_wallet/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_wallet/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_wallet/features/asset_details/data/repositories/asset_details_repository.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_data_status.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/presentation/controllers/asset_details_controller.dart';
+import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_lot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MockAssetDetailsRepository extends Mock implements AssetDetailsRepository {}

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/domain/services/academy_progress_calculator.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/module_card.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/module_card.dart';
 
 import '../../academy_test_fixtures.dart';
 

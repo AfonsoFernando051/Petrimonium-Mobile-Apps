@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_data_status.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_data_status.dart';
 
 void main() {
   group('AssetDataStatus.fromString', () {

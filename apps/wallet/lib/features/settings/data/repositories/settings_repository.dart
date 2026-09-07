@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:petrimonium/features/settings/data/datasources/settings_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/settings/data/datasources/settings_remote_datasource.dart';
 
 class SettingsRepository {
   final SettingsRemoteDataSource remoteDataSource;

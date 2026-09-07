@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/mentor/domain/entities/chat_message.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.dart';
 
 void main() {
   group('ChatMessage', () {

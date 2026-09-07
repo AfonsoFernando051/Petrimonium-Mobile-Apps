@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/pet/data/datasources/pet_remote_datasource.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_wallet/features/pet/data/datasources/pet_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 

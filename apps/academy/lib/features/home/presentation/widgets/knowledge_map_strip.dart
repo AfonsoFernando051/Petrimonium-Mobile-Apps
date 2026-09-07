@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
-import 'package:petrimonium/features/academy/domain/services/academy_progress_calculator.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 
 /// Home's "how is my knowledge developing" glance
 /// (`docs/PRODUCT_VISION.md` §8): a vertical, tappable list of module rows —

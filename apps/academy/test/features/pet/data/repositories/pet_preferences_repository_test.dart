@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/features/pet/data/models/experience_level_enum.dart';
-import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dart';
-import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
-import 'package:petrimonium/features/pet/data/repositories/pet_preferences_repository.dart';
+import 'package:petrimonium_academy/features/pet/data/models/experience_level_enum.dart';
+import 'package:petrimonium_academy/features/pet/data/models/investment_horizon_enum.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
+import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferences_repository.dart';
 
 void main() {
   late PetPreferencesRepository repository;

@@ -1,7 +1,7 @@
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/passive_income_estimate.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_type_display.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/portfolio_stats.dart';
+import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/passive_income_estimate.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/investment_type_display.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_stats.dart';
 
 class PassiveIncomeEstimator {
   const PassiveIncomeEstimator._();

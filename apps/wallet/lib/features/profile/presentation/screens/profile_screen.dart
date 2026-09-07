@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/display_name.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/quick_setup_screen.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_companion_header.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
-import 'package:petrimonium/features/profile/presentation/screens/mentor_preferences_screen.dart';
-import 'package:petrimonium/features/profile/presentation/screens/privacy_and_memory_screen.dart';
-import 'package:petrimonium/features/settings/presentation/screens/settings_screen.dart';
+import 'package:petrimonium_wallet/core/utils/display_name.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/screens/quick_setup_screen.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_companion_controller.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_companion_header.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_speech_bubble.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_wallet/features/profile/presentation/screens/mentor_preferences_screen.dart';
+import 'package:petrimonium_wallet/features/profile/presentation/screens/privacy_and_memory_screen.dart';
+import 'package:petrimonium_wallet/features/settings/presentation/screens/settings_screen.dart';
 
 /// The "Perfil" experience — reached via the AppBar's config/gear icon.
 /// Identity (name + "same account as the Academy") plus exactly the 3 rows

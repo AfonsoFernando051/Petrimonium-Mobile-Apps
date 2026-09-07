@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/game/domain/entities/gamification_summary.dart';
+import 'package:petrimonium_academy/features/game/domain/entities/gamification_summary.dart';
 
 void main() {
   group('GamificationSummary', () {

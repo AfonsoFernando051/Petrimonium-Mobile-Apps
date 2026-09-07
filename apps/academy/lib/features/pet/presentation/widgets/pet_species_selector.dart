@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/pet_assets.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_academy/core/utils/pet_assets.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
 
 /// `PetConfigurationScreen`'s species picker — a 2-column grid of cards
 /// (portrait + label), matching the Notion mockup's "Escolha seu parceiro

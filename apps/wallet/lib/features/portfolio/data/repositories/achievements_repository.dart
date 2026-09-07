@@ -1,5 +1,5 @@
-import 'package:petrimonium/features/portfolio/data/datasources/achievements_remote_datasource.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/achievement_evaluation_result.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/datasources/achievements_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/achievement_evaluation_result.dart';
 
 class AchievementsRepository {
   final AchievementsRemoteDataSource remoteDataSource;

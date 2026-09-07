@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
 
 /// Shown instead of a screen's curriculum content when the Academy catalog
 /// could neither be fetched nor loaded from cache (see

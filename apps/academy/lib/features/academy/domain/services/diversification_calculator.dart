@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
 
 /// How concentrated a [DiversificationResult] reads, purely from its
 /// largest single weight — thresholds sit below `InsightGenerator`'s

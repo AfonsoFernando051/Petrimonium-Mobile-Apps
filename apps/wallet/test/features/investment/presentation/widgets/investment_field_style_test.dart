@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/investment/presentation/widgets/investment_field_style.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/widgets/investment_field_style.dart';
 
 /// `investment_field_style.dart` holds pure style helpers (no widget state,
 /// no behavior) shared by every input field on the investment configuration

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/utils/financial_input_validators.dart';
+import 'package:petrimonium_wallet/core/utils/financial_input_validators.dart';
 
 void main() {
   group('FinancialInputValidators.parsePositiveDecimal', () {

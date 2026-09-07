@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// A generic animated gradient progress bar — same visual language as

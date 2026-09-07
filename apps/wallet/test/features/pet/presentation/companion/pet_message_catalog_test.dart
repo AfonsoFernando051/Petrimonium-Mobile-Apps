@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message_catalog.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message_catalog.dart';
 
 void main() {
   group('PetMessageCatalog.pageEnter — home', () {

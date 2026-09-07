@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/investment/presentation/widgets/pet_companion_card.dart';
-import 'package:petrimonium/features/pet/domain/repositories/pet_repository.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/widgets/pet_companion_card.dart';
+import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 
 class MockPetRepository extends Mock implements PetRepository {}
 

@@ -1,10 +1,10 @@
-import 'package:petrimonium/features/investment/data/models/asset_registration_model.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/portfolio_stats.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/portfolio_summary.dart';
+import 'package:petrimonium_wallet/features/investment/data/models/asset_registration_model.dart';
+import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/allocation_slice.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_stats.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_summary.dart';
 
 /// Builds a real `PortfolioStats` snapshot from the assets a user is
 /// *currently adding* on the Portfolio Setup screen — before anything is

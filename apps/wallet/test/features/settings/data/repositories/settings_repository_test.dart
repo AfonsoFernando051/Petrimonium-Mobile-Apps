@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/features/settings/data/datasources/settings_remote_datasource.dart';
-import 'package:petrimonium/features/settings/data/repositories/settings_repository.dart';
+import 'package:petrimonium_wallet/features/settings/data/datasources/settings_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/settings/data/repositories/settings_repository.dart';
 
 class MockSettingsRemoteDataSource extends Mock implements SettingsRemoteDataSource {}
 

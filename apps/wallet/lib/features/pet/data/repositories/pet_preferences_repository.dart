@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dart';
-import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
+import 'package:petrimonium_wallet/features/pet/data/models/investment_horizon_enum.dart';
+import 'package:petrimonium_wallet/features/pet/data/models/pet_goal_enum.dart';
 
 /// Persists the user's chosen main goal / investment horizon from pet
 /// profile creation. Local-only (SharedPreferences), mirroring

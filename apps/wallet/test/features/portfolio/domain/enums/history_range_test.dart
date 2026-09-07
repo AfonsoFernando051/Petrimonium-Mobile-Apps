@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/portfolio/domain/enums/history_range.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/enums/history_range.dart';
 
 void main() {
   group('HistoryRange', () {

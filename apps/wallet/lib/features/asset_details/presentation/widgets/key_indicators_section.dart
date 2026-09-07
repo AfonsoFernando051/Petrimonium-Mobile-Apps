@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_indicator.dart';
-import 'package:petrimonium/features/asset_details/domain/services/indicator_education_catalog.dart';
-import 'package:petrimonium/features/asset_details/presentation/widgets/indicator_education_sheet.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/shared/section_label.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_indicator.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/services/indicator_education_catalog.dart';
+import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/indicator_education_sheet.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 
 /// Displays key indicators adapted to the asset type. Each indicator
 /// is tappable — opening an educational bottom sheet that explains

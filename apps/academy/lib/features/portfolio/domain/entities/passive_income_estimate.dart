@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
 
 /// A forward-looking, clearly-labeled *estimate* of passive income — there is
 /// no real dividend/coupon payment data source anywhere in this system yet

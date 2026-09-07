@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
-import 'package:petrimonium/features/asset_details/presentation/widgets/dividend_history_section.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/dividend_history_section.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
 
 void main() {
   Widget buildTestableWidget(AssetDetails asset) {

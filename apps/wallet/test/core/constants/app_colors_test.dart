@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 
 void main() {
   group('AppColors', () {

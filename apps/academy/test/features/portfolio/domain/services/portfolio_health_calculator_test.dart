@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/portfolio_health.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/portfolio_stats.dart';
-import 'package:petrimonium/features/portfolio/domain/services/portfolio_health_calculator.dart';
+import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_health.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_stats.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio_health_calculator.dart';
 
 import 'portfolio_test_fixtures.dart';
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/applied_concept.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_indicator.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/educational_explanation.dart';
-import 'package:petrimonium/features/asset_details/presentation/widgets/applied_learning_card.dart';
-import 'package:petrimonium/features/asset_details/presentation/widgets/indicator_education_sheet.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/applied_concept.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_indicator.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/educational_explanation.dart';
+import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/applied_learning_card.dart';
+import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/indicator_education_sheet.dart';
 
 const _asset = AssetDetails(ticker: 'PETR4', shortName: 'Petrobras', assetType: 'stock', priceToEarnings: 8.5);
 

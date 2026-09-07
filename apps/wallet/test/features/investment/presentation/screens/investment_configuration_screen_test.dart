@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/investment/data/repositories/investment_repository.dart';
-import 'package:petrimonium/features/investment/presentation/screens/investment_configuration_screen.dart';
-import 'package:petrimonium/features/investment/presentation/widgets/added_asset_tile.dart';
-import 'package:petrimonium/features/investment/presentation/widgets/investment_type_selector.dart';
-import 'package:petrimonium/features/investment/presentation/widgets/live_portfolio_summary_card.dart';
-import 'package:petrimonium/features/investment/presentation/widgets/pet_companion_card.dart';
-import 'package:petrimonium/features/investment/presentation/widgets/portfolio_progress_bar.dart';
-import 'package:petrimonium/features/investment/presentation/widgets/unlockable_rewards_card.dart';
-import 'package:petrimonium/features/pet/domain/repositories/pet_repository.dart';
-import 'package:petrimonium/features/portfolio/data/repositories/achievements_local_repository.dart';
-import 'package:petrimonium/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_wallet/features/investment/data/repositories/investment_repository.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/screens/investment_configuration_screen.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/widgets/added_asset_tile.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/widgets/investment_type_selector.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/widgets/live_portfolio_summary_card.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/widgets/pet_companion_card.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/widgets/portfolio_progress_bar.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/widgets/unlockable_rewards_card.dart';
+import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/repositories/achievements_local_repository.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/repositories/portfolio_repository.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
 
 class MockInvestmentRepository extends Mock implements InvestmentRepository {}
 

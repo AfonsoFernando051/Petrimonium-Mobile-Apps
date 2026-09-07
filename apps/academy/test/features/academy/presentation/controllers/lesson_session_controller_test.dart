@@ -1,19 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/features/academy/data/datasources/academy_remote_datasource.dart';
-import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium/features/academy/data/repositories/academy_progress_local_repository.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_completion_result.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/academy/presentation/controllers/lesson_session_controller.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
+import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
+import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson_completion_result.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_academy/features/academy/presentation/controllers/lesson_session_controller.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MockAcademyRemoteDataSource extends Mock

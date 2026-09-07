@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/pet/domain/entities/pet_evolution_rule.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_academy/features/pet/domain/entities/pet_evolution_rule.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
 
 void main() {
   group('PetEvolutionRule.isSatisfiedBy', () {

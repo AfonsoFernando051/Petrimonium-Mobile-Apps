@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/features/academy/domain/entities/lab_simulator.dart';
-import 'package:petrimonium/features/academy/presentation/controllers/lab_completion_controller.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/compound_interest_lab_screen.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/diversification_lab_screen.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/fixed_income_lab_screen.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/inflation_lab_screen.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/portfolio_lab_screen.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
+import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/compound_interest_lab_screen.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/diversification_lab_screen.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/fixed_income_lab_screen.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/inflation_lab_screen.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/portfolio_lab_screen.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// One tile in [FinancialLabHomeScreen] and the screen it opens when
 /// available. Replaces five hardcoded `_LabTile` widgets — enabling a lab

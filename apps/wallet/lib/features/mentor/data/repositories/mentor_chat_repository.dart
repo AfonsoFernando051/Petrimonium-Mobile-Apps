@@ -1,11 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/mentor/data/datasources/mentor_remote_datasource.dart';
-import 'package:petrimonium/features/mentor/domain/entities/chat_message.dart';
-import 'package:petrimonium/features/mentor/domain/entities/conversation_summary.dart';
-import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dart';
-import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
-import 'package:petrimonium/features/pet/data/repositories/pet_preferences_repository.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/mentor/data/datasources/mentor_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_wallet/features/pet/data/models/investment_horizon_enum.dart';
+import 'package:petrimonium_wallet/features/pet/data/models/pet_goal_enum.dart';
+import 'package:petrimonium_wallet/features/pet/data/repositories/pet_preferences_repository.dart';
 
 /// Facade over the Mentor conversation API. Conversations and messages are
 /// now persisted server-side, scoped to the authenticated user — this class

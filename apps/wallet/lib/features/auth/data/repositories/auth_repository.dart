@@ -1,8 +1,8 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/core/constants/api_constants.dart';
-import 'package:petrimonium/features/auth/data/datasources/auth_remote_datasource.dart';
-import 'package:petrimonium/features/auth/data/models/user_model.dart';
+import 'package:petrimonium_wallet/core/constants/api_constants.dart';
+import 'package:petrimonium_wallet/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/auth/data/models/user_model.dart';
 
 class AuthRepository {
   final AuthRemoteDataSource remoteDataSource;

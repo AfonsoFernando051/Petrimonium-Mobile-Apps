@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/entities/conversation_summary.dart';
 
 void main() {
   group('ConversationSummary.fromJson', () {

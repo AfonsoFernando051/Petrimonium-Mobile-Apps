@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/mentor/domain/services/mentor_reply_layers.dart';
+import 'package:petrimonium_academy/features/mentor/domain/services/mentor_reply_layers.dart';
 
 void main() {
   group('MentorReplyLayers.tryParse', () {

@@ -1,6 +1,6 @@
-import 'package:petrimonium/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/portfolio_summary.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/allocation_slice.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_summary.dart';
 
 /// A convenience snapshot bundling everything the gamification calculators
 /// (`PortfolioHealthCalculator`, `InsightGenerator`, `AchievementCatalog`,

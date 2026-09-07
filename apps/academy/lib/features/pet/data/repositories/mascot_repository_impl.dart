@@ -1,13 +1,13 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/features/game/data/datasources/gamification_remote_datasource.dart';
-import 'package:petrimonium/features/game/domain/entities/gamification_summary.dart';
-import 'package:petrimonium/features/pet/data/datasources/pet_remote_datasource.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_academy/features/game/data/datasources/gamification_remote_datasource.dart';
+import 'package:petrimonium_academy/features/game/domain/entities/gamification_summary.dart';
+import 'package:petrimonium_academy/features/pet/data/datasources/pet_remote_datasource.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 
 /// [loadProfile] paints instantly from the local cache (name/stage/
 /// accessories/lastActiveAt have no backend equivalent — they stay

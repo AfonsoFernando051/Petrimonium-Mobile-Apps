@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 
 void main() {
   group('DI', () {

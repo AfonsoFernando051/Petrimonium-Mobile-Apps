@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/pet_assets.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/mentor/domain/entities/chat_message.dart';
-import 'package:petrimonium/features/mentor/presentation/controllers/mentor_chat_controller.dart';
-import 'package:petrimonium/features/mentor/presentation/screens/conversation_list_screen.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/chat_bubble.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/mentor_input_bar.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/suggested_prompt_chip.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/typing_indicator.dart';
+import 'package:petrimonium_academy/core/utils/pet_assets.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/mentor/domain/entities/chat_message.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/controllers/mentor_chat_controller.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/screens/conversation_list_screen.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/chat_bubble.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_input_bar.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/suggested_prompt_chip.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/typing_indicator.dart';
 
 /// The "Mentor" tab — a full-screen chat with the user's pet acting as their
 /// personal investment mentor. Owns its own controller/state (mirrors how

@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/game/domain/entities/player_level.dart';
+import 'package:petrimonium_academy/features/game/domain/entities/player_level.dart';
 
 /// Derives the user's level from real accumulated XP
 /// ([AchievementCatalog.totalXpFor], the same total already fed into

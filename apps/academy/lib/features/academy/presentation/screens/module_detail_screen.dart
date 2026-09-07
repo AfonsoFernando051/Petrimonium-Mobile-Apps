@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/academy/domain/services/academy_progress_calculator.dart';
-import 'package:petrimonium/features/academy/presentation/controllers/academy_controller.dart';
-import 'package:petrimonium/features/academy/presentation/screens/lesson_screen.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_catalog_error_state.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_progress_bar.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/lesson_list_tile.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/widgets/cosmic_background.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
+import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/lesson_screen.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_catalog_error_state.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_progress_bar.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/lesson_list_tile.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 class ModuleDetailScreen extends StatefulWidget {
   const ModuleDetailScreen({

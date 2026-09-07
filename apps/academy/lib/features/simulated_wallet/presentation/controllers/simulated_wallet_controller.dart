@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:petrimonium/core/utils/friendly_error_message.dart';
-import 'package:petrimonium/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/asset_quote.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_order.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_order_side.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_portfolio_summary.dart';
+import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/asset_quote.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_order.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_order_side.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_portfolio_summary.dart';
 
 /// Owns all state for the simulated wallet (Academy's fictitious "Carteira"
 /// tab) — entirely separate from `PortfolioController`, which still owns

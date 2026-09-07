@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium/features/auth/presentation/screens/login_screen.dart';
-import 'package:petrimonium/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
-import 'package:petrimonium/features/settings/data/repositories/settings_repository.dart';
-import 'package:petrimonium/features/settings/presentation/screens/settings_screen.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/account_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/appearance_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/companion_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/language_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/notifications_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/privacy_section.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
+import 'package:petrimonium_academy/features/auth/presentation/screens/login_screen.dart';
+import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
+import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_academy/features/settings/data/repositories/settings_repository.dart';
+import 'package:petrimonium_academy/features/settings/presentation/screens/settings_screen.dart';
+import 'package:petrimonium_academy/features/settings/presentation/widgets/account_section.dart';
+import 'package:petrimonium_academy/features/settings/presentation/widgets/appearance_section.dart';
+import 'package:petrimonium_academy/features/settings/presentation/widgets/companion_section.dart';
+import 'package:petrimonium_academy/features/settings/presentation/widgets/language_section.dart';
+import 'package:petrimonium_academy/features/settings/presentation/widgets/notifications_section.dart';
+import 'package:petrimonium_academy/features/settings/presentation/widgets/privacy_section.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}

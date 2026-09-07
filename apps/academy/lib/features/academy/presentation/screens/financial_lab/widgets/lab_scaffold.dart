@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_companion_header.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/widgets/cosmic_background.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_companion_header.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 
 /// Shared chrome for every Financial Lab screen (the Lab home and each
 /// simulator) — AppBar with a back button and a Pet companion avatar,

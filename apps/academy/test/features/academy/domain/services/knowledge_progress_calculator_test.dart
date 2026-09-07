@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/domain/entities/knowledge_level.dart';
-import 'package:petrimonium/features/academy/domain/services/knowledge_progress_calculator.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/knowledge_level.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/knowledge_progress_calculator.dart';
 
 import '../../academy_test_fixtures.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
 
 /// Settings → "Companheiro": current pet name + a rename shortcut.
 class CompanionSection extends StatelessWidget {

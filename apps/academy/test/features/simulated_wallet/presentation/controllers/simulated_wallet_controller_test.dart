@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/simulated_wallet/data/datasources/simulated_wallet_remote_datasource.dart';
-import 'package:petrimonium/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/asset_quote.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_order.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_order_side.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_portfolio_summary.dart';
-import 'package:petrimonium/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/data/datasources/simulated_wallet_remote_datasource.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/asset_quote.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_order.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_order_side.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_portfolio_summary.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
 
 /// In-memory [SimulatedWalletRepository] double — extends the real
 /// (concrete, not abstract) class and overrides every method, the same

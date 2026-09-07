@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// Bottom input bar: text field + send `GameButton`. Voice/attachment

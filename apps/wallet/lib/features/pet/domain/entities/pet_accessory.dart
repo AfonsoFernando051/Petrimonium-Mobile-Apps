@@ -1,5 +1,5 @@
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.dart';
 
 /// A single cosmetic item the user has (or hasn't yet) unlocked.
 class PetAccessory {

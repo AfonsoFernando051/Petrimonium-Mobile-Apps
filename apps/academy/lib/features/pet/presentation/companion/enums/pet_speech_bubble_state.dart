@@ -1,5 +1,5 @@
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
 
 /// Semantic visual states for the Investor Companion speech bubble, as required
 /// by the Investor Companion Art Direction specification (§9).

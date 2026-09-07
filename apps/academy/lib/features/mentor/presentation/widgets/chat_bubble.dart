@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/layer_chip.dart';
-import 'package:petrimonium/features/mentor/domain/entities/chat_message.dart';
-import 'package:petrimonium/features/mentor/domain/services/mentor_reply_layers.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/widgets/layer_chip.dart';
+import 'package:petrimonium_academy/features/mentor/domain/entities/chat_message.dart';
+import 'package:petrimonium_academy/features/mentor/domain/services/mentor_reply_layers.dart';
 
 /// A single chat bubble: user messages are a solid neon-gradient pill
 /// (right-aligned, plain text), mentor replies are a `GlassCard` with

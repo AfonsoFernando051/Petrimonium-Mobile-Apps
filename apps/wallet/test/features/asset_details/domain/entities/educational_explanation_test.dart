@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/educational_explanation.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/educational_explanation.dart';
 
 void main() {
   group('EducationalExplanation', () {

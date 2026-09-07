@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/features/academy/domain/services/academy_pet_behavior.dart';
-import 'package:petrimonium/features/pet/domain/behavior/core_pet_behavior.dart';
-import 'package:petrimonium/features/pet/domain/behavior/pet_behavior.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium/features/portfolio/domain/services/portfolio_pet_behavior.dart';
+import 'package:petrimonium_academy/core/events/app_event.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_pet_behavior.dart';
+import 'package:petrimonium_academy/features/pet/domain/behavior/core_pet_behavior.dart';
+import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio_pet_behavior.dart';
 
 /// PRD guardrail (§10.3, §12.2, FR-MEN-002): the Pet's celebratory moods are
 /// reserved for educational milestones. A financial event may be acknowledged,

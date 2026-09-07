@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
-import 'package:petrimonium/features/asset_details/domain/services/portfolio_learning_bridge.dart';
+import 'package:petrimonium_wallet/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_wallet/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/services/portfolio_learning_bridge.dart';
 
 const _peLesson = Lesson(
   id: 'fundamental_analysis_pl_pvp',

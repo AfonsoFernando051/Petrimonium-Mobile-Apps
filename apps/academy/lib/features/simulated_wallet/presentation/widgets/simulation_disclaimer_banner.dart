@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
 
 /// Mandatory, always-visible reminder that every number on this screen is
 /// virtual: no real order is ever executed, there is no connection to any

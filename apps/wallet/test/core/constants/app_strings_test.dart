@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 
 void main() {
   group('AppStrings', () {

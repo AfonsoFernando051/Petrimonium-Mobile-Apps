@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/onboarding/data/models/wallet_base_currency_enum.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_base_currency_enum.dart';
 
 /// The Wallet's country/market, chosen on the quick-setup screen.
 ///

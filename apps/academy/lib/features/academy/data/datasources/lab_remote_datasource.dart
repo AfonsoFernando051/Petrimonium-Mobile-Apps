@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:petrimonium/core/constants/api_constants.dart';
+import 'package:petrimonium_academy/core/constants/api_constants.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/academy/domain/entities/simulator_completion_result.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/simulator_completion_result.dart';
 
 /// Syncs Financial Lab simulator completions against the backend's
 /// authoritative XP ledger (`docs/DECISIONS.md` DECISION-037). Mirrors

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/domain/entities/mastery_tier.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/mastery_bar_row.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/mastery_tier.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/mastery_bar_row.dart';
 
 import '../../academy_test_fixtures.dart';
 

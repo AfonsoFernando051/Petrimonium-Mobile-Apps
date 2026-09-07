@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/home/presentation/widgets/portfolio_not_connected_card.dart';
-import 'package:petrimonium/features/investment/presentation/screens/investment_configuration_screen.dart';
+import 'package:petrimonium_wallet/features/home/presentation/widgets/portfolio_not_connected_card.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/screens/investment_configuration_screen.dart';
 
 void main() {
   setUp(() {

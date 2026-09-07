@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/display_name.dart';
+import 'package:petrimonium_wallet/core/utils/display_name.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/layer_chip.dart';
-import 'package:petrimonium/features/home/presentation/widgets/mentor_insight_card.dart';
-import 'package:petrimonium/features/home/presentation/widgets/portfolio_not_connected_card.dart';
-import 'package:petrimonium/features/investment/presentation/screens/add_asset_screen.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_type_display.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/wealth_change_breakdown.dart';
-import 'package:petrimonium/features/portfolio/presentation/controllers/portfolio_controller.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/allocation_donut_card.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/holdings_section.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/shared/error_banner.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/wealth_evolution_card.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/widgets/layer_chip.dart';
+import 'package:petrimonium_wallet/features/home/presentation/widgets/mentor_insight_card.dart';
+import 'package:petrimonium_wallet/features/home/presentation/widgets/portfolio_not_connected_card.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/wealth_change_breakdown.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/allocation_donut_card.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/holdings_section.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/error_banner.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealth_evolution_card.dart';
 
 /// Wallet's "Início" — the unified patrimônio + Mentor screen, absorbing
 /// what used to be a separate Carteira tab ("Home unifica patrimônio

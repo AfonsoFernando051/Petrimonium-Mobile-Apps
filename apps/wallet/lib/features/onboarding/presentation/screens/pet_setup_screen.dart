@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/friendly_error_message.dart';
-import 'package:petrimonium/core/utils/game_snack.dart';
-import 'package:petrimonium/core/utils/pet_assets.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/select_field.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
+import 'package:petrimonium_wallet/core/utils/game_snack.dart';
+import 'package:petrimonium_wallet/core/utils/pet_assets.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/widgets/select_field.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
 
 /// Step 1 of 3 — only reached when [StartRouteResolver] finds no Pet on the
 /// account yet (a Wallet-first signup with no prior Academy account). An

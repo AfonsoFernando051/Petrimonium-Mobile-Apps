@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/investment/data/models/asset_registration_model.dart';
-import 'package:petrimonium/features/investment/data/repositories/investment_repository.dart';
-import 'package:petrimonium/features/investment/presentation/screens/add_asset_screen.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/presentation/controllers/portfolio_controller.dart';
+import 'package:petrimonium_wallet/features/investment/data/models/asset_registration_model.dart';
+import 'package:petrimonium_wallet/features/investment/data/repositories/investment_repository.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
 import '../../../portfolio/presentation/controllers/portfolio_controller_test.dart';
 import '../../../portfolio/domain/services/portfolio_test_fixtures.dart';

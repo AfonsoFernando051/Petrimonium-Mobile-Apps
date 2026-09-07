@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/data/datasources/academy_remote_datasource.dart';
-import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/academy_intro_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/gamification_intro_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/financial_goal_screen.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
+import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
+import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/academy_intro_screen.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/gamification_intro_screen.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/financial_goal_screen.dart';
 
 class MockAcademyCatalogRepository extends Mock implements AcademyCatalogRepository {}
 

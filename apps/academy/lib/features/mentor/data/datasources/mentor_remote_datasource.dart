@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:petrimonium/core/constants/api_constants.dart';
+import 'package:petrimonium_academy/core/constants/api_constants.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/mentor/domain/entities/chat_message.dart';
-import 'package:petrimonium/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_academy/features/mentor/domain/entities/chat_message.dart';
+import 'package:petrimonium_academy/features/mentor/domain/entities/conversation_summary.dart';
 
 /// Result of a `POST /api/mentor/chat` call — besides the reply text, the
 /// backend now also returns which conversation it was persisted to (created

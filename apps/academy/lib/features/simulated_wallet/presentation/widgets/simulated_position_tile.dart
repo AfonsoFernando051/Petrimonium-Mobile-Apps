@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_position.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_position.dart';
 
 class SimulatedPositionTile extends StatelessWidget {
   const SimulatedPositionTile({super.key, required this.position});

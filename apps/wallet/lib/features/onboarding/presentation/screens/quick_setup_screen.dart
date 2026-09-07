@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/game_snack.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/core/widgets/select_field.dart';
-import 'package:petrimonium/features/onboarding/data/models/wallet_base_currency_enum.dart';
-import 'package:petrimonium/features/onboarding/data/models/wallet_market_enum.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium/main.dart';
+import 'package:petrimonium_wallet/core/utils/game_snack.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
+import 'package:petrimonium_wallet/core/widgets/select_field.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_base_currency_enum.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_market_enum.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_wallet/main.dart';
 
 /// Screen 2 of 2 in the Wallet's mini-onboarding: country/market and
 /// base-currency, the only setup this app asks for before Home. Both

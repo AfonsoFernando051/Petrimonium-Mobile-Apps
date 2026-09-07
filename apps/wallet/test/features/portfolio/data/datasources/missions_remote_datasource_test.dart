@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/constants/api_constants.dart';
+import 'package:petrimonium_wallet/core/constants/api_constants.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/portfolio/data/datasources/missions_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/datasources/missions_remote_datasource.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 

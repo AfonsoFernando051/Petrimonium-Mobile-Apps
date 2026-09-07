@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/constants/api_constants.dart';
+import 'package:petrimonium_academy/core/constants/api_constants.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/mentor/data/datasources/mentor_remote_datasource.dart';
-import 'package:petrimonium/features/mentor/domain/entities/chat_message.dart';
+import 'package:petrimonium_academy/features/mentor/data/datasources/mentor_remote_datasource.dart';
+import 'package:petrimonium_academy/features/mentor/domain/entities/chat_message.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 

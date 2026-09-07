@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
 
 void main() {
   late AcademyProgressLocalRepository repository;

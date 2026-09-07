@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/dividend_event.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/dividend_event_tile.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/dividend_event_tile.dart';
 
 /// Bell-icon notification popover — real, provider-confirmed upcoming
 /// dividend / JCP / yield payments for the user's real holdings (the same

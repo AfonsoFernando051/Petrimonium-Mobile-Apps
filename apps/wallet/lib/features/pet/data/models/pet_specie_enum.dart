@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
 
 // Uppercase values mirror the backend's Java enum wire format (see
 // PetApp-Backend PetSpecieEnum) and must match exactly for (de)serialization.

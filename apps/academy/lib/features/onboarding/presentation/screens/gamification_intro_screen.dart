@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/financial_goal_screen.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/financial_goal_screen.dart';
 
 /// Onboarding's "how the loop actually works" beat — three ground rules the
 /// Notion mockup states plainly (XP only from learning, no streak

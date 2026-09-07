@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/achievement_evaluation_result.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/achievement_evaluation_result.dart';
 
 void main() {
   group('AchievementEvaluationResult.fromJson', () {

@@ -1,15 +1,15 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_type_display.dart';
-import 'package:petrimonium/features/portfolio/domain/enums/history_range.dart';
-import 'package:petrimonium/features/portfolio/presentation/controllers/portfolio_controller.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/history_point.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/enums/history_range.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// The "Wealth Evolution" premium chart: invested capital vs. portfolio

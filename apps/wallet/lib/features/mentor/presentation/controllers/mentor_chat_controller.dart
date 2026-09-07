@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:petrimonium/core/utils/friendly_error_message.dart';
-import 'package:petrimonium/features/mentor/data/repositories/mentor_chat_repository.dart';
-import 'package:petrimonium/features/mentor/domain/entities/chat_message.dart';
+import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
+import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.dart';
 
 const String _fallbackErrorReply =
     'Hmm, algo deu errado ao pensar na resposta 🐾 Vamos tentar de novo daqui a pouco?';

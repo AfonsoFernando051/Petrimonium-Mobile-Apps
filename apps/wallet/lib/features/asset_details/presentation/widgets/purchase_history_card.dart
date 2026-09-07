@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_lot.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/shared/section_label.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 
 /// One row per purchase lot, most recent first — ported from the old
 /// `AssetDetailsSheet` as part of consolidating asset details into one

@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/mentor/data/repositories/mentor_chat_repository.dart';
-import 'package:petrimonium/features/mentor/domain/entities/conversation_summary.dart';
-import 'package:petrimonium/features/mentor/presentation/controllers/conversation_list_controller.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/mentor/data/repositories/mentor_chat_repository.dart';
+import 'package:petrimonium_academy/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/controllers/conversation_list_controller.dart';
 
 class MockMentorChatRepository extends Mock implements MentorChatRepository {}
 

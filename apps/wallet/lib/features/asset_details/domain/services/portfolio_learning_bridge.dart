@@ -1,7 +1,7 @@
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/applied_concept.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
-import 'package:petrimonium/features/asset_details/domain/services/indicator_education_catalog.dart';
+import 'package:petrimonium_wallet/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/applied_concept.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/services/indicator_education_catalog.dart';
 
 /// Connects a completed Academy lesson to the asset currently being viewed —
 /// the concrete implementation of "Educational Portfolio Intelligence"

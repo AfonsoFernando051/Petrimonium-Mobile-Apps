@@ -1,9 +1,9 @@
-import 'package:petrimonium/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/academy/domain/entities/school.dart';
-import 'package:petrimonium/features/academy/domain/services/academy_icon_registry.dart';
+import 'package:petrimonium_wallet/features/academy/domain/entities/academy_domain.dart';
+import 'package:petrimonium_wallet/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_wallet/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_wallet/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_wallet/features/academy/domain/entities/school.dart';
+import 'package:petrimonium_wallet/features/academy/domain/services/academy_icon_registry.dart';
 
 /// The full Academy curriculum for one language, as fetched from
 /// `GET /api/v1/academy/catalog` (see `AcademyCatalogRepository`) — 4 flat

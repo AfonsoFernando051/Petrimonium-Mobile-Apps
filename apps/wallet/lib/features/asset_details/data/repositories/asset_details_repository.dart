@@ -1,5 +1,5 @@
-import 'package:petrimonium/features/asset_details/data/datasources/asset_details_remote_datasource.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/data/datasources/asset_details_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 
 /// Repository for asset details — maps raw JSON from the datasource into
 /// the domain [AssetDetails] model. The only place that knows the JSON

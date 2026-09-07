@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/layer_chip.dart';
-import 'package:petrimonium/features/mentor/domain/services/wallet_mentor_reply_layers.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/mentor_reply_layers_view.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/widgets/layer_chip.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/services/wallet_mentor_reply_layers.dart';
+import 'package:petrimonium_wallet/features/mentor/presentation/widgets/mentor_reply_layers_view.dart';
 
 void main() {
   setUp(() {

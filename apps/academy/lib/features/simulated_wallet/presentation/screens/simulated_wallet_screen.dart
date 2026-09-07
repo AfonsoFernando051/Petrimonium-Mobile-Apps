@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/game_snack.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
-import 'package:petrimonium/features/simulated_wallet/presentation/screens/place_simulated_order_screen.dart';
-import 'package:petrimonium/features/simulated_wallet/presentation/widgets/reset_simulated_wallet_dialog.dart';
-import 'package:petrimonium/features/simulated_wallet/presentation/widgets/simulated_position_tile.dart';
-import 'package:petrimonium/features/simulated_wallet/presentation/widgets/simulation_disclaimer_banner.dart';
+import 'package:petrimonium_academy/core/utils/game_snack.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/screens/place_simulated_order_screen.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/reset_simulated_wallet_dialog.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_position_tile.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulation_disclaimer_banner.dart';
 
 /// Academy's "Carteira" tab — a fictitious wallet with a virtual starting
 /// balance, entirely separate from any real investment account. Never

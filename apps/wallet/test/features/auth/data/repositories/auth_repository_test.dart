@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/auth/data/datasources/auth_remote_datasource.dart';
-import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium/features/auth/data/models/user_model.dart';
+import 'package:petrimonium_wallet/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
+import 'package:petrimonium_wallet/features/auth/data/models/user_model.dart';
 
 class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 

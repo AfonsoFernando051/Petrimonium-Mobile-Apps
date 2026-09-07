@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/features/asset_details/data/datasources/asset_details_remote_datasource.dart';
-import 'package:petrimonium/features/asset_details/data/repositories/asset_details_repository.dart';
+import 'package:petrimonium_wallet/features/asset_details/data/datasources/asset_details_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/asset_details/data/repositories/asset_details_repository.dart';
 
 class MockAssetDetailsRemoteDataSource extends Mock implements AssetDetailsRemoteDataSource {}
 

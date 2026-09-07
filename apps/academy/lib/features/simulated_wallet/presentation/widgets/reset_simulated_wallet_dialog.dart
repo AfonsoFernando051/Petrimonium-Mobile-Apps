@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
 
 /// "Reiniciar a simulação mediante confirmação" — mirrors
 /// `ConfirmLogoutDialog`'s shape (the app's one other destructive-action

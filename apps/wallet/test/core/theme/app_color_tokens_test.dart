@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_palette.dart';
+import 'package:petrimonium_wallet/core/theme/app_palette.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 

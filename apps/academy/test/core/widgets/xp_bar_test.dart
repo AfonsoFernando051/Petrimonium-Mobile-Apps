@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/widgets/xp_bar.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/widgets/xp_bar.dart';
 
 void main() {
   Widget wrap(Widget child) => MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));

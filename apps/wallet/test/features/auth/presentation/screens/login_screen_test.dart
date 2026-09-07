@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium/features/onboarding/data/models/onboarding_status_model.dart';
-import 'package:petrimonium/features/onboarding/data/models/question_model.dart';
-import 'package:petrimonium/features/onboarding/data/repositories/onboarding_repository.dart';
-import 'package:petrimonium/features/auth/presentation/screens/login_screen.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/models/onboarding_status_model.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/models/question_model.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_repository.dart';
+import 'package:petrimonium_wallet/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/auth/presentation/widgets/login_background.dart';
-import 'package:petrimonium/features/auth/presentation/widgets/login_button.dart';
-import 'package:petrimonium/features/auth/presentation/widgets/login_card.dart';
+import 'package:petrimonium_wallet/features/auth/presentation/widgets/login_background.dart';
+import 'package:petrimonium_wallet/features/auth/presentation/widgets/login_button.dart';
+import 'package:petrimonium_wallet/features/auth/presentation/widgets/login_card.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 

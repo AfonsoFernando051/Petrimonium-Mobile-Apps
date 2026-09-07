@@ -1,11 +1,11 @@
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/features/game/domain/services/level_calculator.dart';
-import 'package:petrimonium/features/pet/domain/behavior/pet_behavior.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart'
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/events/app_event.dart';
+import 'package:petrimonium_academy/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart'
     show kSleepAfterInactiveDays;
 
 /// Academy's Pet reaction script — lessons completed, quizzes passed, review

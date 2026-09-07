@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_position.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_position.dart';
 
 /// The user's fictitious wallet — virtual balance plus current simulated
 /// positions. Never derived from, or connected to, any real brokerage/bank/

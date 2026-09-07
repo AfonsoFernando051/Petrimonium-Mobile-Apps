@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/game/domain/entities/player_level.dart';
+import 'package:petrimonium_academy/features/game/domain/entities/player_level.dart';
 
 void main() {
   group('PlayerLevel', () {

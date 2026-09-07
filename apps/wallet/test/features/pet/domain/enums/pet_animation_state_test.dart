@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
 
 void main() {
   test('has the 6 expected animation states', () {

@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
 
 /// The XP threshold a user must reach to unlock [stage].
 ///

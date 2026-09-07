@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/layer_chip.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/dividend_event.dart';
-import 'package:petrimonium/features/portfolio/presentation/controllers/portfolio_controller.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/dividend_radar_section.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/passive_income_card.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/proventos_evolution_bar_card.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/shared/error_banner.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/shared/section_label.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/widgets/layer_chip.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/dividend_radar_section.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/passive_income_card.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/proventos_evolution_bar_card.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/error_banner.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 
 /// The "Proventos" (Passive Income) tab — its own dedicated home, no longer
 /// folded into the Home dashboard. [controller] is owned and loaded by

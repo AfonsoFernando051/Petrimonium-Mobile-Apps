@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
 
 /// One category's slice of the Asset Allocation donut, plus its distance
 /// from [PortfolioHealthCalculator]'s ideal target for that category.

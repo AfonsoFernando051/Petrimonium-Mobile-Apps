@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
 
 /// A glowing circular "platform" the pet stands on — the breathing/floating
 /// composition originally hand-built once inside `PetConfigurationScreen`

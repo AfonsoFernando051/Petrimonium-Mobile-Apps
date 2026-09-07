@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:petrimonium/features/academy/domain/services/compound_interest_calculator.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/compound_interest_calculator.dart';
 
 /// One year's checkpoint in a [FixedIncomeResult]'s trajectory — principal
 /// (money actually put in) vs. total value at that point, for charting.

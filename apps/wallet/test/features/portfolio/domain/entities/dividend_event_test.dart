@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
 
 void main() {
   group('DividendEvent.fromJson', () {

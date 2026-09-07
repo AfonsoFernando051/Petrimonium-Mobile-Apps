@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/presentation/controllers/lab_completion_controller.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/lab_simulator_catalog.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/lab_simulator_catalog.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Entry point for the Financial Lab (`docs/ACADEMY_ENGINE.md` §3d/§3g) —
 /// simulations that teach concepts by letting the learner change variables

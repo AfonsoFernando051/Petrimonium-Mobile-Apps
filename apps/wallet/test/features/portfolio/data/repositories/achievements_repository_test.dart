@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/features/portfolio/data/datasources/achievements_remote_datasource.dart';
-import 'package:petrimonium/features/portfolio/data/repositories/achievements_repository.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/datasources/achievements_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/repositories/achievements_repository.dart';
 
 class MockAchievementsRemoteDataSource extends Mock implements AchievementsRemoteDataSource {}
 

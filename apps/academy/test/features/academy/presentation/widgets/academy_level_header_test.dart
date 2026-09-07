@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/domain/entities/knowledge_level.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_level_header.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/knowledge_level.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_level_header.dart';
 
 void main() {
   setUp(() {

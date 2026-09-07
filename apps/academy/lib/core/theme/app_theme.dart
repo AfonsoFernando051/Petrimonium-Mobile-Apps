@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
-import 'package:petrimonium/core/theme/app_palette.dart';
+import 'package:petrimonium_academy/core/theme/app_palette.dart';
 
 /// Academy's two `ThemeData` instances. `MaterialApp` is given both
 /// (`theme`/`darkTheme`) plus a `themeMode`, so Flutter — not app code —

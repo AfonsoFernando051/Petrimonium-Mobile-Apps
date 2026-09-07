@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/onboarding/data/models/option_model.dart';
+import 'package:petrimonium_academy/features/onboarding/data/models/option_model.dart';
 
 class QuestionModel {
   final String id;

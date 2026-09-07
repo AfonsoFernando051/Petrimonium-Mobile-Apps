@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/investment/presentation/screens/investment_configuration_screen.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/screens/investment_configuration_screen.dart';
 
 /// Home's placeholder when the user has no holdings yet — the app must stay
 /// fully usable without a portfolio, so this replaces the wealth/holdings

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_progress_bar.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/widgets/cosmic_background.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_progress_bar.dart';
 
 /// Shared chrome for every screen in the onboarding narrative arc (Welcome
 /// through Journey Ready): the shared background, a top bar (back button +

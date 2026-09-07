@@ -1,5 +1,5 @@
-import 'package:petrimonium/features/portfolio/data/datasources/missions_remote_datasource.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/mission_status.dart';
+import 'package:petrimonium_wallet/features/portfolio/data/datasources/missions_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/mission_status.dart';
 
 class MissionsRepository {
   final MissionsRemoteDataSource remoteDataSource;

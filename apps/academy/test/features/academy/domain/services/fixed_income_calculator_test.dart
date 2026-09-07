@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/academy/domain/services/fixed_income_calculator.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/fixed_income_calculator.dart';
 
 void main() {
   group('FixedIncomeCalculator.simulate', () {

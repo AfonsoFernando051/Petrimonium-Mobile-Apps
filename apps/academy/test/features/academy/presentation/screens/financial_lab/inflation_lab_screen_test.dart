@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/data/repositories/academy_progress_local_repository.dart';
-import 'package:petrimonium/features/academy/presentation/controllers/lab_completion_controller.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/inflation_lab_screen.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/inflation_lab_screen.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
+import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FakeMascotRepository implements MascotRepository {

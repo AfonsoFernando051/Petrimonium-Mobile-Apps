@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/layer_chip.dart';
-import 'package:petrimonium/features/mentor/domain/services/wallet_mentor_reply_layers.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/widgets/layer_chip.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/services/wallet_mentor_reply_layers.dart';
 
 /// Renders a Mentor reply's DADO / CÁLCULO / INTERPRETAÇÃO layers, each behind
 /// its own [LayerChip] — the Wallet's rule that a real figure, a derived one

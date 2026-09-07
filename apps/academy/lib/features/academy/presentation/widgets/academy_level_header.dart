@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/domain/entities/knowledge_level.dart';
-import 'package:petrimonium/features/academy/domain/services/knowledge_progress_calculator.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/knowledge_level.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/knowledge_progress_calculator.dart';
 
 /// `AcademyHomeScreen`'s top-of-screen status line: Game Level + XP earned,
 /// plus Knowledge Progress underneath. Kept deliberately visually distinct

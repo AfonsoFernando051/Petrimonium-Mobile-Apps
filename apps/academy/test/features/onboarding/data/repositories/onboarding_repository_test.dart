@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/features/onboarding/data/datasources/onboarding_remote_datasource.dart';
-import 'package:petrimonium/features/onboarding/data/models/onboarding_status_model.dart';
-import 'package:petrimonium/features/onboarding/data/models/question_model.dart';
-import 'package:petrimonium/features/onboarding/data/repositories/onboarding_repository.dart';
+import 'package:petrimonium_academy/features/onboarding/data/datasources/onboarding_remote_datasource.dart';
+import 'package:petrimonium_academy/features/onboarding/data/models/onboarding_status_model.dart';
+import 'package:petrimonium_academy/features/onboarding/data/models/question_model.dart';
+import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_repository.dart';
 
 class MockOnboardingRemoteDataSource extends Mock implements OnboardingRemoteDataSource {}
 

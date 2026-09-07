@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
 
 /// A single, short (2-5 minute) unit of the Academy curriculum: a fixed
 /// sequence of [steps] worth [xpReward] once completed.

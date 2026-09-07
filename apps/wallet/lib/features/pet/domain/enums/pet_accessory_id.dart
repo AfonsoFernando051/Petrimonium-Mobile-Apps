@@ -1,4 +1,4 @@
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart';
 
 /// Every cosmetic item unlockable via gamification rewards, grouped by the
 /// [AccessoryType] slot it occupies.

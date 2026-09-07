@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium/features/pet/presentation/widgets/pet_species_selector.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_species_selector.dart';
 
 void main() {
   Widget buildTestableWidget({

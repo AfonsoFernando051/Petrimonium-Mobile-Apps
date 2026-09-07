@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
 
 /// "What should I do next" (`docs/ACADEMY_ENGINE.md` §3d, brief §20/22) —
 /// up to two reason-annotated suggestions from

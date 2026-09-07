@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/mentor/data/repositories/mentor_chat_repository.dart';
-import 'package:petrimonium/features/mentor/domain/entities/conversation_summary.dart';
-import 'package:petrimonium/features/mentor/presentation/screens/conversation_list_screen.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/conversation_list_tile.dart';
+import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_wallet/features/mentor/presentation/screens/conversation_list_screen.dart';
+import 'package:petrimonium_wallet/features/mentor/presentation/widgets/conversation_list_tile.dart';
 
 class MockMentorChatRepository extends Mock implements MentorChatRepository {}
 

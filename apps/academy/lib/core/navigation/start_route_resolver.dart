@@ -1,8 +1,8 @@
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium/features/onboarding/data/repositories/onboarding_state_repository.dart';
-import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
-import 'package:petrimonium/features/pet/domain/repositories/pet_repository.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
+import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_state_repository.dart';
+import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
 
 /// Where `MyApp` should route the user on cold start.
 enum StartRoute { login, meetPet, financialGoal, tutorial, portfolioChoice, home }

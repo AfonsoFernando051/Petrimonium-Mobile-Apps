@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/features/portfolio/data/repositories/achievements_local_repository.dart';
+import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_local_repository.dart';
 
 void main() {
   late AchievementsLocalRepository repository;

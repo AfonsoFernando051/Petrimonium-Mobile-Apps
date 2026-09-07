@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/mentor/data/datasources/mentor_remote_datasource.dart';
-import 'package:petrimonium/features/mentor/data/repositories/mentor_chat_repository.dart';
-import 'package:petrimonium/features/mentor/presentation/screens/mentor_screen.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/chat_bubble.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/mentor_input_bar.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/suggested_prompt_chip.dart';
-import 'package:petrimonium/features/pet/domain/repositories/pet_repository.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/mentor/data/datasources/mentor_remote_datasource.dart';
+import 'package:petrimonium_academy/features/mentor/data/repositories/mentor_chat_repository.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/screens/mentor_screen.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/chat_bubble.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_input_bar.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/suggested_prompt_chip.dart';
+import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
 
 class MockMentorChatRepository extends Mock implements MentorChatRepository {}
 

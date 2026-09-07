@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/asset_row.dart';
-import 'package:petrimonium/features/portfolio/presentation/widgets/expandable_category.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/asset_row.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/expandable_category.dart';
 
 void main() {
   Widget buildTestableWidget(List<Holding> holdings, {bool initiallyExpanded = false}) {

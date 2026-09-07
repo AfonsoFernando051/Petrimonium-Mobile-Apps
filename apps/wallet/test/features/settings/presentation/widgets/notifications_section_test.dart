@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/notifications_section.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/settings_toggle_card.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/settings/presentation/widgets/notifications_section.dart';
+import 'package:petrimonium_wallet/features/settings/presentation/widgets/settings_toggle_card.dart';
 
 void main() {
   setUp(() {

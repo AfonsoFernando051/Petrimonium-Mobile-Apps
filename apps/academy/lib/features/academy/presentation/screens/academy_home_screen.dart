@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/academy/presentation/controllers/academy_controller.dart';
-import 'package:petrimonium/features/academy/presentation/screens/academy_domain_detail_screen.dart';
-import 'package:petrimonium/features/academy/presentation/screens/financial_lab/financial_lab_home_screen.dart';
-import 'package:petrimonium/features/academy/presentation/screens/lesson_screen.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_catalog_error_state.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_continue_card.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_domain_card.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_level_header.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_mastery_section.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_review_card.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/financial_lab_entry_card.dart';
-import 'package:petrimonium/features/game/domain/services/level_calculator.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/academy_domain_detail_screen.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/financial_lab_home_screen.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/lesson_screen.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_catalog_error_state.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_continue_card.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_domain_card.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_level_header.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_mastery_section.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_review_card.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/financial_lab_entry_card.dart';
+import 'package:petrimonium_academy/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// The "Academia" tab: current level, an unmissable "what's next" CTA, and
 /// the module list — the answer to "what should I learn next?" is always on

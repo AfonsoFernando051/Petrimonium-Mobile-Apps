@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
+import 'package:petrimonium_wallet/features/pet/data/models/pet_goal_enum.dart';
 
 void main() {
   group('PetGoalEnumDisplay', () {

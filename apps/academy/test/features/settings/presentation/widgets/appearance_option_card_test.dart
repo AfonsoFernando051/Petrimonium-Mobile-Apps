@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/appearance_option_card.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/features/settings/presentation/widgets/appearance_option_card.dart';
 
 void main() {
   Widget buildTestableWidget({

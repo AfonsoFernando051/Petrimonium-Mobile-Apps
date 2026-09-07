@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
+import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_wallet/features/pet/domain/entities/pet_profile.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
 
 /// Minimal in-memory MascotRepository double, mirrors the one used in
 /// `mascot_controller_test.dart` — only `loadProfile` matters here.

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/auth/presentation/screens/forgot_password_screen.dart';
-import 'package:petrimonium/features/auth/presentation/widgets/forgot_password_button.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/auth/presentation/screens/forgot_password_screen.dart';
+import 'package:petrimonium_academy/features/auth/presentation/widgets/forgot_password_button.dart';
 
 void main() {
   setUp(() {

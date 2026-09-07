@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/academy/domain/entities/lab_simulator.dart';
-import 'package:petrimonium/features/academy/presentation/controllers/lab_completion_controller.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/wallet_bridge_cta.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
+import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/wallet_bridge_cta.dart';
 
 /// The XP-granting CTA at the bottom of every simulator — disabled until
 /// [canComplete] (the comprehension check answered correctly), and reflects

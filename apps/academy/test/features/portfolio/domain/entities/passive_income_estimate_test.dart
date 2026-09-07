@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/passive_income_estimate.dart';
+import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/passive_income_estimate.dart';
 
 void main() {
   group('PassiveIncomeEstimate', () {

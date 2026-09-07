@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/core/events/app_event_bus.dart';
-import 'package:petrimonium/features/academy/data/datasources/academy_remote_datasource.dart';
-import 'package:petrimonium/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium/features/academy/data/repositories/academy_progress_local_repository.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson_completion_result.dart';
-import 'package:petrimonium/features/academy/domain/entities/mastery_tier.dart';
-import 'package:petrimonium/features/academy/presentation/controllers/academy_controller.dart';
+import 'package:petrimonium_academy/core/events/app_event.dart';
+import 'package:petrimonium_academy/core/events/app_event_bus.dart';
+import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
+import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
+import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson_completion_result.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/mastery_tier.dart';
+import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../academy_test_fixtures.dart';

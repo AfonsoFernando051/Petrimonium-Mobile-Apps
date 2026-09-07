@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/xp_bar.dart';
-import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium/features/home/domain/entities/next_action.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/mission_status.dart';
-import 'package:petrimonium/features/portfolio/domain/services/mission_display_catalog.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/widgets/xp_bar.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_academy/features/home/domain/entities/next_action.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/services/mission_display_catalog.dart';
 
 /// Home's single primary CTA — renders whichever [NextAction]
 /// `NextActionResolver` decided is currently the most important thing for

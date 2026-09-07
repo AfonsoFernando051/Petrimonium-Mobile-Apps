@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/investment_lot.dart';
 
 InvestmentLot _lot({
   int id = 1,

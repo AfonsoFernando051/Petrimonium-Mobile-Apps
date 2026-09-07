@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium/features/onboarding/data/repositories/onboarding_state_repository.dart';
-import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
-import 'package:petrimonium/features/pet/domain/repositories/pet_repository.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_state_repository.dart';
+import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 
 /// Where `MyApp` should route the user on cold start.
 enum StartRoute { login, petSetup, mentorWelcome, quickSetup, home }

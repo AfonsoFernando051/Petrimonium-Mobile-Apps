@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/game_snack.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/features/mentor/domain/entities/conversation_summary.dart';
-import 'package:petrimonium/features/mentor/presentation/controllers/conversation_list_controller.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/conversation_list_tile.dart';
+import 'package:petrimonium_academy/core/utils/game_snack.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/widgets/cosmic_background.dart';
+import 'package:petrimonium_academy/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/controllers/conversation_list_controller.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/conversation_list_tile.dart';
 
 /// History of the user's Mentor conversations. Popping this screen returns
 /// either `null` (nothing selected — user just went back), a positive

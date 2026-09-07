@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/utils/friendly_error_message.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/asset_details/data/repositories/asset_details_repository.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/applied_concept.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_data_status.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
-import 'package:petrimonium/features/asset_details/domain/entities/user_position.dart';
-import 'package:petrimonium/features/asset_details/domain/services/portfolio_learning_bridge.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/asset_details/data/repositories/asset_details_repository.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/applied_concept.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_data_status.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/user_position.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/services/portfolio_learning_bridge.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
 
 /// Manages loading and state for the Asset Details screen.
 ///

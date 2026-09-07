@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/game/domain/services/level_calculator.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/portfolio_choice_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/onboarding_constants.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/mission_reward_card.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
-import 'package:petrimonium/features/pet/domain/entities/pet_profile.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/game/domain/services/level_calculator.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/portfolio_choice_screen.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/onboarding_constants.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/mission_reward_card.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
+import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
 
 /// Onboarding's closing beat — a summary of the choices just made plus the
 /// actual first mission, so the flow ends on an action rather than more

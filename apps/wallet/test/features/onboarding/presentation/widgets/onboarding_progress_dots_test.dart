@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_progress_dots.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/widgets/onboarding_progress_dots.dart';
 
 void main() {
   Widget buildTestableWidget({required int step, required int total}) {

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/pet_setup_screen.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
-import 'package:petrimonium/features/pet/domain/repositories/pet_repository.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/screens/pet_setup_screen.dart';
+import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_wallet/features/pet/domain/entities/pet_profile.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.dart';
+import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 
 class FakePetRepository implements PetRepository {
   bool hasPet = false;

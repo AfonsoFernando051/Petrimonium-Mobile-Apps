@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/mentor/domain/entities/conversation_summary.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/conversation_list_tile.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_wallet/features/mentor/presentation/widgets/conversation_list_tile.dart';
 
 void main() {
   setUp(() {

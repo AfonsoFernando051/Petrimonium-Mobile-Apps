@@ -22,3 +22,8 @@ pubspec_overrides.yaml
 **/*.jks
 .env
 *.env
+
+# Library packages do not pin their own resolution - the consuming app's
+# lockfile is the one that decides what ships. Each app's pubspec.lock IS
+# committed, which is what makes a release build reproducible per product.
+packages/*/pubspec.lock

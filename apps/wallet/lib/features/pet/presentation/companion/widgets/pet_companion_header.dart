@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium/features/pet/presentation/companion/rive/pet_rive_companion.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_interaction_sheet.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_companion_controller.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/rive/pet_rive_companion.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_interaction_sheet.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 
 /// The compact, always-visible companion avatar shown in every major
 /// screen's chrome (see `docs/PRODUCT_VISION.md`'s Pet Companion section).

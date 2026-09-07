@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/navigation/wallet_deep_link.dart';
-import 'package:petrimonium/features/academy/domain/entities/lab_simulator.dart';
+import 'package:petrimonium_academy/core/navigation/wallet_deep_link.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
 
 void main() {
   group('WalletDeepLink.portfolioHighlight', () {

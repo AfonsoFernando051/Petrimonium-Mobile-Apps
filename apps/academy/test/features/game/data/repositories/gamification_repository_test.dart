@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/features/game/data/datasources/gamification_remote_datasource.dart';
-import 'package:petrimonium/features/game/data/repositories/gamification_repository.dart';
+import 'package:petrimonium_academy/features/game/data/datasources/gamification_remote_datasource.dart';
+import 'package:petrimonium_academy/features/game/data/repositories/gamification_repository.dart';
 
 class MockGamificationRemoteDataSource extends Mock implements GamificationRemoteDataSource {}
 

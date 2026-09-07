@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/features/onboarding/data/repositories/onboarding_state_repository.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_state_repository.dart';
 
 void main() {
   late OnboardingStateRepository repository;

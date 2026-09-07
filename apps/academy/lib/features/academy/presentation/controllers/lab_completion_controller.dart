@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/core/events/app_event_bus.dart';
-import 'package:petrimonium/features/academy/data/datasources/lab_remote_datasource.dart';
-import 'package:petrimonium/features/academy/data/repositories/academy_progress_local_repository.dart';
-import 'package:petrimonium/features/academy/domain/entities/lab_simulator.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/core/events/app_event.dart';
+import 'package:petrimonium_academy/core/events/app_event_bus.dart';
+import 'package:petrimonium_academy/features/academy/data/datasources/lab_remote_datasource.dart';
+import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Owns Financial Lab completion state — which simulators are done, and the
 /// local-first-then-sync flow for completing one — for the lifetime of a

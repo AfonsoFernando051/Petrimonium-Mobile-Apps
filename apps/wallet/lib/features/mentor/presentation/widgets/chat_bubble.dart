@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/mentor/domain/entities/chat_message.dart';
-import 'package:petrimonium/features/mentor/domain/services/wallet_mentor_reply_layers.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/mentor_reply_layers_view.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.dart';
+import 'package:petrimonium_wallet/features/mentor/domain/services/wallet_mentor_reply_layers.dart';
+import 'package:petrimonium_wallet/features/mentor/presentation/widgets/mentor_reply_layers_view.dart';
 
 /// Maps a real source key from `MentorSystemPromptBuilder.walletSourcesFor`
 /// to its translated label — falls back to the raw key for a source added

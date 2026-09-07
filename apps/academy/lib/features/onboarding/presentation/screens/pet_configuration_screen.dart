@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/utils/friendly_error_message.dart';
-import 'package:petrimonium/core/utils/game_snack.dart';
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
+import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
+import 'package:petrimonium_academy/core/utils/game_snack.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/pet_assets.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/academy_intro_screen.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/pet_hero_capsule.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium/features/pet/presentation/widgets/pet_name_field.dart';
-import 'package:petrimonium/features/pet/presentation/widgets/pet_preview_panel.dart';
-import 'package:petrimonium/features/pet/presentation/widgets/pet_species_selector.dart';
+import 'package:petrimonium_academy/core/utils/pet_assets.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/academy_intro_screen.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/pet_hero_capsule.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_name_field.dart';
+import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_preview_panel.dart';
+import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_species_selector.dart';
 
 /// Onboarding's "Configure Your Pet" step — the pet introduces itself, and
 /// the player picks its species and name together in one screen right after

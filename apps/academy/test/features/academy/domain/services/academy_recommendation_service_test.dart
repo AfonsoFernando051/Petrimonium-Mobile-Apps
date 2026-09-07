@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium/features/academy/domain/services/academy_recommendation_service.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_recommendation_service.dart';
 
 import '../../academy_test_fixtures.dart';
 

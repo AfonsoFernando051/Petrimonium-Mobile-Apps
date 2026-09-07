@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/comic_bubble_painter.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_comic_speech_bubble.dart';
-import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_companion_controller.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/comic_bubble_painter.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_comic_speech_bubble.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 
 /// Floats [PetCompanionController]'s current message next to wherever the
 /// Pet actually renders on screen — anchored via [anchor], not a hardcoded

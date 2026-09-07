@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/history_point.dart';
+import 'package:petrimonium_academy/features/portfolio/domain/entities/history_point.dart';
 
 void main() {
   group('HistoryPoint', () {

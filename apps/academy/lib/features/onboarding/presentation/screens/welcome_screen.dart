@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/pet_assets.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/pet_hero_capsule.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/pet_configuration_screen.dart';
+import 'package:petrimonium_academy/core/utils/pet_assets.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/pet_hero_capsule.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/screens/pet_configuration_screen.dart';
 
 /// Onboarding's opening beat — a real emotional entrance rather than a form.
 /// No species/name is chosen yet (that's `PetConfigurationScreen`, the next

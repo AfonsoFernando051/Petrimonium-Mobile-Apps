@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
+import 'package:petrimonium_academy/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 

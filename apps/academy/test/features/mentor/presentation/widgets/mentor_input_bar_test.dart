@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/mentor/presentation/widgets/mentor_input_bar.dart';
+import 'package:petrimonium_academy/core/theme/app_theme.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_input_bar.dart';
 
 void main() {
   Widget buildTestableWidget({

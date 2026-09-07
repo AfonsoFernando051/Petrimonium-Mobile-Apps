@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/home/presentation/widgets/mentor_insight_card.dart';
-import 'package:petrimonium/features/mentor/data/datasources/mentor_remote_datasource.dart';
-import 'package:petrimonium/features/mentor/data/repositories/mentor_chat_repository.dart';
+import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/features/home/presentation/widgets/mentor_insight_card.dart';
+import 'package:petrimonium_wallet/features/mentor/data/datasources/mentor_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
 
 class MockMentorChatRepository extends Mock implements MentorChatRepository {}
 

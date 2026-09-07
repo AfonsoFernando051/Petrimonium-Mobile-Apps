@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/settings/presentation/widgets/appearance_option_card.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/features/settings/presentation/widgets/appearance_option_card.dart';
 
 /// Settings → Appearance: lets the user pick Light / Dark / System. Wraps
 /// its own `ValueListenableBuilder` on [ThemeController.themeModeNotifier]

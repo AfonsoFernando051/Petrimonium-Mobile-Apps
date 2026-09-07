@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/achievement.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/portfolio_stats.dart';
-import 'package:petrimonium/features/portfolio/domain/services/passive_income_estimator.dart';
+import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/achievement.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_stats.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/services/passive_income_estimator.dart';
 
 class _AchievementDef {
   final String id;

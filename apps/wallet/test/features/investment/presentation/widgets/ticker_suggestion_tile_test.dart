@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/features/investment/presentation/widgets/ticker_suggestion_tile.dart';
+import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/widgets/ticker_suggestion_tile.dart';
 
 void main() {
   Widget buildTestableWidget({

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/academy/domain/entities/mastery_tier.dart';
-import 'package:petrimonium/features/academy/domain/entities/school.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/academy_progress_bar.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/mastery_tier_presentation.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/mastery_tier.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/school.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_progress_bar.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/mastery_tier_presentation.dart';
 
 /// One row of the Academy home's "Your Mastery" section — a school's icon,
 /// title, Progress bar (completion, `AcademyController.masteryFor`) and a

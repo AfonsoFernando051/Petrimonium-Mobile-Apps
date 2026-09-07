@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/constants/api_constants.dart';
+import 'package:petrimonium_wallet/core/constants/api_constants.dart';
 
 void main() {
   group('ApiConstants', () {
