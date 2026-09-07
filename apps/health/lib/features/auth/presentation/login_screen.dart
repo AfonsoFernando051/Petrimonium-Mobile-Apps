@@ -63,11 +63,10 @@ class _LoginScreenState extends State<LoginScreen> {
             constraints: const BoxConstraints(maxWidth: 380),
             child: Column(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(999),
-                  child: Image.asset('assets/pets/fox.png', width: 72, height: 72, fit: BoxFit.contain),
-                ),
-                const SizedBox(height: 12),
+                // Sem recorte circular: a arte do mascote já vem com fundo
+                // transparente e assenta direto sobre o fundo da tela.
+                Image.asset('assets/pets/fox.png', height: 96, fit: BoxFit.contain),
+                const SizedBox(height: 14),
                 Text(
                   'PETRIMONIUM HEALTH',
                   style: TextStyle(
@@ -79,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(l10n.healthTagline, style: const TextStyle(fontSize: 12, color: HealthColors.textMuted)),
-                const SizedBox(height: 20),
+                const SizedBox(height: 28),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(3),

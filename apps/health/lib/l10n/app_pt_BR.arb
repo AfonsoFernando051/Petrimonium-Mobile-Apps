@@ -38,6 +38,8 @@
   "interfaceLanguage": "Idioma da interface",
   "languagePtBr": "Português do Brasil",
   "languagePtPt": "Português de Portugal",
+  "languageEn": "Inglês",
+  "languageEs": "Espanhol",
   "countrySuggestion": "Ao trocar o país, sugerimos a moeda e o idioma mais comuns. Você ainda pode escolher cada opção separadamente.",
   "singleCurrencyNotice": "Nesta versão, a moeda escolhida vale para todas as contas e lançamentos. Não há câmbio nem consolidação entre moedas.",
   "onboardingSaveFailed": "Não foi possível salvar suas preferências.",

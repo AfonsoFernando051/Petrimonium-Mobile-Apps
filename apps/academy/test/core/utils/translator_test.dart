@@ -37,6 +37,20 @@ void main() {
   // a language block drifting out of parity is caught here, not by a user
   // spotting Portuguese text in the English app.
   group('Translator — language parity', () {
+    test('pt_PT só define chaves que pt também define', () {
+      final values = Translator.debugLocalizedValues;
+      final ptKeys = values['pt']!.keys.toSet();
+      final ptPtKeys = values['pt_PT']!.keys.toSet();
+      // pt_PT é um overlay esparso: pode definir menos que pt, nunca outra
+      // coisa. Uma chave aqui que pt não conheça é erro de digitação.
+      expect(
+        ptPtKeys.difference(ptKeys),
+        isEmpty,
+        reason: 'pt_PT define chaves que pt desconhece',
+      );
+      expect(ptPtKeys, isNotEmpty);
+    });
+
     test('en defines exactly the same key set as pt', () {
       final values = Translator.debugLocalizedValues;
       final ptKeys = values['pt']!.keys.toSet();

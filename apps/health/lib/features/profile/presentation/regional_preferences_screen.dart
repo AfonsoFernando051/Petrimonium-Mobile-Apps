@@ -161,18 +161,36 @@ class _RegionalPreferencesScreenState extends State<RegionalPreferencesScreen> {
             const SizedBox(height: 22),
             _SectionLabel(l10n.interfaceLanguage),
             const SizedBox(height: 8),
-            Row(
+            // Wrap, e não Row: com quatro idiomas os chips não cabem numa
+            // única linha. expanded: false porque HealthChip envolve-se em
+            // Expanded por omissão, o que Wrap não aceita.
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
                 HealthChip(
                   label: l10n.languagePtBr,
                   selected: _locale == InterfaceLocale.ptBr,
+                  expanded: false,
                   onTap: () => setState(() => _locale = InterfaceLocale.ptBr),
                 ),
-                const SizedBox(width: 8),
                 HealthChip(
                   label: l10n.languagePtPt,
                   selected: _locale == InterfaceLocale.ptPt,
+                  expanded: false,
                   onTap: () => setState(() => _locale = InterfaceLocale.ptPt),
+                ),
+                HealthChip(
+                  label: l10n.languageEn,
+                  selected: _locale == InterfaceLocale.en,
+                  expanded: false,
+                  onTap: () => setState(() => _locale = InterfaceLocale.en),
+                ),
+                HealthChip(
+                  label: l10n.languageEs,
+                  selected: _locale == InterfaceLocale.es,
+                  expanded: false,
+                  onTap: () => setState(() => _locale = InterfaceLocale.es),
                 ),
               ],
             ),

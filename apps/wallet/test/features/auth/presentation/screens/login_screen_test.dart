@@ -60,7 +60,12 @@ void main() {
       expect(find.text('PETRIMONIUM WALLET'), findsOneWidget);
       expect(find.text('E-mail ou Usuário'), findsOneWidget);
       expect(find.text('Senha'), findsOneWidget);
-      expect(find.text('Entrar'), findsOneWidget);
+      // 'Entrar' aparece duas vezes em pt: a aba do alternador e o CTA do
+      // LoginButton. Aqui interessa o CTA.
+      expect(
+        find.descendant(of: find.byType(LoginButton), matching: find.text('Entrar')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('updates UI text when Translator language changes', (WidgetTester tester) async {
@@ -69,7 +74,7 @@ void main() {
 
       expect(find.text('Email or Username'), findsOneWidget);
       expect(find.text('Password'), findsOneWidget);
-      // 'Login' now appears twice in English: the Login/Sign Up toggle tab
+      // 'Login' now appears twice in English: the Login/Create Account toggle tab
       // and the LoginButton's own CTA label — assert the CTA specifically.
       expect(
         find.descendant(of: find.byType(LoginButton), matching: find.text('Login')),
@@ -80,6 +85,14 @@ void main() {
     });
 
     testWidgets('TextFields accept text input properly and attempt login', (WidgetTester tester) async {
+      // A superfície padrão de teste (800x600) é menor que um telefone e o CTA
+      // fica fora dela; o fundo cósmico anima sem parar, então rolar até o
+      // botão com pumpAndSettle não é opção.
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 3.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
       when(() => mockAuthRepository.login(any(), any())).thenAnswer((_) async {});
       
       await tester.pumpWidget(buildTestableWidget());
