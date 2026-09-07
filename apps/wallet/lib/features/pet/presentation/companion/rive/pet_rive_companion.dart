@@ -70,9 +70,9 @@ String? _dogTriggerForState(PetAnimationState state) {
   }
 }
 
-/// Owl expression-pack artboard names (see
-/// `assets/rive/tests/25712-48015-owl-mascot-expression-pack-*.riv`) chosen
-/// for each [PetAnimationState]. Like the dog stopgap, [PetAnimationState.sleep]
+/// Owl expression-pack artboard names (see `assets/rive/pet/owl.riv`, a
+/// marketplace expression pack copied in verbatim) chosen for each
+/// [PetAnimationState]. Like the dog stopgap, [PetAnimationState.sleep]
 /// has no literal sleep pose in this pack — artboard `13` (calm, one eye
 /// closed) is the closest available stand-in.
 String _owlArtboardForState(PetAnimationState state) {

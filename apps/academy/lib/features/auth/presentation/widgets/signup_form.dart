@@ -12,7 +12,7 @@ import 'google_signin_button.dart';
 import 'or_divider.dart';
 
 /// Mirrors the backend's `RegisterRequest` username size — see
-/// `PetApp-Backend/.../presentation/auth/dto/RegisterRequest.java`.
+/// `Petrimonium-Backend/.../presentation/auth/dto/RegisterRequest.java`.
 const int _minNameLength = 3;
 
 final RegExp _emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');

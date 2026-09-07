@@ -27,7 +27,7 @@ class _AchievementDef {
 /// assets the user is still typing in on the setup screen (not yet saved,
 /// so there's nothing for the backend to evaluate yet — see
 /// `PendingPortfolioStatsBuilder`). For a saved portfolio, the backend's
-/// `AchievementCatalog` (PetApp-Backend/.../application/gamification/achievement)
+/// `AchievementCatalog` (Petrimonium-Backend/.../application/gamification/achievement)
 /// is authoritative — it actually grants XP and persists unlocks
 /// (`PortfolioController._evaluateGamification` via `AchievementsRepository`).
 /// Ids, XP rewards and conditions here must be kept in sync with that Java

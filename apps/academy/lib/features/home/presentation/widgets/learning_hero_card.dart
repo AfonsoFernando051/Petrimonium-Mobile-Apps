@@ -25,7 +25,7 @@ import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/
 /// Redesigned from the former `dashboard/presentation/widgets/pet_showcase
 /// .dart`: the aura no longer derives from portfolio performance, and the
 /// backend-`health`-driven "HP" bar (a decorative field, never actually
-/// updated — see `PetApp-Backend`'s `ConfigurePetUseCaseImpl`) is replaced
+/// updated — see `Petrimonium-Backend`'s `ConfigurePetUseCaseImpl`) is replaced
 /// by a real XP-to-next-evolution bar. The pet represents learning
 /// progression, never investment volume or performance
 /// (`docs/PRODUCT_VISION.md` §9, §11).

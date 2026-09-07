@@ -3,7 +3,7 @@ import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 
 // Uppercase values mirror the backend's Java enum wire format (see
-// PetApp-Backend PetSpecieEnum) and must match exactly for (de)serialization.
+// Petrimonium-Backend PetSpecieEnum) and must match exactly for (de)serialization.
 enum PetSpecieEnum {
   DOG,
   CAT,

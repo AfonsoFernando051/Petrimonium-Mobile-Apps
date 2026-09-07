@@ -1,6 +1,6 @@
 /// Password strength rule shared by every sign-up entry point in the app.
 /// Mirrors the backend's `RegisterRequest` validation (see
-/// `PetApp-Backend/.../presentation/auth/dto/RegisterRequest.java`) so a weak
+/// `Petrimonium-Backend/.../presentation/auth/dto/RegisterRequest.java`) so a weak
 /// password is rejected locally with a clear message instead of round-tripping
 /// to the server for a 400.
 class PasswordPolicy {

@@ -52,7 +52,7 @@ scripts:
 
   test:packages:
     description: Test only the shared packages.
-    run: melos exec --scope="petrimonium_ui,petrimonium_flutter_core" -- flutter test
+    run: melos exec --scope="petrimonium_ui,petrimonium_flutter_core,petrimonium_shared_features" -- flutter test
 
   build:academy:
     description: Release bundle for Academy only. Wallet and Health are untouched.

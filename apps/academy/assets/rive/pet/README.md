@@ -16,7 +16,7 @@ Two species are bundled today, both reference assets copied in as-is rather than
 wires each one around the target contract. Every other species still has no `.riv` and renders
 the `PetMascotWidget` (Lottie/PNG) fallback.
 
-**`dog.riv`** (`assets/rive/tests/pet_cachorro_state_machine.riv`, verbatim):
+**`dog.riv`** (copied verbatim from a `pet_cachorro_state_machine.riv` reference asset, kept only in git history):
 
 - Artboard "Pet Cachorro", state machine **"Pet State Machine"** (not `Companion`).
 - Five one-shot **trigger** inputs (`Happy`, `Blink`, `Tail Wag`, `Sit`, `Excited`) instead of the

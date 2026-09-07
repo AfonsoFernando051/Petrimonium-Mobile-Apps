@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 // Uppercase values mirror the backend's Java enum wire format (see
-// PetApp-Backend PetSpecieEnum) and must match exactly for (de)serialization.
+// Petrimonium-Backend PetSpecieEnum) and must match exactly for (de)serialization.
 enum PetSpecieEnum {
   DOG,
   CAT,
