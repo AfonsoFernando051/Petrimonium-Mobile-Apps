@@ -37,14 +37,36 @@ petrimonium-mobile/
 
 ## Dependency rules
 
+### Current graph
+
 ```
-apps/academy ─┐
-apps/wallet  ─┼──> petrimonium_shared_features ──> petrimonium_flutter_core
-apps/health  ─┘                                └──> petrimonium_ui
+apps/academy ─┬──> petrimonium_ui
+              ├──> petrimonium_flutter_core
+              └──> petrimonium_shared_features ──> petrimonium_flutter_core
+
+apps/wallet  ─┬──> petrimonium_ui
+              ├──> petrimonium_flutter_core
+              └──> petrimonium_shared_features ──> petrimonium_flutter_core
+
+apps/health       (currently self-contained; no package dependency yet)
 ```
 
-Three rules, all enforced by `.github/workflows/shared-checks.yml` rather than
-by good intentions:
+### Target direction
+
+Health may adopt shared packages incrementally when a real three-product seam
+has been verified. The allowed direction remains:
+
+```text
+apps/academy ─┐
+apps/wallet  ─┼──> packages/*
+apps/health  ─┘
+```
+
+The target does not require every app to depend on every package. An unused
+edge should not be declared merely to make the graph look symmetrical.
+
+Three rules, checked by `.github/workflows/shared-checks.yml` and
+`tooling/check_dependency_direction.sh` rather than left only to convention:
 
 1. **No package may import an app.** `packages/**` must never contain
    `package:petrimonium_academy/`, `petrimonium_wallet/` or
@@ -71,10 +93,11 @@ It contains **no product name, no product route, no business rule, and no
 string catalog**. Everything product-specific arrives as configuration:
 
 - **Colors** through `PetrimoniumTheme.build(brightness:, colors:, accents:)`.
-  Each app owns `lib/core/theme/app_palette.dart`. Academy is cosmic-dark with
-  cyan/violet accents; Wallet is petrol-green with emerald, and additionally
-  renders a market dip in a neutral tone rather than alarm red — a Wallet
-  product guardrail, which is precisely why it lives in Wallet.
+  Academy and Wallet own `lib/core/theme/app_palette.dart`; Health currently
+  owns a separate `lib/core/theme/health_theme.dart`. Academy is cosmic-dark
+  with cyan/violet accents; Wallet is petrol-green with emerald, and
+  additionally renders a market dip in a neutral tone rather than alarm red —
+  a Wallet product guardrail, which is precisely why it lives in Wallet.
 - **Copy** through widget parameters. Every shared widget that renders text
   takes that text as an argument.
 - **Behavior** through callbacks.
@@ -93,9 +116,9 @@ backend* are the same: `PetrimoniumEnvironment` (base URL, release guard),
 callback rather than emitting an event. Each app's `AppEvent` is a sealed
 hierarchy, and a sealed type cannot be extended from another library, so the
 bridge is wired at each app's composition root (`DI.notifySessionExpired`).
-That callback is optional, so each app carries a test pinning the wire-up —
-forgetting it would silently disable logout-on-expiry without failing
-anything else.
+That callback is optional, so each consuming app carries a test pinning the
+wire-up — forgetting it would silently disable logout-on-expiry without
+failing anything else. Health currently uses its own network layer.
 
 **Not here:** product business rules. Account, consent, global XP, global
 level, Pet evolution, Mentor context, financial calculations, Academy
@@ -106,9 +129,11 @@ must not quietly become their source of truth.
 ### `petrimonium_shared_features`
 
 Features that genuinely belong to the ecosystem rather than to one product.
-Today: gamification. Global XP and global level are one number per account,
-produced by one backend ledger and read by every product from the same route,
-so a bug in the level maths is a bug in all three products at once.
+Today: the gamification client used by Academy and Wallet. Global XP and global
+level are one number per account, produced by one backend ledger; Health has
+not adopted this package yet, even though it participates in the same backend
+identity. A package bug currently affects its two consumers, and a future
+Health adoption must preserve the same contract rather than fork the maths.
 
 Note the split used for the level tier, because it is the pattern to copy:
 the **boundaries** (`level < 5` is a beginner) are ecosystem facts and live in
@@ -118,23 +143,25 @@ product-supplied copy.
 
 ## What is deliberately still duplicated
 
-Academy and Wallet still hold byte-identical copies of the pet (22 files),
-settings (11), mentor (8) and auth (8) blocks. This is known, and it is not an
+Academy and Wallet still hold structurally similar copies of Pet, settings,
+Mentor and auth areas. Some individual files remain identical, while others
+have already diverged in behavior and copy. Health implements the same broad
+experiences with a different architecture. This is known, and it is not an
 oversight.
 
-All of them are bound to `Translator` and `AppStrings`, and **the two catalogs
-have already diverged by roughly 650 lines**. Health is a third system
-entirely, using ARB files and `gen_l10n`. Sharing that UI therefore requires
-first deciding which product's wording wins for the shared strings — a
-decision that silently changes one product's copy, which a refactor is not
-allowed to do.
+All of them are bound to product-local state, navigation and string systems.
+Academy and Wallet use their existing translator/catalog approach, while
+Health is a third system using ARB files and `gen_l10n`. Sharing that UI must
+not decide which product's wording wins. Shared widgets should normally accept
+already-localized copy as parameters; converging localization mechanisms is a
+separate decision.
 
-So the prerequisite for the next extraction phase is a **localization
-decision, not a refactor**. The recommended order once it is made:
+The prerequisite for each extraction is an explicit copy/localization seam;
+it does not require all apps to adopt the same localization library. The
+recommended order:
 
-1. Converge on one shared string mechanism (or agree that shared widgets keep
-   taking copy as parameters, which is what the ten already-extracted widgets
-   do and it has worked well).
+1. Keep shared widgets taking already-localized copy as parameters unless a
+   separate, justified localization decision changes that contract.
 2. Auth UI — the layout, fields, validation, loading and error presentation
    are already structurally identical; only copy, accent and post-login
    navigation differ. Those are callbacks and configuration, not branches.
