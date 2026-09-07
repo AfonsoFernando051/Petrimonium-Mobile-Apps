@@ -34,3 +34,4 @@ cd apps/academy && flutter run
 adding anything to `packages/`.** It carries the rule that decides whether
 code is shared, what belongs in each package, and what is deliberately still
 duplicated and why.
+# Petrimonium-Mobile-Apps
