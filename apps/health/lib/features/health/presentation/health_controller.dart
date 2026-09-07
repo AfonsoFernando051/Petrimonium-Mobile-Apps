@@ -105,6 +105,13 @@ final class HealthController extends ChangeNotifier {
     });
   }
 
+  Future<void> loginWithGoogle() async {
+    await _withBusy(() async {
+      await _repository.loginWithGoogle();
+      await _loadAuthenticatedState();
+    });
+  }
+
   Future<void> register(String name, String email, String password) async {
     await _withBusy(() async {
       await _repository.register(name, email, password);

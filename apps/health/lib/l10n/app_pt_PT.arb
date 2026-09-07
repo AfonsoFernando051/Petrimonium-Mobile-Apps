@@ -141,6 +141,8 @@
   "loginToggleSignup": "Cadastro",
   "loginCtaSignup": "Criar a minha conta",
   "forgotPassword": "Esqueceu a sua palavra-passe?",
+  "continueWithGoogle": "Continuar com Google",
+  "orDivider": "ou",
   "loginNoteLogin": "Mesma conta Petrimonium da Academy e da Wallet. Se já tiver uma, o seu Pet e preferências vêm junto.",
   "loginNoteSignup": "A sua conta Petrimonium é única para Academy, Wallet e Health. No próximo passo cria o seu Pet.",
   "petSetupTitle": "Crie o seu Pet",

@@ -47,6 +47,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> _submitGoogle(HealthController controller) async {
+    final l10n = AppLocalizations.of(context);
+    setState(() => _formError = null);
+    try {
+      await controller.loginWithGoogle();
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _formError = l10n.authFailed);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = HealthScope.of(context);
@@ -145,6 +156,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   busy: busy,
                   onPressed: () => _submit(controller),
                 ),
+                const SizedBox(height: 14),
+                Row(
+                  children: [
+                    const Expanded(child: Divider(color: HealthColors.border)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text(
+                        l10n.orDivider,
+                        style: const TextStyle(fontSize: 12, color: HealthColors.textMuted),
+                      ),
+                    ),
+                    const Expanded(child: Divider(color: HealthColors.border)),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                _GoogleButton(
+                  label: l10n.continueWithGoogle,
+                  busy: busy,
+                  onPressed: () => _submitGoogle(controller),
+                ),
                 if (!isSignup) ...[
                   const SizedBox(height: 10),
                   Text(
@@ -156,6 +187,43 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Alternativa ao e-mail/palavra-passe, não a acção principal: fundo do
+/// cartão com contorno, em vez do terracota cheio do [HealthPrimaryButton].
+/// O glifo é o mesmo `Icons.g_mobiledata` que a Wallet e a Academy usam — a
+/// marca de quatro cores do Google exigiria um asset, que este repo não tem.
+class _GoogleButton extends StatelessWidget {
+  const _GoogleButton({required this.label, required this.busy, required this.onPressed});
+
+  final String label;
+  final bool busy;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: OutlinedButton.icon(
+        onPressed: busy ? null : onPressed,
+        icon: const Icon(Icons.g_mobiledata, size: 28, color: HealthColors.textPrimary),
+        label: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            color: HealthColors.textPrimary,
+          ),
+        ),
+        style: OutlinedButton.styleFrom(
+          backgroundColor: HealthColors.card,
+          side: const BorderSide(color: HealthColors.border),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     );
