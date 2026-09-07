@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_radii.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// The neon-cyan-outlined "field" look shared by every input on
 /// `InvestmentConfigurationScreen` — plain `TextFormField`s (`_buildTextField`),

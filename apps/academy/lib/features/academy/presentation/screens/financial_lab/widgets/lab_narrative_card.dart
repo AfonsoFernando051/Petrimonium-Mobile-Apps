@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_radii.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/theme/app_text_styles.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// Which narrative beat a [LabNarrativeCard] represents in a simulator's
 /// Introduction → Inputs → Calculation → Visualization → Interpretation →

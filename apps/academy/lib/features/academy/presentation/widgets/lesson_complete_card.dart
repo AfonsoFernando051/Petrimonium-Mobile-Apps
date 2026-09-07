@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/game_button.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
 import 'package:petrimonium/features/pet/presentation/companion/rive/pet_rive_companion.dart';
 import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/portfolio_stats.dart';
 import 'package:petrimonium/features/portfolio/domain/services/achievement_catalog.dart';
 

@@ -18,7 +18,7 @@ import 'package:petrimonium/features/academy/domain/entities/lesson_completion_r
 import 'package:petrimonium/features/academy/data/repositories/academy_catalog_repository.dart';
 import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium/features/auth/presentation/screens/login_screen.dart';
-import 'package:petrimonium/features/auth/presentation/widgets/custom_text_field.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/login_button.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/signup_action_button.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/signup_form.dart';
@@ -39,7 +39,6 @@ import 'package:petrimonium/features/pet/domain/repositories/pet_repository.dart
 import 'package:petrimonium/features/pet/presentation/celebration/module_completion_share_overlay.dart';
 import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/widgets/game_button.dart';
 import 'package:petrimonium/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

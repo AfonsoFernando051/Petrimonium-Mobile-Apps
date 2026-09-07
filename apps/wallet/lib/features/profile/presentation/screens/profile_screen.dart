@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/display_name.dart';
-import 'package:petrimonium/core/utils/fade_route.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
 import 'package:petrimonium/features/onboarding/presentation/screens/quick_setup_screen.dart';

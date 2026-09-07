@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/widgets/game_button.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/investment/data/repositories/investment_repository.dart';
 import 'package:petrimonium/features/investment/presentation/screens/investment_configuration_screen.dart';
 import 'package:petrimonium/features/investment/presentation/widgets/added_asset_tile.dart';

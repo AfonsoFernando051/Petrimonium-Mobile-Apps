@@ -1,13 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_radii.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/formatters.dart';
-import 'package:petrimonium/core/widgets/chart_legend.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
-import 'package:petrimonium/core/widgets/tooltip_summary.dart';
 
 /// One line series in a [LabLineChart] — [dashed] marks a flat reference
 /// line (e.g. nominal value that never grows) as visually distinct from the

@@ -9,7 +9,7 @@ import 'package:petrimonium/features/onboarding/data/models/onboarding_status_mo
 import 'package:petrimonium/features/onboarding/data/models/question_model.dart';
 import 'package:petrimonium/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:petrimonium/features/auth/presentation/screens/login_screen.dart';
-import 'package:petrimonium/features/auth/presentation/widgets/custom_text_field.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/login_background.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/login_button.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/login_card.dart';

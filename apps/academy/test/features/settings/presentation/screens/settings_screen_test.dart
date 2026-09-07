@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/theme/theme_controller.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium/features/auth/presentation/screens/login_screen.dart';

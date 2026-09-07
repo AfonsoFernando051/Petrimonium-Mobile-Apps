@@ -4,16 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/theme/app_text_styles.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/friendly_error_message.dart';
 import 'package:petrimonium/core/utils/game_snack.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
-import 'package:petrimonium/core/widgets/confirm_logout_dialog.dart';
-import 'package:petrimonium/core/widgets/error_state_view.dart';
 import 'package:petrimonium/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium/features/settings/presentation/widgets/account_section.dart';
 import 'package:petrimonium/features/settings/presentation/widgets/appearance_section.dart';
@@ -149,7 +144,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _confirmLogout() async {
-    final confirmed = await ConfirmLogoutDialog.show(context);
+    final confirmed = await ConfirmLogoutDialog.show(
+        context,
+        title: Translator.translate(AppStrings.logoutConfirmTitle),
+        message: Translator.translate(AppStrings.logoutConfirmMessage),
+        cancelLabel: Translator.translate(AppStrings.cancelButton),
+        confirmLabel: Translator.translate(AppStrings.logoutButton),
+      );
 
     if (confirmed && mounted) {
       HapticFeedback.mediumImpact();
@@ -197,7 +198,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: _loadingPrefs
               ? const AppLoadingIndicator()
               : _loadError != null
-                  ? ErrorStateView(message: _loadError!, onRetry: _retryLoadLocalPreferences)
+                  ? ErrorStateView(
+            retryLabel: Translator.translate(AppStrings.retryButtonLabel),message: _loadError!, onRetry: _retryLoadLocalPreferences)
                   : SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
                   child: Column(

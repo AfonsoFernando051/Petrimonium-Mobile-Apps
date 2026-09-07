@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 
 /// Home's opening line — "Welcome back, {name}" plus a streak badge, both

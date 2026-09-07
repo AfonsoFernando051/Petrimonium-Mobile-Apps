@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// The app's shared background — a flat gradient plus a sparse, gently
 /// twinkling starfield, matching the Academy design system exactly ("Base:

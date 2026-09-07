@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/game_snack.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/core/widgets/game_button.dart';
 import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
 import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
 import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';

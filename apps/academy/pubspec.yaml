@@ -31,6 +31,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Shared Petrimonium packages, resolved from the monorepo by path. They are
+  # deliberately NOT published to pub.dev - they are internal to this
+  # workspace, and a path dependency keeps each app's dependency resolution
+  # (and its own pubspec.lock) independent of the others.
+  petrimonium_ui:
+    path: ../../packages/petrimonium_ui
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8

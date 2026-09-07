@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/core/widgets/game_button.dart';
 import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_progress_dots.dart';
 
 /// Shared chrome for every screen in the onboarding narrative arc (Welcome

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_radii.dart';
-import 'package:petrimonium/core/theme/app_text_styles.dart';
+import '../tokens/app_color_tokens.dart';
+import '../tokens/app_radii.dart';
+import '../tokens/app_text_styles.dart';
 
 /// A premium "mobile-game" CTA button: gradient fill, ambient glow, a tap-down
 /// press animation, and an optional slow idle pulse reserved for the single
@@ -18,7 +18,7 @@ class GameButton extends StatefulWidget {
     required String this.label,
     required this.onPressed,
     this.icon,
-    this.colors = AppColors.brandGradient,
+    this.colors,
     this.pulse = false,
     this.isLoading = false,
     this.height = 56,
@@ -41,7 +41,7 @@ class GameButton extends StatefulWidget {
     super.key,
     required Widget this.child,
     required this.onPressed,
-    this.colors = AppColors.brandGradient,
+    this.colors,
     this.pulse = false,
     this.height,
     this.borderRadius = AppRadii.xl,
@@ -56,7 +56,11 @@ class GameButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final IconData? icon;
   final bool iconTrailing;
-  final List<Color> colors;
+  /// Gradient fill. Defaults to the product's own brand gradient
+  /// (`context.brand.gradient`) when omitted, so a plain `GameButton`
+  /// renders in Academy's accent inside Academy and Wallet's inside Wallet
+  /// with no call-site change.
+  final List<Color>? colors;
 
   /// Reserve `true` for the single most important CTA on a screen.
   final bool pulse;
@@ -131,7 +135,8 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final glowColor = widget.colors.last;
+    final gradientColors = widget.colors ?? context.brand.gradient;
+    final glowColor = gradientColors.last;
 
     return AnimatedBuilder(
       animation: Listenable.merge([_pulseController, _pressController]),
@@ -151,7 +156,7 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: widget.colors,
+                  colors: gradientColors,
                 ),
                 borderRadius: BorderRadius.circular(widget.borderRadius),
                 boxShadow: [

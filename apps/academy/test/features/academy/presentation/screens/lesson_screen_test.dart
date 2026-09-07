@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/game_button.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/academy/data/datasources/academy_remote_datasource.dart';
 import 'package:petrimonium/features/academy/data/repositories/academy_progress_local_repository.dart';
 import 'package:petrimonium/features/academy/domain/entities/lesson.dart';

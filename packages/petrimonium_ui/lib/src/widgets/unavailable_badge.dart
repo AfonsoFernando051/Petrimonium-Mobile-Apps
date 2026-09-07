@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import '../tokens/app_color_tokens.dart';
 
 /// Shared "coming soon" visual language for any control that looks
 /// interactive but isn't implemented yet — extracted from the Financial
@@ -12,12 +10,13 @@ import 'package:petrimonium/core/utils/translator.dart';
 /// (Search, Sell, Reports, Import) needs the same honest treatment instead
 /// of each screen inventing its own variant.
 class UnavailableBadge extends StatelessWidget {
-  const UnavailableBadge({super.key, this.label});
+  const UnavailableBadge({super.key, required this.label});
 
-  /// Defaults to the shared "coming soon" string; pass an override only if
-  /// the control's unavailability isn't a "not built yet" case (e.g. a
-  /// different `Unavailable`/`Disabled` reason from `AppStrings`).
-  final String? label;
+  /// The already-localized reason, e.g. a translated "coming soon". This
+  /// package holds no string catalog of its own - Academy/Wallet and Health
+  /// localize through different mechanisms, so text is always passed in by
+  /// the product rather than resolved here.
+  final String label;
 
   /// The opacity every unavailable control in the app should apply to its
   /// whole subtree — one constant instead of each call site guessing a
@@ -27,7 +26,7 @@ class UnavailableBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      (label ?? Translator.translate(AppStrings.labComingSoon)).toUpperCase(),
+      label.toUpperCase(),
       style: TextStyle(
         color: context.colors.textTertiary,
         fontSize: 10,

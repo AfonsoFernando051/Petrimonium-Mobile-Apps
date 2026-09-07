@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// A generic animated gradient progress bar — same visual language as
 /// `PortfolioProgressBar`, kept separate since that widget's label copy is

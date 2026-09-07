@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// The onboarding narrative arc's shared progress indicator — [step] (1-based)
 /// out of [total]. Same active/inactive dot mechanic `TutorialScreen` used to

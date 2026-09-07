@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// Which of the three layers a piece of information belongs to — the
 /// central guardrail across both Petrimonium apps: every financial metric

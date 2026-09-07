@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/widgets/chart_legend.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   Widget buildTestableWidget(List<ChartLegendItem> items) {

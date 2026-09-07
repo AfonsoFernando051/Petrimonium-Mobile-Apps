@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
-import '../../../../core/theme/app_color_tokens.dart';
-import '../../../../core/theme/app_motion.dart';
-import '../../../../core/theme/app_text_styles.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import '../../../../core/utils/translator.dart';
-import '../../../../core/widgets/confirm_logout_dialog.dart';
 import '../../../../core/widgets/cosmic_background.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/utils/game_snack.dart';
@@ -211,7 +208,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // ── Logout ────────────────────────────────────────────────────────────────
   Future<void> _confirmLogout() async {
-    final confirmed = await ConfirmLogoutDialog.show(context);
+    final confirmed = await ConfirmLogoutDialog.show(
+        context,
+        title: Translator.translate(AppStrings.logoutConfirmTitle),
+        message: Translator.translate(AppStrings.logoutConfirmMessage),
+        cancelLabel: Translator.translate(AppStrings.cancelButton),
+        confirmLabel: Translator.translate(AppStrings.logoutButton),
+      );
 
     if (confirmed && mounted) {
       HapticFeedback.mediumImpact();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/formatters.dart';
 
 /// One row in the ticker-search autocomplete dropdown — an avatar (ticker

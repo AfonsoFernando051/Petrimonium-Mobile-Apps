@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/theme_controller.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

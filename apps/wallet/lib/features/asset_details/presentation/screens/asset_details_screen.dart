@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium/core/constants/app_strings.dart';
+import 'package:petrimonium/core/utils/translator.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/widgets/error_state_view.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/asset_details/domain/entities/asset_data_status.dart';
 import 'package:petrimonium/features/asset_details/presentation/controllers/asset_details_controller.dart';
 import 'package:petrimonium/features/asset_details/presentation/widgets/allocation_suggestion_card.dart';
@@ -132,6 +133,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
 
     if (_controller.error != null && asset == null) {
       return ErrorStateView(
+            retryLabel: Translator.translate(AppStrings.retryButtonLabel),
         title: 'Não foi possível carregar este ativo',
         message: _controller.error!,
         onRetry: _controller.refresh,

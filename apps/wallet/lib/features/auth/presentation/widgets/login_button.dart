@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/translator.dart';
-import '../../../../core/widgets/game_button.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 class LoginButton extends StatelessWidget {
   final VoidCallback? onPressed;

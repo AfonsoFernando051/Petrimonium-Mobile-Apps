@@ -3,13 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/game_snack.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
-import 'package:petrimonium/core/widgets/empty_state_view.dart';
-import 'package:petrimonium/core/widgets/error_state_view.dart';
 import 'package:petrimonium/features/mentor/domain/entities/conversation_summary.dart';
 import 'package:petrimonium/features/mentor/presentation/controllers/conversation_list_controller.dart';
 import 'package:petrimonium/features/mentor/presentation/widgets/conversation_list_tile.dart';
@@ -164,7 +161,8 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
     }
 
     if (_controller.error != null) {
-      return ErrorStateView(message: _controller.error!, onRetry: _controller.load);
+      return ErrorStateView(
+            retryLabel: Translator.translate(AppStrings.retryButtonLabel),message: _controller.error!, onRetry: _controller.load);
     }
 
     if (_controller.conversations.isEmpty) {

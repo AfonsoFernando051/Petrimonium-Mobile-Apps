@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// Three-dot pulse shown in a mentor-style bubble while a reply is pending —
 /// the "thinking" beat between sending and the typewriter reveal starting.

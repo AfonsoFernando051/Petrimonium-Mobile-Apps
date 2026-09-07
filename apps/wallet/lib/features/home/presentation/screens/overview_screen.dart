@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/display_name.dart';
 import 'package:petrimonium/core/utils/formatters.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
 import 'package:petrimonium/core/widgets/layer_chip.dart';
 import 'package:petrimonium/features/home/presentation/widgets/mentor_insight_card.dart';
 import 'package:petrimonium/features/home/presentation/widgets/portfolio_not_connected_card.dart';

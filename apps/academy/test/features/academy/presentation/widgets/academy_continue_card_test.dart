@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/game_button.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/academy/presentation/widgets/academy_continue_card.dart';
 
 import '../../academy_test_fixtures.dart';

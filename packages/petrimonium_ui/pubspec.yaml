@@ -1,0 +1,26 @@
+name: petrimonium_ui
+description: "Shared visual foundation for the Petrimonium products: design tokens, theming and presentation-only widgets."
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Deliberately a wide range rather than the apps' `^8.2.1`: Health is still
+  # on google_fonts 6.x and must be able to adopt this package without being
+  # forced through a font-package major upgrade it did not ask for.
+  google_fonts: '>=6.2.1 <9.0.0'
+  # Used only by ThemeController to persist the user's Light/Dark/System
+  # choice. No other part of this package touches storage.
+  shared_preferences: ^2.2.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   test('AppSpacing scale is strictly increasing', () {

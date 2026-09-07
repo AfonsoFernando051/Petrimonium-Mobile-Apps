@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/confirm_logout_dialog.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   setUp(() {
@@ -16,7 +17,13 @@ void main() {
         body: Builder(
           builder: (context) => ElevatedButton(
             onPressed: () async {
-              final result = await ConfirmLogoutDialog.show(context);
+              final result = await ConfirmLogoutDialog.show(
+        context,
+        title: Translator.translate(AppStrings.logoutConfirmTitle),
+        message: Translator.translate(AppStrings.logoutConfirmMessage),
+        cancelLabel: Translator.translate(AppStrings.cancelButton),
+        confirmLabel: Translator.translate(AppStrings.logoutButton),
+      );
               onResult(result);
             },
             child: const Text('open'),

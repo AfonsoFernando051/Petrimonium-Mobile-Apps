@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/mentor/domain/services/wallet_mentor_reply_layers.dart';
 import 'package:petrimonium/features/mentor/presentation/widgets/mentor_reply_layers_view.dart';

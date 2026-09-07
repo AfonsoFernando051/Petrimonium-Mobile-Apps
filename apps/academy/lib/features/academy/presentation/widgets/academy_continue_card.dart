@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_radii.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/theme/app_text_styles.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/game_button.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
 import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
 
 /// `AcademyHomeScreen`'s "what's next" CTA — always the first thing under

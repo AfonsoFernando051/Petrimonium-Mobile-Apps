@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_radii.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
 import 'package:petrimonium/features/academy/presentation/widgets/steps/choice_question_step_view.dart';
 import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';

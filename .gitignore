@@ -1,0 +1,24 @@
+# Dart/Flutter build output and per-machine state. Each app and package keeps
+# its own; nothing here is shared, so it is all ignored repo-wide.
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+.idea/
+.vscode/
+# Per-developer DevTools preferences, not a project setting.
+devtools_options.yaml
+
+# Melos writes this when bootstrapping; it is machine-local.
+pubspec_overrides.yaml
+.melos_tool/
+
+# Never commit signing material or environment secrets. Release signing is
+# supplied at build time via android/key.properties (see docs/MOBILE_ARCHITECTURE.md).
+**/android/key.properties
+**/*.keystore
+**/*.jks
+.env
+*.env

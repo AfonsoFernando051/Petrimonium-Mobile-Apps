@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
 import 'package:petrimonium/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
 import 'package:petrimonium/features/simulated_wallet/presentation/screens/simulated_wallet_screen.dart';

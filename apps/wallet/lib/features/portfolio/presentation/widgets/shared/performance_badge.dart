@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/formatters.dart';
 
 /// Small pill showing a signed percentage with a trend arrow, colored

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
-import 'package:petrimonium/core/widgets/error_state_view.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/dividend_event.dart';
 import 'package:petrimonium/features/portfolio/presentation/widgets/dividend_event_tile.dart';
 
@@ -84,6 +82,7 @@ class DividendNotificationsSheet extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: ErrorStateView(
+            retryLabel: Translator.translate(AppStrings.retryButtonLabel),
           message: 'Não foi possível carregar suas notificações.',
           onRetry: () async => onRetry(),
           style: ErrorStateStyle.compact,

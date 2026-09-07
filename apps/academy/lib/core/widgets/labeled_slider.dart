@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_text_styles.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// A label/value row over a [Slider], with haptic feedback on drag and a
 /// semantic value announced to screen readers — extracted from the

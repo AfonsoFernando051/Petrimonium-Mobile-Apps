@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/theme/app_color_tokens.dart';
+import '../tokens/app_color_tokens.dart';
 
 class CustomTextField extends StatefulWidget {
   final String hint;
@@ -35,7 +34,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     final tokens = context.colors;
     final hasError = widget.errorText != null;
-    final accentColor = hasError ? tokens.error : AppColors.neonCyan;
+    final accentColor = hasError ? tokens.error : context.brand.accent;
     return Container(
       decoration: BoxDecoration(
         color: tokens.surface.withValues(alpha: context.isDarkMode ? 0.05 : 0.9),

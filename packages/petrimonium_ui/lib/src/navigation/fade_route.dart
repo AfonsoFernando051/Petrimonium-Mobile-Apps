@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_motion.dart';
+import '../tokens/app_motion.dart';
 
 /// The app's standard push transition — fade combined with a subtle
 /// slide-up — used for every non-modal screen push (Academy, Financial Lab,

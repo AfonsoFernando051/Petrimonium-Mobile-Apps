@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/asset_details/presentation/screens/asset_details_screen.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/investment_type_display.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/price_status.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/unavailable_badge.dart';
 import 'package:petrimonium/core/utils/formatters.dart';
 import 'package:petrimonium/features/portfolio/presentation/widgets/shared/performance_badge.dart';
 

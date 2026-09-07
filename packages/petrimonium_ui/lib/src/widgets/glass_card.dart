@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_radii.dart';
+import '../tokens/app_color_tokens.dart';
+import '../tokens/brand_accents.dart';
+import '../tokens/app_radii.dart';
 
 /// Light-mode surface hierarchy for [GlassCard] — Dark theme keeps its
 /// single glow-border look regardless of [GlassCard.surface] (it already
@@ -59,7 +59,7 @@ class GlassCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = context.colors;
     final isDark = context.isDarkMode;
-    final look = _resolveLook(tokens, isDark);
+    final look = _resolveLook(tokens, context.brand, isDark);
 
     final effectiveBg = backgroundColor ?? look.background;
     final effectiveBorder = borderColor ?? look.border;
@@ -94,11 +94,15 @@ class GlassCard extends StatelessWidget {
     return inner;
   }
 
-  _CardLook _resolveLook(AppColorTokens tokens, bool isDark) {
+  _CardLook _resolveLook(
+    AppColorTokens tokens,
+    PetrimoniumBrandAccents brand,
+    bool isDark,
+  ) {
     if (isDark) {
       // Dark theme leans on the glowing border for depth; unaffected by
       // [surface] — see class doc.
-      return _CardLook(background: tokens.surface.withValues(alpha: 0.55), border: AppColors.goldenBorder.withValues(alpha: 0.5));
+      return _CardLook(background: tokens.surface.withValues(alpha: 0.55), border: brand.highlight.withValues(alpha: 0.5));
     }
 
     switch (surface) {
@@ -122,17 +126,17 @@ class GlassCard extends StatelessWidget {
         // just a stronger neutral shadow, so it reads as meaningfully
         // different from `elevated` rather than just "more of the same".
         return _CardLook(
-          background: Color.alphaBlend(AppColors.neonPurple.withValues(alpha: 0.05), tokens.surfaceElevated),
-          border: AppColors.neonPurple.withValues(alpha: 0.4),
-          shadow: [BoxShadow(color: AppColors.neonPurple.withValues(alpha: 0.16), blurRadius: 22, offset: const Offset(0, 8))],
+          background: Color.alphaBlend(brand.mentorGlow.withValues(alpha: 0.05), tokens.surfaceElevated),
+          border: brand.mentorGlow.withValues(alpha: 0.4),
+          shadow: [BoxShadow(color: brand.mentorGlow.withValues(alpha: 0.16), blurRadius: 22, offset: const Offset(0, 8))],
         );
       case CardSurface.reward:
         // Completed/celebratory — golden glow instead of purple, echoing
         // the brand gradient's warm end without tinting every card pink.
         return _CardLook(
-          background: Color.alphaBlend(AppColors.goldenBorder.withValues(alpha: 0.06), tokens.surfaceElevated),
-          border: AppColors.goldenBorder.withValues(alpha: 0.45),
-          shadow: [BoxShadow(color: AppColors.goldenBorder.withValues(alpha: 0.18), blurRadius: 22, offset: const Offset(0, 8))],
+          background: Color.alphaBlend(brand.highlight.withValues(alpha: 0.06), tokens.surfaceElevated),
+          border: brand.highlight.withValues(alpha: 0.45),
+          shadow: [BoxShadow(color: brand.highlight.withValues(alpha: 0.18), blurRadius: 22, offset: const Offset(0, 8))],
         );
       case CardSurface.disabled:
         // Recedes below `standard` — muted surface, no shadow, so locked

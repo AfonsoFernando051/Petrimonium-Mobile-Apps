@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/theme/app_text_styles.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/simulated_wallet/domain/entities/simulated_position.dart';
 
 class SimulatedPositionTile extends StatelessWidget {

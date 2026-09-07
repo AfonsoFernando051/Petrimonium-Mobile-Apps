@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_strings.dart';
-import '../../../../core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import '../../../../core/utils/translator.dart';
 import '../screens/forgot_password_screen.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/theme/app_text_styles.dart';
+import '../tokens/app_color_tokens.dart';
+import '../tokens/app_spacing.dart';
+import '../tokens/app_text_styles.dart';
 
 /// One dot+label pair in a [ChartLegend].
 class ChartLegendItem {

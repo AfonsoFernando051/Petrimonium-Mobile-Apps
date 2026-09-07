@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/investment_type_display.dart';
 

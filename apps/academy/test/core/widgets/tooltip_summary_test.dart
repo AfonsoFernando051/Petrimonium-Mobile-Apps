@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/widgets/tooltip_summary.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   Widget wrap(Widget child) => MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));

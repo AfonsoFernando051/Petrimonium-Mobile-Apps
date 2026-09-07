@@ -6,7 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/friendly_error_message.dart';
-import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/asset_details/data/repositories/asset_details_repository.dart';
 import 'package:petrimonium/features/asset_details/domain/entities/asset_data_status.dart';
 import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';

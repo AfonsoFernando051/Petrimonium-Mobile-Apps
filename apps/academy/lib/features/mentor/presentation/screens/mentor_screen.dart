@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_motion.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/pet_assets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
-import 'package:petrimonium/core/widgets/error_state_view.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
 import 'package:petrimonium/features/mentor/domain/entities/chat_message.dart';
 import 'package:petrimonium/features/mentor/presentation/controllers/mentor_chat_controller.dart';
 import 'package:petrimonium/features/mentor/presentation/screens/conversation_list_screen.dart';
@@ -249,6 +245,7 @@ class _MentorScreenState extends State<MentorScreen> {
 
     if (_controller.historyError != null) {
       return ErrorStateView(
+            retryLabel: Translator.translate(AppStrings.retryButtonLabel),
         message: _controller.historyError!,
         onRetry: () => _controller.loadConversation(_controller.conversationId),
       );

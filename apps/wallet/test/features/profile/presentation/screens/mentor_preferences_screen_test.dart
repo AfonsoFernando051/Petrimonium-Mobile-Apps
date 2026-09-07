@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/game_button.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dart';
 import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
 import 'package:petrimonium/features/pet/data/repositories/pet_preferences_repository.dart';

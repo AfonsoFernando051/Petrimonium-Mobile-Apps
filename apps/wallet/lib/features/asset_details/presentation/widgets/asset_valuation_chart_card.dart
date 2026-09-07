@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/investment_type_display.dart';
 import 'package:petrimonium/features/portfolio/domain/enums/history_range.dart';

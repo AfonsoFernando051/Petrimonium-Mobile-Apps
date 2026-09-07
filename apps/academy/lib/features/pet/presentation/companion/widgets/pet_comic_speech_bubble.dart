@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/pet/presentation/companion/enums/pet_speech_bubble_state.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';

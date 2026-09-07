@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/pet_assets.dart';
 import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
 import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';

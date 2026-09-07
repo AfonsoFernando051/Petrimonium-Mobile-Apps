@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// Reframes "fill out a form" as visible onboarding progress toward a
 /// starter-portfolio milestone ([target] assets) — there's no fixed step

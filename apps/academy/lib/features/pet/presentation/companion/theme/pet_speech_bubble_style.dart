@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/pet/presentation/companion/enums/pet_speech_bubble_state.dart';
 
 /// Design tokens and visual styling parameters for each [PetSpeechBubbleState].

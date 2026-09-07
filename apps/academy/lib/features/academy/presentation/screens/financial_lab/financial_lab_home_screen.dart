@@ -3,12 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/utils/fade_route.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
-import 'package:petrimonium/core/widgets/unavailable_badge.dart';
 import 'package:petrimonium/features/academy/presentation/controllers/lab_completion_controller.dart';
 import 'package:petrimonium/features/academy/presentation/screens/financial_lab/lab_simulator_catalog.dart';
 import 'package:petrimonium/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
@@ -203,7 +199,7 @@ class _LabTile extends StatelessWidget {
                     ),
                   ),
                   if (!available)
-                    const UnavailableBadge()
+                    UnavailableBadge(label: Translator.translate(AppStrings.labComingSoon))
                   else if (completed)
                     Icon(Icons.check_circle, color: tokens.success, size: 18)
                   else

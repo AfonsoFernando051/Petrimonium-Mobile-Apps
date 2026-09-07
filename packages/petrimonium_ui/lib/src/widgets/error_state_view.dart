@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_radii.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/theme/app_text_styles.dart';
-import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
+import '../tokens/app_color_tokens.dart';
+import '../tokens/app_radii.dart';
+import '../tokens/app_spacing.dart';
+import '../tokens/app_text_styles.dart';
+import 'glass_card.dart';
 
 /// Where/how prominently an [ErrorStateView] renders — previously each
 /// screen (`AssetDetailsScreen`, `PortfolioScreen`,
@@ -33,6 +30,7 @@ class ErrorStateView extends StatelessWidget {
     super.key,
     required this.message,
     required this.onRetry,
+    required this.retryLabel,
     this.title,
     this.style = ErrorStateStyle.standard,
   });
@@ -42,6 +40,10 @@ class ErrorStateView extends StatelessWidget {
   final String? title;
   final String message;
   final Future<void> Function() onRetry;
+
+  /// Already-localized label for the retry action. Passed in for the same
+  /// reason as everywhere else in this package: no shared string catalog.
+  final String retryLabel;
   final ErrorStateStyle style;
 
   @override
@@ -61,10 +63,10 @@ class ErrorStateView extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           TextButton.icon(
             onPressed: onRetry,
-            icon: const Icon(Icons.refresh, color: AppColors.neonCyan, size: 16),
+            icon: Icon(Icons.refresh, color: context.brand.accent, size: 16),
             label: Text(
-              Translator.translate(AppStrings.retryButtonLabel),
-              style: const TextStyle(color: AppColors.neonCyan),
+              retryLabel,
+              style: TextStyle(color: context.brand.accent),
             ),
           ),
         ],
@@ -93,8 +95,11 @@ class ErrorStateView extends StatelessWidget {
         ElevatedButton.icon(
           onPressed: onRetry,
           icon: const Icon(Icons.refresh, size: 18),
-          label: Text(Translator.translate(AppStrings.retryButtonLabel)),
-          style: ElevatedButton.styleFrom(backgroundColor: AppColors.neonViolet, foregroundColor: Colors.white),
+          label: Text(retryLabel),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: context.brand.accentDeep,
+            foregroundColor: Colors.white,
+          ),
         ),
       ],
     );

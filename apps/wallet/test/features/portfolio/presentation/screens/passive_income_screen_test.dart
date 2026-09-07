@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
 import 'package:petrimonium/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium/features/portfolio/presentation/screens/passive_income_screen.dart';

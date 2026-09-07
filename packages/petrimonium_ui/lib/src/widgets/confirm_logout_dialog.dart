@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_radii.dart';
-import 'package:petrimonium/core/utils/translator.dart';
+import '../tokens/app_color_tokens.dart';
+import '../tokens/app_radii.dart';
 
-/// The app's single logout-confirmation dialog, shown from both Dashboard
-/// and Settings. Centralizing it means there's exactly one place that needs
-/// to stay in sync with `Translator`/`AppStrings` — previously each screen
-/// implemented its own copy, and only one of them was actually localized.
+/// The single logout-confirmation dialog, shown from both Dashboard and
+/// Settings in every product. Centralizing it means there is exactly one
+/// place that defines what this dialog looks like and how it behaves.
+///
+/// Copy is passed in rather than resolved here: the products do not share a
+/// string catalog, and a shared widget that reached for one would couple this
+/// package to a single product's localization system.
 class ConfirmLogoutDialog {
   ConfirmLogoutDialog._();
 
   /// Shows the dialog and resolves to `true` if the user confirmed logout.
-  static Future<bool> show(BuildContext context) async {
+  static Future<bool> show(
+    BuildContext context, {
+    required String title,
+    required String message,
+    required String cancelLabel,
+    required String confirmLabel,
+  }) async {
     final tokens = context.colors;
     final confirmed = await showDialog<bool>(
       context: context,
@@ -20,21 +27,21 @@ class ConfirmLogoutDialog {
         backgroundColor: tokens.surfaceElevated,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.xl)),
         title: Text(
-          Translator.translate(AppStrings.logoutConfirmTitle),
+          title,
           style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold),
         ),
         content: Text(
-          Translator.translate(AppStrings.logoutConfirmMessage),
+          message,
           style: TextStyle(color: tokens.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
-            child: Text(Translator.translate(AppStrings.cancelButton), style: TextStyle(color: tokens.primary)),
+            child: Text(cancelLabel, style: TextStyle(color: tokens.primary)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, true),
-            child: Text(Translator.translate(AppStrings.logoutButton), style: TextStyle(color: tokens.error)),
+            child: Text(confirmLabel, style: TextStyle(color: tokens.error)),
           ),
         ],
       ),

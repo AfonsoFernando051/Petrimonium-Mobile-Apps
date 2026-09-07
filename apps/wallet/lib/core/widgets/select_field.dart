@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// A small, bold, uppercase-style label above a [SelectField] — matches the
 /// Wallet quick-setup screen's field labels ("País / mercado", "Moeda-base").

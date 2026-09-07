@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// The app's shared background — a flat top-to-bottom gradient between
 /// [AppColorTokens.backgroundPrimary] and [AppColorTokens.backgroundSecondary]

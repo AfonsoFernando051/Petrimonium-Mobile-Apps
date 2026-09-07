@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_radii.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
+import '../tokens/app_color_tokens.dart';
+import '../tokens/app_radii.dart';
+import '../tokens/app_spacing.dart';
 
 /// The pill-shaped row shown under a chart when a point/bar is touched
 /// (Wealth Evolution, Wealth Evolution bars, Proventos Evolution) — same

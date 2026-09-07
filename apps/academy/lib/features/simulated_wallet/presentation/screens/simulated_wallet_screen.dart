@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/theme/app_text_styles.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/game_snack.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
-import 'package:petrimonium/core/widgets/error_state_view.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
 import 'package:petrimonium/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
 import 'package:petrimonium/features/simulated_wallet/presentation/screens/place_simulated_order_screen.dart';
 import 'package:petrimonium/features/simulated_wallet/presentation/widgets/reset_simulated_wallet_dialog.dart';
@@ -81,6 +76,7 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
       body = const AppLoadingIndicator();
     } else if (controller.error != null) {
       body = ErrorStateView(
+            retryLabel: Translator.translate(AppStrings.retryButtonLabel),
         title: Translator.translate(AppStrings.simulatedWalletTitle),
         message: controller.error!,
         onRetry: controller.loadPortfolio,

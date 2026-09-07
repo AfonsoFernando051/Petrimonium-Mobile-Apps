@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/error_state_view.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   setUp(() {
@@ -19,7 +19,8 @@ void main() {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: ErrorStateView(title: title, message: message, onRetry: onRetry, style: style),
+        body: ErrorStateView(
+            retryLabel: Translator.translate(AppStrings.retryButtonLabel),title: title, message: message, onRetry: onRetry, style: style),
       ),
     );
   }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/glass_card.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/portfolio_stats.dart';
 import 'package:petrimonium/features/portfolio/domain/services/achievement_catalog.dart';
 import 'package:petrimonium/features/portfolio/domain/services/passive_income_estimator.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import '../tokens/app_color_tokens.dart';
 
 /// The app's standard "this section is loading" state — a centered primary
 /// spinner. Used for whole-screen/whole-section loading; button-internal
