@@ -1,6 +1,11 @@
 # API do Petrimonium Health
 
-Contrato HTTP inicial entre o aplicativo Flutter e o backend compartilhado. O documento descreve as invariantes públicas; consulte os controllers e DTOs da versão em execução para a lista final de campos opcionais.
+Contrato HTTP do cliente Health com o backend compartilhado, revisto durante a
+consolidação do monorepo em 2026-09-07. O documento descreve as invariantes
+públicas; consulte os controllers e DTOs da versão em execução para a lista
+final de campos opcionais. Claims, autorização e isolamento entre produtos têm
+como fonte canônica
+[`Petrimonium-Backend/docs/INTEGRATION.md`](../../../../Petrimonium-Backend/docs/INTEGRATION.md).
 
 ## Convenções
 

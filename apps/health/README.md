@@ -1,121 +1,60 @@
 # Petrimonium Health
 
-Aplicativo Flutter de saúde financeira do ecossistema Petrimonium. O Health ajuda a responder:
+Aplicativo de saúde financeira: *como está meu mês e quanto ainda terei
+disponível depois dos compromissos previstos?* O Health é um produto Flutter
+independente dentro do monorepo mobile.
 
-> Como está meu mês e quanto ainda terei disponível depois dos compromissos previstos?
+## Documentos
 
-Esta primeira entrega é manual: contas, receitas, despesas, transferências, recorrências, cartões, faturas e projeção mensal são persistidos no backend compartilhado. Integração bancária não faz parte desta versão.
+| Documento | Finalidade |
+| --- | --- |
+| [`../../docs/PRODUCT_VISION.md`](../../docs/PRODUCT_VISION.md) | Visão e limites do ecossistema |
+| [`../../docs/MOBILE_ARCHITECTURE.md`](../../docs/MOBILE_ARCHITECTURE.md) | Regras do monorepo e dos packages |
+| [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) | Papel atual do Health |
+| [`docs/API.md`](docs/API.md) | Contrato HTTP do cliente Health |
+| [`docs/FINANCIAL_RULES.md`](docs/FINANCIAL_RULES.md) | Regras monetárias específicas |
+| [`../../../Petrimonium-Backend/docs/INTEGRATION.md`](../../../Petrimonium-Backend/docs/INTEGRATION.md) | Contrato canônico de integração e isolamento |
 
-## Escopo de localização
+## Escopo atual
 
-O onboarding trata as escolhas como preferências independentes:
+Contas, receitas, despesas, transferências, recorrências, cartões, faturas e
+projeção mensal são persistidos no backend compartilhado. Não há integração
+bancária, câmbio ou conversão automática nesta versão.
 
-| Preferência | Valores iniciais | Sugestão por país |
-|---|---|---|
-| País | Brasil (`BR`) ou Portugal (`PT`) | a seleção do país sugere as outras duas opções |
-| Moeda principal | real brasileiro (`BRL`) ou euro (`EUR`) | Brasil → BRL; Portugal → EUR |
-| Idioma da interface | português do Brasil (`pt-BR`) ou português de Portugal (`pt-PT`) | Brasil → pt-BR; Portugal → pt-PT |
+País (`BR`/`PT`), moeda (`BRL`/`EUR`) e idioma (`pt-BR`/`pt-PT`) são escolhas
+explícitas e independentes. O backend grava a moeda nos dados financeiros e a
+bloqueia após a existência de dados; o aplicativo nunca converte um valor
+apenas trocando o símbolo.
 
-País, moeda e idioma não dependem da localização do dispositivo. O usuário pode alterar as sugestões antes de concluir o cadastro.
+## Executar
 
-Cada perfil Health possui uma única moeda principal. O backend grava e valida o código ISO da moeda em todos os dados financeiros; o aplicativo nunca converte um valor apenas trocando seu símbolo. Consulte [Regras financeiras](docs/FINANCIAL_RULES.md) e [Contrato da API](docs/API.md).
+Com o backend local em `http://localhost:8081`:
 
-## Relação com o ecossistema
-
-- O Health é um aplicativo próprio, com `app_context = health`.
-- Autenticação, conta Petrimonium e Pet continuam compartilhados com Wallet e Academy.
-- Dados Health ficam em um contexto e schema próprios no mesmo backend.
-- Dados reais do Health não são lidos pela Academy nem misturados à carteira simulada.
-- Dados de investimentos da Wallet não são tratados como saldo de conta no Health.
-
-O contrato completo — o que atravessa a fronteira entre os três produtos, o
-que nunca atravessa e por quê — vive em um lugar só, no backend:
-[`Petrimonium-Backend/docs/INTEGRATION.md`](../Petrimonium-Backend/docs/INTEGRATION.md).
-O papel específico deste app, e as lacunas conhecidas dele, em
-[`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md).
-
-## Pré-requisitos
-
-- Flutter compatível com o SDK Dart declarado em `pubspec.yaml`.
-- Java 21 para executar o Petrimonium Backend.
-- Para desenvolvimento local, o backend usa o perfil `dev` e H2 em memória.
-
-## Executar o backend
-
-Em outro terminal, a partir da raiz deste workspace:
-
-```sh
-cd Petrimonium-Backend
-SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
-```
-
-O backend local escuta em `http://localhost:8081`. As configurações sensíveis devem vir do ambiente ou do `.env` local ignorado pelo Git; não as inclua no aplicativo.
-
-## Executar o aplicativo
-
-```sh
-cd Petrimonium-Health
+```bash
+cd apps/health
 flutter pub get
 flutter gen-l10n
-flutter run -d linux --no-pub --dart-define=API_BASE_URL=http://localhost:8081
+flutter run -d linux --dart-define=API_BASE_URL=http://localhost:8081
 ```
 
-No emulador Android, use `http://10.0.2.2:8081` no lugar de `localhost`:
+No emulador Android, use `http://10.0.2.2:8081`.
 
-```sh
-flutter devices
-flutter run -d emulator-5554 --no-pub --dart-define=API_BASE_URL=http://10.0.2.2:8081
-```
+Verificação:
 
-Substitua `emulator-5554` pelo identificador mostrado por `flutter devices`, se
-for diferente. Para consumir menos memória, prefira o destino Linux durante o
-desenvolvimento e mantenha somente um destino aberto. A compilação Android do
-projeto está limitada a dois workers e 2 GB de heap, sem daemon Gradle
-persistente.
-
-## Verificações locais
-
-Aplicativo:
-
-```sh
-cd Petrimonium-Health
-flutter pub get
+```bash
 flutter gen-l10n
 flutter analyze
 flutter test
 ```
 
-Backend compartilhado:
+## Produto e arquitetura
 
-```sh
-cd Petrimonium-Backend
-./mvnw -B verify
-```
+- Dart package: `petrimonium_health`
+- Identificador nativo atual: `com.petrimonium.petrimonium_health`
+- Backend context: `health` (fixo, não é flavor)
+- Contexto financeiro: fluxo de caixa real
 
-## Estrutura
-
-O aplicativo segue as convenções dos demais clientes Petrimonium:
-
-```text
-lib/
-├── core/                 # rede, tema, localização e utilitários
-├── features/
-│   ├── auth/             # conta e sessão Petrimonium compartilhadas
-│   ├── onboarding/       # país, moeda, idioma e primeira conta
-│   ├── accounts/         # contas e transferências
-│   ├── transactions/     # receitas, despesas e recorrências
-│   ├── cards/            # compras, prestações e faturas
-│   ├── summary/          # visão e projeção mensal
-│   └── profile/          # preferências Health e Pet
-└── l10n/                 # recursos ARB pt-BR e pt-PT
-```
-
-As divisões concretas podem evoluir, mas o código de apresentação não deve concentrar regras monetárias nem acesso HTTP.
-
-## Limitações deliberadas da primeira versão
-
-- Uma única moeda principal por usuário no Health.
-- Sem câmbio, conversão ou consolidação entre moedas.
-- Sem conexão a bancos, Pix, Open Finance, MB Way ou provedores equivalentes.
-- Sem deduplicação por heurística de data e valor.
-- A moeda fica bloqueada depois que o perfil possui dados financeiros; ainda não existe migração de moeda.
+O Health nasceu com arquitetura, tema, rede e localização próprios e ainda não
+depende dos packages compartilhados do monorepo. Uma futura adoção deve ser
+incremental e baseada em uma abstração realmente comum aos três produtos, sem
+forçar o Health ao formato histórico de Academy/Wallet.

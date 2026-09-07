@@ -1,108 +1,56 @@
 # Petrimonium Wallet
 
-Real investment management — *how is my patrimony, and what is it doing?* One
-of four sibling repos in the Petrimonium ecosystem, alongside
-`petrimonium-health` (cash flow), `petrimonium-academy` (education, simulated
-money) and `petrimonium-backend`, which serves all three and is the only place
-the boundary between them is enforced.
+Real investment patrimony organization and interpretation: *how is my
+patrimony, and what is it doing?* Wallet is one independently released
+application inside the Petrimonium mobile monorepo.
 
-| Read this | For |
-|---|---|
-| [`Petrimonium-Backend/docs/INTEGRATION.md`](../Petrimonium-Backend/docs/INTEGRATION.md) | **The integration contract** — what the three products share, what never crosses between them, and the known gaps |
-| [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) | This repo's job and the history of how it got here |
-| [`docs/ARCHITECTURE/`](docs/ARCHITECTURE/) | Pointer into the shared Atlas Técnico, plus what is specific to this repo |
+## Read first
 
-## Getting Started
+| Document | Purpose |
+| --- | --- |
+| [`../../docs/PRODUCT_VISION.md`](../../docs/PRODUCT_VISION.md) | Ecosystem and financial-safety principles |
+| [`../../docs/MOBILE_ARCHITECTURE.md`](../../docs/MOBILE_ARCHITECTURE.md) | Monorepo and shared-package rules |
+| [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) | Wallet's current role and boundaries |
+| [`../../../Petrimonium-Backend/docs/INTEGRATION.md`](../../../Petrimonium-Backend/docs/INTEGRATION.md) | Canonical integration and data-isolation contract |
 
-This project is a starting point for a Flutter application.
+## Run
 
-A few resources to get you started if this is your first Flutter project:
+From the monorepo root:
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-## Application identity
-
-Wallet is a separate installable product. Its native application identifier is
-`com.petrimonium.wallet` on Android, iOS, macOS and Linux. Do not reuse this ID
-for Academy or Health.
-
-When configuring Google Sign-In or store distribution, register this exact ID
-as its own Android/iOS client (including the Android signing-certificate
-fingerprint). The backend-facing web `serverClientId` may remain shared, but the
-native OAuth clients and store records must be product-specific.
-
-## Configuring the backend URL
-
-`ApiConstants.baseUrl` (`lib/core/constants/api_constants.dart`) defaults to
-`http://localhost:8081`, which works for the iOS Simulator and Flutter Web but
-**not** the Android emulator (which needs `10.0.2.2` to reach your machine's
-localhost). Override it per run/build with `--dart-define` instead of editing
-source:
-
-```sh
-# Android emulator, pointing at a locally running backend
-flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8081
-
-# Pointing at a staging/prod deployment
-flutter build apk --dart-define=API_BASE_URL=https://api.example.com
+```bash
+melos bootstrap
+cd apps/wallet
+flutter run --dart-define=API_BASE_URL=http://localhost:8081
 ```
 
-A release build (`--release`/`--profile`) refuses to start if `API_BASE_URL` was left at
-the `localhost` default (see `ApiConstants.assertConfiguredForRelease`) — this is
-intentional, so a build that forgot the flag fails immediately instead of silently
-talking to a developer machine in front of a real user.
+For an Android emulator, use `http://10.0.2.2:8081`. `API_BASE_URL` must be
+provided for profile/release builds; the app refuses to start a release that
+would point to localhost.
 
-## Release signing (Android)
+Useful checks:
 
-`android/app/build.gradle.kts` signs release builds with the debug key until
-`android/key.properties` exists (gitignored — never commit it). To produce a real,
-store-ready release build:
-
-1. Generate a keystore (keep it and its passwords in a secrets manager, not the repo):
-   ```sh
-   keytool -genkey -v -keystore ~/petrimonium-release.jks -keyalg RSA -keysize 2048 \
-     -validity 10000 -alias petrimonium
-   ```
-2. Copy `android/key.properties.example` to `android/key.properties` and fill in the
-   real `storeFile`/passwords/alias.
-3. `flutter build apk --release --dart-define=API_BASE_URL=...` now signs with that
-   keystore automatically.
-
-iOS signing (a Team ID + provisioning profile in Xcode) isn't scriptable the same way —
-set it up in `ios/Runner.xcodeproj` under Signing & Capabilities.
-
-## Crash/error reporting
-
-Wired via `sentry_flutter` (`lib/main.dart`) but disabled by default — pass a real DSN
-to enable it:
-
-```sh
-flutter build apk --release --dart-define=SENTRY_DSN=https://xxx@oXXX.ingest.sentry.io/XXX
+```bash
+flutter analyze
+flutter test
 ```
 
-Left unset, `SentryFlutter.init` is a documented no-op: nothing is sent, nothing breaks.
+Use `melos run verify` from the root when a shared package changes.
 
-On Linux desktop, `sentry_flutter` pulls in `sentry-native`, which needs libcurl's dev headers
-to configure via CMake — same class of issue as `libsecret-1-dev` below:
+## Product and release identity
 
-```sh
-sudo apt-get install -y libcurl4-openssl-dev
-```
+- Dart package: `petrimonium_wallet`
+- Android/bundle identifier: `com.petrimonium.wallet`
+- Backend context: `wallet` (fixed, not a build flavor)
+- Financial context: real investments/patrimony, without order execution
 
-## Linux desktop builds
+OAuth native clients, store records, signing and versions remain independent
+from Academy and Health. Supply backend URL, Sentry DSN and signing secrets at
+build/release time; never commit real credentials or `android/key.properties`.
 
-`flutter_secure_storage` (used to store the auth token) needs the system
-package `libsecret-1` to build its Linux desktop backend — it isn't bundled
-with the Flutter SDK. Android/iOS/Web builds are unaffected; this is only
-needed if you're building/running the `linux` target locally:
+## Architecture notes
 
-```sh
-sudo apt-get install libsecret-1-dev
-```
-# Petrimonium-Wallet
+Wallet consumes `petrimonium_ui`, `petrimonium_flutter_core` and
+`petrimonium_shared_features`, while keeping product navigation, copy,
+portfolio behavior and market presentation local. Wallet must not treat Health
+cash flow as investable balance, expose Academy simulations as real data or
+reward a financial result.

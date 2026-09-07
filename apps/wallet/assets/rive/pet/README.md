@@ -6,7 +6,10 @@ existing naming convention.
 
 The target design and technical contract each file should satisfy — character structure, a
 `Companion` state machine, its three inputs (`state`, `reducedMotion`, `interacting`) and their
-exact meaning — is specified in `docs/RIVE_PET_COMPANION_BRIEF.md`, not here.
+exact meaning — is specified in the shared mobile brief
+[`docs/RIVE_PET_COMPANION_BRIEF.md`](../../../../../docs/RIVE_PET_COMPANION_BRIEF.md),
+not here. Rive remains an optional adapter rather than a Pet architecture
+dependency.
 
 ## `dog.riv` and `owl.riv` — stopgaps, not yet contract-compliant
 
