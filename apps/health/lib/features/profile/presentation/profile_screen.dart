@@ -168,7 +168,17 @@ Future<void> _confirmDeleteAccount(BuildContext context, AppLocalizations l10n) 
     ),
   );
   if (confirmed != true) return;
-  await controller.deleteAccount();
+  try {
+    await controller.deleteAccount();
+  } catch (_) {
+    // A conta continua a existir. Sem isto o erro só chegava ao handler da
+    // zone e o ecrã ficava igual, com o utilizador a achar que foi apagada —
+    // `controller.error` só é lido pela HomeScreen, nunca aqui.
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+  }
 }
 
 class _ProfileRow extends StatelessWidget {

@@ -50,5 +50,39 @@ void main() {
 
       expect(tapped, isTrue);
     });
+
+    testWidgets('renders the delete-account button below logout', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(email: 'user@example.com'));
+
+      expect(find.text('Excluir minha conta'), findsOneWidget);
+      expect(find.byIcon(Icons.delete_outline), findsOneWidget);
+
+      // Subordinate to Sair, never above it — it must not be the button the
+      // thumb lands on by accident.
+      final logoutY = tester.getCenter(find.text('Sair')).dy;
+      final deleteY = tester.getCenter(find.text('Excluir minha conta')).dy;
+      expect(deleteY, greaterThan(logoutY));
+    });
+
+    testWidgets('invokes onDeleteAccount when the delete button is tapped', (WidgetTester tester) async {
+      var tapped = false;
+      await tester.pumpWidget(buildTestableWidget(email: 'user@example.com', onDeleteAccount: () => tapped = true));
+
+      await tester.tap(find.text('Excluir minha conta'));
+      await tester.pump();
+
+      expect(tapped, isTrue);
+    });
+
+    testWidgets('tapping delete does not trigger logout', (WidgetTester tester) async {
+      var loggedOut = false;
+      await tester.pumpWidget(buildTestableWidget(email: 'user@example.com', onLogout: () => loggedOut = true));
+
+      await tester.tap(find.text('Excluir minha conta'));
+      await tester.pump();
+
+      expect(loggedOut, isFalse);
+    });
+
   });
 }

@@ -44,6 +44,7 @@ void main() {
     when(() => mockMascotRepository.loadProfile()).thenAnswer((_) async => PetProfile(name: 'Rex'));
     when(() => mockMascotRepository.saveName(any())).thenAnswer((_) async {});
     when(() => mockSettingsRepository.syncLanguage(any())).thenAnswer((_) async {});
+    when(() => mockSettingsRepository.deleteAccount()).thenAnswer((_) async {});
 
     DI.authRepository = mockAuthRepository;
     DI.mascotRepository = mockMascotRepository;
@@ -153,5 +154,92 @@ void main() {
       expect(find.byType(LoginScreen), findsOneWidget);
       expect(find.byType(SettingsScreen), findsNothing);
     });
+    testWidgets('cancelling the delete-account dialog deletes nothing', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tapVisible(tester, find.text('Excluir minha conta'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('Excluir a conta?'), findsOneWidget);
+
+      await tester.tap(find.text('Cancelar'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      verifyNever(() => mockSettingsRepository.deleteAccount());
+      verifyNever(() => mockAuthRepository.logout());
+      expect(find.byType(SettingsScreen), findsOneWidget);
+    });
+
+    testWidgets('confirming the delete-account dialog erases the account, clears the session and navigates to LoginScreen', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tapVisible(tester, find.text('Excluir minha conta'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Two "Excluir minha conta" widgets now exist: the section's button and
+      // the dialog's confirm action — the dialog's is the last one added.
+      await tester.tap(find.text('Excluir minha conta').last);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      verify(() => mockSettingsRepository.deleteAccount()).called(1);
+      // The local session has to be cleared too, otherwise the device keeps
+      // tokens for an account that no longer exists.
+      verify(() => mockAuthRepository.logout()).called(1);
+      expect(find.byType(LoginScreen), findsOneWidget);
+      expect(find.byType(SettingsScreen), findsNothing);
+    });
+
+    testWidgets('a failed deletion reports the error and leaves the user signed in', (WidgetTester tester) async {
+      when(() => mockSettingsRepository.deleteAccount())
+          .thenThrow(Exception('Não foi possível excluir a conta'));
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tapVisible(tester, find.text('Excluir minha conta'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tester.tap(find.text('Excluir minha conta').last);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(find.text('Não foi possível excluir a conta'), findsOneWidget);
+      // The account still exists, so the session must survive: no logout, no
+      // navigation away from Settings.
+      verifyNever(() => mockAuthRepository.logout());
+      expect(find.byType(SettingsScreen), findsOneWidget);
+      expect(find.byType(LoginScreen), findsNothing);
+    });
+
+    testWidgets('a successful deletion still signs out locally when the remote logout fails', (WidgetTester tester) async {
+      // Expected: /auth/logout answers 401 because the account is already gone.
+      when(() => mockAuthRepository.logout()).thenThrow(Exception('401'));
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tapVisible(tester, find.text('Excluir minha conta'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tester.tap(find.text('Excluir minha conta').last);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      verify(() => mockSettingsRepository.deleteAccount()).called(1);
+      expect(find.byType(LoginScreen), findsOneWidget);
+      expect(find.byType(SettingsScreen), findsNothing);
+    });
+
   });
 }
