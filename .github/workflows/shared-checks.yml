@@ -1,0 +1,75 @@
+name: Shared checks
+
+# The shared packages get their own gate, on top of the per-app workflows.
+# A package change triggers this AND all three app workflows: this proves the
+# package is correct on its own terms, and those prove it did not break any
+# consumer. Neither check subsumes the other.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/**"
+      - "melos.yaml"
+      - "pubspec.yaml"
+      - ".github/workflows/shared-checks.yml"
+  pull_request:
+    paths:
+      - "packages/**"
+      - "melos.yaml"
+      - "pubspec.yaml"
+      - ".github/workflows/shared-checks.yml"
+
+jobs:
+  packages:
+    runs-on: ubuntu-latest
+    strategy:
+      # Each package must stand on its own, so they are checked separately
+      # rather than through one workspace-wide command. fail-fast off so a
+      # break in one does not hide the state of the others.
+      fail-fast: false
+      matrix:
+        package:
+          - petrimonium_ui
+          - petrimonium_flutter_core
+          - petrimonium_shared_features
+    defaults:
+      run:
+        working-directory: packages/${{ matrix.package }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.4"
+          cache: true
+          cache-key: "flutter-packages-3.41.4-v1"
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+  dependency-direction:
+    # The one rule that cannot be allowed to rot: a shared package must never
+    # import an app. If it ever does, the products stop being independently
+    # releasable and the whole structure collapses back into one app.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No shared package may import an application
+        run: |
+          if grep -rn --include='*.dart' -E "package:petrimonium_(academy|wallet|health)/" packages/; then
+            echo "::error::A package under packages/ imports an application. Dependencies must only ever point apps -> packages."
+            exit 1
+          fi
+          echo "OK: no package imports an app."
+      - name: No app may import another app
+        run: |
+          fail=0
+          for app in academy wallet health; do
+            for other in academy wallet health; do
+              [ "$app" = "$other" ] && continue
+              if grep -rn --include='*.dart' "package:petrimonium_$other/" "apps/$app" 2>/dev/null; then
+                echo "::error::apps/$app imports petrimonium_$other. Cross-product imports are not allowed."
+                fail=1
+              fi
+            done
+          done
+          exit $fail

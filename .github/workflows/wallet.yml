@@ -1,0 +1,90 @@
+name: Wallet CI
+
+# Path-aware on purpose: a Wallet-only change must not spend CI minutes on
+# Academy or Health. But packages/** IS in this list - a shared-package change
+# has to be validated against every app that consumes it, which is the whole
+# safety story of a monorepo with shared code.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/wallet/**"
+      - "packages/**"
+      - "melos.yaml"
+      - ".github/workflows/wallet.yml"
+  pull_request:
+    paths:
+      - "apps/wallet/**"
+      - "packages/**"
+      - "melos.yaml"
+      - ".github/workflows/wallet.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/wallet
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pinned rather than `channel: stable`: a floating channel both drifts
+      # CI onto untested Flutter releases out from under this codebase and,
+      # combined with `cache: true`, risks pinning a *stale/broken* cached SDK
+      # to that same never-changing "stable" cache key with no way to bust it
+      # short of an SDK bump. A version pin gives every run a cache key tied
+      # to a specific, locally-verified SDK.
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.4"
+          cache: true
+          cache-key: "flutter-wallet-3.41.4-v3"
+
+      - name: Verify Flutter version
+        run: |
+          flutter --version
+          echo "FLUTTER_ROOT=$FLUTTER_ROOT"
+
+      # Resolves this app plus the shared packages it path-depends on. No
+      # workspace-wide bootstrap is needed to build one app, which is what
+      # keeps the three release lines independent.
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+  integration-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/wallet
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.4"
+          cache: true
+          cache-key: "flutter-wallet-3.41.4-v3"
+
+      # integration_test drives the real widget tree via the Linux desktop
+      # target (-d linux) - Flutter's web target does not support
+      # `flutter test` for integration_test, and there is no emulator here -
+      # which needs the GTK desktop toolchain and a display.
+      # libsecret-1-dev: required by flutter_secure_storage_linux's CMake build.
+      # libcurl4-openssl-dev: required by sentry-native, whose default Linux
+      # transport is curl. Both fail CMake configure before any Dart runs.
+      - name: Install Linux desktop build dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev libsecret-1-dev libcurl4-openssl-dev xvfb
+      - run: flutter config --enable-linux-desktop
+      - run: flutter pub get
+      - name: Integration (E2E) tests
+        # Vendored native deps pass -Werror=nontrivial-memcall, which GCC 13
+        # (ubuntu-latest default) does not recognise, aborting the CMake build
+        # before any Dart code runs. This makes GCC ignore unknown -Werror=
+        # options without suppressing real warnings.
+        env:
+          CFLAGS: "-Wno-error=unknown-warning-option"
+          CXXFLAGS: "-Wno-error=unknown-warning-option"
+        run: xvfb-run -a flutter test -d linux integration_test

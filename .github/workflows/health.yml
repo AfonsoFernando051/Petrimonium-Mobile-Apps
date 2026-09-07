@@ -1,0 +1,55 @@
+name: Health CI
+
+# Path-aware on purpose: a Wallet-only change must not spend CI minutes on
+# Academy or Health. But packages/** IS in this list - a shared-package change
+# has to be validated against every app that consumes it, which is the whole
+# safety story of a monorepo with shared code.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/health/**"
+      - "packages/**"
+      - "melos.yaml"
+      - ".github/workflows/health.yml"
+  pull_request:
+    paths:
+      - "apps/health/**"
+      - "packages/**"
+      - "melos.yaml"
+      - ".github/workflows/health.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/health
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pinned rather than `channel: stable`: a floating channel both drifts
+      # CI onto untested Flutter releases out from under this codebase and,
+      # combined with `cache: true`, risks pinning a *stale/broken* cached SDK
+      # to that same never-changing "stable" cache key with no way to bust it
+      # short of an SDK bump. A version pin gives every run a cache key tied
+      # to a specific, locally-verified SDK.
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.4"
+          cache: true
+          cache-key: "flutter-health-3.41.4-v3"
+
+      - name: Verify Flutter version
+        run: |
+          flutter --version
+          echo "FLUTTER_ROOT=$FLUTTER_ROOT"
+
+      # Resolves this app plus the shared packages it path-depends on. No
+      # workspace-wide bootstrap is needed to build one app, which is what
+      # keeps the three release lines independent.
+      - run: flutter pub get
+      - run: flutter gen-l10n
+      - run: flutter analyze
+      - run: flutter test
+
