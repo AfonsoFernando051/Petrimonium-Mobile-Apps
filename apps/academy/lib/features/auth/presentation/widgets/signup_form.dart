@@ -165,14 +165,14 @@ class _SignupFormState extends State<SignupForm> {
           controller: _nameController,
           errorText: _nameError,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         CustomTextField(
           hint: Translator.translate(AppStrings.emailOrUserHint),
           icon: Icons.email,
           controller: _emailController,
           errorText: _emailError,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         CustomTextField(
           hint: Translator.translate(AppStrings.passwordHint),
           icon: Icons.lock,
@@ -183,7 +183,7 @@ class _SignupFormState extends State<SignupForm> {
           const SizedBox(height: 10),
           _PasswordRequirementsChecklist(password: _passwordController.text),
         ],
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         CustomTextField(
           hint: Translator.translate(AppStrings.confirmPasswordHint),
           icon: Icons.lock_outline,
@@ -203,6 +203,8 @@ class _SignupFormState extends State<SignupForm> {
           onPressed: _handleGoogleSignup,
           isLoading: _isGoogleLoading,
         ),
+        const SizedBox(height: 24),
+        SharedAccountNotice(text: Translator.translate(AppStrings.signupSharedAccountNotice)),
       ],
     );
   }

@@ -59,9 +59,9 @@ class Translator {
       AppStrings.brandTitle: "Petrimonium Wallet",
       AppStrings.brandTagline: "Seu patrimônio, com clareza",
       AppStrings.sharedAccountNotice:
-          "Mesma conta Petrimonium da Academy. Se você já estudou por lá, seu Pet e suas preferências vêm junto.",
+          "Mesma conta Petrimonium da Wallet, da Academy e do Health. Se você já tem uma, seu Pet e preferências vêm junto.",
       AppStrings.signupSharedAccountNotice:
-          "Sua conta Petrimonium é única para Academy e Wallet. No próximo passo você cria seu Pet.",
+          "Sua conta Petrimonium é única para Wallet, Academy e Health. No próximo passo você cria seu Pet.",
       AppStrings.authTabLoginLabel: "Entrar",
       AppStrings.authTabSignupLabel: "Criar Conta",
       AppStrings.petSetupTitle: "Crie seu Pet",
@@ -765,6 +765,10 @@ class Translator {
     // maior parte da língua, e uma chave em falta não é um buraco de tradução.
     // O teste 'pt_PT só define chaves que pt também define' impede órfãs.
     'pt_PT': {
+      AppStrings.signupSharedAccountNotice:
+          "A sua conta Petrimonium é única para Wallet, Academy e Health. No próximo passo cria o seu Pet.",
+      AppStrings.sharedAccountNotice:
+          "Mesma conta Petrimonium da Wallet, da Academy e do Health. Se já tiver uma, o seu Pet e preferências vêm junto.",
       AppStrings.petSpecieDog: "Cão",
       AppStrings.brandTagline: "O seu património, com clareza",
       AppStrings.quickSetupSaveCta: "Guardar",
@@ -807,9 +811,9 @@ class Translator {
       AppStrings.brandTitle: "Petrimonium Wallet",
       AppStrings.brandTagline: "Your wealth, made clear",
       AppStrings.sharedAccountNotice:
-          "Same Petrimonium account as the Academy. If you've already studied there, your Pet and preferences carry over.",
+          "The same Petrimonium account as Wallet, Academy and Health. If you already have one, your Pet and preferences come with it.",
       AppStrings.signupSharedAccountNotice:
-          "Your Petrimonium account is shared between the Academy and the Wallet. In the next step you'll create your Pet.",
+          "Your Petrimonium account is a single account for Wallet, Academy and Health. You will create your Pet in the next step.",
       AppStrings.authTabLoginLabel: "Login",
       AppStrings.authTabSignupLabel: "Create Account",
       AppStrings.petSetupTitle: "Create your Pet",
@@ -1513,9 +1517,9 @@ class Translator {
       AppStrings.brandTitle: "Petrimonium Wallet",
       AppStrings.brandTagline: "Tu patrimonio, con claridad",
       AppStrings.sharedAccountNotice:
-          "Misma cuenta Petrimonium que la Academy. Si ya estudiaste allí, tu Pet y tus preferencias vienen junto.",
+          "La misma cuenta Petrimonium de Wallet, Academy y Health. Si ya tienes una, tu Pet y tus preferencias vienen contigo.",
       AppStrings.signupSharedAccountNotice:
-          "Tu cuenta Petrimonium es única para la Academy y la Wallet. En el próximo paso crearás tu Pet.",
+          "Tu cuenta Petrimonium es única para Wallet, Academy y Health. En el siguiente paso crearás tu Pet.",
       AppStrings.authTabLoginLabel: "Entrar",
       AppStrings.authTabSignupLabel: "Crear Cuenta",
       AppStrings.petSetupTitle: "Crea tu Pet",

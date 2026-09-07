@@ -5,7 +5,6 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/game_snack.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
-import 'package:petrimonium_wallet/core/widgets/select_field.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_base_currency_enum.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_market_enum.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
@@ -56,35 +55,14 @@ class _QuickSetupScreenState extends State<QuickSetupScreen> {
     });
   }
 
-  Future<void> _pickMarket() async {
-    final selected = await showModalBottomSheet<WalletMarketEnum>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => OptionSheet<WalletMarketEnum>(
-        options: WalletMarketEnum.values,
-        current: _market,
-        labelOf: (m) => '${m.flag} ${m.label}',
-      ),
-    );
-    if (selected != null) {
-      setState(() {
-        _market = selected;
-        _currency = selected.defaultCurrency;
-      });
-    }
-  }
-
-  Future<void> _pickCurrency() async {
-    final selected = await showModalBottomSheet<WalletBaseCurrencyEnum>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => OptionSheet<WalletBaseCurrencyEnum>(
-        options: WalletBaseCurrencyEnum.values,
-        current: _currency,
-        labelOf: (c) => c.label,
-      ),
-    );
-    if (selected != null) setState(() => _currency = selected);
+  void _selectMarket(WalletMarketEnum market) {
+    if (market == _market) return;
+    setState(() {
+      _market = market;
+      // Como no artboard: trocar de mercado aplica a moeda sugerida da
+      // região; a moeda continua livre para ser sobrescrita a seguir.
+      _currency = market.defaultCurrency;
+    });
   }
 
   Future<void> _handleContinue() async {
@@ -117,22 +95,49 @@ class _QuickSetupScreenState extends State<QuickSetupScreen> {
       children: [
         FieldLabel(Translator.translate(AppStrings.quickSetupMarketLabel)),
         const SizedBox(height: 8),
-        SelectField(
-          value: '${_market.flag} ${_market.label}',
-          onTap: _pickMarket,
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final market in WalletMarketEnum.values)
+              OptionPill(
+                leading: market.flag,
+                label: market.label,
+                selected: market == _market,
+                onTap: () => _selectMarket(market),
+              ),
+          ],
         ),
         const SizedBox(height: 20),
         FieldLabel(Translator.translate(AppStrings.quickSetupCurrencyLabel)),
         const SizedBox(height: 8),
-        SelectField(
-          value: _currency.label,
-          onTap: _pickCurrency,
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final currency in WalletBaseCurrencyEnum.values)
+              OptionPill(
+                label: currency.label,
+                selected: currency == _currency,
+                onTap: () => setState(() => _currency = currency),
+              ),
+          ],
         ),
         if (!widget.isSettingsMode) ...[
           const SizedBox(height: 20),
-          Text(
-            Translator.translate(AppStrings.quickSetupFooterNote),
-            style: TextStyle(color: tokens.textTertiary, fontSize: 12, height: 1.4),
+          // Caixa com contorno, como no artboard `PrefsWallet` — era texto solto.
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: tokens.textPrimary.withValues(alpha: 0.03),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: tokens.textPrimary.withValues(alpha: 0.12)),
+            ),
+            child: Text(
+              Translator.translate(AppStrings.quickSetupFooterNote),
+              style: TextStyle(color: tokens.textSecondary, fontSize: 12, height: 1.45),
+            ),
           ),
         ],
       ],

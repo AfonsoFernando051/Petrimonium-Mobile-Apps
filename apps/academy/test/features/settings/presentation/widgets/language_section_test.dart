@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/language_section.dart';
@@ -31,10 +32,17 @@ void main() {
       expect(find.text('Español'), findsOneWidget);
     });
 
-    testWidgets('shows a check icon only next to the currently selected language', (tester) async {
+    testWidgets('marks exactly one language as selected', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
-      expect(find.byIcon(Icons.check_circle), findsOneWidget);
+      // O artboard desenha o círculo em todas as linhas — vazio nas não
+      // escolhidas — e só a escolhida leva o visto dentro.
+      expect(find.byType(OptionRow), findsNWidgets(4));
+      expect(find.byIcon(Icons.check), findsOneWidget);
+      expect(
+        tester.widgetList<OptionRow>(find.byType(OptionRow)).where((r) => r.selected).length,
+        1,
+      );
     });
 
     testWidgets('shows the check next to English when currentLanguage is en', (tester) async {
@@ -46,7 +54,7 @@ void main() {
         matching: find.byType(InkWell),
       );
       expect(
-        find.descendant(of: englishRow, matching: find.byIcon(Icons.check_circle)),
+        find.descendant(of: englishRow, matching: find.byIcon(Icons.check)),
         findsOneWidget,
       );
     });

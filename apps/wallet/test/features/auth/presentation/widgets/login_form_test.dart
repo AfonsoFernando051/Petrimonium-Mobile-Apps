@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
@@ -56,12 +57,13 @@ void main() {
     testWidgets('renders the shared-account notice, both fields, LoginButton and ForgotPasswordButton', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
+      // Pela chave, não pelo literal: a copy da nota mudou com o
+      // alinhamento ao canvas e voltará a mudar.
       expect(
-        find.text(
-          'Mesma conta Petrimonium da Academy. Se você já estudou por lá, seu Pet e suas preferências vêm junto.',
-        ),
+        find.text(Translator.translate(AppStrings.sharedAccountNotice)),
         findsOneWidget,
       );
+      expect(find.byType(SharedAccountNotice), findsOneWidget);
       expect(find.byType(CustomTextField), findsNWidgets(2));
       expect(find.byType(LoginButton), findsOneWidget);
       expect(find.byType(GoogleSignInButton), findsOneWidget);

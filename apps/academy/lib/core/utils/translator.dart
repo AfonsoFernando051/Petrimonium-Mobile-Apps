@@ -66,7 +66,9 @@ class Translator {
       AppStrings.brandTitle: "Petrimonium",
       AppStrings.brandTagline: "Aprenda a investir jogando",
       AppStrings.sharedAccountNotice:
-          "Sua conta Petrimonium é única para Academy e Wallet. Desinstalar um dos apps não exclui sua conta nem seus dados.",
+          "Mesma conta Petrimonium da Wallet, da Academy e do Health. Se você já tem uma, seu Pet e preferências vêm junto.",
+      AppStrings.signupSharedAccountNotice:
+          "Sua conta Petrimonium é única para Wallet, Academy e Health. No próximo passo você cria seu Pet.",
       AppStrings.createAccount: "Criar Conta",
       AppStrings.fillDetails: "Preencha seus dados",
       AppStrings.nameHint: "Nome Completo",
@@ -739,6 +741,10 @@ class Translator {
     // maior parte da língua, e uma chave em falta não é um buraco de tradução.
     // O teste 'pt_PT só define chaves que pt também define' impede órfãs.
     'pt_PT': {
+      AppStrings.sharedAccountNotice:
+          "Mesma conta Petrimonium da Wallet, da Academy e do Health. Se já tiver uma, o seu Pet e preferências vêm junto.",
+      AppStrings.signupSharedAccountNotice:
+          "A sua conta Petrimonium é única para Wallet, Academy e Health. No próximo passo cria o seu Pet.",
       AppStrings.petSpecieDog: "Cão",
       AppStrings.brandTagline: "Aprenda a investir a jogar",
       AppStrings.gamificationIntroCompareRuleBody:
@@ -786,7 +792,9 @@ class Translator {
       AppStrings.brandTitle: "Petrimonium",
       AppStrings.brandTagline: "Learn investing by playing",
       AppStrings.sharedAccountNotice:
-          "Your Petrimonium account is shared between Academy and Wallet. Uninstalling one app doesn't delete your account or your data.",
+          "The same Petrimonium account as Wallet, Academy and Health. If you already have one, your Pet and preferences come with it.",
+      AppStrings.signupSharedAccountNotice:
+          "Your Petrimonium account is a single account for Wallet, Academy and Health. You will create your Pet in the next step.",
       AppStrings.createAccount: "Create Account",
       AppStrings.fillDetails: "Fill in your details",
       AppStrings.nameHint: "Full Name",
@@ -1467,7 +1475,9 @@ class Translator {
       AppStrings.brandTitle: "Petrimonium",
       AppStrings.brandTagline: "Aprende a invertir jugando",
       AppStrings.sharedAccountNotice:
-          "Tu cuenta Petrimonium es única para Academy y Wallet. Desinstalar una de las apps no elimina tu cuenta ni tus datos.",
+          "La misma cuenta Petrimonium de Wallet, Academy y Health. Si ya tienes una, tu Pet y tus preferencias vienen contigo.",
+      AppStrings.signupSharedAccountNotice:
+          "Tu cuenta Petrimonium es única para Wallet, Academy y Health. En el siguiente paso crearás tu Pet.",
       AppStrings.createAccount: "Crear Cuenta",
       AppStrings.fillDetails: "Completa tus datos",
       AppStrings.nameHint: "Nombre Completo",

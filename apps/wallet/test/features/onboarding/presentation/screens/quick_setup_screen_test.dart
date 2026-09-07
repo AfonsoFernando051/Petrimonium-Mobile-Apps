@@ -1,3 +1,4 @@
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,9 +30,13 @@ void main() {
       expect(find.text('Antes de começar'), findsOneWidget);
       expect(find.text('Só o essencial — dá pra ajustar depois.'), findsOneWidget);
       expect(find.text('País / mercado'), findsOneWidget);
-      expect(find.text('🇧🇷 Brasil · B3'), findsOneWidget);
+      // As opções ficam à vista em pastilhas, com a bandeira à parte do
+      // rótulo — o artboard `PrefsWallet` não usa campo que abre folha.
+      expect(find.text('Brasil · B3'), findsOneWidget);
+      expect(find.text('🇧🇷'), findsOneWidget);
       expect(find.text('Moeda-base'), findsOneWidget);
       expect(find.text('BRL — Real'), findsOneWidget);
+      expect(find.byType(OptionPill), findsNWidgets(2));
       expect(
         find.text(
           'Você vai adicionar seus ativos manualmente no próximo passo — nada é importado automaticamente ainda.',
@@ -41,25 +46,26 @@ void main() {
       expect(find.text('Continuar'), findsOneWidget);
     });
 
-    testWidgets('tapping the market field opens a sheet listing it, selectable', (tester) async {
+    testWidgets('shows the choices inline and marks the current one, with no modal', (tester) async {
       // GameButton's CTA pulse animation repeats forever (see
       // welcome_screen_test.dart's comment on the same constraint) — explicit
       // pumps only, never pumpAndSettle, for the whole test.
       await tester.pumpWidget(buildThemedTestableWidget());
       await tester.pump();
 
-      await tester.tap(find.text('🇧🇷 Brasil · B3'));
+      final marketPill = find.ancestor(
+        of: find.text('Brasil · B3'),
+        matching: find.byType(OptionPill),
+      );
+      expect(tester.widget<OptionPill>(marketPill).selected, isTrue);
+
+      await tester.tap(find.text('Brasil · B3'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      // Sheet shows the option with a check mark, since it's already selected.
-      expect(find.byIcon(Icons.check), findsOneWidget);
-
-      await tester.tap(find.text('🇧🇷 Brasil · B3').last);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-
-      expect(find.text('🇧🇷 Brasil · B3'), findsOneWidget);
+      // Nada de folha modal: a escolha resolve-se no próprio ecrã.
+      expect(find.byType(BottomSheet), findsNothing);
+      expect(tester.widget<OptionPill>(marketPill).selected, isTrue);
     });
   });
 }
