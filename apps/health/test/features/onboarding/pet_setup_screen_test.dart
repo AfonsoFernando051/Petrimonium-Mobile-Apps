@@ -4,6 +4,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_health/core/app/health_scope.dart';
 import 'package:petrimonium_health/core/i18n/locale_controller.dart';
+import 'package:petrimonium_health/core/theme/health_theme.dart';
+import 'package:petrimonium_health/core/widgets/health_widgets.dart';
 import 'package:petrimonium_health/features/health/data/health_repository.dart';
 import 'package:petrimonium_health/features/health/domain/pet_species.dart';
 import 'package:petrimonium_health/features/health/presentation/health_controller.dart';
@@ -77,6 +79,70 @@ void main() {
     expect(PetSpecies.fromApiValue('LION'), PetSpecies.lion);
     expect(PetSpecies.fromApiValue('BEAR'), PetSpecies.bear);
   });
+  testWidgets('lays the step out as the canvas does', (tester) async {
+    await pumpPetSetup(tester);
+    final l10n = AppLocalizations.of(tester.element(find.byType(PetSetupScreen)));
+
+    // Indicador de passo no topo, acima do título — estava junto ao CTA.
+    final dots = find.byType(ProgressDots);
+    final title = find.text(l10n.petSetupTitle);
+    expect(dots, findsOneWidget);
+    expect(tester.getTopLeft(dots).dy, lessThan(tester.getTopLeft(title).dy));
+
+    // Título e subtítulo à esquerda, na mesma margem dos rótulos.
+    final speciesLabel = find.text(l10n.petSetupSpeciesLabel);
+    expect(tester.getTopLeft(title).dx, tester.getTopLeft(speciesLabel).dx);
+
+    // A nota de rodapé é uma caixa com fundo e contorno, não texto solto.
+    final noteBox = find.ancestor(
+      of: find.text(l10n.petSetupFooterNote),
+      matching: find.byType(Container),
+    );
+    final decoration = tester.widget<Container>(noteBox.first).decoration as BoxDecoration;
+    expect(decoration.color, HealthColors.inputFill);
+    expect(decoration.border, isNotNull);
+  });
+
+  testWidgets('selection changes the label weight, never its colour', (tester) async {
+    await pumpPetSetup(tester);
+    final l10n = AppLocalizations.of(tester.element(find.byType(PetSetupScreen)));
+
+    Text labelOf(PetSpecies s) => tester.widget<Text>(find.text(_label(tester, s)));
+
+    // fox é o pré-selecionado no artboard `PetHealth`.
+    expect(labelOf(PetSpecies.fox).style?.fontWeight, FontWeight.w700);
+    expect(labelOf(PetSpecies.lion).style?.fontWeight, FontWeight.w400);
+    // No canvas as sete espécies partilham a cor do rótulo.
+    expect(labelOf(PetSpecies.fox).style?.color, labelOf(PetSpecies.lion).style?.color);
+    expect(labelOf(PetSpecies.fox).style?.color, HealthColors.textSecondary);
+    expect(l10n.petSetupSpeciesLabel, isNotEmpty);
+  });
+
+  testWidgets('caps the content width on a desktop-sized window', (tester) async {
+    // Numa janela larga a coluna esticava a 1920px e a grelha dava cartões de
+    // ~480px — o passo do pet ocupava o ecrã inteiro com quatro espécies.
+    tester.view.physicalSize = const Size(1920, 1080);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await pumpPetSetup(tester);
+
+    // Medir o contentor, não a largura intrínseca do texto: esta última é a
+    // mesma com ou sem limite, e deixava o teste passar à mesma.
+    final grid = tester.getSize(find.byType(GridView));
+    expect(grid.width, lessThanOrEqualTo(HealthContent.bodyWidth));
+
+    final cta = tester.getSize(find.byType(HealthPrimaryButton));
+    expect(cta.width, lessThanOrEqualTo(HealthContent.bodyWidth));
+
+    // As sete espécies continuam presentes, em duas linhas de quatro.
+    expect(find.byType(Image), findsNWidgets(PetSpecies.values.length));
+    final firstOfRow = tester.getTopLeft(find.text(_label(tester, PetSpecies.fox)));
+    final lastOfRow = tester.getTopLeft(find.text(_label(tester, PetSpecies.owl)));
+    expect(lastOfRow.dx - firstOfRow.dx, lessThan(HealthContent.bodyWidth));
+  });
+
 }
 
 String _label(WidgetTester tester, PetSpecies species) {

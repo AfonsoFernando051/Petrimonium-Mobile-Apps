@@ -76,108 +76,106 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Centrado na vertical como no artboard: em ecrãs altos a
                 // coluna assenta no meio, em ecrãs baixos volta a rolar.
                 constraints: BoxConstraints(minHeight: constraints.maxHeight - 64),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 342),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // Sem recorte circular: a arte do mascote já vem com
-                        // fundo transparente e assenta direto sobre o fundo.
-                        Image.asset('assets/pets/fox.png', height: 96, fit: BoxFit.contain),
-                        const SizedBox(height: 14),
-                        Text(
-                          'PETRIMONIUM HEALTH',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            letterSpacing: 2.5,
-                            fontWeight: FontWeight.w800,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                child: HealthContent(
+                  width: HealthContent.bodyWidth,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Sem recorte circular: a arte do mascote já vem com
+                      // fundo transparente e assenta direto sobre o fundo.
+                      Image.asset('assets/pets/fox.png', height: 96, fit: BoxFit.contain),
+                      const SizedBox(height: 14),
+                      Text(
+                        'PETRIMONIUM HEALTH',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          letterSpacing: 2.5,
+                          fontWeight: FontWeight.w800,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          l10n.healthTagline,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 12, color: HealthColors.textSecondary),
-                        ),
-                        const SizedBox(height: 28),
-                        _AuthModeToggle(
-                          isSignup: isSignup,
-                          loginLabel: l10n.loginToggleLogin,
-                          signupLabel: l10n.loginToggleSignup,
-                          onChanged: (signup) =>
-                              controller.setAuthMode(signup ? AuthMode.signup : AuthMode.login),
-                        ),
-                        const SizedBox(height: 28),
-                        if (isSignup) ...[
-                          TextField(
-                            controller: _nameController,
-                            decoration: InputDecoration(hintText: l10n.name),
-                          ),
-                          const SizedBox(height: 14),
-                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        l10n.healthTagline,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 12, color: HealthColors.textSecondary),
+                      ),
+                      const SizedBox(height: 28),
+                      _AuthModeToggle(
+                        isSignup: isSignup,
+                        loginLabel: l10n.loginToggleLogin,
+                        signupLabel: l10n.loginToggleSignup,
+                        onChanged: (signup) =>
+                            controller.setAuthMode(signup ? AuthMode.signup : AuthMode.login),
+                      ),
+                      const SizedBox(height: 28),
+                      if (isSignup) ...[
                         TextField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(hintText: l10n.email),
+                          controller: _nameController,
+                          decoration: InputDecoration(hintText: l10n.name),
                         ),
                         const SizedBox(height: 14),
-                        TextField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(hintText: l10n.password),
-                        ),
-                        if (_formError != null) ...[
-                          const SizedBox(height: 12),
-                          Text(
-                            _formError!,
-                            style: const TextStyle(color: HealthColors.negative, fontSize: 12.5),
-                          ),
-                        ],
-                        const SizedBox(height: 20),
-                        HealthPrimaryButton(
-                          label: isSignup ? l10n.loginCtaSignup : l10n.login,
-                          busy: busy,
-                          onPressed: () => _submit(controller),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            const Expanded(child: Divider(color: HealthColors.textMuted, height: 1)),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text(
-                                l10n.orDivider,
-                                style: const TextStyle(fontSize: 12, color: HealthColors.textMuted),
-                              ),
-                            ),
-                            const Expanded(child: Divider(color: HealthColors.textMuted, height: 1)),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        _GoogleButton(
-                          label: l10n.continueWithGoogle,
-                          busy: busy,
-                          onPressed: () => _submitGoogle(controller),
-                        ),
-                        if (!isSignup) ...[
-                          const SizedBox(height: 24),
-                          Text(
-                            l10n.forgotPassword,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 12.5, color: HealthColors.textMuted),
-                          ),
-                        ],
-                        const SizedBox(height: 24),
-                        // A nota fecha o ecrã, depois do Google — no artboard
-                        // ela é rodapé explicativo, não um aviso a meio do
-                        // formulário separando os campos do botão.
-                        _SharedAccountNote(text: isSignup ? l10n.loginNoteSignup : l10n.loginNoteLogin),
                       ],
-                    ),
+                      TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(hintText: l10n.email),
+                      ),
+                      const SizedBox(height: 14),
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(hintText: l10n.password),
+                      ),
+                      if (_formError != null) ...[
+                        const SizedBox(height: 12),
+                        Text(
+                          _formError!,
+                          style: const TextStyle(color: HealthColors.negative, fontSize: 12.5),
+                        ),
+                      ],
+                      const SizedBox(height: 20),
+                      HealthPrimaryButton(
+                        label: isSignup ? l10n.loginCtaSignup : l10n.login,
+                        busy: busy,
+                        onPressed: () => _submit(controller),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          const Expanded(child: Divider(color: HealthColors.textMuted, height: 1)),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              l10n.orDivider,
+                              style: const TextStyle(fontSize: 12, color: HealthColors.textMuted),
+                            ),
+                          ),
+                          const Expanded(child: Divider(color: HealthColors.textMuted, height: 1)),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      _GoogleButton(
+                        label: l10n.continueWithGoogle,
+                        busy: busy,
+                        onPressed: () => _submitGoogle(controller),
+                      ),
+                      if (!isSignup) ...[
+                        const SizedBox(height: 24),
+                        Text(
+                          l10n.forgotPassword,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 12.5, color: HealthColors.textMuted),
+                        ),
+                      ],
+                      const SizedBox(height: 24),
+                      // A nota fecha o ecrã, depois do Google — no artboard
+                      // ela é rodapé explicativo, não um aviso a meio do
+                      // formulário separando os campos do botão.
+                      _SharedAccountNote(text: isSignup ? l10n.loginNoteSignup : l10n.loginNoteLogin),
+                    ],
                   ),
                 ),
               ),
@@ -216,19 +214,11 @@ class _AuthModeToggle extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _AuthModeOption(
-              label: loginLabel,
-              selected: !isSignup,
-              onTap: () => onChanged(false),
-            ),
+            child: _AuthModeOption(label: loginLabel, selected: !isSignup, onTap: () => onChanged(false)),
           ),
           const SizedBox(width: 4),
           Expanded(
-            child: _AuthModeOption(
-              label: signupLabel,
-              selected: isSignup,
-              onTap: () => onChanged(true),
-            ),
+            child: _AuthModeOption(label: signupLabel, selected: isSignup, onTap: () => onChanged(true)),
           ),
         ],
       ),
@@ -328,11 +318,7 @@ class _GoogleButton extends StatelessWidget {
         icon: const Icon(Icons.g_mobiledata, size: 28, color: HealthColors.textPrimary),
         label: Text(
           label,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: HealthColors.textPrimary,
-          ),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: HealthColors.textPrimary),
         ),
         style: OutlinedButton.styleFrom(
           backgroundColor: HealthColors.card,

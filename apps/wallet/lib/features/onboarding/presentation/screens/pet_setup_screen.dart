@@ -179,7 +179,9 @@ class _SpeciesCard extends StatelessWidget {
             Text(
               specie.displayLabel,
               style: TextStyle(
-                color: selected ? tokens.textPrimary : tokens.textSecondary,
+                // Só o peso muda com a selecção: no artboard a cor do rótulo
+                // é a mesma nas sete espécies.
+                color: tokens.textSecondary,
                 fontSize: 10.5,
                 fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
               ),
