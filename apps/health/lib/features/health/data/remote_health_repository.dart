@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:google_sign_in/google_sign_in.dart';
+
 import '../../../core/config/api_config.dart';
 import '../../../core/money/money.dart';
 import '../../../core/network/api_client.dart';
@@ -59,6 +61,54 @@ final class RemoteHealthRepository implements HealthRepository {
     );
   }
 
+  bool _googleSignInInitialized = false;
+
+  @override
+  Future<void> loginWithGoogle() async {
+    // O plugin só tem implementação real em Android/iOS/macOS/Web; noutras
+    // plataformas lança UnsupportedError em qualquer chamada. Traduz-se isso
+    // numa mensagem legível em vez do "UnimplementedError" cru.
+    try {
+      if (!_googleSignInInitialized) {
+        await GoogleSignIn.instance.initialize(
+          serverClientId: ApiConfig.googleServerClientId,
+        );
+        _googleSignInInitialized = true;
+      }
+    } on UnsupportedError {
+      throw Exception('Login com Google não está disponível neste dispositivo.');
+    }
+
+    final GoogleSignInAccount account;
+    try {
+      account = await GoogleSignIn.instance.authenticate();
+    } on GoogleSignInException catch (e) {
+      // Cancelar não é erro: sai em silêncio e a tela fica como estava.
+      if (e.code == GoogleSignInExceptionCode.canceled) return;
+      rethrow;
+    } on UnsupportedError {
+      throw Exception('Login com Google não está disponível neste dispositivo.');
+    }
+
+    final idToken = account.authentication.idToken;
+    if (idToken == null) {
+      throw Exception('O Google não devolveu um ID token.');
+    }
+
+    final response = await _api.unauthenticatedPost('/auth/google', {
+      'idToken': idToken,
+      'appContext': ApiConfig.appContext,
+    });
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throwApiError(response);
+    }
+    final json = decodeObject(response);
+    await _api.tokenStore.saveTokens(
+      json['accessToken'] as String,
+      json['refreshToken'] as String,
+    );
+  }
+
   @override
   Future<void> register(String name, String email, String password) async {
     final response = await _api.unauthenticatedPost('/auth/register', {
@@ -70,6 +120,14 @@ final class RemoteHealthRepository implements HealthRepository {
       throwApiError(response);
     }
     await login(email, password);
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    final response = await _api.delete('/api/settings/account');
+    if (response.statusCode != 204 && response.statusCode != 200) {
+      throwApiError(response);
+    }
   }
 
   @override

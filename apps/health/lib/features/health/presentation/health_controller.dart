@@ -105,6 +105,13 @@ final class HealthController extends ChangeNotifier {
     });
   }
 
+  Future<void> loginWithGoogle() async {
+    await _withBusy(() async {
+      await _repository.loginWithGoogle();
+      await _loadAuthenticatedState();
+    });
+  }
+
   Future<void> register(String name, String email, String password) async {
     await _withBusy(() async {
       await _repository.register(name, email, password);
@@ -185,6 +192,16 @@ final class HealthController extends ChangeNotifier {
       profile = saved;
       await _localeController.setLocale(saved.interfaceLocale);
     });
+  }
+
+  /// Apaga a conta e a seguir limpa o estado local. O logout remoto que
+  /// [logout] faz vai responder 401 — a conta já não existe — mas ele engole
+  /// essa falha e limpa os tokens de qualquer forma, que é o que falta aqui.
+  Future<void> deleteAccount() async {
+    await _withBusy(() async {
+      await _repository.deleteAccount();
+    });
+    await logout();
   }
 
   Future<void> logout() async {

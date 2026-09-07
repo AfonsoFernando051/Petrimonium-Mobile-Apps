@@ -17,7 +17,9 @@ enum CountryCode {
 
 enum InterfaceLocale {
   ptBr('pt-BR', Locale('pt', 'BR')),
-  ptPt('pt-PT', Locale('pt', 'PT'));
+  ptPt('pt-PT', Locale('pt', 'PT')),
+  en('en', Locale('en')),
+  es('es', Locale('es'));
 
   const InterfaceLocale(this.tag, this.locale);
   final String tag;

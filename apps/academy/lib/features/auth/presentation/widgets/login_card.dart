@@ -30,18 +30,17 @@ class _LoginCardState extends State<LoginCard> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ClipOval(
-                child: Image.asset(
-                  'assets/images/generated_fox.png',
-                  width: 72,
-                  height: 72,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.pets, size: 40, color: tokens.mentor);
-                  },
-                ),
+              // Sem recorte circular: a arte do mascote já vem com fundo
+              // transparente e assenta direto sobre o fundo da tela.
+              Image.asset(
+                'assets/images/generated_wolf.png',
+                height: 96,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.pets, size: 48, color: tokens.mentor);
+                },
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               Text(
                 Translator.translate(AppStrings.brandTitle).toUpperCase(),
                 textAlign: TextAlign.center,
@@ -52,7 +51,13 @@ class _LoginCardState extends State<LoginCard> {
                   letterSpacing: 2.5,
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 4),
+              Text(
+                Translator.translate(AppStrings.brandTagline),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: tokens.textSecondary, fontSize: 12),
+              ),
+              const SizedBox(height: 28),
               _AuthModeToggle(
                 isLogin: _isLogin,
                 onChanged: (isLogin) => setState(() => _isLogin = isLogin),

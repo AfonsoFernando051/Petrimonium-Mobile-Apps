@@ -19,6 +19,7 @@ class LanguageSection extends StatelessWidget {
     final tokens = context.colors;
     final languages = [
       (code: 'pt', label: Translator.translate(AppStrings.languagePt), flag: '🇧🇷'),
+      (code: 'pt_PT', label: Translator.translate(AppStrings.languagePtPt), flag: '🇵🇹'),
       (code: 'en', label: Translator.translate(AppStrings.languageEn), flag: '🇺🇸'),
       (code: 'es', label: Translator.translate(AppStrings.languageEs), flag: '🇪🇸'),
     ];

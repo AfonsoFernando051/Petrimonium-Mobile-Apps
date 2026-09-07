@@ -31,13 +31,15 @@ void main() {
   }
 
   group('LoginCard', () {
-    testWidgets('renders the fox mascot, brand title, the Login/Cadastro toggle and LoginForm by default', (tester) async {
+    testWidgets('renders the dog mascot, brand title, the Entrar/Criar Conta toggle and LoginForm by default', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
       expect(find.byType(Image), findsOneWidget);
       expect(find.text('PETRIMONIUM WALLET'), findsOneWidget);
-      expect(find.text('Login'), findsOneWidget);
-      expect(find.text('Cadastro'), findsOneWidget);
+      // Em pt a aba do alternador e o botão primário partilham o rótulo
+      // 'Entrar', por isso aqui não se espera um único widget.
+      expect(find.text('Entrar'), findsWidgets);
+      expect(find.text('Criar Conta'), findsOneWidget);
       expect(find.byType(LoginForm), findsOneWidget);
       expect(find.byType(SignupForm), findsNothing);
     });
@@ -45,13 +47,13 @@ void main() {
     testWidgets('tapping Cadastro swaps in SignupForm; tapping Login swaps back', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
-      await tester.tap(find.text('Cadastro'));
+      await tester.tap(find.text('Criar Conta'));
       await tester.pump();
 
       expect(find.byType(SignupForm), findsOneWidget);
       expect(find.byType(LoginForm), findsNothing);
 
-      await tester.tap(find.text('Login'));
+      await tester.tap(find.text('Entrar').first);
       await tester.pump();
 
       expect(find.byType(LoginForm), findsOneWidget);

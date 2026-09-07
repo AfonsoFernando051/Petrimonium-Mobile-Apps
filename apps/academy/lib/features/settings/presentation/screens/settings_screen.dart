@@ -13,6 +13,8 @@ import 'package:petrimonium_academy/features/auth/presentation/screens/login_scr
 import 'package:petrimonium_academy/features/settings/presentation/widgets/account_section.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/appearance_section.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/companion_section.dart';
+import 'package:petrimonium_academy/core/preferences/country_preference.dart';
+import 'package:petrimonium_academy/features/settings/presentation/widgets/country_section.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/language_section.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/notifications_section.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/privacy_section.dart';
@@ -133,6 +135,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await prefs.setBool(key, value);
   }
 
+  Future<void> _handleCountrySelected(String countryCode) async {
+    if (countryCode == CountryPreference.current) return;
+    HapticFeedback.selectionClick();
+    await CountryPreference.setCountry(countryCode);
+    await DI.settingsRepository.syncCountry(countryCode);
+  }
+
   Future<void> _handleLanguageSelected(String language) async {
     if (language == Translator.currentLanguage) return;
     HapticFeedback.selectionClick();
@@ -141,6 +150,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (!mounted) return;
     setState(() {});
     GameSnack.show(context, Translator.translate(AppStrings.languageUpdated), isSuccess: true);
+  }
+
+  Future<void> _confirmDeleteAccount() async {
+    final confirmed = await ConfirmLogoutDialog.show(
+      context,
+      title: Translator.translate(AppStrings.deleteAccountConfirmTitle),
+      message: Translator.translate(AppStrings.deleteAccountConfirmMessage),
+      cancelLabel: Translator.translate(AppStrings.cancelButton),
+      confirmLabel: Translator.translate(AppStrings.deleteAccountButton),
+    );
+    if (!confirmed || !mounted) return;
+
+    HapticFeedback.heavyImpact();
+    try {
+      await DI.settingsRepository.deleteAccount();
+    } catch (e) {
+      if (!mounted) return;
+      GameSnack.show(context, friendlyErrorMessage(e), isError: true);
+      return;
+    }
+
+    // A conta já não existe do lado do servidor, por isso o /auth/logout vai
+    // responder 401. O que ainda interessa aqui é limpar tokens e preferências
+    // do dispositivo — a falha da chamada remota é esperada e não muda nada.
+    try {
+      await DI.authRepository.logout();
+    } catch (_) {}
+
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        (route) => false,
+      );
+    }
   }
 
   Future<void> _confirmLogout() async {
@@ -214,6 +257,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(height: AppSpacing.xl),
                       LanguageSection(sectionLabel: _sectionLabel, onLanguageSelected: _handleLanguageSelected),
                       const SizedBox(height: AppSpacing.xl),
+                      CountrySection(sectionLabel: _sectionLabel, onCountrySelected: _handleCountrySelected),
+                      const SizedBox(height: AppSpacing.xl),
                       AppearanceSection(sectionLabel: _sectionLabel),
                       const SizedBox(height: AppSpacing.xl),
                       NotificationsSection(
@@ -239,7 +284,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         },
                       ),
                       const SizedBox(height: AppSpacing.xl),
-                      AccountSection(sectionLabel: _sectionLabel, email: _email, onLogout: _confirmLogout),
+                      AccountSection(
+                        sectionLabel: _sectionLabel,
+                        email: _email,
+                        onLogout: _confirmLogout,
+                        onDeleteAccount: _confirmDeleteAccount,
+                      ),
                       const SizedBox(height: AppSpacing.xxxl),
                     ],
                   ),

@@ -31,7 +31,7 @@ void main() {
   }
 
   group('LoginCard', () {
-    testWidgets('renders the fox mascot, brand title and LoginForm by default', (tester) async {
+    testWidgets('renders the wolf mascot, brand title and LoginForm by default', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
       expect(find.byType(Image), findsOneWidget);

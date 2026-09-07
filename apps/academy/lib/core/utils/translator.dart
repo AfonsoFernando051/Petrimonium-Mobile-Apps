@@ -11,7 +11,7 @@ class Translator {
 
   static const String _prefsKey = 'app_language';
   static const String defaultLanguage = 'pt';
-  static const Set<String> supportedLanguages = {'pt', 'en', 'es'};
+  static const Set<String> supportedLanguages = {'pt', 'pt_PT', 'en', 'es'};
 
   static final ValueNotifier<String> languageNotifier = ValueNotifier(
     defaultLanguage,
@@ -57,6 +57,7 @@ class Translator {
       AppStrings.continueWithGoogle: "Continuar com Google",
       AppStrings.orDivider: "ou",
       AppStrings.brandTitle: "Petrimonium",
+      AppStrings.brandTagline: "Aprenda a investir jogando",
       AppStrings.sharedAccountNotice:
           "Sua conta Petrimonium é única para Academy e Wallet. Desinstalar um dos apps não exclui sua conta nem seus dados.",
       AppStrings.createAccount: "Criar Conta",
@@ -223,7 +224,14 @@ class Translator {
       AppStrings.settingsTitle: "Configurações",
       AppStrings.settingsSubtitle: "Personalize sua experiência, Comandante.",
       AppStrings.languageSectionTitle: "Idioma",
+      AppStrings.countrySectionTitle: "País",
+      AppStrings.deleteAccountButton: "Excluir minha conta",
+      AppStrings.deleteAccountConfirmTitle: "Excluir a conta?",
+      AppStrings.deleteAccountConfirmMessage: "Isto apaga definitivamente a sua conta Petrimonium e tudo o que está nela — Wallet, Academy e Health, incluindo o seu Pet. Não há como desfazer.",
+      AppStrings.countryBrazil: "Brasil",
+      AppStrings.countryPortugal: "Portugal",
       AppStrings.languagePt: "Português (Brasil)",
+      AppStrings.languagePtPt: "Português (Portugal)",
       AppStrings.languageEn: "English",
       AppStrings.languageEs: "Español",
       AppStrings.languageUpdated: "Idioma atualizado",
@@ -718,6 +726,38 @@ class Translator {
       AppStrings.petTeacherNotOwnedGreeting:
           "Quer saber mais sobre {assetName}?",
     },
+    // Português europeu. Deliberadamente esparso: só as entradas que diferem
+    // do pt-BR. Todo o resto resolve pelo fallback de [translate] para o bloco
+    // 'pt', que aqui é o comportamento certo — as duas variantes partilham a
+    // maior parte da língua, e uma chave em falta não é um buraco de tradução.
+    // O teste 'pt_PT só define chaves que pt também define' impede órfãs.
+    'pt_PT': {
+      AppStrings.brandTagline: "Aprenda a investir a jogar",
+      AppStrings.gamificationIntroCompareRuleBody:
+          "O seu progresso é só seu. Não existe ranking de património ou retorno aqui.",
+      AppStrings.emailOrUserHint: "E-mail ou Utilizador",
+      AppStrings.passwordHint: "Palavra-passe",
+      AppStrings.confirmPasswordHint: "Confirmar palavra-passe",
+      AppStrings.forgotPassword: "Esqueceu-se da palavra-passe?",
+      AppStrings.noAccountSignUp: "Não tem conta? Registe-se",
+      AppStrings.signupButton: "Registar",
+      AppStrings.forgotPasswordTitle: "Recuperar palavra-passe",
+      AppStrings.forgotPasswordSubtitle:
+          "Introduza o seu e-mail e enviaremos uma ligação para redefinir a sua palavra-passe.",
+      AppStrings.resetPasswordTitle: "Redefinir palavra-passe",
+      AppStrings.resetPasswordSubtitle:
+          "Cole o código que enviámos por e-mail e escolha uma nova palavra-passe.",
+      AppStrings.resetPasswordNewPasswordHint: "Nova palavra-passe",
+      AppStrings.resetPasswordSubmitButton: "Redefinir palavra-passe",
+      AppStrings.resetPasswordSuccessMessage:
+          "Palavra-passe redefinida com sucesso! Inicie sessão com a sua nova palavra-passe.",
+      AppStrings.resetPasswordMismatchError: "As palavras-passe não coincidem.",
+      AppStrings.mentorRenameConversationSave: "Guardar",
+      AppStrings.failedToSavePet: "Falha ao guardar o pet",
+      AppStrings.portfolioGuidanceMentorBody:
+          "Com a sua carteira registada, o mentor poderá analisar o seu progresso e ajudá-lo a aprender.",
+    },
+
     'en': {
       AppStrings.welcomeBack: "Welcome back",
       AppStrings.loginToContinue: "Login to continue",
@@ -729,6 +769,7 @@ class Translator {
       AppStrings.continueWithGoogle: "Continue with Google",
       AppStrings.orDivider: "or",
       AppStrings.brandTitle: "Petrimonium",
+      AppStrings.brandTagline: "Learn investing by playing",
       AppStrings.sharedAccountNotice:
           "Your Petrimonium account is shared between Academy and Wallet. Uninstalling one app doesn't delete your account or your data.",
       AppStrings.createAccount: "Create Account",
@@ -892,7 +933,14 @@ class Translator {
       AppStrings.settingsTitle: "Settings",
       AppStrings.settingsSubtitle: "Personalize your experience, Commander.",
       AppStrings.languageSectionTitle: "Language",
+      AppStrings.countrySectionTitle: "Country",
+      AppStrings.deleteAccountButton: "Delete my account",
+      AppStrings.deleteAccountConfirmTitle: "Delete account?",
+      AppStrings.deleteAccountConfirmMessage: "This permanently deletes your Petrimonium account and everything in it — Wallet, Academy and Health, including your Pet. This cannot be undone.",
+      AppStrings.countryBrazil: "Brazil",
+      AppStrings.countryPortugal: "Portugal",
       AppStrings.languagePt: "Português (Brasil)",
+      AppStrings.languagePtPt: "Português (Portugal)",
       AppStrings.languageEn: "English",
       AppStrings.languageEs: "Español",
       AppStrings.languageUpdated: "Language updated",
@@ -1395,6 +1443,7 @@ class Translator {
       AppStrings.continueWithGoogle: "Continuar con Google",
       AppStrings.orDivider: "o",
       AppStrings.brandTitle: "Petrimonium",
+      AppStrings.brandTagline: "Aprende a invertir jugando",
       AppStrings.sharedAccountNotice:
           "Tu cuenta Petrimonium es única para Academy y Wallet. Desinstalar una de las apps no elimina tu cuenta ni tus datos.",
       AppStrings.createAccount: "Crear Cuenta",
@@ -1561,7 +1610,14 @@ class Translator {
       AppStrings.settingsTitle: "Configuración",
       AppStrings.settingsSubtitle: "Personaliza tu experiencia, Comandante.",
       AppStrings.languageSectionTitle: "Idioma",
+      AppStrings.countrySectionTitle: "País",
+      AppStrings.deleteAccountButton: "Eliminar mi cuenta",
+      AppStrings.deleteAccountConfirmTitle: "¿Eliminar la cuenta?",
+      AppStrings.deleteAccountConfirmMessage: "Esto elimina definitivamente tu cuenta Petrimonium y todo lo que contiene — Wallet, Academy y Health, incluido tu Pet. No se puede deshacer.",
+      AppStrings.countryBrazil: "Brasil",
+      AppStrings.countryPortugal: "Portugal",
       AppStrings.languagePt: "Português (Brasil)",
+      AppStrings.languagePtPt: "Português (Portugal)",
       AppStrings.languageEn: "English",
       AppStrings.languageEs: "Español",
       AppStrings.languageUpdated: "Idioma actualizado",

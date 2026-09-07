@@ -6,6 +6,12 @@ import '../domain/mentor_models.dart';
 abstract interface class HealthRepository {
   Future<bool> hasSession();
   Future<void> login(String email, String password);
+
+  /// Devolve sem fazer nada se o utilizador cancelar o diálogo do Google.
+  Future<void> loginWithGoogle();
+
+  /// Apaga a conta e todos os dados dela, nos três apps. Irreversível.
+  Future<void> deleteAccount();
   Future<void> register(String name, String email, String password);
   Future<void> logout();
 

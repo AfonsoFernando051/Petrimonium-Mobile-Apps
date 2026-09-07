@@ -19,4 +19,21 @@ class SettingsRepository {
       debugPrint('WARN: failed to sync language preference with backend: $e');
     }
   }
+
+  Future<String?> getCountry() => remoteDataSource.getCountry();
+
+  /// Mesmo contrato do idioma: a preferência local já foi guardada e
+  /// continua a valer para a sessão, por isso uma falha de rede não
+  /// bloqueia o utilizador.
+  Future<void> syncCountry(String countryCode) async {
+    try {
+      await remoteDataSource.updateCountry(countryCode);
+    } catch (e) {
+      debugPrint('WARN: failed to sync country preference with backend: $e');
+    }
+  }
+
+  /// Ao contrário das preferências, uma falha aqui NÃO é engolida: se a
+  /// conta não foi apagada, o utilizador tem de saber.
+  Future<void> deleteAccount() => remoteDataSource.deleteAccount();
 }

@@ -186,6 +186,20 @@ class _QuickSetupScreenState extends State<QuickSetupScreen> {
                           onTap: () =>
                               setState(() => _locale = InterfaceLocale.ptPt),
                         ),
+                        HealthChip(
+                          label: l10n.languageEn,
+                          selected: _locale == InterfaceLocale.en,
+                          expanded: false,
+                          onTap: () =>
+                              setState(() => _locale = InterfaceLocale.en),
+                        ),
+                        HealthChip(
+                          label: l10n.languageEs,
+                          selected: _locale == InterfaceLocale.es,
+                          expanded: false,
+                          onTap: () =>
+                              setState(() => _locale = InterfaceLocale.es),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 20),
