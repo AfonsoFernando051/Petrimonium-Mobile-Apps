@@ -37,7 +37,9 @@ class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
     'Nino',
   ];
 
-  PetSpecieEnum _selectedSpecie = PetSpecieEnum.DOG;
+  // Lobo por omissão: é o mascote da Academy (o mesmo do ecrã de login) e é
+  // o que o artboard `PetAcademy` do canvas mostra pré-selecionado.
+  PetSpecieEnum _selectedSpecie = PetSpecieEnum.WOLF;
   bool _isLoading = false;
   bool _showNameError = false;
   final _nameController = TextEditingController();

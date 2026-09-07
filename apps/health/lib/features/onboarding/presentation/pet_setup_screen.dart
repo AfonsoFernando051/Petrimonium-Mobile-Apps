@@ -85,34 +85,37 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       crossAxisCount: 4,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
                       childAspectRatio: 0.85,
                       children: PetSpecies.values.map((species) {
                         final selected = species == _species;
                         return GestureDetector(
                           onTap: () => setState(() => _species = species),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
                             decoration: BoxDecoration(
+                              // Não-selecionado é totalmente transparente (o
+                              // artboard usa `transparent` no contorno e no
+                              // fundo), para a grelha não virar uma grade.
                               color: selected
                                   ? Theme.of(context).colorScheme.primary.withValues(alpha: .08)
-                                  : HealthColors.inputFill,
+                                  : Colors.transparent,
                               borderRadius: BorderRadius.circular(14),
                               border: Border.all(
-                                color: selected ? Theme.of(context).colorScheme.primary : HealthColors.border,
+                                color: selected ? Theme.of(context).colorScheme.primary : Colors.transparent,
                                 width: 1.5,
                               ),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image.asset(species.assetPath, width: 38, height: 38, fit: BoxFit.contain),
-                                const SizedBox(height: 6),
+                                Image.asset(species.assetPath, height: 46, fit: BoxFit.contain),
+                                const SizedBox(height: 4),
                                 Text(
                                   _speciesLabel(l10n, species),
                                   style: TextStyle(
-                                    fontSize: 11,
+                                    fontSize: 10.5,
                                     fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                                     color: selected ? HealthColors.textPrimary : HealthColors.textSecondary,
                                   ),
@@ -173,5 +176,8 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
         PetSpecies.dog => l10n.speciesDog,
         PetSpecies.cat => l10n.speciesCat,
         PetSpecies.owl => l10n.speciesOwl,
+        PetSpecies.wolf => l10n.speciesWolf,
+        PetSpecies.bear => l10n.speciesBear,
+        PetSpecies.lion => l10n.speciesLion,
       };
 }

@@ -56,8 +56,7 @@ void main() {
       // vertically scrollable column, so later entries need scrolling into
       // view first.
       for (final specie in PetSpecieEnum.values) {
-        final label = specie.name[0].toUpperCase() + specie.name.substring(1).toLowerCase();
-        final finder = find.text(label);
+        final finder = find.text(specie.displayLabel);
         await tester.ensureVisible(finder);
         await tester.pump();
         expect(finder, findsOneWidget, reason: specie.name);
@@ -109,7 +108,8 @@ void main() {
       await tester.pump(); // configurePet + saveName resolve
       await tester.pump(const Duration(milliseconds: 350)); // route transition
 
-      verify(() => mockPetRepository.configurePet(PetSpecieEnum.DOG, name: 'Loki')).called(1);
+      // Lobo é o default da Academy — o mascote do app, pré-selecionado no artboard.
+      verify(() => mockPetRepository.configurePet(PetSpecieEnum.WOLF, name: 'Loki')).called(1);
       verify(() => mockMascotRepository.saveName('Loki')).called(1);
       expect(find.byType(AcademyIntroScreen), findsOneWidget);
     });
@@ -121,7 +121,7 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      final catEntry = find.text('Cat');
+      final catEntry = find.text(PetSpecieEnum.CAT.displayLabel);
       await tester.ensureVisible(catEntry);
       await tester.pump();
       await tester.tap(catEntry, warnIfMissed: false);

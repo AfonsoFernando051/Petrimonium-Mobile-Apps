@@ -17,6 +17,20 @@ enum PetSpecieEnum {
 extension PetSpecieEnumExtension on PetSpecieEnum {
   String get name => toString().split('.').last;
 
+  /// Ordem em que o seletor apresenta as espécies. Deliberadamente diferente
+  /// de [PetSpecieEnum.values], que segue o wire format do backend: esta é a
+  /// ordem do canvas de design (artboard `PetWallet`), partilhada pelos três
+  /// apps. Mudar a ordem do enum quebraria a serialização; esta não.
+  static const List<PetSpecieEnum> displayOrder = [
+    PetSpecieEnum.FOX,
+    PetSpecieEnum.DOG,
+    PetSpecieEnum.CAT,
+    PetSpecieEnum.OWL,
+    PetSpecieEnum.WOLF,
+    PetSpecieEnum.BEAR,
+    PetSpecieEnum.LION,
+  ];
+
   /// Localized display label — for pickers like `PetSetupScreen`'s species
   /// grid, where the wire-format [name] ("DOG") isn't user-facing copy.
   String get displayLabel {

@@ -96,7 +96,7 @@ void main() {
       expect(find.text('Crie seu Pet'), findsOneWidget);
       expect(find.text('Escolha uma espécie'), findsOneWidget);
       expect(find.text('Raposa'), findsOneWidget);
-      expect(find.text('Cão'), findsOneWidget);
+      expect(find.text('Cachorro'), findsOneWidget);
       expect(find.text('Criar meu Pet e continuar'), findsOneWidget);
 
       final button = tester.widget<GameButton>(find.byType(GameButton));
@@ -109,7 +109,7 @@ void main() {
         await tester.pumpWidget(buildThemedTestableWidget());
         await tester.pump();
 
-        await tester.tap(find.text('Cão'));
+        await tester.tap(find.text('Cachorro'));
         await tester.enterText(find.byType(TextField), 'Toby');
         await tester.pump();
 

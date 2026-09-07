@@ -1,6 +1,16 @@
 class AppStrings {
   AppStrings._();
 
+  // Nomes das espécies do Pet — rótulos do seletor no onboarding. O wire
+  // format do backend ("DOG") nunca é copy visível ao utilizador.
+  static const String petSpecieDog = "petSpecieDog";
+  static const String petSpecieCat = "petSpecieCat";
+  static const String petSpecieWolf = "petSpecieWolf";
+  static const String petSpecieFox = "petSpecieFox";
+  static const String petSpecieBear = "petSpecieBear";
+  static const String petSpecieLion = "petSpecieLion";
+  static const String petSpecieOwl = "petSpecieOwl";
+
   static const String welcomeBack = "welcomeBack";
   static const String loginToContinue = "loginToContinue";
   static const String emailOrUserHint = "emailOrUserHint";
