@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/asset_details/domain/entities/asset_details.dart';
-import 'package:petrimonium/core/utils/formatters.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/features/portfolio/presentation/widgets/shared/section_label.dart';
 
 /// Displays the user's personal position in the asset — clearly separated

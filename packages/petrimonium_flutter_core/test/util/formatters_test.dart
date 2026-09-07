@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/utils/formatters.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 void main() {
   group('AppFormatters.currency', () {

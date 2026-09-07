@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium/core/constants/api_constants.dart';
-import 'package:petrimonium/core/network/api_client.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/features/mentor/data/datasources/mentor_remote_datasource.dart';
 import 'package:petrimonium/features/mentor/domain/entities/chat_message.dart';
 

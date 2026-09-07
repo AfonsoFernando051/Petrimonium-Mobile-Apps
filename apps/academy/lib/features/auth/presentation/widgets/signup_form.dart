@@ -4,7 +4,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import '../../../../core/utils/translator.dart';
 import '../../../../core/utils/game_snack.dart';
 import '../../../../core/utils/friendly_error_message.dart';
-import '../../../../core/utils/password_policy.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../main.dart';
 import 'signup_action_button.dart';

@@ -7,7 +7,7 @@ import 'package:petrimonium/features/portfolio/domain/entities/investment_type_d
 import 'package:petrimonium/features/portfolio/domain/entities/price_status.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/utils/formatters.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/features/portfolio/presentation/widgets/shared/performance_badge.dart';
 
 /// One holding row inside an [ExpandableCategory]. There's no logo CDN or

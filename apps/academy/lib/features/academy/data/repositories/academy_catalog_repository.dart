@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:petrimonium/core/constants/api_constants.dart';
-import 'package:petrimonium/core/network/api_client.dart';
-import 'package:petrimonium/core/network/api_error_parser.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

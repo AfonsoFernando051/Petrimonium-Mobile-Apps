@@ -4,10 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/constants/api_constants.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/core/events/app_event_bus.dart';
-import 'package:petrimonium/core/network/api_client.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 class MockHttpClient extends Mock implements http.Client {}
 
@@ -17,15 +14,24 @@ void main() {
   late MockHttpClient httpClient;
   late MockSecureStorage secureStorage;
   late ApiClient apiClient;
+  // Counts how many times the client reported a definitively-lost session.
+  // The client no longer emits an app event itself - each product bridges
+  // this callback onto its own event bus at its composition root.
+  late int sessionExpiredCount;
 
   setUpAll(() {
-    registerFallbackValue(Uri.parse('${ApiConstants.baseUrl}/fallback'));
+    registerFallbackValue(Uri.parse('${PetrimoniumEnvironment.baseUrl}/fallback'));
   });
 
   setUp(() {
     httpClient = MockHttpClient();
     secureStorage = MockSecureStorage();
-    apiClient = ApiClient(client: httpClient, secureStorage: secureStorage);
+    sessionExpiredCount = 0;
+    apiClient = ApiClient(
+      client: httpClient,
+      secureStorage: secureStorage,
+      onSessionExpired: () => sessionExpiredCount++,
+    );
 
     final response = http.Response('{}', 200);
     when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer((_) async => response);
@@ -73,7 +79,7 @@ void main() {
       final url = captured[0] as Uri;
       final headers = captured[1] as Map<String, String>;
 
-      expect(url.toString(), '${ApiConstants.baseUrl}/investments');
+      expect(url.toString(), '${PetrimoniumEnvironment.baseUrl}/investments');
       expect(headers['Authorization'], 'Bearer abc123');
       expect(headers['Content-Type'], 'application/json');
     });
@@ -100,7 +106,7 @@ void main() {
             body: captureAny(named: 'body'),
           )).captured;
 
-      expect((captured[0] as Uri).toString(), '${ApiConstants.baseUrl}/investments');
+      expect((captured[0] as Uri).toString(), '${PetrimoniumEnvironment.baseUrl}/investments');
       expect((captured[1] as Map<String, String>)['Authorization'], 'Bearer abc123');
       expect(captured[2], '{"ticker":"PETR4"}');
     });
@@ -116,7 +122,7 @@ void main() {
             body: captureAny(named: 'body'),
           )).captured;
 
-      expect((captured[0] as Uri).toString(), '${ApiConstants.baseUrl}/settings');
+      expect((captured[0] as Uri).toString(), '${PetrimoniumEnvironment.baseUrl}/settings');
       expect(captured[2], '{"language":"en"}');
     });
   });
@@ -154,7 +160,7 @@ void main() {
       final refreshCall = verify(() => httpClient.post(captureAny(),
               headers: captureAny(named: 'headers'), body: captureAny(named: 'body')))
           .captured;
-      expect((refreshCall[0] as Uri).toString(), '${ApiConstants.baseUrl}${ApiConstants.refreshTokenEndpoint}');
+      expect((refreshCall[0] as Uri).toString(), '${PetrimoniumEnvironment.baseUrl}${PetrimoniumEnvironment.refreshTokenEndpoint}');
       expect(refreshCall[2], jsonEncode({'refreshToken': 'valid-refresh-token'}));
     });
 
@@ -181,16 +187,13 @@ void main() {
       expect(postCallCount, 1);
     });
 
-    test('refresh failing clears both tokens and emits SessionExpiredEvent, without retrying', () async {
+    test('refresh failing clears both tokens and reports session expiry, without retrying', () async {
       stubTokens(accessToken: 'expired-token', refreshToken: 'stale-refresh-token');
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => http.Response('{}', 401));
       when(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')))
           .thenAnswer((_) async => http.Response('{"code":"INVALID_CREDENTIALS"}', 401));
-
-      final events = <AppEvent>[];
-      final subscription = AppEventBus.instance.stream.listen(events.add);
 
       final response = await apiClient.get('/portfolio/summary');
       await Future<void>.delayed(Duration.zero);
@@ -199,27 +202,20 @@ void main() {
       verify(() => httpClient.get(any(), headers: any(named: 'headers'))).called(1); // never retried
       verify(() => secureStorage.delete(key: ApiClient.authTokenKey)).called(1);
       verify(() => secureStorage.delete(key: ApiClient.refreshTokenKey)).called(1);
-      expect(events, contains(isA<SessionExpiredEvent>()));
-
-      await subscription.cancel();
+      expect(sessionExpiredCount, 1);
     });
 
-    test('a 401 with no refresh token stored emits SessionExpiredEvent without calling the refresh endpoint', () async {
+    test('a 401 with no refresh token stored reports session expiry without calling the refresh endpoint', () async {
       stubTokens(accessToken: 'expired-token', refreshToken: null);
 
       when(() => httpClient.get(any(), headers: any(named: 'headers')))
           .thenAnswer((_) async => http.Response('{}', 401));
 
-      final events = <AppEvent>[];
-      final subscription = AppEventBus.instance.stream.listen(events.add);
-
       await apiClient.get('/portfolio/summary');
       await Future<void>.delayed(Duration.zero);
 
       verifyNever(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')));
-      expect(events, contains(isA<SessionExpiredEvent>()));
-
-      await subscription.cancel();
+      expect(sessionExpiredCount, 1);
     });
   });
 }

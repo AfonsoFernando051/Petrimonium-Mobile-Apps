@@ -10,7 +10,7 @@ import 'package:petrimonium/features/portfolio/domain/entities/history_point.dar
 import 'package:petrimonium/features/portfolio/domain/entities/investment_type_display.dart';
 import 'package:petrimonium/features/portfolio/domain/enums/history_range.dart';
 import 'package:petrimonium/features/portfolio/presentation/controllers/portfolio_controller.dart';
-import 'package:petrimonium/core/utils/formatters.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// The "Wealth Evolution" premium chart: invested capital vs. portfolio
 /// value over a selectable range, with an asset-class filter, drag tooltip

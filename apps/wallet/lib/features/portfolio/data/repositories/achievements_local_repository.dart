@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:petrimonium/core/utils/user_scoped_prefs.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// A local, offline-fallback cache of unlocked achievement ids + their
 /// unlock timestamp. The backend (`AchievementsRepository.evaluate()`) is

@@ -1,0 +1,20 @@
+name: petrimonium_flutter_core
+description: "Flutter-level infrastructure shared by the Petrimonium apps: environment config, the authenticated API client, and small pure utilities."
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_secure_storage: ^11.0.0
+  http: ^1.2.1
+  shared_preferences: ^2.2.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.3

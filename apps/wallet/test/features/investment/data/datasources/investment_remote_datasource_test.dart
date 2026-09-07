@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium/core/network/api_client.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/features/investment/data/datasources/investment_remote_datasource.dart';
 import 'package:petrimonium/features/investment/data/models/asset_registration_model.dart';
 import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';

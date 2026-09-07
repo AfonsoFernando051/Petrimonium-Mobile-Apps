@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium/core/utils/formatters.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// Small pill showing a signed percentage with a trend arrow, colored
 /// positive/negative — reused across hero cards, holdings rows and

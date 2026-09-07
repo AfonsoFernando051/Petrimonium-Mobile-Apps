@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/network/api_client.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/features/simulated_wallet/data/datasources/simulated_wallet_remote_datasource.dart';
 import 'package:petrimonium/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
 import 'package:petrimonium/features/simulated_wallet/domain/entities/asset_quote.dart';

@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:petrimonium/core/utils/user_scoped_prefs.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// After this many app sessions with portfolio still unconnected, the pet
 /// may gently nudge the user on Home (see `shouldShowPortfolioReminder`).

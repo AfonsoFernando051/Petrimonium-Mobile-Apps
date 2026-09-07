@@ -3,7 +3,7 @@ import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/dividend_event.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/dividend_type_display.dart';
-import 'package:petrimonium/core/utils/formatters.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// One confirmed corporate-action row inside the Dividend Radar — either an
 /// upcoming announced payment or a past paid one. [showAsReceived] switches

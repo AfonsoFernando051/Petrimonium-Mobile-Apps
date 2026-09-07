@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:petrimonium/core/utils/user_scoped_prefs.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// Persists completed Academy lesson ids on-device. Mirrors
 /// `AchievementsLocalRepository`'s style exactly: entries are only ever

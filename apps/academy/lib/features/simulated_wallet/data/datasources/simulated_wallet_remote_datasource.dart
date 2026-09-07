@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:petrimonium/core/constants/api_constants.dart';
-import 'package:petrimonium/core/network/api_client.dart';
-import 'package:petrimonium/core/network/api_error_parser.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// Thin HTTP layer over `/api/v1/simulated-portfolios/*` — entirely separate
 /// from `PortfolioRemoteDataSource`'s `/api/investments/*` calls, both by

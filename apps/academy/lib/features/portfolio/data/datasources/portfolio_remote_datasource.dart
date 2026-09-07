@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:petrimonium/core/network/api_client.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// Thin HTTP layer over the new `/api/investments` read endpoints
 /// (`GetPortfolioHoldingsUseCase` / summary / allocation / history on the

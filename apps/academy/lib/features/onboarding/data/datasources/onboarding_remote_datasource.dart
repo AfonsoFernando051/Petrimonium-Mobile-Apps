@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:petrimonium/core/network/api_client.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/core/constants/api_constants.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/onboarding/data/models/onboarding_status_model.dart';

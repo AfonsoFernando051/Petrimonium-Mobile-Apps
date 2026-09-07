@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/core/utils/user_scoped_prefs.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 void main() {
   test('falls back to an anonymous scope when no account is logged in', () async {

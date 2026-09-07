@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:petrimonium/core/constants/api_constants.dart';
-import 'package:petrimonium/core/network/api_client.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 class SettingsRemoteDataSource {
   final ApiClient apiClient;

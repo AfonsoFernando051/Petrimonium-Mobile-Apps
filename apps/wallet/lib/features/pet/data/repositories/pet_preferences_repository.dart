@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:petrimonium/core/utils/user_scoped_prefs.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dart';
 import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
 

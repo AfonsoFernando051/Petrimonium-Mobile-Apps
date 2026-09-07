@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:petrimonium/core/network/api_client.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/features/investment/data/models/asset_registration_model.dart';
 
 class InvestmentRemoteDataSource {

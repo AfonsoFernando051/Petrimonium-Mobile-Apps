@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:petrimonium/core/network/api_client.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
 
 class PetRemoteDataSource {

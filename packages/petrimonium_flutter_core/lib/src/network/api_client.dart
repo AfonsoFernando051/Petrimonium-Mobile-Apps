@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:petrimonium/core/constants/api_constants.dart';
-import 'package:petrimonium/core/events/app_event.dart';
-import 'package:petrimonium/core/events/app_event_bus.dart';
+import '../config/petrimonium_environment.dart';
 
 /// Every authenticated request goes through here, which is what makes
 /// centralized 401 handling possible: a 401 triggers exactly one refresh
@@ -11,9 +9,15 @@ import 'package:petrimonium/core/events/app_event_bus.dart';
 /// refresh rather than each firing their own) and, on success, retries the
 /// original request once with the new access token. If refresh fails (no
 /// refresh token stored, or the backend rejects it as invalid/expired/
-/// revoked), both tokens are cleared and [SessionExpiredEvent] is emitted
-/// so `main.dart`'s root listener can send the user back to the login
-/// screen — no individual screen has to know any of this happened.
+/// revoked), both tokens are cleared and [onSessionExpired] is invoked so
+/// the app's root listener can send the user back to the login screen — no
+/// individual screen has to know any of this happened.
+///
+/// It deliberately calls a callback rather than emitting onto an event bus.
+/// Each product owns its own sealed `AppEvent` hierarchy (a sealed type
+/// cannot be extended from another library), so a client living in a shared
+/// package cannot emit one. The app supplies the bridge at construction:
+/// `onSessionExpired: () => AppEventBus.instance.emit(const SessionExpiredEvent())`.
 class ApiClient {
   final http.Client _client;
   final FlutterSecureStorage _secureStorage;
@@ -24,9 +28,30 @@ class ApiClient {
 
   /// [client]/[secureStorage] are injectable so tests can substitute mocks —
   /// production code relies on the defaults.
-  ApiClient({http.Client? client, FlutterSecureStorage? secureStorage})
-      : _client = client ?? http.Client(),
-        _secureStorage = secureStorage ?? const FlutterSecureStorage();
+  ///
+  /// [baseUrl] and [refreshTokenEndpoint] default to
+  /// [PetrimoniumEnvironment]; they are parameters only so tests can point a
+  /// client at a fake host without touching global state.
+  ApiClient({
+    http.Client? client,
+    FlutterSecureStorage? secureStorage,
+    String? baseUrl,
+    String? refreshTokenEndpoint,
+    void Function()? onSessionExpired,
+  })  : _client = client ?? http.Client(),
+        _secureStorage = secureStorage ?? const FlutterSecureStorage(),
+        _baseUrl = baseUrl ?? PetrimoniumEnvironment.baseUrl,
+        _refreshTokenEndpoint =
+            refreshTokenEndpoint ?? PetrimoniumEnvironment.refreshTokenEndpoint,
+        _onSessionExpired = onSessionExpired;
+
+  final String _baseUrl;
+  final String _refreshTokenEndpoint;
+
+  /// Invoked exactly once per definitive session loss, after both tokens have
+  /// already been cleared. Null is a valid configuration (a client used for
+  /// unauthenticated calls has nothing to report).
+  final void Function()? _onSessionExpired;
 
   /// Key under which the bearer token is stored. Moved off
   /// `shared_preferences` (which persists as unencrypted plaintext on disk)
@@ -85,30 +110,30 @@ class ApiClient {
   /// straightforward database read.
   Future<http.Response> post(String endpoint, dynamic body, {Duration? timeout}) {
     return _sendWithAuth((headers) => _client
-        .post(Uri.parse('${ApiConstants.baseUrl}$endpoint'), headers: headers, body: jsonEncode(body))
+        .post(Uri.parse('$_baseUrl$endpoint'), headers: headers, body: jsonEncode(body))
         .timeout(timeout ?? _requestTimeout));
   }
 
   Future<http.Response> get(String endpoint) {
     return _sendWithAuth(
-        (headers) => _client.get(Uri.parse('${ApiConstants.baseUrl}$endpoint'), headers: headers).timeout(_requestTimeout));
+        (headers) => _client.get(Uri.parse('$_baseUrl$endpoint'), headers: headers).timeout(_requestTimeout));
   }
 
   Future<http.Response> put(String endpoint, dynamic body) {
     return _sendWithAuth((headers) => _client
-        .put(Uri.parse('${ApiConstants.baseUrl}$endpoint'), headers: headers, body: jsonEncode(body))
+        .put(Uri.parse('$_baseUrl$endpoint'), headers: headers, body: jsonEncode(body))
         .timeout(_requestTimeout));
   }
 
   Future<http.Response> patch(String endpoint, dynamic body) {
     return _sendWithAuth((headers) => _client
-        .patch(Uri.parse('${ApiConstants.baseUrl}$endpoint'), headers: headers, body: jsonEncode(body))
+        .patch(Uri.parse('$_baseUrl$endpoint'), headers: headers, body: jsonEncode(body))
         .timeout(_requestTimeout));
   }
 
   Future<http.Response> delete(String endpoint) {
     return _sendWithAuth(
-        (headers) => _client.delete(Uri.parse('${ApiConstants.baseUrl}$endpoint'), headers: headers).timeout(_requestTimeout));
+        (headers) => _client.delete(Uri.parse('$_baseUrl$endpoint'), headers: headers).timeout(_requestTimeout));
   }
 
   /// Sends [send] with fresh auth headers; on a 401, attempts exactly one
@@ -156,7 +181,7 @@ class ApiClient {
     try {
       final response = await _client
           .post(
-            Uri.parse('${ApiConstants.baseUrl}${ApiConstants.refreshTokenEndpoint}'),
+            Uri.parse('$_baseUrl$_refreshTokenEndpoint'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({'refreshToken': refreshToken}),
           )
@@ -190,6 +215,6 @@ class ApiClient {
 
   Future<void> _handleSessionExpired() async {
     await clearTokens();
-    AppEventBus.instance.emit(const SessionExpiredEvent());
+    _onSessionExpired?.call();
   }
 }

@@ -1,4 +1,6 @@
-import 'package:petrimonium/core/network/api_client.dart';
+import 'package:petrimonium/core/events/app_event.dart';
+import 'package:petrimonium/core/events/app_event_bus.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium/features/academy/data/repositories/academy_catalog_repository.dart';
 import 'package:petrimonium/features/academy/data/repositories/academy_progress_local_repository.dart';
 import 'package:petrimonium/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -33,7 +35,23 @@ import 'package:petrimonium/features/asset_details/data/datasources/asset_detail
 import 'package:petrimonium/features/asset_details/data/repositories/asset_details_repository.dart';
 
 class DI {
-  static final ApiClient _apiClient = ApiClient();
+  // The shared ApiClient cannot emit an AppEvent itself: AppEvent is a sealed
+  // hierarchy owned by this app, and a sealed type cannot be extended from
+  // another library. So the bridge from "the session is definitively gone" to
+  // "the app event bus" is wired here, once, at the composition root.
+  /// Bridges the shared [ApiClient]'s "this session is definitively gone"
+  /// signal onto this app's own event bus.
+  ///
+  /// Named (rather than an inline closure) so it is directly testable: the
+  /// callback is optional on [ApiClient], which means forgetting to wire it
+  /// would silently disable the logout-on-expiry behaviour without failing
+  /// analysis or any client test.
+  static void notifySessionExpired() =>
+      AppEventBus.instance.emit(const SessionExpiredEvent());
+
+  static final ApiClient _apiClient = ApiClient(
+    onSessionExpired: notifySessionExpired,
+  );
 
   static final AuthRemoteDataSource _authRemoteDataSource =
       AuthRemoteDataSource(apiClient: _apiClient);

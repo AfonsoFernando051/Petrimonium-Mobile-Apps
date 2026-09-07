@@ -6,7 +6,7 @@ import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/dividend_event.dart';
-import 'package:petrimonium/core/utils/formatters.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 class _MonthlyProventos {
   const _MonthlyProventos({required this.month, required this.received, required this.expected});
