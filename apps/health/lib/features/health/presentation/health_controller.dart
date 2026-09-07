@@ -194,6 +194,16 @@ final class HealthController extends ChangeNotifier {
     });
   }
 
+  /// Apaga a conta e a seguir limpa o estado local. O logout remoto que
+  /// [logout] faz vai responder 401 — a conta já não existe — mas ele engole
+  /// essa falha e limpa os tokens de qualquer forma, que é o que falta aqui.
+  Future<void> deleteAccount() async {
+    await _withBusy(() async {
+      await _repository.deleteAccount();
+    });
+    await logout();
+  }
+
   Future<void> logout() async {
     await _repository.logout();
     account = null;

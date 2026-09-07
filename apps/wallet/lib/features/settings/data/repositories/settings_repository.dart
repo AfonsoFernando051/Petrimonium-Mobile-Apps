@@ -32,4 +32,8 @@ class SettingsRepository {
       debugPrint('WARN: failed to sync country preference with backend: $e');
     }
   }
+
+  /// Ao contrário das preferências, uma falha aqui NÃO é engolida: se a
+  /// conta não foi apagada, o utilizador tem de saber.
+  Future<void> deleteAccount() => remoteDataSource.deleteAccount();
 }

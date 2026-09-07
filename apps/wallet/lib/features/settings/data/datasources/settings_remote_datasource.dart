@@ -51,4 +51,12 @@ class SettingsRemoteDataSource {
     }
     throw Exception('Failed to update country preference. Status code: ${response.statusCode}');
   }
+
+  /// Apaga a conta e todos os dados dela. Irreversível.
+  Future<void> deleteAccount() async {
+    final response = await apiClient.delete(ApiConstants.settingsAccountEndpoint);
+    if (response.statusCode != 204 && response.statusCode != 200) {
+      throw Exception('Failed to delete account. Status code: ${response.statusCode}');
+    }
+  }
 }

@@ -123,6 +123,14 @@ final class RemoteHealthRepository implements HealthRepository {
   }
 
   @override
+  Future<void> deleteAccount() async {
+    final response = await _api.delete('/api/settings/account');
+    if (response.statusCode != 204 && response.statusCode != 200) {
+      throwApiError(response);
+    }
+  }
+
+  @override
   Future<void> logout() async {
     final refreshToken = await _api.tokenStore.readRefreshToken();
     if (refreshToken != null) {

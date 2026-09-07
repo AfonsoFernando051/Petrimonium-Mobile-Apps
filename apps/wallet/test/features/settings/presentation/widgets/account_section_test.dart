@@ -9,7 +9,7 @@ void main() {
     Translator.currentLanguage = 'pt';
   });
 
-  Widget buildTestableWidget({String? email, VoidCallback? onLogout}) {
+  Widget buildTestableWidget({String? email, VoidCallback? onLogout, VoidCallback? onDeleteAccount}) {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
@@ -17,6 +17,7 @@ void main() {
           sectionLabel: (label) => Text(label),
           email: email,
           onLogout: onLogout ?? () {},
+          onDeleteAccount: onDeleteAccount ?? () {},
         ),
       ),
     );

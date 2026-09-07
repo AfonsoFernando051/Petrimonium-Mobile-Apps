@@ -6,11 +6,18 @@ import 'package:petrimonium_wallet/core/utils/translator.dart';
 
 /// Settings → Account: signed-in email + logout.
 class AccountSection extends StatelessWidget {
-  const AccountSection({super.key, required this.sectionLabel, required this.email, required this.onLogout});
+  const AccountSection({
+    super.key,
+    required this.sectionLabel,
+    required this.email,
+    required this.onLogout,
+    required this.onDeleteAccount,
+  });
 
   final Widget Function(String label) sectionLabel;
   final String? email;
   final VoidCallback onLogout;
+  final VoidCallback onDeleteAccount;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +61,25 @@ class AccountSection extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: tokens.error),
                     padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.md)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              // Contorno tracejado e sem preenchimento: fica claramente
+              // subordinado a Sair, para não se clicar nele por engano.
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: onDeleteAccount,
+                  icon: Icon(Icons.delete_outline, color: tokens.error, size: 20),
+                  label: Text(
+                    Translator.translate(AppStrings.deleteAccountButton),
+                    style: TextStyle(color: tokens.error, fontWeight: FontWeight.w600),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: tokens.error.withValues(alpha: 0.5)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.md)),
                   ),
                 ),

@@ -124,6 +124,12 @@ class ProfileScreen extends StatelessWidget {
                       danger: true,
                       onTap: controller.logout,
                     ),
+                    const SizedBox(height: 12),
+                    _ProfileRow(
+                      label: l10n.deleteAccount,
+                      danger: true,
+                      onTap: () => _confirmDeleteAccount(context, l10n),
+                    ),
                   ],
                 ),
               ),
@@ -133,6 +139,36 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Diálogo obrigatório antes de apagar: ao contrário do logout, isto não tem
+/// volta. O botão destrutivo fica à direita e em vermelho; o pedido é
+/// cancelado se o utilizador tocar fora.
+Future<void> _confirmDeleteAccount(BuildContext context, AppLocalizations l10n) async {
+  final controller = HealthScope.of(context);
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      backgroundColor: HealthColors.card,
+      title: Text(l10n.deleteAccountConfirmTitle),
+      content: Text(
+        l10n.deleteAccountConfirmMessage,
+        style: const TextStyle(fontSize: 13.5, height: 1.4, color: HealthColors.textSecondary),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(false),
+          child: Text(l10n.cancel, style: const TextStyle(color: HealthColors.textSecondary)),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(true),
+          child: Text(l10n.deleteAccount, style: const TextStyle(color: HealthColors.negative)),
+        ),
+      ],
+    ),
+  );
+  if (confirmed != true) return;
+  await controller.deleteAccount();
 }
 
 class _ProfileRow extends StatelessWidget {

@@ -152,6 +152,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
     GameSnack.show(context, Translator.translate(AppStrings.languageUpdated), isSuccess: true);
   }
 
+  Future<void> _confirmDeleteAccount() async {
+    final confirmed = await ConfirmLogoutDialog.show(
+      context,
+      title: Translator.translate(AppStrings.deleteAccountConfirmTitle),
+      message: Translator.translate(AppStrings.deleteAccountConfirmMessage),
+      cancelLabel: Translator.translate(AppStrings.cancelButton),
+      confirmLabel: Translator.translate(AppStrings.deleteAccountButton),
+    );
+    if (!confirmed || !mounted) return;
+
+    HapticFeedback.heavyImpact();
+    try {
+      await DI.settingsRepository.deleteAccount();
+    } catch (e) {
+      if (!mounted) return;
+      GameSnack.show(context, friendlyErrorMessage(e), isError: true);
+      return;
+    }
+
+    // A conta já não existe do lado do servidor, por isso o /auth/logout vai
+    // responder 401. O que ainda interessa aqui é limpar tokens e preferências
+    // do dispositivo — a falha da chamada remota é esperada e não muda nada.
+    try {
+      await DI.authRepository.logout();
+    } catch (_) {}
+
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        (route) => false,
+      );
+    }
+  }
+
   Future<void> _confirmLogout() async {
     final confirmed = await ConfirmLogoutDialog.show(
         context,
@@ -250,7 +284,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         },
                       ),
                       const SizedBox(height: AppSpacing.xl),
-                      AccountSection(sectionLabel: _sectionLabel, email: _email, onLogout: _confirmLogout),
+                      AccountSection(
+                        sectionLabel: _sectionLabel,
+                        email: _email,
+                        onLogout: _confirmLogout,
+                        onDeleteAccount: _confirmDeleteAccount,
+                      ),
                       const SizedBox(height: AppSpacing.xxxl),
                     ],
                   ),

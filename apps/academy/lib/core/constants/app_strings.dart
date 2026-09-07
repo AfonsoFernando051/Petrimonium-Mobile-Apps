@@ -226,6 +226,9 @@ class AppStrings {
   static const String languageSectionTitle = "languageSectionTitle";
   static const String languagePt = "languagePt";
   static const String countrySectionTitle = "countrySectionTitle";
+  static const String deleteAccountButton = "deleteAccountButton";
+  static const String deleteAccountConfirmTitle = "deleteAccountConfirmTitle";
+  static const String deleteAccountConfirmMessage = "deleteAccountConfirmMessage";
   static const String countryBrazil = "countryBrazil";
   static const String countryPortugal = "countryPortugal";
   static const String languagePtPt = "languagePtPt";
