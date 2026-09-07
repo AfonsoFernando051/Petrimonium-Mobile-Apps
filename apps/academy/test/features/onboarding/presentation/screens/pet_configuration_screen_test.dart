@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_academy/features/onboarding/presentation/widgets/pet_hero_capsule.dart';
+import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_preview_panel.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
@@ -40,9 +42,8 @@ void main() {
   group('PetConfigurationScreen', () {
     testWidgets('renders the title, subtitle, species selector and name field', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
-      // Hosts CosmicBackground, a pulsing GameButton and the breathing
-      // PetHeroCapsule — all repeating AnimationControllers, so never call
-      // pumpAndSettle.
+      // Hosts CosmicBackground and a pulsing GameButton — both repeating
+      // AnimationControllers, so never call pumpAndSettle.
       await tester.pump();
 
       expect(find.text('Escolha seu parceiro de jornada'), findsOneWidget);
@@ -153,5 +154,29 @@ void main() {
 
       expect(find.textContaining('Falha ao salvar o pet'), findsOneWidget);
     });
+    testWidgets('lays the step out as the canvas does: one flat column, species then name', (tester) async {
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      // O artboard `PetAcademy` não tem o painel lateral nem a cápsula
+      // circular do mascote — leva do rótulo da espécie direto para a grelha
+      // e daí para o nome.
+      expect(find.byType(PetPreviewPanel), findsNothing);
+      expect(find.byType(PetHeroCapsule), findsNothing);
+
+      final speciesLabel = find.text('Escolha a espécie do seu companheiro');
+      final nameLabel = find.text('Mas antes... eu preciso de um nome!');
+      expect(speciesLabel, findsOneWidget);
+      expect(nameLabel, findsOneWidget);
+      expect(
+        tester.getTopLeft(nameLabel).dy,
+        greaterThan(tester.getTopLeft(speciesLabel).dy),
+        reason: 'o nome vem depois da espécie, como no canvas',
+      );
+
+      // Rótulos alinhados à esquerda, na mesma margem da grelha.
+      expect(tester.getTopLeft(speciesLabel).dx, tester.getTopLeft(nameLabel).dx);
+    });
+
   });
 }

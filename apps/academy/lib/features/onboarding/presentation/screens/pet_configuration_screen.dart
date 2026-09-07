@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_academy/core/utils/game_snack.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/academy_intro_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium_academy/features/onboarding/presentation/widgets/pet_hero_capsule.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
 import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_name_field.dart';
-import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_preview_panel.dart';
 import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_species_selector.dart';
 
 /// Onboarding's "Configure Your Pet" step — the pet introduces itself, and
@@ -100,77 +96,34 @@ class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
       onCta: _handleContinue,
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isWide = constraints.maxWidth > 700;
-            if (isWide) {
-              return IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(flex: 5, child: _buildLeftPanel()),
-                    const SizedBox(width: AppSpacing.md),
-                    const Expanded(flex: 4, child: PetPreviewPanel()),
-                  ],
-                ),
-              );
-            }
-            return Column(
-              children: [
-                _buildLeftPanel(),
-                const SizedBox(height: AppSpacing.md),
-                const PetPreviewPanel(),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLeftPanel() {
-    return GlassCard(
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            Translator.translate(AppStrings.meetPetNeedName),
-            textAlign: TextAlign.center,
-            style: AppTextStyles.body.copyWith(color: AppColors.goldenBorder, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Center(
-            child: PetHeroCapsule(
-              size: 210,
-              child: Image.asset(
-                PetAssets.imageFor(_selectedSpecie.name),
-                fit: BoxFit.contain,
-              ),
+        // Coluna única e plana, como o artboard `PetAcademy`: sem GlassCard a
+        // envolver, sem a cápsula circular do mascote e sem o painel lateral
+        // — o canvas leva do rótulo da espécie direto para a grelha e daí
+        // para o nome.
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FieldLabel(Translator.translate(AppStrings.meetPetSpeciesPrompt)),
+            const SizedBox(height: 10),
+            PetSpeciesSelector(
+              selected: _selectedSpecie,
+              onSelected: (specie) => setState(() => _selectedSpecie = specie),
             ),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            Translator.translate(AppStrings.meetPetSpeciesPrompt),
-            textAlign: TextAlign.center,
-            style: AppTextStyles.body.copyWith(color: context.colors.textSecondary),
-          ),
-          const SizedBox(height: AppSpacing.sm + 4),
-          PetSpeciesSelector(
-            selected: _selectedSpecie,
-            onSelected: (specie) => setState(() => _selectedSpecie = specie),
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          PetNameField(
-            controller: _nameController,
-            showError: _showNameError,
-            suggestions: _nameSuggestions,
-            onChanged: (_) {
-              if (_showNameError) setState(() => _showNameError = false);
-            },
-            onSuggestionSelected: _pickSuggestion,
-          ),
-        ],
+            const SizedBox(height: 20),
+            FieldLabel(Translator.translate(AppStrings.meetPetNeedName)),
+            const SizedBox(height: 8),
+            PetNameField(
+              controller: _nameController,
+              showError: _showNameError,
+              suggestions: _nameSuggestions,
+              onChanged: (_) {
+                if (_showNameError) setState(() => _showNameError = false);
+              },
+              onSuggestionSelected: _pickSuggestion,
+            ),
+          ],
+        ),
       ),
     );
   }

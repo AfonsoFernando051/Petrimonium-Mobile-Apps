@@ -52,20 +52,28 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
         child: Column(
           children: [
             const SizedBox(height: 24),
+            // Indicador de passo no topo e cabeçalho alinhado à esquerda,
+            // como o artboard `PetHealth` — estava em baixo, junto ao CTA.
+            ProgressDots(total: controller.onboardingTotalSteps, current: 1),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     l10n.petSetupTitle,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: HealthColors.textPrimary),
+                    style: const TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w700,
+                      height: 1.2,
+                      color: HealthColors.textPrimary,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     l10n.petSetupSubtitle,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 13.5, color: HealthColors.textSecondary, height: 1.4),
+                    style: const TextStyle(fontSize: 14, color: HealthColors.textSecondary, height: 1.4),
                   ),
                 ],
               ),
@@ -139,9 +147,18 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
                       decoration: InputDecoration(hintText: l10n.petSetupNameHint, counterText: ''),
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      l10n.petSetupFooterNote,
-                      style: const TextStyle(fontSize: 12, color: HealthColors.textMuted, height: 1.4),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: HealthColors.inputFill,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: HealthColors.border),
+                      ),
+                      child: Text(
+                        l10n.petSetupFooterNote,
+                        style: const TextStyle(fontSize: 12, color: HealthColors.textSecondary, height: 1.45),
+                      ),
                     ),
                     if (_error != null) ...[
                       const SizedBox(height: 10),
@@ -155,8 +172,6 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
               child: Column(
                 children: [
-                  ProgressDots(total: controller.onboardingTotalSteps, current: 1),
-                  const SizedBox(height: 16),
                   HealthPrimaryButton(
                     label: l10n.petSetupCta,
                     busy: controller.busy,

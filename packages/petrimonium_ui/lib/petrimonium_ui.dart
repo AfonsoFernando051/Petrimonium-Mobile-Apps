@@ -25,6 +25,7 @@ export 'src/widgets/confirm_logout_dialog.dart';
 export 'src/widgets/custom_text_field.dart';
 export 'src/widgets/empty_state_view.dart';
 export 'src/widgets/error_state_view.dart';
+export 'src/widgets/field_label.dart';
 export 'src/widgets/game_button.dart';
 export 'src/widgets/glass_card.dart';
 export 'src/widgets/tooltip_summary.dart';

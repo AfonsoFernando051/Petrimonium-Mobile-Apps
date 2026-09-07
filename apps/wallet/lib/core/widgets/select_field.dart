@@ -1,22 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
-/// A small, bold, uppercase-style label above a [SelectField] — matches the
-/// Wallet quick-setup screen's field labels ("País / mercado", "Moeda-base").
-class FieldLabel extends StatelessWidget {
-  const FieldLabel(this.label, {super.key});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      label,
-      style: TextStyle(color: context.colors.textSecondary, fontSize: 12, fontWeight: FontWeight.w600),
-    );
-  }
-}
-
 /// A tappable field that opens an [OptionSheet] picker — shared by the
 /// Wallet's quick-setup onboarding screen and its Profile settings
 /// equivalent, so both stay pixel-identical without duplicating the field

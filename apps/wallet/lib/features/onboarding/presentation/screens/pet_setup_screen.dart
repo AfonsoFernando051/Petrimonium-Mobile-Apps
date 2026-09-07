@@ -6,7 +6,6 @@ import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_wallet/core/utils/game_snack.dart';
 import 'package:petrimonium_wallet/core/utils/pet_assets.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/core/widgets/select_field.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
@@ -96,9 +95,18 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
           const SizedBox(height: 8),
           _PetNameField(controller: _nameController),
           const SizedBox(height: 16),
-          Text(
-            Translator.translate(AppStrings.petSetupFooterNote),
-            style: TextStyle(color: context.colors.textTertiary, fontSize: 12, height: 1.4),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: context.colors.textPrimary.withValues(alpha: 0.03),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: context.colors.textPrimary.withValues(alpha: 0.12)),
+            ),
+            child: Text(
+              Translator.translate(AppStrings.petSetupFooterNote),
+              style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.45),
+            ),
           ),
         ],
       ),
