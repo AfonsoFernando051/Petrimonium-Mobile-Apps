@@ -2,9 +2,33 @@
 
 `dogcompanion-v1-animated.riv` is the fully-animated dog rig built on
 `feat/pet-rive-rig` (the `pet-rive-rig` skill + `dog_rig_v2`, cut from
-`generated_dog.png` at silhouette IoU 0.9941) — 9 objects, six real pose
+`generated_dog.png` at silhouette IoU 0.9941) — 313 objects, six real pose
 timelines driven by a `Companion` state machine (`state`, `reducedMotion`,
 `interacting`), joints instead of image-centre pivots for the ears/tail.
+
+`sleep` closes the eyes with real drawn eyelid art (`eyelid_left`/
+`eyelid_right`, synthesized in `synth_face_assets.py` on `feat/pet-rive-rig`
+to match this rig's own fur/line colour, added there in commit `58eb95e`)
+layered opaquely over `eye_left`/`eye_right` rather than the earlier
+scale-`y` squash, which read as the eye melting rather than closing. Every
+other pose explicitly keys both lids to opacity 0 — a property Rive was
+never told to touch keeps whatever the previous animation left it at, so
+waking from sleep into any other pose would otherwise stay stuck
+eyes-shut. Verified pixel-identical to the previous file on the other five
+animations (0.000 mean error, 3 sampled frames each) — the eyelid change
+touches nothing else.
+
+A separately-discovered, pre-existing gap, not introduced by that change:
+driving this file's `Companion` state machine via its `state` number input
+externally (`rive-cli render --state-machine Companion --input state=3`)
+does not actually transition into any non-idle pose — confirmed on both
+the old and new file, so whatever's wrong lives in either the state
+machine's transition graph or in how rive-cli evaluates number-input
+conditions, not in this edit. Every render in this repo's history verified
+poses by selecting the animation directly (`--animation sleep`), never by
+driving the state machine end-to-end, so this was never caught before.
+Matters only if this file is ever wired back into the app; harmless while
+archived.
 
 **Nothing in the app loads this file.** Production moved to a pure-Flutter
 animation engine (`PetAnimationEngine`, see
