@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
 
 void main() {
-  test('has the 6 expected animation states', () {
+  test('has the 9 expected animation states', () {
     expect(PetAnimationState.values, [
       PetAnimationState.idle,
       PetAnimationState.celebrate,
@@ -10,6 +10,9 @@ void main() {
       PetAnimationState.sleep,
       PetAnimationState.victory,
       PetAnimationState.happy,
+      PetAnimationState.talking,
+      PetAnimationState.listening,
+      PetAnimationState.sad,
     ]);
   });
 
