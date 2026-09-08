@@ -6,8 +6,8 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/rive/pet_rive_companion.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_interaction_sheet.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 
 /// The compact, always-visible companion avatar shown in every major
@@ -123,11 +123,11 @@ class PetCompanionHeader extends StatelessWidget {
                           : null,
                     ),
                     child: ClipOval(
-                      child: PetRiveCompanion(
+                      child: PetMascotWidget(
                         controller: controller.mascotController,
                         size: avatarSize - 4,
                         interactive: false,
-                        interacting: controller.isInteractionOpen,
+                        attentive: controller.isInteractionOpen,
                       ),
                     ),
                   ),

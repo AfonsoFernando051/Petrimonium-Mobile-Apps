@@ -85,8 +85,8 @@ void main() {
       await mascotController.loadProfile();
 
       await tester.pumpWidget(buildTestableWidget());
-      // Hosts a PetRiveCompanion falling back to PetMascotWidget's
-      // repeating breathe animation — never pumpAndSettle.
+      // Hosts a PetMascotWidget with a repeating idle animation loop —
+      // never pumpAndSettle.
       await tester.pump();
       await tester.pump();
 
