@@ -107,7 +107,11 @@ def main() -> None:
     out = Path(args.out)
     (out / "layers").mkdir(parents=True, exist_ok=True)
 
-    order = manifest["drawOrderBackToFront"]
+    # Rive draws an artboard's children front-to-back, so the frontmost layer is
+    # emitted first. Feeding the manifest's back-to-front order straight through
+    # stacks the rig inside out -- the head ends up hiding the face, which reads
+    # as a corrupted render rather than as an ordering mistake.
+    order = list(reversed(manifest["drawOrderBackToFront"]))
     children: list[dict] = []
     images: list[dict] = []
     for name in order:

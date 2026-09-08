@@ -87,10 +87,12 @@ rive-cli validate build/cat.riv
 `rive_values.py` is the fallback for assembling in the editor instead — same
 numbers, typed rather than compiled.
 
-> **Do not trust `rive-cli render` for raster rigs.** Its preview rasteriser
-> renders image layers as faceted garbage while the file itself is correct — the
-> embedded PNGs come back byte-identical to their sources. Verify with
-> `--composite` (step 5) and the real Flutter runtime, never with the preview.
+> **Draw order is front-to-back.** Rive draws an artboard's children in the order
+> they appear, frontmost first, so `build_scene.py` emits the reverse of the
+> manifest's `drawOrderBackToFront`. Getting this backwards stacks the rig inside
+> out — the head hides the face — and the result looks like a corrupted render
+> rather than an ordering mistake. Silhouette and centroid both still pass; only
+> the colour gate catches it.
 
 ### 5. Verify
 
@@ -104,7 +106,12 @@ The colour gate is not optional — silhouette alone passes a render whose outli
 is right and whose interior is destroyed. Read the overlay's diff panel: red is
 reference-only and is how a missing part announces itself.
 
-Then load the `.riv` in the app and see it. `flutter test` cannot do this:
+`rive-cli render` drives the real Rive runtime in headless Chromium, so rendering
+the built file and checking it with `--export` is a genuine test, not a preview
+approximation. Use `--frames 0,15,30,45 --contact-sheet` to confirm a timeline
+actually moves.
+
+It still is not the Flutter runtime. `flutter test` cannot stand in either:
 `flutter_tester` on Linux lacks `rive_common`'s FFI symbols, and the Chrome
 harness hangs in `RiveFile.initialize()`. Run the app.
 
