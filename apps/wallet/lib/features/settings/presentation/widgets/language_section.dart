@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
@@ -30,36 +29,26 @@ class LanguageSection extends StatelessWidget {
         sectionLabel(Translator.translate(AppStrings.languageSectionTitle).toUpperCase()),
         GlassCard(
           backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
-          borderColor: AppColors.neonCyan.withValues(alpha: 0.3),
-          borderRadius: AppRadii.xl,
+          // Contorno neutro e raio 18, como no artboard `SettingsWallet`: as
+          // secções não têm cor própria de acento na moldura.
+          borderColor: tokens.textPrimary.withValues(alpha: 0.12),
+          borderRadius: AppRadii.lg + 2,
           borderWidth: 1,
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
-          child: Column(
-            children: languages.map((lang) {
-              final isSelected = Translator.currentLanguage == lang.code;
-              return InkWell(
-                onTap: () => onLanguageSelected(lang.code),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 14),
-                  child: Row(
-                    children: [
-                      Text(lang.flag, style: AppTextStyles.headline),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Text(
-                          lang.label,
-                          style: AppTextStyles.title.copyWith(
-                            color: isSelected ? tokens.textPrimary : tokens.textSecondary,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                      if (isSelected) Icon(Icons.check_circle, color: tokens.primary, size: 20),
-                    ],
+          padding: EdgeInsets.zero,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadii.lg + 2),
+            child: Column(
+              children: [
+                for (var i = 0; i < languages.length; i++)
+                  OptionRow(
+                    leading: languages[i].flag,
+                    label: languages[i].label,
+                    selected: Translator.currentLanguage == languages[i].code,
+                    onTap: () => onLanguageSelected(languages[i].code),
+                    showDivider: i < languages.length - 1,
                   ),
-                ),
-              );
-            }).toList(),
+              ],
+            ),
           ),
         ),
       ],

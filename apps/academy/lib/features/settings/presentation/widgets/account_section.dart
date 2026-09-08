@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
@@ -28,8 +27,10 @@ class AccountSection extends StatelessWidget {
         sectionLabel(Translator.translate(AppStrings.accountSectionTitle).toUpperCase()),
         GlassCard(
           backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
-          borderColor: AppColors.neonPink.withValues(alpha: 0.3),
-          borderRadius: AppRadii.xl,
+          // Contorno neutro: o artboard `SettingsWallet` usa a mesma linha
+          // esbatida dos outros cartões, não um rosa próprio da secção.
+          borderColor: tokens.textPrimary.withValues(alpha: 0.12),
+          borderRadius: AppRadii.lg + 2,
           borderWidth: 1,
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
@@ -51,16 +52,16 @@ class AccountSection extends StatelessWidget {
               ],
               SizedBox(
                 width: double.infinity,
+                height: 48,
                 child: OutlinedButton.icon(
                   onPressed: onLogout,
-                  icon: Icon(Icons.logout, color: tokens.error),
+                  icon: Icon(Icons.logout, color: tokens.error, size: 17),
                   label: Text(
                     Translator.translate(AppStrings.logoutButton),
-                    style: TextStyle(color: tokens.error, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: tokens.error, fontSize: 14, fontWeight: FontWeight.w700),
                   ),
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: tokens.error),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    side: BorderSide(color: tokens.error, width: 1.5),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.md)),
                   ),
                 ),
@@ -70,17 +71,23 @@ class AccountSection extends StatelessWidget {
               // subordinado a Sair, para não se clicar nele por engano.
               SizedBox(
                 width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: onDeleteAccount,
-                  icon: Icon(Icons.delete_outline, color: tokens.error, size: 20),
-                  label: Text(
-                    Translator.translate(AppStrings.deleteAccountButton),
-                    style: TextStyle(color: tokens.error, fontWeight: FontWeight.w600),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: tokens.error.withValues(alpha: 0.5)),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.md)),
+                height: 48,
+                child: Opacity(
+                  opacity: 0.75,
+                  child: DashedOutline(
+                    color: tokens.error,
+                    radius: AppRadii.md,
+                    child: TextButton.icon(
+                      onPressed: onDeleteAccount,
+                      icon: Icon(Icons.delete_outline, color: tokens.error, size: 17),
+                      label: Text(
+                        Translator.translate(AppStrings.deleteAccountButton),
+                        style: TextStyle(color: tokens.error, fontSize: 14, fontWeight: FontWeight.w700),
+                      ),
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.md)),
+                      ),
+                    ),
                   ),
                 ),
               ),

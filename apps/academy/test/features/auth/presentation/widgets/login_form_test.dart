@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
@@ -57,12 +58,13 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
 
       expect(find.byType(CustomTextField), findsNWidgets(2));
+      // Pela chave, não pelo literal: a copy da nota mudou com o
+      // alinhamento ao canvas e voltará a mudar.
       expect(
-        find.text(
-          'Sua conta Petrimonium é única para Academy e Wallet. Desinstalar um dos apps não exclui sua conta nem seus dados.',
-        ),
+        find.text(Translator.translate(AppStrings.sharedAccountNotice)),
         findsOneWidget,
       );
+      expect(find.byType(SharedAccountNotice), findsOneWidget);
       expect(find.byType(LoginButton), findsOneWidget);
       expect(find.byType(GoogleSignInButton), findsOneWidget);
       expect(find.text('Esqueceu a senha?'), findsOneWidget);

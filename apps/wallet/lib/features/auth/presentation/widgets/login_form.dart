@@ -100,15 +100,13 @@ class _LoginFormState extends State<LoginForm> {
           icon: Icons.email_outlined,
           controller: _emailController,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         CustomTextField(
           hint: Translator.translate(AppStrings.passwordHint),
           icon: Icons.lock_outline,
           obscure: true,
           controller: _passwordController,
         ),
-        const SizedBox(height: 16),
-        _SharedAccountNotice(text: Translator.translate(AppStrings.sharedAccountNotice)),
         const SizedBox(height: 20),
         LoginButton(
           onPressed: _handleLogin,
@@ -123,34 +121,9 @@ class _LoginFormState extends State<LoginForm> {
         ),
         const SizedBox(height: 24),
         const ForgotPasswordButton(),
+        const SizedBox(height: 24),
+        SharedAccountNotice(text: Translator.translate(AppStrings.sharedAccountNotice)),
       ],
-    );
-  }
-}
-
-/// Reassures a user arriving from (or heading to) the Academy that this is
-/// the same Petrimonium account, not a separate signup — see the Wallet
-/// design system's login screen.
-class _SharedAccountNotice extends StatelessWidget {
-  final String text;
-
-  const _SharedAccountNotice({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.colors;
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: tokens.surfaceMuted,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: tokens.border),
-      ),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(color: tokens.textSecondary, fontSize: 12, height: 1.4),
-      ),
     );
   }
 }

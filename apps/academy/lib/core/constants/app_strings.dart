@@ -23,6 +23,7 @@ class AppStrings {
   static const String brandTitle = "brandTitle";
   static const String brandTagline = "brandTagline";
   static const String sharedAccountNotice = "sharedAccountNotice";
+  static const String signupSharedAccountNotice = "signupSharedAccountNotice";
 
   // Signup
   static const String createAccount = "createAccount";

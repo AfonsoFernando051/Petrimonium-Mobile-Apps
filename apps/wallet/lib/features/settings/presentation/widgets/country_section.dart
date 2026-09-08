@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_wallet/core/preferences/country_preference.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
@@ -30,36 +29,25 @@ class CountrySection extends StatelessWidget {
             sectionLabel(Translator.translate(AppStrings.countrySectionTitle).toUpperCase()),
             GlassCard(
               backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
-              borderColor: AppColors.neonCyan.withValues(alpha: 0.3),
-              borderRadius: AppRadii.xl,
+              // Contorno neutro e raio 18, como no artboard `SettingsWallet`.
+              borderColor: tokens.textPrimary.withValues(alpha: 0.12),
+              borderRadius: AppRadii.lg + 2,
               borderWidth: 1,
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
-              child: Column(
-                children: countries.map((country) {
-                  final isSelected = selected == country.code;
-                  return InkWell(
-                    onTap: () => onCountrySelected(country.code),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 14),
-                      child: Row(
-                        children: [
-                          Text(country.flag, style: AppTextStyles.headline),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Text(
-                              country.label,
-                              style: AppTextStyles.title.copyWith(
-                                color: isSelected ? tokens.textPrimary : tokens.textSecondary,
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                          if (isSelected) Icon(Icons.check_circle, color: tokens.primary, size: 20),
-                        ],
+              padding: EdgeInsets.zero,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadii.lg + 2),
+                child: Column(
+                  children: [
+                    for (var i = 0; i < countries.length; i++)
+                      OptionRow(
+                        leading: countries[i].flag,
+                        label: countries[i].label,
+                        selected: selected == countries[i].code,
+                        onTap: () => onCountrySelected(countries[i].code),
+                        showDivider: i < countries.length - 1,
                       ),
-                    ),
-                  );
-                }).toList(),
+                  ],
+                ),
               ),
             ),
           ],

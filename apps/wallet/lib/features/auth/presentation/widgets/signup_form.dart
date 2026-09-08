@@ -165,14 +165,14 @@ class _SignupFormState extends State<SignupForm> {
           controller: _nameController,
           errorText: _nameError,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         CustomTextField(
           hint: Translator.translate(AppStrings.emailOrUserHint),
           icon: Icons.email,
           controller: _emailController,
           errorText: _emailError,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         CustomTextField(
           hint: Translator.translate(AppStrings.passwordHint),
           icon: Icons.lock,
@@ -183,7 +183,7 @@ class _SignupFormState extends State<SignupForm> {
           const SizedBox(height: 10),
           _PasswordRequirementsChecklist(password: _passwordController.text),
         ],
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         CustomTextField(
           hint: Translator.translate(AppStrings.confirmPasswordHint),
           icon: Icons.lock_outline,
@@ -191,8 +191,6 @@ class _SignupFormState extends State<SignupForm> {
           controller: _confirmPasswordController,
           errorText: _confirmPasswordError,
         ),
-        const SizedBox(height: 16),
-        _SharedAccountNotice(text: Translator.translate(AppStrings.signupSharedAccountNotice)),
         const SizedBox(height: 20),
         SignupActionButton(
           onPressed: _handleRegister,
@@ -205,35 +203,9 @@ class _SignupFormState extends State<SignupForm> {
           onPressed: _handleGoogleSignup,
           isLoading: _isGoogleLoading,
         ),
+        const SizedBox(height: 24),
+        SharedAccountNotice(text: Translator.translate(AppStrings.signupSharedAccountNotice)),
       ],
-    );
-  }
-}
-
-/// Explains up front that Cadastro creates one account shared with the
-/// Academy (a Pet gets created for it in the next onboarding step) — the
-/// signup-mode counterpart to [LoginForm]'s notice of the same shape, per
-/// the Wallet design's `loginNoteText`.
-class _SharedAccountNotice extends StatelessWidget {
-  final String text;
-
-  const _SharedAccountNotice({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.colors;
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: tokens.surfaceMuted,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: tokens.border),
-      ),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(color: tokens.textSecondary, fontSize: 12, height: 1.4),
-      ),
     );
   }
 }
