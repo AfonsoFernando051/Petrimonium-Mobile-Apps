@@ -27,3 +27,7 @@ pubspec_overrides.yaml
 # lockfile is the one that decides what ships. Each app's pubspec.lock IS
 # committed, which is what makes a release build reproducible per product.
 packages/*/pubspec.lock
+
+# Python tooling under tools/
+__pycache__/
+*.pyc
