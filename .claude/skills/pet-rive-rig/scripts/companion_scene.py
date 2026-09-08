@@ -119,14 +119,38 @@ def build_animations(
             return []
         return [_track("torso", "scale_y", [(0, 1.0), (span // 2, 1.0 + amount), (span - 1, 1.0)])]
 
-    def eyes_shut() -> list[dict]:
+    def opacity(name: str, peak: float, frames: list[int], curve: list[float]) -> list[dict]:
+        if name not in present:
+            return []
+        return [_track(name, "opacity", [(f, peak * c) for f, c in zip(frames, curve)])]
+
+    def eyelids(shut: bool) -> list[dict]:
+        """Cover the eyes with the drawn lid asset if present; otherwise fall
+        back to squashing the eye itself flat. The squash is a visibly cruder
+        stand-in -- it reads as the eye melting rather than closing -- kept
+        only for a rig that has not run synth_face_assets.py yet."""
+        has_lids = "eyelid_left" in present and "eyelid_right" in present
         out = []
-        for eye in ("eye_left", "eye_right"):
-            if eye in present:
-                out.append(_track(eye, "scale_y", [(0, 1.0), (12, 0.08), (168, 0.08), (179, 1.0)]))
+        for side in ("left", "right"):
+            if has_lids:
+                out.append(_track(f"eyelid_{side}", "opacity", [(0, 1.0 if shut else 0.0)]))
+            elif f"eye_{side}" in present:
+                value = 0.08 if shut else 1.0
+                out.append(_track(f"eye_{side}", "scale_y", [(0, value)]))
         return out
 
     specs: dict[str, tuple[int, list[dict]]] = {}
+
+    def blush(peak: float, frames: list[int], curve: list[float]) -> list[dict]:
+        return opacity("blush_left", peak, frames, curve) + opacity("blush_right", peak, frames, curve)
+
+    # Every pose keys the face overlays explicitly, lids included, even where
+    # the value is just "stay off". A property Rive was never told to touch
+    # keeps whatever the previous animation left it at, so leaving any of
+    # these implicit would carry sleep's shut lids or a joy pose's blush into
+    # whatever plays next.
+    no_blush = [0]
+    open_lids = eyelids(shut=False)
 
     # Idle: two-second breath. Deliberately almost subliminal.
     f = [0, 60, 119]
@@ -136,27 +160,33 @@ def build_animations(
         + shift("head", 1.5, f, [0, 1, 0])
         + turn("ear_left", 1.5, f, [0, 1, 0])
         + turn("ear_right", -1.5, f, [0, 1, 0])
-        + turn("tail", 2.0, [0, 30, 60, 90, 119], [0, 1, 0, -1, 0]),
+        + turn("tail", 2.0, [0, 30, 60, 90, 119], [0, 1, 0, -1, 0])
+        + open_lids
+        + blush(0.0, no_blush, [0]),
     )
 
-    # Happy: a quick, small acknowledgement of a tap.
+    # Happy: a quick, small acknowledgement of a tap, with a warm cheek flush.
     f = [0, 12, 30, 44]
     specs["happy"] = (
         45,
         shift("head", -4.0, f, [0, 1, 0.3, 0])
         + turn("tail", 8.0, [0, 11, 22, 33, 44], [0, 1, -1, 1, 0])
         + turn("ear_left", -2.5, f, [0, 1, 0.3, 0])
-        + turn("ear_right", 2.5, f, [0, 1, 0.3, 0]),
+        + turn("ear_right", 2.5, f, [0, 1, 0.3, 0])
+        + open_lids
+        + blush(0.85, f, [0, 1, 0.6, 0]),
     )
 
-    # Celebrate: a settled double bounce, still modest.
+    # Celebrate: a settled double bounce, blush riding along with it.
     f = [0, 16, 34, 50, 74]
     specs["celebrate"] = (
         75,
         shift("head", -6.0, f, [0, 1, 0.35, 0.7, 0])
         + turn("tail", 10.0, [0, 14, 28, 42, 56, 74], [0, 1, -1, 1, -0.5, 0])
         + turn("ear_left", -3.0, f, [0, 1, 0.4, 0.7, 0])
-        + turn("ear_right", 3.0, f, [0, 1, 0.4, 0.7, 0]),
+        + turn("ear_right", 3.0, f, [0, 1, 0.4, 0.7, 0])
+        + open_lids
+        + blush(0.8, f, [0, 1, 0.6, 0.85, 0]),
     )
 
     # Victory: the largest of the reactions, and still under ten pixels.
@@ -166,7 +196,9 @@ def build_animations(
         shift("head", -8.0, f, [0, 1, 0.3, 0.75, 0])
         + turn("tail", 12.0, [0, 15, 30, 45, 60, 89], [0, 1, -1, 1, -0.6, 0])
         + turn("ear_left", -4.0, f, [0, 1, 0.35, 0.75, 0])
-        + turn("ear_right", 4.0, f, [0, 1, 0.35, 0.75, 0]),
+        + turn("ear_right", 4.0, f, [0, 1, 0.35, 0.75, 0])
+        + open_lids
+        + blush(0.9, f, [0, 1, 0.55, 0.8, 0]),
     )
 
     # Think: a slow head tilt that holds, for loading and deliberation.
@@ -176,18 +208,21 @@ def build_animations(
         turn("head", 2.5, f, [0, 1, 1, 0])
         + shift("head", 1.5, f, [0, 1, 1, 0])
         + turn("ear_left", 5.0, f, [0, 1, 1, 0])
-        + breathe(90, 0.006),
+        + breathe(90, 0.006)
+        + open_lids
+        + blush(0.0, no_blush, [0]),
     )
 
-    # Sleep: eyes shut, head lowered, a slower breath. Persistent.
+    # Sleep: lids drawn shut, head lowered, a slower breath. Persistent.
     f = [0, 40, 140, 179]
     specs["sleep"] = (
         180,
-        eyes_shut()
+        eyelids(shut=True)
         + shift("head", 5.0, f, [0, 1, 1, 0])
         + turn("ear_left", 3.0, f, [0, 1, 1, 0])
         + turn("ear_right", -3.0, f, [0, 1, 1, 0])
-        + breathe(180, 0.010),
+        + breathe(180, 0.010)
+        + blush(0.0, no_blush, [0]),
     )
 
     animations = [

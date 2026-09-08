@@ -16,3 +16,20 @@ the reference. Colour separates only the crisp features; the cuts through flat t
 the diff panel.
 
 Current: silhouette IoU 0.9941, centroid drift 0.61px, colour error 0.27.
+
+## Face overlays (eyelid, blush)
+
+`eyelid_left/right.png` and `blush_left/right.png` are synthesized by
+`synth_face_assets.py`, not cut from the reference -- it shows one open-eyed,
+neutral expression, so there is no closed eye or flushed cheek to extract.
+Colour is sampled from the rig's own fur and linework so they sit on-model.
+
+Both are drawn as opaque overlays at opacity 0 by default; `companion_scene.py`
+raises `eyelid_*` to 1 for `sleep` and `blush_*` for the three joy poses. This
+replaced an earlier approach that squashed the eye's own `scale_y` to fake
+closed eyes -- it reads as the eye melting, not closing, once seen next to a
+drawn lid.
+
+Their `placements` entries carry `"synthesized": true`, which
+`verify_assembly.py --composite` uses to exclude them from the neutral-assembly
+check -- they are invisible in the base rig by design, not missing from it.

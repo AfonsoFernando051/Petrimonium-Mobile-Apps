@@ -74,6 +74,29 @@ Writes `layers/*.png` and an **exact** `placements` block. The `hidden` column i
 how much of each part was inpainted — high is normal for base layers (a torso
 under everything), suspicious for a part that should be mostly visible.
 
+### 3.5. Synthesize what the reference can't show (optional)
+
+A single reference photo shows one expression. `sleep` needs closed eyes and the
+three joy poses read better with a flushed cheek, and neither exists anywhere to
+cut out. `synth_face_assets.py` draws them instead, sampling colour from the
+rig's own layers so they land on-model rather than introducing a foreign
+palette:
+
+```bash
+python3 .claude/skills/pet-rive-rig/scripts/synth_face_assets.py --specie cat --rig cat_rig_v1
+```
+
+Adds `eyelid_left/right` and `blush_left/right` as new layers, opaque overlays
+sitting at opacity 0 until `companion_scene.py` raises them for the relevant
+poses. Skip this for a species without comparable eyes, or extend the script's
+per-part logic for a different face shape.
+
+Check both cheeks after generating: a coat marking under one eye and not the
+other (the dog's is exactly this asymmetric) can wash the flush out on just that
+side even though the placement is geometrically symmetric. Re-render at the
+pose's peak frame and zoom in -- tune `make_blush`'s tone/alpha before touching
+position, since the placement is usually already correct.
+
 ### 4. Build the .riv
 
 ```bash

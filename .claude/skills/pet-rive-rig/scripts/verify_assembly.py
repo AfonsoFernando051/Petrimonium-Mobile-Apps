@@ -108,6 +108,13 @@ def main() -> None:
             path = rig_dir / "layers" / f"{name}.png"
             if not placement or not path.exists():
                 continue
+            if placement.get("synthesized"):
+                # Pose-only overlays (a closed lid, a blush) aren't part of the
+                # neutral assembly this check validates -- they're invisible at
+                # opacity 0 until a specific animation raises them, so stacking
+                # them at full opacity here would fault the base rig for
+                # artwork that was never meant to show in it.
+                continue
             x, y, w, h = placement["refBox"]
             layer = Image.open(path).convert("RGBA")
             if (layer.width, layer.height) != (w, h):

@@ -20,7 +20,11 @@
     "eye_right",
     "eye_left",
     "eyebrow_right",
-    "eyebrow_left"
+    "eyebrow_left",
+    "eyelid_left",
+    "blush_left",
+    "eyelid_right",
+    "blush_right"
   ],
   "pivots": {
     "torso": [
@@ -78,6 +82,22 @@
     "tail": [
       0.8,
       0.85
+    ],
+    "eyelid_left": [
+      0.5,
+      0.5
+    ],
+    "blush_left": [
+      0.5,
+      0.5
+    ],
+    "eyelid_right": [
+      0.5,
+      0.5
+    ],
+    "blush_right": [
+      0.5,
+      0.5
     ]
   },
   "stateMachine": {
@@ -236,6 +256,46 @@
       ],
       "rotation": 0,
       "exact": true
+    },
+    "eyelid_left": {
+      "refBox": [
+        102,
+        95,
+        81,
+        71
+      ],
+      "rotation": 0,
+      "synthesized": true
+    },
+    "blush_left": {
+      "refBox": [
+        80,
+        155,
+        69,
+        44
+      ],
+      "rotation": 0,
+      "synthesized": true
+    },
+    "eyelid_right": {
+      "refBox": [
+        226,
+        103,
+        61,
+        71
+      ],
+      "rotation": 0,
+      "synthesized": true
+    },
+    "blush_right": {
+      "refBox": [
+        252,
+        163,
+        52,
+        44
+      ],
+      "rotation": 0,
+      "synthesized": true
     }
   }
 }
