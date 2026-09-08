@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -25,6 +26,7 @@ import '../../../pet/presentation/companion/pet_context.dart';
 import '../../../pet/presentation/companion/widgets/pet_companion_header.dart';
 import '../../../pet/presentation/companion/widgets/pet_speech_bubble.dart';
 import '../../../pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import '../../../pet/presentation/mascot/debug/pet_animation_playground_screen.dart';
 import '../../../profile/presentation/screens/profile_screen.dart';
 import '../../../simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
 import '../../../simulated_wallet/presentation/screens/simulated_wallet_screen.dart';
@@ -272,6 +274,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          if (kDebugMode)
+            IconButton(
+              icon: Icon(Icons.pets, color: tokens.textSecondary),
+              tooltip: 'Pet animation playground (debug)',
+              onPressed: () => Navigator.of(context).push(
+                _fadeRoute(const PetAnimationPlaygroundScreen()),
+              ),
+            ),
           IconButton(
             icon: Icon(Icons.settings_outlined, color: tokens.textSecondary),
             tooltip: Translator.translate(AppStrings.profileTooltip),

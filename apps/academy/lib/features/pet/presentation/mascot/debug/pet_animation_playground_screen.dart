@@ -14,9 +14,11 @@ import 'package:petrimonium_academy/features/pet/presentation/mascot/widgets/pet
 /// reach the real trigger (finish a lesson, wait for inactivity, etc.) in
 /// the running app.
 ///
-/// **Not part of the production app.** [main.dart] never imports this file,
-/// so there is no code path — debug build or otherwise — that reaches it
-/// from the shipped app. Launch it directly as its own entrypoint instead:
+/// Reachable two ways:
+/// - From the running app's dashboard AppBar, behind a `kDebugMode` guard
+///   (see `DashboardScreen._buildScaffold`) — stripped out of release
+///   builds automatically.
+/// - As its own standalone entrypoint, without going through login at all:
 ///
 /// ```
 /// flutter run -t lib/dev/main_pet_playground.dart
