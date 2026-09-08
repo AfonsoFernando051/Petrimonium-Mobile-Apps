@@ -52,7 +52,9 @@ class _PoseSwapRig extends _RiveCompanionRig {
 
 /// [PetAnimationState.sleep] has no real counterpart in `dog.riv`, so it
 /// borrows `Blink` (eyes closing) as the closest available stand-in until a
-/// proper sleep pose is authored.
+/// proper sleep pose is authored. [talking], [listening] and [sad] are
+/// newer than this stopgap rig and get the same treatment: the closest
+/// existing trigger, not a dedicated pose.
 String? _dogTriggerForState(PetAnimationState state) {
   switch (state) {
     case PetAnimationState.idle:
@@ -67,6 +69,12 @@ String? _dogTriggerForState(PetAnimationState state) {
       return 'Sit';
     case PetAnimationState.sleep:
       return 'Blink';
+    case PetAnimationState.talking:
+      return 'Happy';
+    case PetAnimationState.listening:
+      return 'Sit';
+    case PetAnimationState.sad:
+      return 'Blink';
   }
 }
 
@@ -74,7 +82,8 @@ String? _dogTriggerForState(PetAnimationState state) {
 /// marketplace expression pack copied in verbatim) chosen for each
 /// [PetAnimationState]. Like the dog stopgap, [PetAnimationState.sleep]
 /// has no literal sleep pose in this pack — artboard `13` (calm, one eye
-/// closed) is the closest available stand-in.
+/// closed) is the closest available stand-in. [talking], [listening] and
+/// [sad] are newer than this pack and reuse the closest existing artboard.
 String _owlArtboardForState(PetAnimationState state) {
   switch (state) {
     case PetAnimationState.idle:
@@ -89,6 +98,12 @@ String _owlArtboardForState(PetAnimationState state) {
       return '13';
     case PetAnimationState.victory:
       return '14';
+    case PetAnimationState.talking:
+      return '5';
+    case PetAnimationState.listening:
+      return '11';
+    case PetAnimationState.sad:
+      return '13';
   }
 }
 
