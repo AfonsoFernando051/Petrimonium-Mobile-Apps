@@ -1,0 +1,12 @@
+{
+  "silhouetteIoU": 0.933625,
+  "globalCentroidErrorPx": 2.655971,
+  "thresholds": {
+    "silhouetteIoU": 0.95,
+    "centroidErrorPx": 2.0
+  },
+  "passes": {
+    "silhouetteIoU": false,
+    "globalCentroidError": false
+  }
+}

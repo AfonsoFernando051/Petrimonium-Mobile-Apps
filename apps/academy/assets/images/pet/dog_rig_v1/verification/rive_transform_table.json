@@ -1,0 +1,162 @@
+[
+  {
+    "layer": "ground_shadow",
+    "originX": 50.0,
+    "originY": 50.0,
+    "positionX": 201.344,
+    "positionY": 519.209,
+    "scaleX": 86.875,
+    "scaleY": 86.875,
+    "rotation": 0.0
+  },
+  {
+    "layer": "tail",
+    "originX": 79.04,
+    "originY": 79.361,
+    "positionX": 123.561,
+    "positionY": 482.555,
+    "scaleX": 48.75,
+    "scaleY": 48.75,
+    "rotation": 0.0
+  },
+  {
+    "layer": "rear_haunch",
+    "originX": 50.0,
+    "originY": 70.795,
+    "positionX": 148.963,
+    "positionY": 496.448,
+    "scaleX": 58.75,
+    "scaleY": 58.75,
+    "rotation": 0.0
+  },
+  {
+    "layer": "torso",
+    "originX": 50.0,
+    "originY": 12.105,
+    "positionX": 209.7,
+    "positionY": 352.34,
+    "scaleX": 67.5,
+    "scaleY": 67.5,
+    "rotation": 0.0
+  },
+  {
+    "layer": "front_leg_right",
+    "originX": 50.0,
+    "originY": 14.118,
+    "positionX": 275.247,
+    "positionY": 397.065,
+    "scaleX": 60.625,
+    "scaleY": 60.625,
+    "rotation": 0.0
+  },
+  {
+    "layer": "front_leg_left",
+    "originX": 50.0,
+    "originY": 14.054,
+    "positionX": 189.119,
+    "positionY": 384.28,
+    "scaleX": 64.375,
+    "scaleY": 64.375,
+    "rotation": 0.0
+  },
+  {
+    "layer": "collar",
+    "originX": 50.0,
+    "originY": 50.0,
+    "positionX": 209.147,
+    "positionY": 366.806,
+    "scaleX": 51.875,
+    "scaleY": 51.875,
+    "rotation": 0.0
+  },
+  {
+    "layer": "head",
+    "originX": 50.0,
+    "originY": 84.074,
+    "positionX": 228.787,
+    "positionY": 303.776,
+    "scaleX": 92.5,
+    "scaleY": 92.5,
+    "rotation": 0.0
+  },
+  {
+    "layer": "ear_right",
+    "originX": 20.813,
+    "originY": 14.179,
+    "positionX": 335.3,
+    "positionY": 93.022,
+    "scaleX": 51.875,
+    "scaleY": 51.875,
+    "rotation": 0.0
+  },
+  {
+    "layer": "ear_left",
+    "originX": 79.662,
+    "originY": 14.133,
+    "positionX": 131.682,
+    "positionY": 79.194,
+    "scaleX": 69.375,
+    "scaleY": 69.375,
+    "rotation": 0.0
+  },
+  {
+    "layer": "muzzle",
+    "originX": 50.0,
+    "originY": 50.0,
+    "positionX": 242.275,
+    "positionY": 285.625,
+    "scaleX": 75.0,
+    "scaleY": 75.0,
+    "rotation": 0.0
+  },
+  {
+    "layer": "eye_right",
+    "originX": 50.0,
+    "originY": 50.0,
+    "positionX": 321.925,
+    "positionY": 220.75,
+    "scaleX": 58.75,
+    "scaleY": 58.75,
+    "rotation": 0.0
+  },
+  {
+    "layer": "eye_left",
+    "originX": 50.0,
+    "originY": 50.0,
+    "positionX": 180.025,
+    "positionY": 212.5,
+    "scaleX": 62.5,
+    "scaleY": 62.5,
+    "rotation": 0.0
+  },
+  {
+    "layer": "eyebrow_right",
+    "originX": 50.0,
+    "originY": 50.0,
+    "positionX": 321.303,
+    "positionY": 126.788,
+    "scaleX": 51.875,
+    "scaleY": 51.875,
+    "rotation": 0.0
+  },
+  {
+    "layer": "eyebrow_left",
+    "originX": 50.0,
+    "originY": 50.0,
+    "positionX": 192.287,
+    "positionY": 123.4,
+    "scaleX": 47.5,
+    "scaleY": 47.5,
+    "rotation": 0.0
+  },
+  {
+    "layer": "medallion",
+    "originX": 50.0,
+    "originY": 15.514,
+    "positionX": 256.444,
+    "positionY": 357.413,
+    "scaleX": 46.25,
+    "scaleY": 46.25,
+    "rotation": 0.0
+  }
+]
