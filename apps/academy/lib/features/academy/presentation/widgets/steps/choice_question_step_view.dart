@@ -6,7 +6,7 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_pet_behavior.dart';
 import 'package:petrimonium_academy/core/widgets/layer_chip.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/rive/pet_rive_companion.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Renders any [ChoiceQuestionStep] (multiple choice, true/false-as-2-options,
@@ -189,7 +189,7 @@ class _FeedbackCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipOval(
-            child: PetRiveCompanion(
+            child: PetMascotWidget(
               controller: mascotController,
               size: 28,
               interactive: false,

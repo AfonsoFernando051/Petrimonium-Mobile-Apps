@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/rive/pet_rive_companion.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// The lesson's reward moment — the player's own pet (not a generic trophy)
@@ -42,7 +42,7 @@ class LessonCompleteCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ClipOval(
-              child: PetRiveCompanion(controller: mascotController, size: 64, interactive: false),
+              child: PetMascotWidget(controller: mascotController, size: 64, interactive: false),
             ),
             const SizedBox(height: 12),
             Text(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/rive/pet_rive_companion.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// What real signal chose [HomeMentorCard]'s message — drives the
@@ -68,7 +68,7 @@ class _HomeMentorCardState extends State<HomeMentorCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipOval(
-            child: PetRiveCompanion(controller: widget.mascotController, size: 40, interactive: false),
+            child: PetMascotWidget(controller: widget.mascotController, size: 40, interactive: false),
           ),
           const SizedBox(width: 12),
           Expanded(
