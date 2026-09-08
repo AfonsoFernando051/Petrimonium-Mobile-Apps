@@ -7,6 +7,7 @@ import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.da
 import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
 import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/mascot/animation/pet_animation_engine.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
 
@@ -46,10 +47,15 @@ void main() {
 
   tearDown(() => controller.dispose());
 
-  Widget buildTestableWidget({double size = 220, bool interactive = true}) {
+  Widget buildTestableWidget({double size = 220, bool interactive = true, bool attentive = false}) {
     return MaterialApp(
       home: Scaffold(
-        body: PetMascotWidget(controller: controller, size: size, interactive: interactive),
+        body: PetMascotWidget(
+          controller: controller,
+          size: size,
+          interactive: interactive,
+          attentive: attentive,
+        ),
       ),
     );
   }
@@ -116,6 +122,22 @@ void main() {
       await tester.pump();
 
       expect(find.byType(GestureDetector), findsNothing);
+    });
+
+    testWidgets('attentive renders listening regardless of the controller mood', (tester) async {
+      controller.triggerEventAnimation(PetAnimationState.celebrate, duration: const Duration(milliseconds: 500));
+
+      await tester.pumpWidget(buildTestableWidget(attentive: true));
+      await tester.pump();
+      await tester.pump();
+
+      expect(controller.profile.animationState, PetAnimationState.celebrate);
+      expect(tester.widget<PetAnimationEngine>(find.byType(PetAnimationEngine)).state, PetAnimationState.listening);
+
+      // Elapse the revert Timer before the test ends — see the tap test
+      // above for why (flutter_test checks for pending Timers before
+      // tearDown runs).
+      await tester.pump(const Duration(milliseconds: 550));
     });
 
     testWidgets('honors disableAnimations — still renders, no crash', (tester) async {

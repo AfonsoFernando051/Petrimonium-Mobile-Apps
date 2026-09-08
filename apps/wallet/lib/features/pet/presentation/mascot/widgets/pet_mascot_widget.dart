@@ -8,18 +8,22 @@ import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart
 import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.dart';
 import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
 import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/mascot/animation/pet_animation_engine.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Renders the gamified pet mascot: an aura layer, the base evolution
 /// animation (Lottie, falling back to a static PNG per stage), and any
-/// equipped accessories layered on top. Tapping/petting the mascot plays a
-/// brief `happy` reaction with light haptic feedback.
+/// equipped accessories layered on top — driven through
+/// [PetAnimationEngine] so the whole stack breathes, reacts and settles as
+/// one piece. Tapping/petting the mascot plays a brief `happy` reaction
+/// with light haptic feedback.
 class PetMascotWidget extends StatefulWidget {
   const PetMascotWidget({
     super.key,
     required this.controller,
     this.size = 220,
     this.interactive = true,
+    this.attentive = false,
   });
 
   final MascotController controller;
@@ -31,61 +35,21 @@ class PetMascotWidget extends StatefulWidget {
   /// `false` so the two gesture detectors don't compete for the same tap.
   final bool interactive;
 
+  /// Whether the companion's interaction sheet is currently open. While
+  /// `true`, the mascot renders [PetAnimationState.listening] regardless of
+  /// [MascotController.animationState] — attention to the user takes
+  /// visual priority over whatever ambient mood was already playing.
+  final bool attentive;
+
   @override
   State<PetMascotWidget> createState() => _PetMascotWidgetState();
 }
 
-class _PetMascotWidgetState extends State<PetMascotWidget>
-    with TickerProviderStateMixin {
-  late final AnimationController _breatheController;
-  late final Animation<double> _breatheAnimation;
-
-  late final AnimationController _bumpController;
-  late final Animation<double> _bumpAnimation;
-
-  bool _breatheLoopStarted = false;
-
+class _PetMascotWidgetState extends State<PetMascotWidget> {
   @override
   void initState() {
     super.initState();
     widget.controller.addListener(_onControllerChanged);
-
-    // Not started here — see didChangeDependencies, which gates it on
-    // MediaQuery's disableAnimations once that's reliably available.
-    _breatheController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2500),
-    );
-    _breatheAnimation = Tween<double>(begin: 0.96, end: 1.04).animate(
-      CurvedAnimation(parent: _breatheController, curve: Curves.easeInOutSine),
-    );
-
-    _bumpController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-    _bumpAnimation = TweenSequence([
-      TweenSequenceItem(
-        tween: Tween<double>(begin: 0, end: -18).chain(CurveTween(curve: Curves.easeOutCubic)),
-        weight: 50,
-      ),
-      TweenSequenceItem(
-        tween: Tween<double>(begin: -18, end: 0).chain(CurveTween(curve: Curves.bounceOut)),
-        weight: 50,
-      ),
-    ]).animate(_bumpController);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (MediaQuery.of(context).disableAnimations) {
-      _breatheController.value = 0.5;
-      _breatheLoopStarted = false;
-    } else if (!_breatheLoopStarted) {
-      _breatheController.repeat(reverse: true);
-      _breatheLoopStarted = true;
-    }
   }
 
   @override
@@ -101,7 +65,6 @@ class _PetMascotWidgetState extends State<PetMascotWidget>
 
   void _handlePet() {
     HapticFeedback.lightImpact();
-    if (!_bumpController.isAnimating) _bumpController.forward(from: 0);
     widget.controller.triggerEventAnimation(
       PetAnimationState.happy,
       duration: const Duration(milliseconds: 900),
@@ -111,26 +74,18 @@ class _PetMascotWidgetState extends State<PetMascotWidget>
   @override
   void dispose() {
     widget.controller.removeListener(_onControllerChanged);
-    _breatheController.dispose();
-    _bumpController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final profile = widget.controller.profile;
+    final effectiveState = widget.attentive ? PetAnimationState.listening : profile.animationState;
 
-    final content = AnimatedBuilder(
-      animation: Listenable.merge([_breatheController, _bumpController]),
-      builder: (context, child) {
-        return Transform.translate(
-          offset: Offset(0, _bumpAnimation.value),
-          child: Transform.scale(
-            scale: _breatheAnimation.value,
-            child: child,
-          ),
-        );
-      },
+    final content = PetAnimationEngine(
+      state: effectiveState,
+      size: widget.size,
+      reducedMotion: MediaQuery.of(context).disableAnimations,
       child: SizedBox(
         width: widget.size,
         height: widget.size,
@@ -138,10 +93,10 @@ class _PetMascotWidgetState extends State<PetMascotWidget>
           alignment: Alignment.center,
           clipBehavior: Clip.none,
           children: [
-            if (_showsAura(profile.stage, profile.animationState))
+            if (_showsAura(profile.stage, effectiveState))
               _AuraLayer(stage: profile.stage, size: widget.size),
             _BaseMascotLayer(
-              state: profile.animationState,
+              state: effectiveState,
               stage: profile.stage,
               specie: profile.specie.name,
               size: widget.size,
