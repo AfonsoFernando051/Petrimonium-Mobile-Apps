@@ -1,0 +1,241 @@
+{
+  "name": "dog_rig_v2",
+  "source": "generated_dog.png",
+  "artboard": {
+    "name": "DogCompanion",
+    "width": 420,
+    "height": 560
+  },
+  "drawOrderBackToFront": [
+    "tail",
+    "torso",
+    "front_leg_right",
+    "front_leg_left",
+    "collar",
+    "medallion",
+    "head",
+    "ear_right",
+    "ear_left",
+    "muzzle",
+    "eye_right",
+    "eye_left",
+    "eyebrow_right",
+    "eyebrow_left"
+  ],
+  "pivots": {
+    "torso": [
+      0.5,
+      0.9
+    ],
+    "front_leg_right": [
+      0.5,
+      0.1
+    ],
+    "front_leg_left": [
+      0.5,
+      0.1
+    ],
+    "collar": [
+      0.5,
+      0.5
+    ],
+    "medallion": [
+      0.5,
+      0.15
+    ],
+    "head": [
+      0.5,
+      0.88
+    ],
+    "ear_right": [
+      0.22,
+      0.12
+    ],
+    "ear_left": [
+      0.8,
+      0.12
+    ],
+    "muzzle": [
+      0.5,
+      0.3
+    ],
+    "eye_right": [
+      0.5,
+      0.5
+    ],
+    "eye_left": [
+      0.5,
+      0.5
+    ],
+    "eyebrow_right": [
+      0.5,
+      0.5
+    ],
+    "eyebrow_left": [
+      0.5,
+      0.5
+    ],
+    "tail": [
+      0.8,
+      0.85
+    ]
+  },
+  "stateMachine": {
+    "name": "Companion",
+    "inputs": {
+      "state": "number",
+      "reducedMotion": "boolean",
+      "interacting": "boolean"
+    },
+    "states": {
+      "0": "idle",
+      "1": "celebrate",
+      "2": "think",
+      "3": "sleep",
+      "4": "victory",
+      "5": "happy"
+    }
+  },
+  "placements": {
+    "tail": {
+      "refBox": [
+        48,
+        279,
+        59,
+        104
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "torso": {
+      "refBox": [
+        68,
+        188,
+        221,
+        210
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "front_leg_right": {
+      "refBox": [
+        174,
+        294,
+        78,
+        104
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "front_leg_left": {
+      "refBox": [
+        98,
+        294,
+        101,
+        104
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "collar": {
+      "refBox": [
+        114,
+        212,
+        136,
+        79
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "medallion": {
+      "refBox": [
+        168,
+        240,
+        65,
+        65
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "head": {
+      "refBox": [
+        55,
+        18,
+        247,
+        213
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "ear_right": {
+      "refBox": [
+        222,
+        21,
+        99,
+        154
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "ear_left": {
+      "refBox": [
+        12,
+        18,
+        110,
+        138
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "muzzle": {
+      "refBox": [
+        147,
+        137,
+        117,
+        87
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "eye_right": {
+      "refBox": [
+        226,
+        103,
+        61,
+        71
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "eye_left": {
+      "refBox": [
+        102,
+        95,
+        81,
+        71
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "eyebrow_right": {
+      "refBox": [
+        239,
+        67,
+        43,
+        29
+      ],
+      "rotation": 0,
+      "exact": true
+    },
+    "eyebrow_left": {
+      "refBox": [
+        118,
+        52,
+        55,
+        35
+      ],
+      "rotation": 0,
+      "exact": true
+    }
+  }
+}
