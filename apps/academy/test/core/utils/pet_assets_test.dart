@@ -12,13 +12,13 @@ void main() {
       expect(PetAssets.imageFor('Dog'), 'assets/images/generated_dog.png');
     });
 
-    test('falls back to the default species (dog) when null', () {
-      expect(PetAssets.imageFor(null), 'assets/images/generated_dog.png');
+    test('falls back to the default species (wolf) when null', () {
+      expect(PetAssets.imageFor(null), 'assets/images/generated_wolf.png');
     });
 
     test('falls back to the default species when blank', () {
-      expect(PetAssets.imageFor(''), 'assets/images/generated_dog.png');
-      expect(PetAssets.imageFor('   '), 'assets/images/generated_dog.png');
+      expect(PetAssets.imageFor(''), 'assets/images/generated_wolf.png');
+      expect(PetAssets.imageFor('   '), 'assets/images/generated_wolf.png');
     });
 
     test('trims surrounding whitespace', () {

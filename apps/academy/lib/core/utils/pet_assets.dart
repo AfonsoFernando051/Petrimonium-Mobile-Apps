@@ -6,7 +6,7 @@
 class PetAssets {
   PetAssets._();
 
-  static const String defaultSpecie = 'dog';
+  static const String defaultSpecie = 'wolf';
 
   /// [specie] is matched case-insensitively (backend/local values are
   /// sometimes `DOG`, sometimes `dog`). Falls back to [defaultSpecie] when
