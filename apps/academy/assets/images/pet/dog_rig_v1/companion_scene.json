@@ -7,181 +7,90 @@
     "children": [
       {
         "type": "image_asset",
-        "name": "ground_shadow_a",
-        "source": "layers/ground_shadow_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "tail_a",
-        "source": "layers/tail_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "rear_haunch_a",
-        "source": "layers/rear_haunch_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "torso_a",
-        "source": "layers/torso_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "front_leg_right_a",
-        "source": "layers/front_leg_right_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "front_leg_left_a",
-        "source": "layers/front_leg_left_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "collar_a",
-        "source": "layers/collar_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "head_a",
-        "source": "layers/head_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "ear_right_a",
-        "source": "layers/ear_right_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "ear_left_a",
-        "source": "layers/ear_left_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "muzzle_a",
-        "source": "layers/muzzle_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "eye_right_a",
-        "source": "layers/eye_right_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "eye_left_a",
-        "source": "layers/eye_left_s.png"
-      },
-      {
-        "type": "image_asset",
-        "name": "eyebrow_right_a",
-        "source": "layers/eyebrow_right_s.png"
+        "name": "medallion_a",
+        "source": "layers/medallion.png"
       },
       {
         "type": "image_asset",
         "name": "eyebrow_left_a",
-        "source": "layers/eyebrow_left_s.png"
+        "source": "layers/eyebrow_left.png"
       },
       {
         "type": "image_asset",
-        "name": "medallion_a",
-        "source": "layers/medallion_s.png"
+        "name": "eyebrow_right_a",
+        "source": "layers/eyebrow_right.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "eye_left_a",
+        "source": "layers/eye_left.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "eye_right_a",
+        "source": "layers/eye_right.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "muzzle_a",
+        "source": "layers/muzzle.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "ear_left_a",
+        "source": "layers/ear_left.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "ear_right_a",
+        "source": "layers/ear_right.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "head_a",
+        "source": "layers/head.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "collar_a",
+        "source": "layers/collar.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "front_leg_left_a",
+        "source": "layers/front_leg_left.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "front_leg_right_a",
+        "source": "layers/front_leg_right.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "torso_a",
+        "source": "layers/torso.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "rear_haunch_a",
+        "source": "layers/rear_haunch.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "tail_a",
+        "source": "layers/tail.png"
+      },
+      {
+        "type": "image_asset",
+        "name": "ground_shadow_a",
+        "source": "layers/ground_shadow.png"
       },
       {
         "type": "image",
-        "name": "ground_shadow",
-        "asset": "ground_shadow_a",
-        "x": 243.0,
-        "y": 583.0
-      },
-      {
-        "type": "image",
-        "name": "tail",
-        "asset": "tail_a",
-        "x": 130.0,
-        "y": 496.7044
-      },
-      {
-        "type": "image",
-        "name": "rear_haunch",
-        "asset": "rear_haunch_a",
-        "x": 166.0,
-        "y": 513.0
-      },
-      {
-        "type": "image",
-        "name": "torso",
-        "asset": "torso_a",
-        "x": 250.0,
-        "y": 467.0
-      },
-      {
-        "type": "image",
-        "name": "front_leg_right",
-        "asset": "front_leg_right_a",
-        "x": 328.0,
-        "y": 505.0
-      },
-      {
-        "type": "image",
-        "name": "front_leg_left",
-        "asset": "front_leg_left_a",
-        "x": 207.0,
-        "y": 500.0
-      },
-      {
-        "type": "image",
-        "name": "collar",
-        "asset": "collar_a",
-        "x": 267.5,
-        "y": 380.5
-      },
-      {
-        "type": "image",
-        "name": "head",
-        "asset": "head_a",
-        "x": 275.0,
-        "y": 256.0
-      },
-      {
-        "type": "image",
-        "name": "ear_right",
-        "asset": "ear_right_a",
-        "x": 389.7044,
-        "y": 185.40251
-      },
-      {
-        "type": "image",
-        "name": "ear_left",
-        "asset": "ear_left_a",
-        "x": 130.5,
-        "y": 209.0
-      },
-      {
-        "type": "image",
-        "name": "muzzle",
-        "asset": "muzzle_a",
-        "x": 281.0,
-        "y": 343.0
-      },
-      {
-        "type": "image",
-        "name": "eye_right",
-        "asset": "eye_right_a",
-        "x": 352.5,
-        "y": 269.0
-      },
-      {
-        "type": "image",
-        "name": "eye_left",
-        "asset": "eye_left_a",
-        "x": 228.37115,
-        "y": 266.1761
-      },
-      {
-        "type": "image",
-        "name": "eyebrow_right",
-        "asset": "eyebrow_right_a",
-        "x": 346.0,
-        "y": 189.0
+        "name": "medallion",
+        "asset": "medallion_a",
+        "x": 290.0,
+        "y": 429.5
       },
       {
         "type": "image",
@@ -192,57 +101,216 @@
       },
       {
         "type": "image",
-        "name": "medallion",
-        "asset": "medallion_a",
-        "x": 290.0,
-        "y": 429.5
+        "name": "eyebrow_right",
+        "asset": "eyebrow_right_a",
+        "x": 346.0,
+        "y": 189.0
+      },
+      {
+        "type": "image",
+        "name": "eye_left",
+        "asset": "eye_left_a",
+        "x": 228.37115,
+        "y": 266.1761
+      },
+      {
+        "type": "image",
+        "name": "eye_right",
+        "asset": "eye_right_a",
+        "x": 352.5,
+        "y": 269.0
+      },
+      {
+        "type": "image",
+        "name": "muzzle",
+        "asset": "muzzle_a",
+        "x": 281.0,
+        "y": 343.0
+      },
+      {
+        "type": "node",
+        "name": "ear_left_joint",
+        "x": 147.3,
+        "y": 143.48000000000002,
+        "children": [
+          {
+            "type": "image",
+            "name": "ear_left",
+            "asset": "ear_left_a",
+            "x": -16.80000000000001,
+            "y": 65.51999999999998
+          }
+        ]
+      },
+      {
+        "type": "node",
+        "name": "ear_right_joint",
+        "x": 378.7844,
+        "y": 135.00251,
+        "children": [
+          {
+            "type": "image",
+            "name": "ear_right",
+            "asset": "ear_right_a",
+            "x": 10.920000000000016,
+            "y": 50.400000000000006
+          }
+        ]
+      },
+      {
+        "type": "node",
+        "name": "head_joint",
+        "x": 275.0,
+        "y": 370.8,
+        "children": [
+          {
+            "type": "image",
+            "name": "head",
+            "asset": "head_a",
+            "x": 0.0,
+            "y": -114.80000000000001
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "name": "collar",
+        "asset": "collar_a",
+        "x": 267.5,
+        "y": 380.5
+      },
+      {
+        "type": "image",
+        "name": "front_leg_left",
+        "asset": "front_leg_left_a",
+        "x": 207.0,
+        "y": 500.0
+      },
+      {
+        "type": "image",
+        "name": "front_leg_right",
+        "asset": "front_leg_right_a",
+        "x": 328.0,
+        "y": 505.0
+      },
+      {
+        "type": "image",
+        "name": "torso",
+        "asset": "torso_a",
+        "x": 250.0,
+        "y": 467.0
+      },
+      {
+        "type": "image",
+        "name": "rear_haunch",
+        "asset": "rear_haunch_a",
+        "x": 166.0,
+        "y": 513.0
+      },
+      {
+        "type": "node",
+        "name": "tail_joint",
+        "x": 150.8,
+        "y": 538.1044,
+        "children": [
+          {
+            "type": "image",
+            "name": "tail",
+            "asset": "tail_a",
+            "x": -20.80000000000001,
+            "y": -41.400000000000034
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "name": "ground_shadow",
+        "asset": "ground_shadow_a",
+        "x": 243.0,
+        "y": 583.0
       }
     ],
     "animations": [
       {
         "name": "idle",
         "fps": 60,
-        "duration": 60,
+        "duration": 120,
         "loop_type": "loop",
         "keyframes": [
           {
-            "object": "head",
-            "property": "y",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 256.0
-              },
-              {
-                "frame": 30,
-                "value": 261.0
-              },
-              {
-                "frame": 59,
-                "value": 256.0
-              }
-            ]
-          },
-          {
             "object": "torso",
+            "property": "scale_y",
+            "frames": [
+              {
+                "frame": 0,
+                "value": 1.0
+              },
+              {
+                "frame": 60,
+                "value": 1.008
+              },
+              {
+                "frame": 119,
+                "value": 1.0
+              }
+            ]
+          },
+          {
+            "object": "head_joint",
             "property": "y",
             "frames": [
               {
                 "frame": 0,
-                "value": 467.0
+                "value": 370.8
               },
               {
-                "frame": 30,
-                "value": 469.0
+                "frame": 60,
+                "value": 372.3
               },
               {
-                "frame": 59,
-                "value": 467.0
+                "frame": 119,
+                "value": 370.8
               }
             ]
           },
           {
-            "object": "ear_left",
+            "object": "ear_left_joint",
+            "property": "rotation",
+            "frames": [
+              {
+                "frame": 0,
+                "value": 0.0
+              },
+              {
+                "frame": 60,
+                "value": 0.026179938779914945
+              },
+              {
+                "frame": 119,
+                "value": 0.0
+              }
+            ]
+          },
+          {
+            "object": "ear_right_joint",
+            "property": "rotation",
+            "frames": [
+              {
+                "frame": 0,
+                "value": -0.0
+              },
+              {
+                "frame": 60,
+                "value": -0.026179938779914945
+              },
+              {
+                "frame": 119,
+                "value": -0.0
+              }
+            ]
+          },
+          {
+            "object": "tail_joint",
             "property": "rotation",
             "frames": [
               {
@@ -251,54 +319,18 @@
               },
               {
                 "frame": 30,
-                "value": 3
+                "value": 0.03490658503988659
               },
               {
-                "frame": 59,
-                "value": 0.0
-              }
-            ]
-          },
-          {
-            "object": "ear_right",
-            "property": "rotation",
-            "frames": [
-              {
-                "frame": 0,
+                "frame": 60,
                 "value": 0.0
               },
               {
-                "frame": 30,
-                "value": -3
+                "frame": 90,
+                "value": -0.03490658503988659
               },
               {
-                "frame": 59,
-                "value": 0.0
-              }
-            ]
-          },
-          {
-            "object": "tail",
-            "property": "rotation",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 0.0
-              },
-              {
-                "frame": 15,
-                "value": 6
-              },
-              {
-                "frame": 30,
-                "value": 0.0
-              },
-              {
-                "frame": 45,
-                "value": -6
-              },
-              {
-                "frame": 59,
+                "frame": 119,
                 "value": 0.0
               }
             ]
@@ -308,47 +340,37 @@
       {
         "name": "celebrate",
         "fps": 60,
-        "duration": 60,
+        "duration": 75,
         "loop_type": "oneshot",
         "keyframes": [
           {
-            "object": "head",
+            "object": "head_joint",
             "property": "y",
             "frames": [
               {
                 "frame": 0,
-                "value": 256.0
+                "value": 370.8
               },
               {
-                "frame": 30,
-                "value": 234.0
+                "frame": 16,
+                "value": 364.8
               },
               {
-                "frame": 59,
-                "value": 256.0
+                "frame": 34,
+                "value": 368.7
+              },
+              {
+                "frame": 50,
+                "value": 366.6
+              },
+              {
+                "frame": 74,
+                "value": 370.8
               }
             ]
           },
           {
-            "object": "torso",
-            "property": "y",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 467.0
-              },
-              {
-                "frame": 30,
-                "value": 457.0
-              },
-              {
-                "frame": 59,
-                "value": 467.0
-              }
-            ]
-          },
-          {
-            "object": "ear_left",
+            "object": "tail_joint",
             "property": "rotation",
             "frames": [
               {
@@ -356,17 +378,55 @@
                 "value": 0.0
               },
               {
-                "frame": 30,
-                "value": -14
+                "frame": 14,
+                "value": 0.17453292519943295
               },
               {
-                "frame": 59,
+                "frame": 28,
+                "value": -0.17453292519943295
+              },
+              {
+                "frame": 42,
+                "value": 0.17453292519943295
+              },
+              {
+                "frame": 56,
+                "value": -0.08726646259971647
+              },
+              {
+                "frame": 74,
                 "value": 0.0
               }
             ]
           },
           {
-            "object": "ear_right",
+            "object": "ear_left_joint",
+            "property": "rotation",
+            "frames": [
+              {
+                "frame": 0,
+                "value": -0.0
+              },
+              {
+                "frame": 16,
+                "value": -0.05235987755982989
+              },
+              {
+                "frame": 34,
+                "value": -0.020943951023931956
+              },
+              {
+                "frame": 50,
+                "value": -0.03665191429188092
+              },
+              {
+                "frame": 74,
+                "value": -0.0
+              }
+            ]
+          },
+          {
+            "object": "ear_right_joint",
             "property": "rotation",
             "frames": [
               {
@@ -374,37 +434,19 @@
                 "value": 0.0
               },
               {
-                "frame": 30,
-                "value": 14
+                "frame": 16,
+                "value": 0.05235987755982989
               },
               {
-                "frame": 59,
-                "value": 0.0
-              }
-            ]
-          },
-          {
-            "object": "tail",
-            "property": "rotation",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 0.0
+                "frame": 34,
+                "value": 0.020943951023931956
               },
               {
-                "frame": 15,
-                "value": 26
+                "frame": 50,
+                "value": 0.03665191429188092
               },
               {
-                "frame": 30,
-                "value": 0.0
-              },
-              {
-                "frame": 45,
-                "value": -26
-              },
-              {
-                "frame": 59,
+                "frame": 74,
                 "value": 0.0
               }
             ]
@@ -414,29 +456,55 @@
       {
         "name": "think",
         "fps": 60,
-        "duration": 60,
-        "loop_type": "oneshot",
+        "duration": 90,
+        "loop_type": "loop",
         "keyframes": [
           {
-            "object": "head",
+            "object": "head_joint",
+            "property": "rotation",
+            "frames": [
+              {
+                "frame": 0,
+                "value": 0.0
+              },
+              {
+                "frame": 30,
+                "value": 0.04363323129985824
+              },
+              {
+                "frame": 60,
+                "value": 0.04363323129985824
+              },
+              {
+                "frame": 89,
+                "value": 0.0
+              }
+            ]
+          },
+          {
+            "object": "head_joint",
             "property": "y",
             "frames": [
               {
                 "frame": 0,
-                "value": 256.0
+                "value": 370.8
               },
               {
                 "frame": 30,
-                "value": 260.0
+                "value": 372.3
               },
               {
-                "frame": 59,
-                "value": 256.0
+                "frame": 60,
+                "value": 372.3
+              },
+              {
+                "frame": 89,
+                "value": 370.8
               }
             ]
           },
           {
-            "object": "head",
+            "object": "ear_left_joint",
             "property": "rotation",
             "frames": [
               {
@@ -445,47 +513,33 @@
               },
               {
                 "frame": 30,
-                "value": 5
+                "value": 0.08726646259971647
               },
               {
-                "frame": 59,
+                "frame": 60,
+                "value": 0.08726646259971647
+              },
+              {
+                "frame": 89,
                 "value": 0.0
               }
             ]
           },
           {
-            "object": "ear_left",
-            "property": "rotation",
+            "object": "torso",
+            "property": "scale_y",
             "frames": [
               {
                 "frame": 0,
-                "value": 0.0
+                "value": 1.0
               },
               {
-                "frame": 30,
-                "value": 14
+                "frame": 45,
+                "value": 1.006
               },
               {
-                "frame": 59,
-                "value": 0.0
-              }
-            ]
-          },
-          {
-            "object": "ear_right",
-            "property": "rotation",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 0.0
-              },
-              {
-                "frame": 30,
-                "value": -4
-              },
-              {
-                "frame": 59,
-                "value": 0.0
+                "frame": 89,
+                "value": 1.0
               }
             ]
           }
@@ -494,63 +548,9 @@
       {
         "name": "sleep",
         "fps": 60,
-        "duration": 60,
-        "loop_type": "oneshot",
+        "duration": 180,
+        "loop_type": "loop",
         "keyframes": [
-          {
-            "object": "head",
-            "property": "y",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 256.0
-              },
-              {
-                "frame": 30,
-                "value": 272.0
-              },
-              {
-                "frame": 59,
-                "value": 256.0
-              }
-            ]
-          },
-          {
-            "object": "ear_left",
-            "property": "rotation",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 0.0
-              },
-              {
-                "frame": 30,
-                "value": 10
-              },
-              {
-                "frame": 59,
-                "value": 0.0
-              }
-            ]
-          },
-          {
-            "object": "ear_right",
-            "property": "rotation",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 0.0
-              },
-              {
-                "frame": 30,
-                "value": -10
-              },
-              {
-                "frame": 59,
-                "value": 0.0
-              }
-            ]
-          },
           {
             "object": "eye_left",
             "property": "scale_y",
@@ -560,15 +560,15 @@
                 "value": 1.0
               },
               {
-                "frame": 20,
+                "frame": 12,
                 "value": 0.08
               },
               {
-                "frame": 40,
+                "frame": 168,
                 "value": 0.08
               },
               {
-                "frame": 59,
+                "frame": 179,
                 "value": 1.0
               }
             ]
@@ -582,15 +582,99 @@
                 "value": 1.0
               },
               {
-                "frame": 20,
+                "frame": 12,
                 "value": 0.08
+              },
+              {
+                "frame": 168,
+                "value": 0.08
+              },
+              {
+                "frame": 179,
+                "value": 1.0
+              }
+            ]
+          },
+          {
+            "object": "head_joint",
+            "property": "y",
+            "frames": [
+              {
+                "frame": 0,
+                "value": 370.8
               },
               {
                 "frame": 40,
-                "value": 0.08
+                "value": 375.8
               },
               {
-                "frame": 59,
+                "frame": 140,
+                "value": 375.8
+              },
+              {
+                "frame": 179,
+                "value": 370.8
+              }
+            ]
+          },
+          {
+            "object": "ear_left_joint",
+            "property": "rotation",
+            "frames": [
+              {
+                "frame": 0,
+                "value": 0.0
+              },
+              {
+                "frame": 40,
+                "value": 0.05235987755982989
+              },
+              {
+                "frame": 140,
+                "value": 0.05235987755982989
+              },
+              {
+                "frame": 179,
+                "value": 0.0
+              }
+            ]
+          },
+          {
+            "object": "ear_right_joint",
+            "property": "rotation",
+            "frames": [
+              {
+                "frame": 0,
+                "value": -0.0
+              },
+              {
+                "frame": 40,
+                "value": -0.05235987755982989
+              },
+              {
+                "frame": 140,
+                "value": -0.05235987755982989
+              },
+              {
+                "frame": 179,
+                "value": -0.0
+              }
+            ]
+          },
+          {
+            "object": "torso",
+            "property": "scale_y",
+            "frames": [
+              {
+                "frame": 0,
+                "value": 1.0
+              },
+              {
+                "frame": 90,
+                "value": 1.01
+              },
+              {
+                "frame": 179,
                 "value": 1.0
               }
             ]
@@ -600,83 +684,37 @@
       {
         "name": "victory",
         "fps": 60,
-        "duration": 60,
+        "duration": 90,
         "loop_type": "oneshot",
         "keyframes": [
           {
-            "object": "head",
+            "object": "head_joint",
             "property": "y",
             "frames": [
               {
                 "frame": 0,
-                "value": 256.0
+                "value": 370.8
               },
               {
-                "frame": 30,
-                "value": 226.0
+                "frame": 18,
+                "value": 362.8
               },
               {
-                "frame": 59,
-                "value": 256.0
+                "frame": 38,
+                "value": 368.40000000000003
+              },
+              {
+                "frame": 56,
+                "value": 364.8
+              },
+              {
+                "frame": 89,
+                "value": 370.8
               }
             ]
           },
           {
-            "object": "torso",
-            "property": "y",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 467.0
-              },
-              {
-                "frame": 30,
-                "value": 453.0
-              },
-              {
-                "frame": 59,
-                "value": 467.0
-              }
-            ]
-          },
-          {
-            "object": "ear_left",
-            "property": "rotation",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 0.0
-              },
-              {
-                "frame": 30,
-                "value": -20
-              },
-              {
-                "frame": 59,
-                "value": 0.0
-              }
-            ]
-          },
-          {
-            "object": "ear_right",
-            "property": "rotation",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 0.0
-              },
-              {
-                "frame": 30,
-                "value": 20
-              },
-              {
-                "frame": 59,
-                "value": 0.0
-              }
-            ]
-          },
-          {
-            "object": "tail",
+            "object": "tail_joint",
             "property": "rotation",
             "frames": [
               {
@@ -685,18 +723,74 @@
               },
               {
                 "frame": 15,
-                "value": 30
+                "value": 0.20943951023931956
               },
               {
                 "frame": 30,
-                "value": 0.0
+                "value": -0.20943951023931956
               },
               {
                 "frame": 45,
-                "value": -30
+                "value": 0.20943951023931956
               },
               {
-                "frame": 59,
+                "frame": 60,
+                "value": -0.12566370614359174
+              },
+              {
+                "frame": 89,
+                "value": 0.0
+              }
+            ]
+          },
+          {
+            "object": "ear_left_joint",
+            "property": "rotation",
+            "frames": [
+              {
+                "frame": 0,
+                "value": -0.0
+              },
+              {
+                "frame": 18,
+                "value": -0.06981317007977318
+              },
+              {
+                "frame": 38,
+                "value": -0.024434609527920613
+              },
+              {
+                "frame": 56,
+                "value": -0.05235987755982989
+              },
+              {
+                "frame": 89,
+                "value": -0.0
+              }
+            ]
+          },
+          {
+            "object": "ear_right_joint",
+            "property": "rotation",
+            "frames": [
+              {
+                "frame": 0,
+                "value": 0.0
+              },
+              {
+                "frame": 18,
+                "value": 0.06981317007977318
+              },
+              {
+                "frame": 38,
+                "value": 0.024434609527920613
+              },
+              {
+                "frame": 56,
+                "value": 0.05235987755982989
+              },
+              {
+                "frame": 89,
                 "value": 0.0
               }
             ]
@@ -706,29 +800,33 @@
       {
         "name": "happy",
         "fps": 60,
-        "duration": 60,
+        "duration": 45,
         "loop_type": "oneshot",
         "keyframes": [
           {
-            "object": "head",
+            "object": "head_joint",
             "property": "y",
             "frames": [
               {
                 "frame": 0,
-                "value": 256.0
+                "value": 370.8
+              },
+              {
+                "frame": 12,
+                "value": 366.8
               },
               {
                 "frame": 30,
-                "value": 244.0
+                "value": 369.6
               },
               {
-                "frame": 59,
-                "value": 256.0
+                "frame": 44,
+                "value": 370.8
               }
             ]
           },
           {
-            "object": "ear_left",
+            "object": "tail_joint",
             "property": "rotation",
             "frames": [
               {
@@ -736,17 +834,47 @@
                 "value": 0.0
               },
               {
-                "frame": 30,
-                "value": -8
+                "frame": 11,
+                "value": 0.13962634015954636
               },
               {
-                "frame": 59,
+                "frame": 22,
+                "value": -0.13962634015954636
+              },
+              {
+                "frame": 33,
+                "value": 0.13962634015954636
+              },
+              {
+                "frame": 44,
                 "value": 0.0
               }
             ]
           },
           {
-            "object": "ear_right",
+            "object": "ear_left_joint",
+            "property": "rotation",
+            "frames": [
+              {
+                "frame": 0,
+                "value": -0.0
+              },
+              {
+                "frame": 12,
+                "value": -0.04363323129985824
+              },
+              {
+                "frame": 30,
+                "value": -0.01308996938995747
+              },
+              {
+                "frame": 44,
+                "value": -0.0
+              }
+            ]
+          },
+          {
+            "object": "ear_right_joint",
             "property": "rotation",
             "frames": [
               {
@@ -754,42 +882,27 @@
                 "value": 0.0
               },
               {
-                "frame": 30,
-                "value": 8
-              },
-              {
-                "frame": 59,
-                "value": 0.0
-              }
-            ]
-          },
-          {
-            "object": "tail",
-            "property": "rotation",
-            "frames": [
-              {
-                "frame": 0,
-                "value": 0.0
-              },
-              {
-                "frame": 15,
-                "value": 18
+                "frame": 12,
+                "value": 0.04363323129985824
               },
               {
                 "frame": 30,
-                "value": 0.0
+                "value": 0.01308996938995747
               },
               {
-                "frame": 45,
-                "value": -18
-              },
-              {
-                "frame": 59,
+                "frame": 44,
                 "value": 0.0
               }
             ]
           }
         ]
+      },
+      {
+        "name": "rest",
+        "fps": 60,
+        "duration": 1,
+        "loop_type": "loop",
+        "keyframes": []
       }
     ],
     "state_machines": [
@@ -844,6 +957,10 @@
               {
                 "type": "animation",
                 "animation": "happy"
+              },
+              {
+                "type": "animation",
+                "animation": "rest"
               }
             ],
             "transitions": [
@@ -859,6 +976,11 @@
                     "input": "state",
                     "op": "==",
                     "value": 1.0
+                  },
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": false
                   }
                 ]
               },
@@ -874,6 +996,17 @@
                 ]
               },
               {
+                "from": 3,
+                "to": 8,
+                "conditions": [
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": true
+                  }
+                ]
+              },
+              {
                 "from": 2,
                 "to": 4,
                 "conditions": [
@@ -881,6 +1014,11 @@
                     "input": "state",
                     "op": "==",
                     "value": 2.0
+                  },
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": false
                   }
                 ]
               },
@@ -896,6 +1034,17 @@
                 ]
               },
               {
+                "from": 4,
+                "to": 8,
+                "conditions": [
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": true
+                  }
+                ]
+              },
+              {
                 "from": 2,
                 "to": 5,
                 "conditions": [
@@ -903,6 +1052,11 @@
                     "input": "state",
                     "op": "==",
                     "value": 3.0
+                  },
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": false
                   }
                 ]
               },
@@ -918,6 +1072,17 @@
                 ]
               },
               {
+                "from": 5,
+                "to": 8,
+                "conditions": [
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": true
+                  }
+                ]
+              },
+              {
                 "from": 2,
                 "to": 6,
                 "conditions": [
@@ -925,6 +1090,11 @@
                     "input": "state",
                     "op": "==",
                     "value": 4.0
+                  },
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": false
                   }
                 ]
               },
@@ -940,6 +1110,17 @@
                 ]
               },
               {
+                "from": 6,
+                "to": 8,
+                "conditions": [
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": true
+                  }
+                ]
+              },
+              {
                 "from": 2,
                 "to": 7,
                 "conditions": [
@@ -947,6 +1128,11 @@
                     "input": "state",
                     "op": "==",
                     "value": 5.0
+                  },
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": false
                   }
                 ]
               },
@@ -958,6 +1144,39 @@
                     "input": "state",
                     "op": "==",
                     "value": 0.0
+                  }
+                ]
+              },
+              {
+                "from": 7,
+                "to": 8,
+                "conditions": [
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "from": 2,
+                "to": 8,
+                "conditions": [
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": true
+                  }
+                ]
+              },
+              {
+                "from": 8,
+                "to": 2,
+                "conditions": [
+                  {
+                    "input": "reducedMotion",
+                    "op": "==",
+                    "value": false
                   }
                 ]
               }

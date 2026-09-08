@@ -22,16 +22,14 @@ from pathlib import Path
 
 from PIL import Image
 
-# state input value per pose -- fixed by PetAnimationState's declaration order in
-# Dart. See references/companion-contract.md; do not renumber.
-POSES = ["idle", "celebrate", "think", "sleep", "victory", "happy"]
+import companion_scene as CS
 
 FPS = 60
-DURATION = 60
 
+# Fraction of the artboard the pet fills, and where its feet land as a fraction
+# of artboard height. Overridable per species via a "framing" block.
 DEFAULT_FILL = 0.92
 DEFAULT_BASELINE = 0.964
-
 
 def content_box(image: Image.Image) -> tuple[int, int, int, int]:
     bbox = image.getchannel("A").getbbox()
@@ -39,24 +37,6 @@ def content_box(image: Image.Image) -> tuple[int, int, int, int]:
         return (0, 0, image.width, image.height)
     left, top, right, bottom = bbox
     return (left, top, right - left, bottom - top)
-
-
-def pose_animation(name: str, moves: dict[str, list[tuple[int, str, float]]]) -> dict:
-    """One timeline. `moves` maps a layer to (frame, property, value) triples."""
-    groups: dict[tuple[str, str], list] = {}
-    for layer, triples in moves.items():
-        for frame, prop, value in triples:
-            groups.setdefault((layer, prop), []).append({"frame": frame, "value": value})
-    return {
-        "name": name,
-        "fps": FPS,
-        "duration": DURATION,
-        "loop_type": "loop" if name == "idle" else "oneshot",
-        "keyframes": [
-            {"object": layer, "property": prop, "frames": sorted(f, key=lambda k: k["frame"])}
-            for (layer, prop), f in groups.items()
-        ],
-    }
 
 
 def find_mobile_root() -> Path:
@@ -106,12 +86,9 @@ def main() -> None:
 
     out = Path(args.out)
     (out / "layers").mkdir(parents=True, exist_ok=True)
+    sizes: dict[str, tuple[int, int]] = {}
 
-    # Rive draws an artboard's children front-to-back, so the frontmost layer is
-    # emitted first. Feeding the manifest's back-to-front order straight through
-    # stacks the rig inside out -- the head ends up hiding the face, which reads
-    # as a corrupted render rather than as an ordering mistake.
-    order = list(reversed(manifest["drawOrderBackToFront"]))
+    order = manifest["drawOrderBackToFront"]
     children: list[dict] = []
     images: list[dict] = []
     for name in order:
@@ -125,6 +102,7 @@ def main() -> None:
             Image.LANCZOS,
         )
         scaled.save(out / "layers" / f"{name}.png", optimize=True)
+        sizes[name] = scaled.size
 
         x, y, w, h = placement["refBox"]
         children.append({"type": "image_asset", "name": f"{name}_asset", "source": f"layers/{name}.png"})
@@ -138,43 +116,11 @@ def main() -> None:
             }
         )
 
-    placed = {image["name"] for image in images}
-    head = "head" if "head" in placed else order[-1]
-    base_y = next(i["y"] for i in images if i["name"] == head)
-
-    def bob(layer: str, amount: float) -> list[tuple[int, str, float]]:
-        start = next(i["y"] for i in images if i["name"] == layer)
-        return [(0, "y", start), (30, "y", start + amount), (59, "y", start)]
-
-    def tilt(layer: str, degrees: float) -> list[tuple[int, str, float]]:
-        return [(0, "rotation", 0.0), (30, "rotation", degrees), (59, "rotation", 0.0)]
-
-    # Placeholder motion: enough to prove each pose is reachable and distinct.
-    # Real character animation is authored on top of the bones, not here.
-    ears = [n for n in ("ear_left", "ear_right") if n in placed]
-    recipes = {
-        "idle": {head: bob(head, 4.0)},
-        "celebrate": {head: bob(head, -14.0), **{e: tilt(e, -10.0) for e in ears}},
-        "think": {head: bob(head, 3.0), **{e: tilt(e, 6.0) for e in ears[:1]}},
-        "sleep": {head: bob(head, 12.0)},
-        "victory": {head: bob(head, -18.0), **{e: tilt(e, 12.0) for e in ears}},
-        "happy": {head: bob(head, -8.0)},
-    }
-    animations = [pose_animation(p, recipes[p]) for p in POSES]
-
-    IDLE = 2  # 0 = entry, 1 = exit
-    states = [{"type": "entry"}, {"type": "exit"}] + [
-        {"type": "animation", "animation": p} for p in POSES
-    ]
-    transitions = [{"from": 0, "to": IDLE}]
-    for index, pose in enumerate(POSES[1:], start=1):
-        node = IDLE + index
-        transitions.append(
-            {"from": IDLE, "to": node, "conditions": [{"input": "state", "op": "==", "value": float(index)}]}
-        )
-        transitions.append(
-            {"from": node, "to": IDLE, "conditions": [{"input": "state", "op": "==", "value": 0.0}]}
-        )
+    present = {image["name"] for image in images}
+    positions = {image["name"]: (image["x"], image["y"]) for image in images}
+    # Rive draws children frontmost first; joints wrap the parts that rotate.
+    children_nodes, joints = CS.joint_children(list(reversed(images)), sizes)
+    animations = CS.build_animations(positions, present, joints)
 
     scene = {
         "scene_format_version": 1,
@@ -182,19 +128,9 @@ def main() -> None:
             "name": board["name"],
             "width": board_w,
             "height": board_h,
-            "children": children + images,
+            "children": children + children_nodes,
             "animations": animations,
-            "state_machines": [
-                {
-                    "name": "Companion",
-                    "inputs": [
-                        {"type": "number", "name": "state", "value": 0.0},
-                        {"type": "bool", "name": "reducedMotion", "value": False},
-                        {"type": "bool", "name": "interacting", "value": False},
-                    ],
-                    "layers": [{"states": states, "transitions": transitions}],
-                }
-            ],
+            "state_machines": [CS.build_state_machine()],
         },
     }
     (out / "scene.json").write_text(json.dumps(scene, indent=2) + "\n")
