@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_health/core/money/money.dart';
-import 'package:petrimonium_health/core/network/api_client.dart';
 import 'package:petrimonium_health/features/health/data/remote_health_repository.dart';
 import 'package:petrimonium_health/features/health/domain/health_models.dart';
 
@@ -33,7 +33,7 @@ void main() {
   setUp(() {
     bodies = [];
     repository = RemoteHealthRepository(ApiClient(
-      httpClient: MockClient((request) async {
+      client: MockClient((request) async {
         bodies.add(jsonDecode(request.body) as Map<String, dynamic>);
         return http.Response(jsonEncode(accountJson()), 201,
             headers: {'content-type': 'application/json'});
@@ -88,7 +88,19 @@ final class _NoSession implements TokenStore {
   Future<String?> readRefreshToken() async => null;
 
   @override
+  Future<void> saveAccessToken(String token) async {}
+
+  @override
+  Future<void> saveRefreshToken(String token) async {}
+
+  @override
   Future<void> saveTokens(String accessToken, String refreshToken) async {}
+
+  @override
+  Future<void> clearAccessToken() async {}
+
+  @override
+  Future<void> clearRefreshToken() async {}
 
   @override
   Future<void> clear() async {}

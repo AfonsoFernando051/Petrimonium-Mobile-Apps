@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import '../config/petrimonium_environment.dart';
+import 'token_store.dart';
 
 /// Every authenticated request goes through here, which is what makes
 /// centralized 401 handling possible: a 401 triggers exactly one refresh
@@ -20,14 +21,17 @@ import '../config/petrimonium_environment.dart';
 /// `onSessionExpired: () => AppEventBus.instance.emit(const SessionExpiredEvent())`.
 class ApiClient {
   final http.Client _client;
-  final FlutterSecureStorage _secureStorage;
+  final TokenStore _tokenStore;
 
   /// Without a bound, a stalled connection (dead wifi, backend hung) leaves the caller
   /// awaiting forever — every request gets a `TimeoutException` instead past this point.
   static const Duration _requestTimeout = Duration(seconds: 15);
 
   /// [client]/[secureStorage] are injectable so tests can substitute mocks —
-  /// production code relies on the defaults.
+  /// production code relies on the defaults. [tokenStore] replaces the whole
+  /// token storage strategy at once (a product with its own storage keys, or
+  /// a test fake); it takes precedence over [secureStorage] when both are
+  /// given.
   ///
   /// [baseUrl] and [refreshTokenEndpoint] default to
   /// [PetrimoniumEnvironment]; they are parameters only so tests can point a
@@ -35,11 +39,12 @@ class ApiClient {
   ApiClient({
     http.Client? client,
     FlutterSecureStorage? secureStorage,
+    TokenStore? tokenStore,
     String? baseUrl,
     String? refreshTokenEndpoint,
     void Function()? onSessionExpired,
   })  : _client = client ?? http.Client(),
-        _secureStorage = secureStorage ?? const FlutterSecureStorage(),
+        _tokenStore = tokenStore ?? SecureTokenStore(storage: secureStorage),
         _baseUrl = baseUrl ?? PetrimoniumEnvironment.baseUrl,
         _refreshTokenEndpoint =
             refreshTokenEndpoint ?? PetrimoniumEnvironment.refreshTokenEndpoint,
@@ -53,16 +58,11 @@ class ApiClient {
   /// unauthenticated calls has nothing to report).
   final void Function()? _onSessionExpired;
 
-  /// Key under which the bearer token is stored. Moved off
-  /// `shared_preferences` (which persists as unencrypted plaintext on disk)
-  /// onto the platform keystore/keychain via `flutter_secure_storage`, since
-  /// this value grants full account access.
-  static const String authTokenKey = 'auth_token';
+  /// Key under which the bearer token is stored by the default [TokenStore].
+  static const String authTokenKey = SecureTokenStore.defaultAccessKey;
 
-  /// Same storage/security reasoning as [authTokenKey] — a leaked refresh
-  /// token is a longer-lived credential than the access token it can mint,
-  /// so it gets the same keystore/keychain treatment, never SharedPreferences.
-  static const String refreshTokenKey = 'refresh_token';
+  /// Same storage/security reasoning as [authTokenKey].
+  static const String refreshTokenKey = SecureTokenStore.defaultRefreshKey;
 
   // Single-flight refresh lock: every 401 that arrives while a refresh is
   // already in progress awaits this same future instead of starting its
@@ -71,29 +71,35 @@ class ApiClient {
   // from under the others.
   Future<bool>? _refreshInFlight;
 
-  Future<String?> readToken() => _secureStorage.read(key: authTokenKey);
+  /// Direct access to the token store, for repositories that need to persist
+  /// or read a token pair from a call this client didn't make itself — e.g.
+  /// saving the pair returned by a login hit through [unauthenticatedPost].
+  TokenStore get tokenStore => _tokenStore;
 
-  Future<void> saveToken(String token) => _secureStorage.write(key: authTokenKey, value: token);
+  Future<String?> readToken() => _tokenStore.readAccessToken();
 
-  Future<void> clearToken() => _secureStorage.delete(key: authTokenKey);
+  Future<void> saveToken(String token) => _tokenStore.saveAccessToken(token);
 
-  Future<String?> readRefreshToken() => _secureStorage.read(key: refreshTokenKey);
+  Future<void> clearToken() => _tokenStore.clearAccessToken();
 
-  Future<void> saveRefreshToken(String token) => _secureStorage.write(key: refreshTokenKey, value: token);
+  Future<String?> readRefreshToken() => _tokenStore.readRefreshToken();
 
-  Future<void> clearRefreshToken() => _secureStorage.delete(key: refreshTokenKey);
+  Future<void> saveRefreshToken(String token) => _tokenStore.saveRefreshToken(token);
+
+  Future<void> clearRefreshToken() => _tokenStore.clearRefreshToken();
 
   /// Saves both halves of a login/refresh response's token pair together —
   /// the two are always issued and consumed as a pair, never independently.
-  Future<void> saveTokens({required String accessToken, required String refreshToken}) async {
-    await saveToken(accessToken);
-    await saveRefreshToken(refreshToken);
-  }
+  Future<void> saveTokens({required String accessToken, required String refreshToken}) =>
+      _tokenStore.saveTokens(accessToken, refreshToken);
 
-  Future<void> clearTokens() async {
-    await clearToken();
-    await clearRefreshToken();
-  }
+  Future<void> clearTokens() => _tokenStore.clear();
+
+  /// Whether a session looks usable, i.e. an access token is stored. Does
+  /// not validate the token against the backend — just answers "is there a
+  /// session worth trying", which is what a splash screen needs before it
+  /// can decide whether to route to login or straight into the app.
+  Future<bool> hasSession() async => (await readToken())?.isNotEmpty ?? false;
 
   Future<Map<String, String>> _getHeaders() async {
     final token = await readToken();
@@ -134,6 +140,20 @@ class ApiClient {
   Future<http.Response> delete(String endpoint) {
     return _sendWithAuth(
         (headers) => _client.delete(Uri.parse('$_baseUrl$endpoint'), headers: headers).timeout(_requestTimeout));
+  }
+
+  /// Sends a POST with no bearer token and no 401-refresh handling — for
+  /// endpoints that authenticate a session rather than use one, e.g. login,
+  /// register or a Google-token exchange. The caller reads the response
+  /// itself and persists the returned pair via [tokenStore].
+  Future<http.Response> unauthenticatedPost(String endpoint, dynamic body, {Duration? timeout}) {
+    return _client
+        .post(
+          Uri.parse('$_baseUrl$endpoint'),
+          headers: const {'Content-Type': 'application/json'},
+          body: jsonEncode(body),
+        )
+        .timeout(timeout ?? _requestTimeout);
   }
 
   /// Sends [send] with fresh auth headers; on a 401, attempts exactly one
