@@ -539,7 +539,6 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
     final stats = _pendingStats;
 
     return GlassCard(
-      isAnimated: true,
       backgroundColor: context.colors.surface.withValues(alpha: context.isDarkMode ? 0.4 : 0.94),
       borderRadius: AppRadii.xxl,
       borderColor: AppColors.neonCyan.withValues(alpha: 0.5),
@@ -678,7 +677,7 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
                       GameButton(
                         label: _editingIndex != null ? 'Salvar Alteração' : 'Adicionar Ativo',
                         icon: _editingIndex != null ? Icons.check : Icons.add,
-                        colors: const [AppColors.spaceBlue, AppColors.neonCyan],
+                        color: AppColors.neonCyan,
                         height: 52,
                         onPressed: _addAsset,
                       ),
@@ -741,7 +740,6 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
               icon: _assets.isNotEmpty ? Icons.arrow_forward : null,
               iconTrailing: true,
               isLoading: _isLoading,
-              pulse: _assets.isNotEmpty,
               height: 56,
               // Disabled while the current portfolio is unknown — see
               // [_holdingsLoadFailed]. A submit here replaces everything.

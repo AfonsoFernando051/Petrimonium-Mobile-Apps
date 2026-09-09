@@ -14,10 +14,10 @@ void main() {
       expect(find.text('inside'), findsOneWidget);
     });
 
-    testWidgets('wraps content in a BackdropFilter for the glass blur', (tester) async {
+    testWidgets('renders as a flat surface with no blur', (tester) async {
       await tester.pumpWidget(wrap(const GlassCard(child: Text('inside'))));
 
-      expect(find.byType(BackdropFilter), findsOneWidget);
+      expect(find.byType(BackdropFilter), findsNothing);
     });
 
     testWidgets('applies a margin wrapper only when margin is provided', (tester) async {

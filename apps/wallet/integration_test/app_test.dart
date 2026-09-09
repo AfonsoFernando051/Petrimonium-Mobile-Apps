@@ -277,9 +277,9 @@ void main() {
     // LoginScreen also has a GoogleSignInButton, which is GameButton-based
     // too — target LoginButton specifically so the tap isn't ambiguous.
     await tester.tap(find.byType(LoginButton));
-    // Not pumpAndSettle() anywhere in this test: both LoginScreen (its
-    // GameButton has pulse:true) and DashboardScreen (its CosmicBackground)
-    // contain indefinitely-repeating animations. Pump bounded steps instead:
+    // Not pumpAndSettle() anywhere in this test: both LoginScreen and
+    // DashboardScreen mount a CosmicBackground with an indefinitely
+    // repeating animation. Pump bounded steps instead:
     // one to resolve login()'s future and start the loading state, one for
     // pushAndRemoveUntil's page transition, then several zero-duration
     // pumps to drain the chained async calls MyApp's re-resolve and

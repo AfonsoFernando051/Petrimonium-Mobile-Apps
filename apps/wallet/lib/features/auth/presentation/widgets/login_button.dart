@@ -21,10 +21,8 @@ class LoginButton extends StatelessWidget {
       iconTrailing: true,
       onPressed: onPressed,
       isLoading: isLoading,
-      pulse: true,
-      // Leftover from the Academy's old blue/purple identity used to override
-      // this to [neonBlue, neonPurple] — GameButton's default `brandGradient`
-      // (emerald) is the Wallet brand color, same as SignupActionButton's,
+      // No explicit color: GameButton's default (`context.colors.primary`,
+      // emerald here) is the Wallet brand color, same as SignupActionButton's,
       // so Login and Cadastro (now on the same toggled screen) match.
     );
   }

@@ -20,9 +20,8 @@ class SignupActionButton extends StatelessWidget {
       label: Translator.translate(AppStrings.signupButton),
       onPressed: onPressed,
       isLoading: isLoading,
-      pulse: true,
       borderRadius: 16,
-      colors: const [AppColors.neonViolet, AppColors.neonPink],
+      color: AppColors.neonViolet,
     );
   }
 }

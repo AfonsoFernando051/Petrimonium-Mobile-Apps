@@ -183,8 +183,8 @@ void main() {
   }
 
   Future<void> pumpUntilLoaded(WidgetTester tester) async {
-    // DashboardScreen mounts a CosmicBackground and several GameButton
-    // pulse:true CTAs across its tabs — never pumpAndSettle. Several plain
+    // DashboardScreen mounts a CosmicBackground with an indefinitely
+    // repeating animation — never pumpAndSettle. Several plain
     // pumps flush the various controllers' async load() chains, plus a
     // longer flush for the persistent companion's greeting Timer (up to 9s).
     for (var i = 0; i < 10; i++) {

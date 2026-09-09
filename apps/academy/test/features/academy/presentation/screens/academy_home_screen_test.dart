@@ -100,10 +100,10 @@ void main() {
 
   Future<void> pumpUntilLoaded(WidgetTester tester) async {
     // Never pumpAndSettle — this screen has no CosmicBackground of its own
-    // (it's embedded in DashboardScreen's shared one), but its GameButton
-    // CTA uses pulse:true (a repeating AnimationController), so the same
-    // rule applies. Several plain pumps flush the controller's async load()
-    // chain (progress load -> catalog cache -> remote merge).
+    // (it's embedded in DashboardScreen's shared one), but the companion
+    // nudge/mascot Timer below is its own indefinitely-recurring source, so
+    // the same rule applies. Several plain pumps flush the controller's
+    // async load() chain (progress load -> catalog cache -> remote merge).
     for (var i = 0; i < 8; i++) {
       await tester.pump();
     }

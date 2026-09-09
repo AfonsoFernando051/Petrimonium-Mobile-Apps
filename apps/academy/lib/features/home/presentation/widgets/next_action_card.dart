@@ -166,8 +166,7 @@ class _ContinueLessonContent extends StatelessWidget {
           GameButton(
             label: Translator.translate(AppStrings.homeContinueLearningCta),
             icon: Icons.play_arrow_rounded,
-            colors: const [AppColors.neonViolet, AppColors.neonPink],
-            pulse: true,
+            color: AppColors.neonViolet,
             onPressed: onStartLesson,
           ),
         ],
@@ -208,8 +207,7 @@ class _CompleteMissionContent extends StatelessWidget {
           GameButton(
             label: Translator.translate(AppStrings.homeContinueLearningCta),
             icon: Icons.play_arrow_rounded,
-            colors: const [AppColors.neonViolet, AppColors.neonPink],
-            pulse: true,
+            color: AppColors.neonViolet,
             onPressed: onStartLesson,
           ),
         ],
@@ -251,7 +249,7 @@ class _AllLessonsCompleteContent extends StatelessWidget {
           GameButton(
             label: Translator.translate(AppStrings.homeExploreAcademyCta),
             icon: Icons.school_outlined,
-            colors: const [AppColors.neonViolet, AppColors.neonPink],
+            color: AppColors.neonViolet,
             onPressed: onOpenAcademy,
           ),
         ],

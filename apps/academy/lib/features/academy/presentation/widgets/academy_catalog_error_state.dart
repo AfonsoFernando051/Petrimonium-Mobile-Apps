@@ -55,7 +55,7 @@ class AcademyCatalogErrorState extends StatelessWidget {
                 GameButton(
                   label: Translator.translate(AppStrings.retryButtonLabel),
                   icon: Icons.refresh_rounded,
-                  colors: const [AppColors.neonBlue, AppColors.neonCyan],
+                  color: AppColors.neonBlue,
                   onPressed: onRetry,
                 ),
               ],

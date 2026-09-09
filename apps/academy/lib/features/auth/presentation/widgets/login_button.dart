@@ -22,8 +22,7 @@ class LoginButton extends StatelessWidget {
       iconTrailing: true,
       onPressed: onPressed,
       isLoading: isLoading,
-      pulse: true,
-      colors: const [AppColors.neonBlue, AppColors.neonPurple],
+      color: AppColors.neonBlue,
     );
   }
 }

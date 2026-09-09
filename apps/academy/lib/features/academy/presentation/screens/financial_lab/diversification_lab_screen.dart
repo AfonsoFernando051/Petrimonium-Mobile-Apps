@@ -245,7 +245,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
               AppStrings.labDiversificationConcentrationShockButton,
             ),
             height: 44,
-            colors: const [AppColors.neonPink, AppColors.neonViolet],
+            color: AppColors.neonPink,
             onPressed: () =>
                 setState(() => _activeShock = _Shock.concentration),
           ),
@@ -257,7 +257,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
               AppStrings.labDiversificationMarketShockButton,
             ),
             height: 44,
-            colors: const [AppColors.neonCyan, AppColors.neonBlue],
+            color: AppColors.neonCyan,
             onPressed: () => setState(() => _activeShock = _Shock.market),
           ),
         ),

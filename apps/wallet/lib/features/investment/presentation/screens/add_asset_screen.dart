@@ -397,7 +397,6 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                     label: Translator.translate(AppStrings.addAssetCta),
                     icon: Icons.add,
                     isLoading: _isLoading,
-                    pulse: _canSubmit,
                     onPressed: _canSubmit ? _handleAdd : null,
                   ),
                 ],

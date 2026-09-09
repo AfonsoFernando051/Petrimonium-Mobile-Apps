@@ -4,8 +4,8 @@ import '../../../../core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// Secondary CTA for "Sign in with Google" — same GameButton chrome as the
-/// primary email/password buttons, but a neutral gray gradient (instead of
-/// the brand neon) so it reads as an alternative, not the main action.
+/// primary email/password buttons, but a neutral gray fill (instead of the
+/// brand accent) so it reads as an alternative, not the main action.
 class GoogleSignInButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
@@ -23,7 +23,7 @@ class GoogleSignInButton extends StatelessWidget {
       icon: Icons.g_mobiledata,
       onPressed: onPressed,
       isLoading: isLoading,
-      colors: [Colors.blueGrey.shade600, Colors.blueGrey.shade800],
+      color: Colors.blueGrey.shade700,
     );
   }
 }
