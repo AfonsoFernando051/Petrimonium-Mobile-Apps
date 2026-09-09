@@ -96,6 +96,24 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Picker escondido (ver _kSpeciesPickerVisible), mas o pet ainda
+          // precisa aparecer para quem está a dar-lhe um nome — o mesmo
+          // retrato do mascote do ecrã de login, não a grelha interativa.
+          Center(
+            child: Image.asset(
+              PetAssets.imageFor(_selectedSpecie.name),
+              height: 96,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(
+                  Icons.pets,
+                  size: 48,
+                  color: context.colors.textSecondary,
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 20),
           if (_kSpeciesPickerVisible) ...[
             FieldLabel(Translator.translate(AppStrings.petSetupSpeciesLabel)),
             const SizedBox(height: 10),
