@@ -12,10 +12,16 @@ import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dar
 import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_name_field.dart';
 import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_species_selector.dart';
 
+const bool _kSpeciesPickerVisible = false;
+
 /// Onboarding's "Configure Your Pet" step — the pet introduces itself, and
 /// the player picks its species and name together in one screen right after
 /// the emotional Welcome opener. The financial goal (`FinancialGoalScreen`)
 /// and the Academy/Gamification narrative screens come after this one.
+///
+/// Species choice is hidden while Rive rigging cost keeps every app locked to
+/// one mascot (Academy = WOLF); flip [_kSpeciesPickerVisible] back on when
+/// that changes instead of rebuilding [PetSpeciesSelector].
 class PetConfigurationScreen extends StatefulWidget {
   const PetConfigurationScreen({super.key});
 
@@ -104,13 +110,16 @@ class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FieldLabel(Translator.translate(AppStrings.meetPetSpeciesPrompt)),
-            const SizedBox(height: 10),
-            PetSpeciesSelector(
-              selected: _selectedSpecie,
-              onSelected: (specie) => setState(() => _selectedSpecie = specie),
-            ),
-            const SizedBox(height: 20),
+            if (_kSpeciesPickerVisible) ...[
+              FieldLabel(Translator.translate(AppStrings.meetPetSpeciesPrompt)),
+              const SizedBox(height: 10),
+              PetSpeciesSelector(
+                selected: _selectedSpecie,
+                onSelected: (specie) =>
+                    setState(() => _selectedSpecie = specie),
+              ),
+              const SizedBox(height: 20),
+            ],
             FieldLabel(Translator.translate(AppStrings.meetPetNeedName)),
             const SizedBox(height: 8),
             PetNameField(
