@@ -349,6 +349,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  petrimonium_flutter_core:
+    dependency: "direct main"
+    description:
+      path: "../../packages/petrimonium_flutter_core"
+      relative: true
+    source: path
+    version: "0.1.0"
   platform:
     dependency: transitive
     description:

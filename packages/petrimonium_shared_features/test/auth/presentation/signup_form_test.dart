@@ -32,8 +32,8 @@ void main() {
           googleButtonLabel: 'Continuar com o Google',
           orDividerLabel: 'ou',
           sharedAccountNoticeText: 'Sua conta é a mesma nos apps Petrimonium.',
-          onRegister: onRegister ?? (_, __, ___) async {},
-          onLoginAfterRegister: onLoginAfterRegister ?? (_, __) async {},
+          onRegister: onRegister ?? (_, _, _) async {},
+          onLoginAfterRegister: onLoginAfterRegister ?? (_, _) async {},
           onGoogleSignup: onGoogleSignup ?? () async {},
           onSuccess: onSuccess ?? () {},
           errorMessageBuilder: errorMessageBuilder ?? (e) => e.toString(),
@@ -56,7 +56,7 @@ void main() {
 
     testWidgets('shows an error snack and does not call onRegister when fields are empty', (tester) async {
       var registerCalled = false;
-      await tester.pumpWidget(buildTestableWidget(onRegister: (_, __, ___) async {
+      await tester.pumpWidget(buildTestableWidget(onRegister: (_, _, _) async {
         registerCalled = true;
       }));
 
@@ -105,7 +105,7 @@ void main() {
 
     testWidgets('shows a snack built from errorMessageBuilder when onRegister throws', (tester) async {
       await tester.pumpWidget(buildTestableWidget(
-        onRegister: (_, __, ___) async => throw Exception('email in use'),
+        onRegister: (_, _, _) async => throw Exception('email in use'),
         errorMessageBuilder: (_) => 'e-mail já cadastrado',
       ));
 

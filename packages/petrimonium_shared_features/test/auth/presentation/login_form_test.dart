@@ -30,7 +30,7 @@ void main() {
           forgotPasswordLabel: 'Esqueceu a senha?',
           onForgotPassword: onForgotPassword ?? () {},
           sharedAccountNoticeText: 'Sua conta é a mesma nos apps Petrimonium.',
-          onLogin: onLogin ?? (_, __) async {},
+          onLogin: onLogin ?? (_, _) async {},
           onGoogleLogin: onGoogleLogin ?? () async {},
           onSuccess: onSuccess ?? () {},
           errorMessageBuilder: errorMessageBuilder ?? (e) => e.toString(),
@@ -52,7 +52,7 @@ void main() {
 
     testWidgets('shows an error snack and does not call onLogin when fields are empty', (tester) async {
       var loginCalled = false;
-      await tester.pumpWidget(buildTestableWidget(onLogin: (_, __) async {
+      await tester.pumpWidget(buildTestableWidget(onLogin: (_, _) async {
         loginCalled = true;
       }));
 
@@ -91,7 +91,7 @@ void main() {
 
     testWidgets('shows a snack built from errorMessageBuilder when onLogin throws', (tester) async {
       await tester.pumpWidget(buildTestableWidget(
-        onLogin: (_, __) async => throw Exception('bad credentials'),
+        onLogin: (_, _) async => throw Exception('bad credentials'),
         errorMessageBuilder: (_) => 'credenciais inválidas',
       ));
 
