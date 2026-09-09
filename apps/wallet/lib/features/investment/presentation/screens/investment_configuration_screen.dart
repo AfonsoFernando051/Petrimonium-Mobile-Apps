@@ -7,7 +7,6 @@ import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/financial_input_validators.dart';
 import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
-import 'package:petrimonium_wallet/core/utils/game_snack.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
-import 'package:petrimonium_academy/core/utils/game_snack.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/academy_intro_screen.dart';

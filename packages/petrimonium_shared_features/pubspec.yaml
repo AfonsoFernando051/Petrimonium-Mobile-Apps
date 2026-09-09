@@ -12,6 +12,8 @@ dependencies:
   http: ^1.2.1
   petrimonium_flutter_core:
     path: ../petrimonium_flutter_core
+  petrimonium_ui:
+    path: ../petrimonium_ui
 
 dev_dependencies:
   flutter_test:

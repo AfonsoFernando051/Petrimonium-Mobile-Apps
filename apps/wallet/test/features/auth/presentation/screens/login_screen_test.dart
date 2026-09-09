@@ -11,7 +11,6 @@ import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboard
 import 'package:petrimonium_wallet/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/features/auth/presentation/widgets/login_background.dart';
-import 'package:petrimonium_wallet/features/auth/presentation/widgets/login_button.dart';
 import 'package:petrimonium_wallet/features/auth/presentation/widgets/login_card.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -55,17 +54,15 @@ void main() {
       expect(find.byType(LoginCard), findsOneWidget);
       expect(find.byType(LoginBackground), findsOneWidget);
       expect(find.byType(CustomTextField), findsNWidgets(2));
-      expect(find.byType(LoginButton), findsOneWidget);
+      // Two GameButtons render here: the primary CTA and Google sign-in.
+      expect(find.byType(GameButton), findsNWidgets(2));
 
       expect(find.text('PETRIMONIUM WALLET'), findsOneWidget);
       expect(find.text('E-mail ou Usuário'), findsOneWidget);
       expect(find.text('Senha'), findsOneWidget);
       // 'Entrar' aparece duas vezes em pt: a aba do alternador e o CTA do
-      // LoginButton. Aqui interessa o CTA.
-      expect(
-        find.descendant(of: find.byType(LoginButton), matching: find.text('Entrar')),
-        findsOneWidget,
-      );
+      // botão primário. Aqui interessa o CTA.
+      expect(find.widgetWithText(GameButton, 'Entrar'), findsOneWidget);
     });
 
     testWidgets('updates UI text when Translator language changes', (WidgetTester tester) async {
@@ -75,11 +72,8 @@ void main() {
       expect(find.text('Email or Username'), findsOneWidget);
       expect(find.text('Password'), findsOneWidget);
       // 'Login' now appears twice in English: the Login/Create Account toggle tab
-      // and the LoginButton's own CTA label — assert the CTA specifically.
-      expect(
-        find.descendant(of: find.byType(LoginButton), matching: find.text('Login')),
-        findsOneWidget,
-      );
+      // and the primary CTA's own label — assert the CTA specifically.
+      expect(find.widgetWithText(GameButton, 'Login'), findsOneWidget);
 
       expect(find.text('E-mail ou Usuário'), findsNothing);
     });
@@ -114,7 +108,7 @@ void main() {
       expect(find.text('test@example.com'), findsOneWidget);
       expect(find.text('password123'), findsOneWidget);
 
-      final loginBtn = find.byType(LoginButton);
+      final loginBtn = find.widgetWithText(GameButton, 'Entrar');
       await tester.tap(loginBtn);
       await tester.pump(); // Start loading
       await tester.pump(); // Finish loading

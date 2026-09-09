@@ -55,10 +55,11 @@ by good intentions:
 3. **No circular dependencies.** Packages may depend on packages below them
    only.
 
-`petrimonium_shared_features` does not currently declare a dependency on
-`petrimonium_ui`, because nothing in it imports UI yet. That edge gets added
-when shared UI actually lands, so the declared graph keeps describing what is
-real rather than what is planned.
+`petrimonium_shared_features` declares a dependency on `petrimonium_ui`: its
+shared `LoginForm`/`SignupForm` (see "What is deliberately still duplicated"
+below) compose `petrimonium_ui` widgets (`CustomTextField`, `GameButton`,
+`GameSnack`, `SharedAccountNotice`, `OrDivider`, `GoogleSignInButton`,
+`ForgotPasswordButton`), so the declared graph keeps describing what is real.
 
 ## What belongs in each package
 
@@ -106,9 +107,9 @@ must not quietly become their source of truth.
 ### `petrimonium_shared_features`
 
 Features that genuinely belong to the ecosystem rather than to one product.
-Today: gamification. Global XP and global level are one number per account,
-produced by one backend ledger and read by every product from the same route,
-so a bug in the level maths is a bug in all three products at once.
+Gamification: global XP and global level are one number per account, produced
+by one backend ledger and read by every product from the same route, so a bug
+in the level maths is a bug in all three products at once.
 
 Note the split used for the level tier, because it is the pattern to copy:
 the **boundaries** (`level < 5` is a beginner) are ecosystem facts and live in
@@ -116,11 +117,12 @@ the package as `LevelTier`; the **label** is product copy and stays in each
 app's `LevelTitle`, resolved through its own catalog. Shared structure,
 product-supplied copy.
 
+Auth UI: `LoginForm`/`SignupForm` (`lib/src/auth/presentation/`) — see below.
+
 ## What is deliberately still duplicated
 
 Academy and Wallet still hold byte-identical copies of the pet (22 files),
-settings (11), mentor (8) and auth (8) blocks. This is known, and it is not an
-oversight.
+settings (11) and mentor (8) blocks. This is known, and it is not an oversight.
 
 All of them are bound to `Translator` and `AppStrings`, and **the two catalogs
 have already diverged by roughly 650 lines**. Health is a third system
@@ -129,18 +131,32 @@ first deciding which product's wording wins for the shared strings — a
 decision that silently changes one product's copy, which a refactor is not
 allowed to do.
 
-So the prerequisite for the next extraction phase is a **localization
-decision, not a refactor**. The recommended order once it is made:
+So the prerequisite for sharing *that* UI is a **localization decision, not a
+refactor** — converge on one shared string mechanism, or agree that shared
+widgets keep taking copy as parameters (see below).
+
+Auth was the exception, and is done: verified byte-for-byte identical (or a
+single cosmetic line apart) before touching it, so no localization decision
+was needed — copy already arrived at each call site via `Translator.translate`
+and only had to become a widget parameter instead of an internal call. The six
+leaf widgets (`OrDivider`, `GoogleSignInButton`, `ForgotPasswordButton`,
+`GameSnack`, plus the already-shared `CustomTextField`/`GameButton`) moved to
+`petrimonium_ui`; `LoginForm`/`SignupForm` moved to
+`petrimonium_shared_features`, since they own actual state and behavior
+(validation, submit, loading) rather than being presentation-only. Each app's
+`LoginCard` now supplies copy, an accent color and the callbacks
+(`DI.authRepository.login/register/loginWithGoogle`, navigation to `MyApp`,
+its own `friendlyErrorMessage`) — no branch on which product is running.
+
+The recommended order for what is left, once the localization decision above
+is made:
 
 1. Converge on one shared string mechanism (or agree that shared widgets keep
-   taking copy as parameters, which is what the ten already-extracted widgets
-   do and it has worked well).
-2. Auth UI — the layout, fields, validation, loading and error presentation
-   are already structurally identical; only copy, accent and post-login
-   navigation differ. Those are callbacks and configuration, not branches.
-3. Settings — as a shell plus genuinely common sections, with each app
+   taking copy as parameters, which is what the auth extraction and the ten
+   widgets before it do and it has worked well).
+2. Settings — as a shell plus genuinely common sections, with each app
    injecting its product-specific sections.
-4. Mentor and Pet presentation — presentation only. Mentor intelligence rules
+3. Mentor and Pet presentation — presentation only. Mentor intelligence rules
    stay in the backend, and Rive must remain a replaceable presentation
    technology, not an interface baked into shared widgets.
 

@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_strings.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
-import '../../../../core/utils/translator.dart';
-import '../../../../core/utils/game_snack.dart';
-import '../../../../core/utils/friendly_error_message.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import '../../../../core/di/dependency_injection.dart';
-import '../../../../main.dart';
-import 'signup_action_button.dart';
-import 'google_signin_button.dart';
-import 'or_divider.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// Mirrors the backend's `RegisterRequest` username size — see
 /// `Petrimonium-Backend/.../presentation/auth/dto/RegisterRequest.java`.
@@ -17,8 +8,54 @@ const int _minNameLength = 3;
 
 final RegExp _emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
+/// The shared signup form — see [LoginForm]'s doc for why this is safe to
+/// share: Academy and Wallet's versions differed by a single cosmetic
+/// `SizedBox` height before this extraction, with every validation rule,
+/// message and the register→auto-login flow already identical.
+///
+/// [onRegister] creates the account; since the register endpoint doesn't
+/// return an access token, [onLoginAfterRegister] is called right after it
+/// succeeds to establish the session — mirroring the two products' identical
+/// `register` then `login` call chain.
 class SignupForm extends StatefulWidget {
-  const SignupForm({super.key});
+  const SignupForm({
+    super.key,
+    required this.nameHint,
+    required this.emailHint,
+    required this.passwordHint,
+    required this.confirmPasswordHint,
+    required this.signupButtonLabel,
+    this.signupButtonColor,
+    required this.googleButtonLabel,
+    required this.orDividerLabel,
+    required this.sharedAccountNoticeText,
+    required this.onRegister,
+    required this.onLoginAfterRegister,
+    required this.onGoogleSignup,
+    required this.onSuccess,
+    required this.errorMessageBuilder,
+  });
+
+  final String nameHint;
+  final String emailHint;
+  final String passwordHint;
+  final String confirmPasswordHint;
+  final String signupButtonLabel;
+
+  /// `null` keeps [GameButton]'s default fill (`context.colors.primary`).
+  final Color? signupButtonColor;
+  final String googleButtonLabel;
+  final String orDividerLabel;
+  final String sharedAccountNoticeText;
+
+  final Future<void> Function(String name, String email, String password) onRegister;
+  final Future<void> Function(String email, String password) onLoginAfterRegister;
+  final Future<void> Function() onGoogleSignup;
+
+  /// Called once the corresponding call chain above completes without throwing.
+  final VoidCallback onSuccess;
+
+  final String Function(Object error) errorMessageBuilder;
 
   @override
   State<SignupForm> createState() => _SignupFormState();
@@ -78,6 +115,11 @@ class _SignupFormState extends State<SignupForm> {
     super.dispose();
   }
 
+  void _showError(Object error) {
+    if (!mounted) return;
+    GameSnack.show(context, 'Cadastro falhou: ${widget.errorMessageBuilder(error)}', isError: true);
+  }
+
   Future<void> _handleRegister() async {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
@@ -103,28 +145,12 @@ class _SignupFormState extends State<SignupForm> {
 
     setState(() => _isLoading = true);
     try {
-      await DI.authRepository.register(name, email, password);
-      
-      // Auto-login since register doesn't return an accessToken
-      await DI.authRepository.login(email, password);
-
-      // Rebuilds fresh from `MyApp._getStartRoute()` — the single source of
-      // truth for where a user belongs (meet pet / goal / tutorial /
-      // portfolio choice / home) — instead of a separate, narrower redirect.
-      if (mounted) {
-        await Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const MyApp()),
-          (route) => false,
-        );
-      }
+      await widget.onRegister(name, email, password);
+      // Auto-login since register doesn't return an accessToken.
+      await widget.onLoginAfterRegister(email, password);
+      if (mounted) widget.onSuccess();
     } catch (e) {
-      if (mounted) {
-        GameSnack.show(
-          context,
-          'Cadastro falhou: ${friendlyErrorMessage(e)}',
-          isError: true,
-        );
-      }
+      _showError(e);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -133,22 +159,10 @@ class _SignupFormState extends State<SignupForm> {
   Future<void> _handleGoogleSignup() async {
     setState(() => _isGoogleLoading = true);
     try {
-      await DI.authRepository.loginWithGoogle();
-
-      if (mounted) {
-        await Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const MyApp()),
-          (route) => false,
-        );
-      }
+      await widget.onGoogleSignup();
+      if (mounted) widget.onSuccess();
     } catch (e) {
-      if (mounted) {
-        GameSnack.show(
-          context,
-          'Cadastro falhou: ${friendlyErrorMessage(e)}',
-          isError: true,
-        );
-      }
+      _showError(e);
     } finally {
       if (mounted) setState(() => _isGoogleLoading = false);
     }
@@ -160,21 +174,21 @@ class _SignupFormState extends State<SignupForm> {
       mainAxisSize: MainAxisSize.min,
       children: [
         CustomTextField(
-          hint: Translator.translate(AppStrings.nameHint),
+          hint: widget.nameHint,
           icon: Icons.person,
           controller: _nameController,
           errorText: _nameError,
         ),
         const SizedBox(height: 14),
         CustomTextField(
-          hint: Translator.translate(AppStrings.emailOrUserHint),
+          hint: widget.emailHint,
           icon: Icons.email,
           controller: _emailController,
           errorText: _emailError,
         ),
         const SizedBox(height: 14),
         CustomTextField(
-          hint: Translator.translate(AppStrings.passwordHint),
+          hint: widget.passwordHint,
           icon: Icons.lock,
           obscure: true,
           controller: _passwordController,
@@ -185,26 +199,30 @@ class _SignupFormState extends State<SignupForm> {
         ],
         const SizedBox(height: 14),
         CustomTextField(
-          hint: Translator.translate(AppStrings.confirmPasswordHint),
+          hint: widget.confirmPasswordHint,
           icon: Icons.lock_outline,
           obscure: true,
           controller: _confirmPasswordController,
           errorText: _confirmPasswordError,
         ),
         const SizedBox(height: 20),
-        SignupActionButton(
+        GameButton(
+          label: widget.signupButtonLabel,
+          color: widget.signupButtonColor,
+          borderRadius: 16,
           onPressed: _handleRegister,
           isLoading: _isLoading,
         ),
         const SizedBox(height: 16),
-        const OrDivider(),
+        OrDivider(label: widget.orDividerLabel),
         const SizedBox(height: 16),
         GoogleSignInButton(
+          label: widget.googleButtonLabel,
           onPressed: _handleGoogleSignup,
           isLoading: _isGoogleLoading,
         ),
         const SizedBox(height: 24),
-        SharedAccountNotice(text: Translator.translate(AppStrings.signupSharedAccountNotice)),
+        SharedAccountNotice(text: widget.sharedAccountNoticeText),
       ],
     );
   }

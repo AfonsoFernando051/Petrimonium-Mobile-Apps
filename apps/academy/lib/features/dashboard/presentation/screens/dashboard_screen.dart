@@ -6,7 +6,6 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import '../../../../core/utils/translator.dart';
-import '../../../../core/utils/game_snack.dart';
 import '../../../../core/widgets/cosmic_background.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/events/app_event.dart';

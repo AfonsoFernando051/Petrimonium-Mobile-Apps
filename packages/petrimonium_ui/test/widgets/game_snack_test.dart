@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/core/theme/app_theme.dart';
-import 'package:petrimonium_academy/core/utils/game_snack.dart';
+import '../test_theme.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   Widget buildTestable(void Function(BuildContext context) onPressed) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
         body: Builder(
           builder: (context) {

@@ -8,7 +8,6 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import '../../../../core/utils/translator.dart';
 import '../../../../core/widgets/cosmic_background.dart';
 import '../../../../core/di/dependency_injection.dart';
-import '../../../../core/utils/game_snack.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../home/presentation/screens/overview_screen.dart';
 import '../../../pet/presentation/mascot/controllers/mascot_controller.dart';

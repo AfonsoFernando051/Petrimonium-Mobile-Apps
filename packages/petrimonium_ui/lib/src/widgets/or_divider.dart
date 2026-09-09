@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_strings.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
-import '../../../../core/utils/translator.dart';
+import '../tokens/app_color_tokens.dart';
 
-/// A labeled horizontal rule ("— or —") separating the primary email/password
-/// action from the alternative Google sign-in below it.
+/// A labeled horizontal rule ("— or —") separating a primary action from an
+/// alternative below it. [label] is the divider word/phrase, supplied by the
+/// caller so this widget carries no string catalog of its own.
 class OrDivider extends StatelessWidget {
-  const OrDivider({super.key});
+  const OrDivider({super.key, required this.label});
+
+  final String label;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class OrDivider extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
-            Translator.translate(AppStrings.orDivider),
+            label,
             style: TextStyle(color: tokens.textTertiary, fontSize: 12),
           ),
         ),

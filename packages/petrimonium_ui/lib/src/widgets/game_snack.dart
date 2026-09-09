@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
+import '../tokens/app_color_tokens.dart';
 
-/// Utility for themed, branded snack bars.
-/// Replaces all raw ScaffoldMessenger.showSnackBar calls.
+/// Themed, branded snack bars — replaces raw `ScaffoldMessenger.showSnackBar`
+/// calls so every product's toasts read as the same family.
 class GameSnack {
   GameSnack._();
 
