@@ -10,11 +10,17 @@ import 'package:petrimonium_wallet/features/onboarding/presentation/screens/ment
 import 'package:petrimonium_wallet/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
 
+const bool _kSpeciesPickerVisible = false;
+
 /// Step 1 of 3 — only reached when [StartRouteResolver] finds no Pet on the
 /// account yet (a Wallet-first signup with no prior Academy account). An
 /// account that already has a Pet (e.g. from the Academy) skips straight to
 /// [MentorWelcomeScreen] instead, since its species/progress already carry
 /// over — see [AppStrings.petSetupFooterNote].
+///
+/// Species choice is hidden while Rive rigging cost keeps every app locked to
+/// one mascot (Wallet = DOG); flip [_kSpeciesPickerVisible] back on when that
+/// changes instead of rebuilding [_SpeciesGrid].
 class PetSetupScreen extends StatefulWidget {
   const PetSetupScreen({super.key});
 
@@ -45,7 +51,8 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
 
   bool get _canSubmit => _nameController.text.trim().isNotEmpty && !_isLoading;
 
-  void _selectSpecie(PetSpecieEnum specie) => setState(() => _selectedSpecie = specie);
+  void _selectSpecie(PetSpecieEnum specie) =>
+      setState(() => _selectedSpecie = specie);
 
   Future<void> _handleSubmit() async {
     final name = _nameController.text.trim();
@@ -57,7 +64,9 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
       await DI.mascotRepository.saveName(name);
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const MentorWelcomeScreen(totalSteps: 3)),
+          MaterialPageRoute(
+            builder: (_) => const MentorWelcomeScreen(totalSteps: 3),
+          ),
         );
       }
     } catch (e) {
@@ -87,10 +96,30 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FieldLabel(Translator.translate(AppStrings.petSetupSpeciesLabel)),
-          const SizedBox(height: 10),
-          _SpeciesGrid(selected: _selectedSpecie, onSelect: _selectSpecie),
+          // Picker escondido (ver _kSpeciesPickerVisible), mas o pet ainda
+          // precisa aparecer para quem está a dar-lhe um nome — o mesmo
+          // retrato do mascote do ecrã de login, não a grelha interativa.
+          Center(
+            child: Image.asset(
+              PetAssets.imageFor(_selectedSpecie.name),
+              height: 96,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(
+                  Icons.pets,
+                  size: 48,
+                  color: context.colors.textSecondary,
+                );
+              },
+            ),
+          ),
           const SizedBox(height: 20),
+          if (_kSpeciesPickerVisible) ...[
+            FieldLabel(Translator.translate(AppStrings.petSetupSpeciesLabel)),
+            const SizedBox(height: 10),
+            _SpeciesGrid(selected: _selectedSpecie, onSelect: _selectSpecie),
+            const SizedBox(height: 20),
+          ],
           FieldLabel(Translator.translate(AppStrings.petSetupNameLabel)),
           const SizedBox(height: 8),
           _PetNameField(controller: _nameController),
@@ -101,11 +130,17 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
             decoration: BoxDecoration(
               color: context.colors.textPrimary.withValues(alpha: 0.03),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: context.colors.textPrimary.withValues(alpha: 0.12)),
+              border: Border.all(
+                color: context.colors.textPrimary.withValues(alpha: 0.12),
+              ),
             ),
             child: Text(
               Translator.translate(AppStrings.petSetupFooterNote),
-              style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.45),
+              style: TextStyle(
+                color: context.colors.textSecondary,
+                fontSize: 12,
+                height: 1.45,
+              ),
             ),
           ),
         ],
@@ -142,7 +177,11 @@ class _SpeciesGrid extends StatelessWidget {
 }
 
 class _SpeciesCard extends StatelessWidget {
-  const _SpeciesCard({required this.specie, required this.selected, required this.onTap});
+  const _SpeciesCard({
+    required this.specie,
+    required this.selected,
+    required this.onTap,
+  });
 
   final PetSpecieEnum specie;
   final bool selected;
@@ -160,9 +199,14 @@ class _SpeciesCard extends StatelessWidget {
           // Não-selecionado é totalmente transparente (o artboard usa
           // `transparent` no contorno e no fundo), para a grelha não virar
           // uma grade de caixas.
-          color: selected ? tokens.textPrimary.withValues(alpha: 0.06) : Colors.transparent,
+          color: selected
+              ? tokens.textPrimary.withValues(alpha: 0.06)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: selected ? tokens.primary : Colors.transparent, width: 1.5),
+          border: Border.all(
+            color: selected ? tokens.primary : Colors.transparent,
+            width: 1.5,
+          ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -217,7 +261,10 @@ class _PetNameField extends StatelessWidget {
         decoration: InputDecoration(
           counterText: '',
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 14,
+          ),
           hintText: Translator.translate(AppStrings.petSetupNameHint),
           hintStyle: TextStyle(color: tokens.textTertiary, fontSize: 14),
         ),

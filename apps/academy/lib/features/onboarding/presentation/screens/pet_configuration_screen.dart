@@ -8,14 +8,21 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/academy_intro_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
 import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_name_field.dart';
 import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_species_selector.dart';
+
+const bool _kSpeciesPickerVisible = false;
 
 /// Onboarding's "Configure Your Pet" step — the pet introduces itself, and
 /// the player picks its species and name together in one screen right after
 /// the emotional Welcome opener. The financial goal (`FinancialGoalScreen`)
 /// and the Academy/Gamification narrative screens come after this one.
+///
+/// Species choice is hidden while Rive rigging cost keeps every app locked to
+/// one mascot (Academy = WOLF); flip [_kSpeciesPickerVisible] back on when
+/// that changes instead of rebuilding [PetSpeciesSelector].
 class PetConfigurationScreen extends StatefulWidget {
   const PetConfigurationScreen({super.key});
 
@@ -104,13 +111,34 @@ class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FieldLabel(Translator.translate(AppStrings.meetPetSpeciesPrompt)),
-            const SizedBox(height: 10),
-            PetSpeciesSelector(
-              selected: _selectedSpecie,
-              onSelected: (specie) => setState(() => _selectedSpecie = specie),
+            // Picker escondido (ver _kSpeciesPickerVisible), mas o pet ainda
+            // precisa aparecer para quem está a dar-lhe um nome — o mesmo
+            // retrato do mascote do ecrã de login, não o seletor interativo.
+            Center(
+              child: Image.asset(
+                PetAssets.imageFor(_selectedSpecie.name),
+                height: 96,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(
+                    Icons.pets,
+                    size: 48,
+                    color: context.colors.textSecondary,
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 20),
+            if (_kSpeciesPickerVisible) ...[
+              FieldLabel(Translator.translate(AppStrings.meetPetSpeciesPrompt)),
+              const SizedBox(height: 10),
+              PetSpeciesSelector(
+                selected: _selectedSpecie,
+                onSelected: (specie) =>
+                    setState(() => _selectedSpecie = specie),
+              ),
+              const SizedBox(height: 20),
+            ],
             FieldLabel(Translator.translate(AppStrings.meetPetNeedName)),
             const SizedBox(height: 8),
             PetNameField(
