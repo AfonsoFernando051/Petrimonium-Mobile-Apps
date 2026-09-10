@@ -10,6 +10,10 @@ class InvestmentRepository {
     return remoteDataSource.configureInvestments(investments, confirmReplace: confirmReplace);
   }
 
+  Future<void> addInvestment(AssetRegistrationModel asset) async {
+    return remoteDataSource.addInvestment(asset);
+  }
+
   Future<Map<String, dynamic>?> fetchQuote(String ticker) async {
     return remoteDataSource.fetchQuote(ticker);
   }

@@ -56,6 +56,30 @@ void main() {
     });
   });
 
+  group('addInvestment', () {
+    final investment = AssetRegistrationModel(
+      name: 'PETR4',
+      quantity: 10,
+      purchasePrice: 20.0,
+      purchaseDate: '2024-01-01',
+      type: InvestmentTypeEnum.STOCKS,
+    );
+
+    test('posts the single asset and completes on 201', () async {
+      when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 201));
+
+      await dataSource.addInvestment(investment);
+
+      verify(() => mockApiClient.post('/api/investments', investment.toJson())).called(1);
+    });
+
+    test('throws an Exception on a non-201 response', () async {
+      when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 400));
+
+      await expectLater(() => dataSource.addInvestment(investment), throwsA(isA<Exception>()));
+    });
+  });
+
   group('fetchQuote', () {
     test('returns the decoded JSON on 200', () async {
       when(

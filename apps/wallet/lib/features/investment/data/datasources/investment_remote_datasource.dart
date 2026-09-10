@@ -24,6 +24,17 @@ class InvestmentRemoteDataSource {
     }
   }
 
+  /// Appends [asset] as a new lot — never touches any other lot. Unlike
+  /// [configureInvestments], the response body is ignored: callers refetch the
+  /// priced view via `GET /api/investments` after a successful add.
+  Future<void> addInvestment(AssetRegistrationModel asset) async {
+    final response = await apiClient.post('/api/investments', asset.toJson());
+
+    if (response.statusCode != 201) {
+      throw Exception('Failed to add investment');
+    }
+  }
+
   Future<Map<String, dynamic>?> fetchQuote(String ticker) async {
     try {
       final response = await apiClient.get('/api/investments/quote/$ticker');

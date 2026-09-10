@@ -13,6 +13,15 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(<AssetRegistrationModel>[]);
+    registerFallbackValue(
+      AssetRegistrationModel(
+        name: 'FALLBACK',
+        quantity: 1,
+        purchasePrice: 1,
+        purchaseDate: '2024-01-01',
+        type: InvestmentTypeEnum.STOCKS,
+      ),
+    );
   });
 
   setUp(() {
@@ -45,6 +54,29 @@ void main() {
         () => mockDataSource.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace')),
       ).thenThrow(Exception('save failed'));
       expect(() => repository.configureInvestments([]), throwsException);
+    });
+  });
+
+  group('addInvestment', () {
+    final asset = AssetRegistrationModel(
+      name: 'PETR4',
+      quantity: 10,
+      purchasePrice: 20,
+      purchaseDate: '2024-01-01',
+      type: InvestmentTypeEnum.STOCKS,
+    );
+
+    test('forwards the asset to the data source unchanged', () async {
+      when(() => mockDataSource.addInvestment(any())).thenAnswer((_) async {});
+
+      await repository.addInvestment(asset);
+
+      verify(() => mockDataSource.addInvestment(asset)).called(1);
+    });
+
+    test('propagates a failure', () async {
+      when(() => mockDataSource.addInvestment(any())).thenThrow(Exception('save failed'));
+      expect(() => repository.addInvestment(asset), throwsException);
     });
   });
 
