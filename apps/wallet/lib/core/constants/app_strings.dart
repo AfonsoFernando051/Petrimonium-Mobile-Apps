@@ -95,7 +95,6 @@ class AppStrings {
   static const String addAssetFailedSnack = 'addAssetFailedSnack';
   static const String addAssetSelectTypeError = 'addAssetSelectTypeError';
   static const String addAssetSelectDateError = 'addAssetSelectDateError';
-  static const String addAssetLoadFailedBanner = 'addAssetLoadFailedBanner';
 
   // Proventos tab + notification popover.
   static const String proventosTitle = 'proventosTitle';

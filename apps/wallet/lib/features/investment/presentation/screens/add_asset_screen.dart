@@ -21,10 +21,11 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/p
 /// first-time setup; this one is the plain, single-asset, "Mentor mais
 /// discreto" Wallet screen the design calls for.
 ///
-/// The backend only exposes a whole-portfolio "configure" endpoint (no
-/// single-asset append), so submitting here still re-sends every existing
-/// holding plus the new one with `confirmReplace: true` — same mechanism as
-/// `InvestmentConfigurationScreen`, just hidden behind a one-asset form.
+/// Submits via `POST /api/investments` — a single-lot append that never
+/// touches any other holding (see DEM-30). The portfolio total shown below
+/// the form comes from `widget.controller.summary`, already loaded by
+/// whichever screen opened this one, so no extra fetch is needed just to
+/// display it.
 class AddAssetScreen extends StatefulWidget {
   const AddAssetScreen({super.key, required this.controller});
 
@@ -44,49 +45,15 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   DateTime? _selectedDate;
   bool _isLoading = false;
 
-  /// Every existing holding, expanded back into per-lot registration models
-  /// — resubmitted alongside the new asset since `configureInvestments`
-  /// replaces the whole portfolio. `null` while still loading.
-  List<AssetRegistrationModel>? _existingAssets;
-  double _currentTotalValue = 0;
-  bool _holdingsLoadFailed = false;
-
   @override
   void initState() {
     super.initState();
     _nameController.addListener(_onFieldChanged);
     _quantityController.addListener(_onFieldChanged);
     _priceController.addListener(_onFieldChanged);
-    _loadExistingHoldings();
   }
 
   void _onFieldChanged() => setState(() {});
-
-  Future<void> _loadExistingHoldings() async {
-    try {
-      final holdings = await DI.portfolioRepository.fetchHoldings();
-      final existing = holdings
-          .expand((holding) => holding.lots)
-          .map(
-            (lot) => AssetRegistrationModel(
-              name: lot.ticker,
-              quantity: lot.quantity,
-              purchasePrice: lot.purchasePrice,
-              purchaseDate: _formatDate(lot.purchaseDate),
-              type: lot.type,
-            ),
-          )
-          .toList();
-      if (!mounted) return;
-      setState(() {
-        _existingAssets = existing;
-        _currentTotalValue = holdings.fold<double>(0, (sum, h) => sum + h.currentValue);
-        _holdingsLoadFailed = false;
-      });
-    } catch (_) {
-      if (mounted) setState(() => _holdingsLoadFailed = true);
-    }
-  }
 
   @override
   void dispose() {
@@ -108,8 +75,6 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
 
   bool get _canSubmit =>
       !_isLoading &&
-      !_holdingsLoadFailed &&
-      _existingAssets != null &&
       _nameController.text.trim().isNotEmpty &&
       FinancialInputValidators.parsePositiveDecimal(_quantityController.text) != null &&
       FinancialInputValidators.parsePositiveDecimal(_priceController.text) != null &&
@@ -171,8 +136,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
 
     final quantity = FinancialInputValidators.parsePositiveDecimal(_quantityController.text);
     final price = FinancialInputValidators.parsePositiveDecimal(_priceController.text);
-    final existing = _existingAssets;
-    if (quantity == null || price == null || existing == null) return;
+    if (quantity == null || price == null) return;
 
     final newAsset = AssetRegistrationModel(
       name: _nameController.text.trim(),
@@ -184,7 +148,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
 
     setState(() => _isLoading = true);
     try {
-      await DI.investmentRepository.configureInvestments([...existing, newAsset], confirmReplace: true);
+      await DI.investmentRepository.addInvestment(newAsset);
       await widget.controller.refresh();
       if (mounted) {
         GameSnack.showWithHaptic(context, Translator.translate(AppStrings.addAssetSuccessSnack), isSuccess: true);
@@ -339,10 +303,6 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                 children: [
                   _MentorTipCard(tokens: tokens),
                   const SizedBox(height: 20),
-                  if (_holdingsLoadFailed) ...[
-                    _LoadFailedBanner(tokens: tokens, onRetry: _loadExistingHoldings),
-                    const SizedBox(height: 16),
-                  ],
                   Text(
                     Translator.translate(AppStrings.addAssetTypeLabel),
                     style: TextStyle(color: tokens.textSecondary, fontSize: 12, fontWeight: FontWeight.w600),
@@ -400,7 +360,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                   _SummaryRow(
                     tokens: tokens,
                     estimatedValue: _estimatedValue,
-                    portfolioAfter: _currentTotalValue + _estimatedValue,
+                    portfolioAfter: widget.controller.summary.currentValue + _estimatedValue,
                   ),
                   const SizedBox(height: 12),
                   Text(
@@ -457,38 +417,6 @@ class _MentorTipCard extends StatelessWidget {
               style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _LoadFailedBanner extends StatelessWidget {
-  const _LoadFailedBanner({required this.tokens, required this.onRetry});
-
-  final AppColorTokens tokens;
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: tokens.warning.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: tokens.warning.withValues(alpha: 0.4)),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.cloud_off_outlined, color: tokens.warning, size: 20),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              Translator.translate(AppStrings.addAssetLoadFailedBanner),
-              style: TextStyle(color: tokens.textPrimary, fontSize: 12),
-            ),
-          ),
-          TextButton(onPressed: onRetry, child: Text(Translator.translate(AppStrings.retryButtonLabel))),
         ],
       ),
     );

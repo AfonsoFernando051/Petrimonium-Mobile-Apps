@@ -11,7 +11,6 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
 import '../../../portfolio/presentation/controllers/portfolio_controller_test.dart';
-import 'package:petrimonium_shared_features/testing.dart';
 
 class MockInvestmentRepository extends Mock implements InvestmentRepository {}
 
@@ -19,6 +18,18 @@ void main() {
   late FakePortfolioRepository portfolioRepository;
   late MockInvestmentRepository investmentRepository;
   late PortfolioController controller;
+
+  setUpAll(() {
+    registerFallbackValue(
+      AssetRegistrationModel(
+        name: 'FALLBACK',
+        quantity: 1,
+        purchasePrice: 1,
+        purchaseDate: '2024-01-01',
+        type: InvestmentTypeEnum.STOCKS,
+      ),
+    );
+  });
 
   setUp(() {
     portfolioRepository = FakePortfolioRepository();
@@ -33,14 +44,8 @@ void main() {
 
     when(() => investmentRepository.searchQuotes(any())).thenAnswer((_) async => <Map<String, dynamic>>[]);
     when(() => investmentRepository.fetchQuoteAtDate(any(), any())).thenAnswer((_) async => null);
-    when(
-      () => investmentRepository.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace')),
-    ).thenAnswer((_) async {});
+    when(() => investmentRepository.addInvestment(any())).thenAnswer((_) async {});
 
-    // AddAssetScreen reads `DI.portfolioRepository` directly to seed existing
-    // holdings, independently of the `PortfolioController`'s own repository
-    // — the same fake is assigned to both so they agree on what "existing"
-    // means.
     DI.portfolioRepository = portfolioRepository;
     DI.investmentRepository = investmentRepository;
   });
@@ -90,11 +95,8 @@ void main() {
     });
 
     testWidgets(
-      'filling type/ticker/quantity/price/date enables the CTA; submitting resubmits existing holdings plus the new asset and pops back',
+      'filling type/ticker/quantity/price/date enables the CTA; submitting appends only the new asset and pops back',
       (tester) async {
-        final existingLot = lot(ticker: 'VALE3', quantity: 10, purchasePrice: 60);
-        portfolioRepository.holdingsToReturn = Holding.fromLots([existingLot]);
-
         await openScreen(tester);
 
         await tester.tap(find.text('Ações'));
@@ -117,28 +119,31 @@ void main() {
         expect(button.onPressed, isNotNull);
 
         await tester.tap(find.byType(GameButton), warnIfMissed: false);
-        // Several async gaps between the submit call and the pop: configure
+        // Several async gaps between the submit call and the pop: addInvestment
         // -> controller.refresh() (a full loadAll()) -> Navigator.pop() —
         // bounded pumps in a loop rather than a fixed count of awaits.
         for (var i = 0; i < 10; i++) {
           await tester.pump(const Duration(milliseconds: 100));
         }
 
-        final captured = verify(
-          () => investmentRepository.configureInvestments(captureAny(), confirmReplace: true),
-        ).captured;
-        final submitted = captured.single as List<AssetRegistrationModel>;
-        expect(submitted.map((a) => a.name), containsAll(['VALE3', 'PETR4']));
-        expect(submitted.length, 2);
+        final captured = verify(() => investmentRepository.addInvestment(captureAny())).captured;
+        final submitted = captured.single as AssetRegistrationModel;
+        expect(submitted.name, 'PETR4');
+        expect(submitted.quantity, 10);
+        expect(submitted.purchasePrice, 25);
+
+        // Regression guard: the granular screen must never fall back to the
+        // full-replace endpoint.
+        verifyNever(
+          () => investmentRepository.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace')),
+        );
 
         expect(find.byType(AddAssetScreen), findsNothing);
       },
     );
 
-    testWidgets('a configureInvestments failure shows a friendly error and does not pop', (tester) async {
-      when(
-        () => investmentRepository.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace')),
-      ).thenThrow(Exception('server exploded'));
+    testWidgets('an addInvestment failure shows a friendly error and does not pop', (tester) async {
+      when(() => investmentRepository.addInvestment(any())).thenThrow(Exception('server exploded'));
 
       await openScreen(tester);
 
