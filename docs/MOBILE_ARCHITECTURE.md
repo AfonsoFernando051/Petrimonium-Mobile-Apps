@@ -29,7 +29,7 @@ petrimonium-mobile/
 │   ├── petrimonium_ui/               design tokens, theming, presentation widgets
 │   ├── petrimonium_flutter_core/     environment config, API client, utilities
 │   └── petrimonium_shared_features/  features the whole ecosystem shares
-├── tooling/
+├── tooling/          dependency-direction and layering checks
 ├── docs/
 ├── .github/workflows/
 └── melos.yaml
@@ -60,6 +60,33 @@ shared `LoginForm`/`SignupForm` (see "What is deliberately still duplicated"
 below) compose `petrimonium_ui` widgets (`CustomTextField`, `GameButton`,
 `GameSnack`, `SharedAccountNotice`, `OrDivider`, `GoogleSignInButton`,
 `ForgotPasswordButton`), so the declared graph keeps describing what is real.
+
+## Rules that are enforced, not remembered
+
+Four checks run in CI. Three are scripts so that one definition serves both
+CI and a developer's terminal.
+
+| Check | Rule |
+| --- | --- |
+| `tooling/check_dependency_direction.sh` | No package imports an app; no app imports another app |
+| `tooling/check_layering.sh` | No `features/*/domain/` file imports Flutter's widget libraries or the data layer |
+| `dart format --set-exit-if-changed` | The tree stays formatted |
+| `analysis_options.yaml` (root) | One lint baseline; every app and package includes it |
+
+`.github/workflows/architecture.yml` runs the first two **unfiltered**, on
+every change. That is deliberate: the dependency-direction check previously
+lived only in `shared-checks.yml`, which triggers on `packages/**`, so its
+"no app may import another app" rule could never fire on the app-only change
+that would break it.
+
+The layering check carries explicit allowlists of the remaining debt, by
+path. Removing an entry is the definition of done; adding one needs a reason
+in the commit message; a path that no longer exists fails the check so the
+allowlist cannot rot into cover for real violations.
+
+A domain layer worth having is one you can test without a widget binding.
+That is the whole point of the layering rule, and it is what let
+`PortfolioHealthCalculator` move into a package as plain Dart.
 
 ## What belongs in each package
 
@@ -119,21 +146,89 @@ product-supplied copy.
 
 Auth UI: `LoginForm`/`SignupForm` (`lib/src/auth/presentation/`) — see below.
 
+Portfolio (`lib/src/portfolio/`): the entities, the two pure calculators, the
+three remote datasources and the three repositories that Academy and Wallet
+had byte-identical copies of. Also `PortfolioHealthCalculator`, which is
+~90 lines of arithmetic and now carries no Flutter import at all — the
+`HealthMetric` it produces names a `HealthMetricKind` instead of a pt-BR
+label and an `IconData`, and each app maps that enum to its own copy.
+
+Pet (`lib/src/pet/`): the domain — species, accessories, evolution rules and
+stages, profile, animation states. The *companion UI* is not here; see below.
+
+Onboarding DTOs and the Mentor conversation summary round it out.
+
+`lib/testing.dart` is a separate entrypoint carrying test-only builders
+(`lot`, `statsFromLots`). It is deliberately off the main barrel so nothing
+in a production build imports it by accident, and it lives under `lib/`
+because one package cannot import another package's `test/` directory.
+
+### The rules/copy split, and why it keeps recurring
+
+Three extractions here took the same shape, and it is the shape to reach for
+first when something "cannot be shared because it has copy in it":
+
+| Shared (ecosystem rule) | Per app (product copy) |
+| --- | --- |
+| `LevelTier` boundaries | `LevelTitle` catalog |
+| `InvestmentTypeRules` — target allocation, assumed yield | `InvestmentTypeDisplay` — label, icon, color |
+| `PetSpecieEnum` — wire format, display order | `PetSpecieDisplay.displayLabel` |
+| `AchievementRules` — ids, XP, conditions | `AchievementCatalog` — title, description, icon |
+| `HealthMetricKind` + the scoring | `HealthMetricDisplay` — label, icon |
+
+The test is whether the two products *must* agree. They must agree about what
+a level is worth and what an asset class yields; they need not agree about
+what to call it. `AppColors.neonCyan` is the clearest illustration: cyan in
+Academy, emerald in Wallet, same field name — which is why anything reading it
+is product-branded no matter how identical the source looks.
+
 ## What is deliberately still duplicated
 
-Academy and Wallet still hold byte-identical copies of the pet (22 files),
-settings (11) and mentor (8) blocks. This is known, and it is not an oversight.
+Academy and Wallet still hold 51 clone files in `lib/` (~5100 lines) and 52
+in `test/` (~4900). That is down from 80 and 93, and what is left is blocked
+by three decisions rather than by effort.
 
-All of them are bound to `Translator` and `AppStrings`, and **the two catalogs
-have already diverged by roughly 650 lines**. Health is a third system
-entirely, using ARB files and `gen_l10n`. Sharing that UI therefore requires
-first deciding which product's wording wins for the shared strings — a
+**1. The localization mechanism (24 of the 51).** Settings, the Mentor
+screens, the auth screens and the Pet's speech all bind to `Translator` and
+`AppStrings`, and **the two catalogs have already diverged by roughly 650
+lines**. Health is a third system entirely, using ARB files and `gen_l10n`.
+Sharing that UI requires first deciding which product's wording wins — a
 decision that silently changes one product's copy, which a refactor is not
 allowed to do.
 
-So the prerequisite for sharing *that* UI is a **localization decision, not a
-refactor** — converge on one shared string mechanism, or agree that shared
-widgets keep taking copy as parameters (see below).
+Worth naming plainly: **Health already uses the mechanism the other two
+should converge on.** `gen_l10n` is the Flutter standard, and the hand-rolled
+`Translator` in Academy and Wallet is a 2200-line map each. The convergence
+has an obvious destination; it is not a tie to be broken.
+
+**2. Whether `AppEvent` becomes an ecosystem type.** The Pet companion UI
+(`pet_rive_companion`, `pet_mascot_widget`, `mascot_controller`,
+`pet_speech_bubble*` — about 1400 lines) is i18n-free and looks ready to
+share, but `MascotController` listens on `AppEventBus` and `AppEvent` is a
+`sealed` hierarchy each app owns. A sealed type cannot be extended from
+another library, which is exactly why `ApiClient` reports an expired session
+through a callback instead of an event.
+
+Moving `AppEvent` into a package would unblock this *and* let `ApiClient`
+emit directly — but it would also make every product's event vocabulary one
+shared vocabulary, and Health has no `AppEvent` at all. That is a design
+decision, not a mechanical move.
+
+**3. The Academy content-icon chain (9 files).** `AcademyCatalogSnapshot`
+deserializes an icon *key* from content JSON straight into a const
+`IconData` on the entity, which is why `academy/domain/entities/*` still
+import `flutter/material`. Unwinding it means changing the data model's shape
+and the seed tooling that writes it
+(`tool/generate_academy_seed_json.dart`). Both allowlists in
+`tooling/check_layering.sh` enumerate these files by path, so the debt is a
+list to work through rather than a number in a report — and a stale entry
+fails the check.
+
+A fourth group is duplicated **on purpose** and should stay that way: the
+copy catalogs (`AchievementCatalog`, `InvestmentTypeDisplay`,
+`MissionDisplayCatalog`, `HealthMetricDisplay`). They read as clones today
+because the two products happen to say the same thing; they are the half of
+the rules/copy split that each product owns.
 
 Auth was the exception, and is done: verified byte-for-byte identical (or a
 single cosmetic line apart) before touching it, so no localization decision
@@ -224,15 +319,19 @@ belongs in this repository.
 | `wallet.yml`         | `apps/wallet/**`, `packages/**`, `melos.yaml`  |
 | `health.yml`         | `apps/health/**`, `packages/**`, `melos.yaml`  |
 | `shared-checks.yml`  | `packages/**`, `melos.yaml`, root `pubspec.yaml` |
+| `architecture.yml`   | everything — see "Rules that are enforced" above |
 
-A product-only change runs one pipeline. A shared-package change runs all
-four: the package proves itself standing alone, and each app proves the change
-did not break it.
+A product-only change runs one pipeline plus `architecture.yml`. A
+shared-package change runs all five: the package proves itself standing
+alone, and each app proves the change did not break it.
 
 ## Adding a shared component
 
 1. Ask the decision rule at the top. If only two of three products want it,
    that is usually a sign it belongs to those products for now.
+1a. If the answer is "shared, except for the copy", do not stop there — split
+   it. The rules go in the package, the wording stays in each app. See the
+   rules/copy table above; five components have taken that shape already.
 2. Put it in the lowest package that can hold it. UI with no logic goes in
    `petrimonium_ui`.
 3. Take copy as a parameter. Take colors from `context.colors` /
