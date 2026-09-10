@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/widgets/conversation_list_tile.dart';
+
+import '../../test_theme.dart';
 
 void main() {
-  setUp(() {
-    Translator.currentLanguage = 'pt';
-  });
-
   Widget buildTestableWidget({
     required ConversationSummary conversation,
     VoidCallback? onTap,
@@ -17,10 +13,12 @@ void main() {
     VoidCallback? onDelete,
   }) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
         body: ConversationListTile(
           conversation: conversation,
+          renameLabel: 'Renomear conversa',
+          deleteLabel: 'Apagar',
           onTap: onTap ?? () {},
           onRename: onRename ?? () {},
           onDelete: onDelete ?? () {},
@@ -111,6 +109,18 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(deleted, isTrue);
+    });
+
+    testWidgets('takes its border accent from the product theme, not a baked-in colour', (tester) async {
+      // `AppColors.neonCyan` is cyan in Academy and emerald in Wallet. This
+      // tile used to read it directly; it now reads `context.brand.accent`,
+      // which is that same field in each app's palette.
+      final conversation = ConversationSummary(id: 1, title: 'Dividendos', updatedAt: DateTime.now());
+
+      await tester.pumpWidget(buildTestableWidget(conversation: conversation));
+
+      final card = tester.widget<GlassCard>(find.byType(GlassCard));
+      expect(card.borderColor, TestPalette.accents.accent.withValues(alpha: 0.2));
     });
   });
 }

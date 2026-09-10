@@ -1,28 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
-import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/screens/conversation_list_screen.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/widgets/conversation_list_tile.dart';
 
-class MockMentorChatRepository extends Mock implements MentorChatRepository {}
+import '../../test_theme.dart';
+
+class MockConversationStore extends Mock implements ConversationStore {}
+
+/// This product-agnostic copy stands in for whatever an app would resolve
+/// through its translator; the assertions below are the same strings the
+/// app-local version of this test asserted.
+const ConversationListCopy testCopy = (
+  historyTitle: 'Conversas',
+  newChatLabel: 'Nova conversa',
+  emptyTitle: 'Nenhuma conversa ainda',
+  emptySubtitle: 'Suas conversas com o mentor vão aparecer aqui.',
+  loadError: 'Não foi possível carregar suas conversas.',
+  retryLabel: 'Tentar novamente',
+  renameTitle: 'Renomear conversa',
+  renameHint: 'Título da conversa',
+  renameSave: 'Salvar',
+  renameFailed: 'Não foi possível renomear a conversa. Tente novamente.',
+  deleteTitle: 'Apagar conversa?',
+  deleteConfirm: 'Esta conversa e todas as mensagens serão apagadas permanentemente.',
+  deleteButton: 'Apagar',
+  deleteFailed: 'Não foi possível apagar a conversa. Tente novamente.',
+  cancelLabel: 'Cancelar',
+);
 
 void main() {
-  late MockMentorChatRepository mockRepository;
+  late MockConversationStore mockRepository;
 
   setUp(() {
-    Translator.currentLanguage = 'pt';
-    mockRepository = MockMentorChatRepository();
-    DI.mentorChatRepository = mockRepository;
+    mockRepository = MockConversationStore();
   });
 
+  // The backdrop is each product's own `CosmicBackground` and is not part of
+  // this package; an identity wrapper keeps the widget tree the assertions
+  // care about unchanged.
+  ConversationListScreen screen() =>
+      ConversationListScreen(store: mockRepository, copy: testCopy, background: (child) => child);
+
   Widget buildTestableWidget() {
-    return MaterialApp(theme: AppTheme.dark, home: const ConversationListScreen());
+    return MaterialApp(theme: TestTheme.dark, home: screen());
   }
 
   group('ConversationListScreen', () {
@@ -89,15 +110,13 @@ void main() {
       int? poppedValue;
       await tester.pumpWidget(
         MaterialApp(
-          theme: AppTheme.dark,
+          theme: TestTheme.dark,
           home: Builder(
             builder: (context) => Scaffold(
               body: Center(
                 child: ElevatedButton(
                   onPressed: () async {
-                    poppedValue = await Navigator.of(
-                      context,
-                    ).push<int?>(MaterialPageRoute(builder: (_) => const ConversationListScreen()));
+                    poppedValue = await Navigator.of(context).push<int?>(MaterialPageRoute(builder: (_) => screen()));
                   },
                   child: const Text('open'),
                 ),
@@ -126,15 +145,13 @@ void main() {
       int? poppedValue;
       await tester.pumpWidget(
         MaterialApp(
-          theme: AppTheme.dark,
+          theme: TestTheme.dark,
           home: Builder(
             builder: (context) => Scaffold(
               body: Center(
                 child: ElevatedButton(
                   onPressed: () async {
-                    poppedValue = await Navigator.of(
-                      context,
-                    ).push<int?>(MaterialPageRoute(builder: (_) => const ConversationListScreen()));
+                    poppedValue = await Navigator.of(context).push<int?>(MaterialPageRoute(builder: (_) => screen()));
                   },
                   child: const Text('open'),
                 ),

@@ -1,24 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_academy/core/constants/app_colors.dart';
-import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
+import '../domain/conversation_summary.dart';
+
+/// One row in the Mentor conversation history.
+///
+/// Copy arrives as parameters; the accent comes from `context.brand`, which is
+/// each product's own `neonCyan` — cyan in Academy, emerald in Wallet.
 class ConversationListTile extends StatelessWidget {
   const ConversationListTile({
     super.key,
     required this.conversation,
+    required this.renameLabel,
+    required this.deleteLabel,
     required this.onTap,
     required this.onRename,
     required this.onDelete,
   });
 
   final ConversationSummary conversation;
+  final String renameLabel;
+  final String deleteLabel;
   final VoidCallback onTap;
   final VoidCallback onRename;
   final VoidCallback onDelete;
 
+  /// NOTE: these units are hard-coded Portuguese and always have been — they
+  /// render as "agora"/"min"/"h"/"d" in the English and Spanish builds too.
+  /// Carried over unchanged rather than fixed here, because translating them
+  /// would change what a user sees, which this extraction deliberately does
+  /// not do. Worth a demand of its own.
   String _relativeTime(DateTime dateTime) {
     final diff = DateTime.now().difference(dateTime);
     if (diff.inMinutes < 1) return 'agora';
@@ -35,7 +46,7 @@ class ConversationListTile extends StatelessWidget {
     return GlassCard(
       margin: const EdgeInsets.only(bottom: 8),
       borderRadius: 16,
-      borderColor: AppColors.neonCyan.withValues(alpha: 0.2),
+      borderColor: context.brand.accent.withValues(alpha: 0.2),
       padding: EdgeInsets.zero,
       child: Material(
         color: Colors.transparent,
@@ -77,14 +88,8 @@ class ConversationListTile extends StatelessWidget {
                     if (value == 'delete') onDelete();
                   },
                   itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 'rename',
-                      child: Text(Translator.translate(AppStrings.mentorRenameConversationTitle)),
-                    ),
-                    PopupMenuItem(
-                      value: 'delete',
-                      child: Text(Translator.translate(AppStrings.mentorDeleteConversationButton)),
-                    ),
+                    PopupMenuItem(value: 'rename', child: Text(renameLabel)),
+                    PopupMenuItem(value: 'delete', child: Text(deleteLabel)),
                   ],
                 ),
               ],

@@ -1,14 +1,20 @@
 import 'package:flutter/foundation.dart';
-import 'package:petrimonium_wallet/core/constants/app_strings.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+
+import '../domain/conversation_store.dart';
+import '../domain/conversation_summary.dart';
 
 /// Drives the Mentor conversation history screen: load, rename, delete.
 class ConversationListController extends ChangeNotifier {
-  ConversationListController({required MentorChatRepository repository}) : _repository = repository;
+  ConversationListController({required ConversationStore repository, required String Function() loadErrorMessage})
+    : _repository = repository,
+      _loadErrorMessage = loadErrorMessage;
 
-  final MentorChatRepository _repository;
+  final ConversationStore _repository;
+
+  /// Resolved at the moment of failure rather than taken as a plain string, so
+  /// the message still lands in the language the user is reading *now* — the
+  /// app-local version called its translator here for the same reason.
+  final String Function() _loadErrorMessage;
 
   bool isLoading = true;
   String? error;
@@ -22,7 +28,7 @@ class ConversationListController extends ChangeNotifier {
     try {
       conversations = await _repository.listConversations();
     } catch (_) {
-      error = Translator.translate(AppStrings.mentorConversationsLoadError);
+      error = _loadErrorMessage();
     } finally {
       isLoading = false;
       notifyListeners();

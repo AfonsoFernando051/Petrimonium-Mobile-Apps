@@ -1,20 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/controllers/conversation_list_controller.dart';
 
-class MockMentorChatRepository extends Mock implements MentorChatRepository {}
+class MockConversationStore extends Mock implements ConversationStore {}
 
 void main() {
-  late MockMentorChatRepository mockRepository;
+  late MockConversationStore mockRepository;
   late ConversationListController controller;
 
   setUp(() {
-    Translator.currentLanguage = 'pt';
-    mockRepository = MockMentorChatRepository();
-    controller = ConversationListController(repository: mockRepository);
+    mockRepository = MockConversationStore();
+    controller = ConversationListController(
+      repository: mockRepository,
+      loadErrorMessage: () => 'Não foi possível carregar suas conversas.',
+    );
   });
 
   group('initial state', () {

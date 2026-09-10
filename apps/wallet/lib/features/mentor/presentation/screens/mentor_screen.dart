@@ -1,3 +1,6 @@
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+
+import 'package:petrimonium_wallet/features/mentor/presentation/conversation_list_route.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
@@ -8,7 +11,6 @@ import 'package:petrimonium_wallet/core/utils/pet_assets.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/controllers/mentor_chat_controller.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/screens/conversation_list_screen.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/widgets/chat_bubble.dart';
 
 /// The "Mentor" tab — a full-screen chat with the user's pet acting as their
@@ -108,7 +110,7 @@ class _MentorScreenState extends State<MentorScreen> {
   }
 
   Future<void> _openHistory() async {
-    final result = await Navigator.of(context).push<int?>(_fadeRoute(const ConversationListScreen()));
+    final result = await Navigator.of(context).push<int?>(_fadeRoute(buildConversationListScreen()));
     if (result == null) return;
     if (result == ConversationListScreen.newConversationSentinel) {
       _controller.startNewChat();

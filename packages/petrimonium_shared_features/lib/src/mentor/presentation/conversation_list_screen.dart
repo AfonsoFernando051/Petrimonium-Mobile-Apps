@@ -1,24 +1,52 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium_wallet/core/constants/app_colors.dart';
-import 'package:petrimonium_wallet/core/constants/app_strings.dart';
-import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/controllers/conversation_list_controller.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/widgets/conversation_list_tile.dart';
+
+import '../domain/conversation_store.dart';
+import '../domain/conversation_summary.dart';
+import 'conversation_list_controller.dart';
+import 'conversation_list_tile.dart';
+
+/// Every string this screen shows, supplied by the product.
+///
+/// A record rather than fifteen constructor parameters: at this size the
+/// parameter list stops being readable, and the app builds it in one place
+/// right next to the navigation call.
+typedef ConversationListCopy = ({
+  String historyTitle,
+  String newChatLabel,
+  String emptyTitle,
+  String emptySubtitle,
+  String loadError,
+  String retryLabel,
+  String renameTitle,
+  String renameHint,
+  String renameSave,
+  String renameFailed,
+  String deleteTitle,
+  String deleteConfirm,
+  String deleteButton,
+  String deleteFailed,
+  String cancelLabel,
+});
 
 /// History of the user's Mentor conversations. Popping this screen returns
 /// either `null` (nothing selected — user just went back), a positive
 /// conversation id (resume that conversation), or the reserved sentinel
 /// `-1` (start a brand-new chat), which `MentorScreen` interprets.
 class ConversationListScreen extends StatefulWidget {
-  const ConversationListScreen({super.key});
+  const ConversationListScreen({super.key, required this.store, required this.copy, required this.background});
 
   static const int newConversationSentinel = -1;
+
+  final ConversationStore store;
+  final ConversationListCopy copy;
+
+  /// Wraps the body in the product's own backdrop. Each app's
+  /// `CosmicBackground` paints its own colours and is not shared.
+  final Widget Function(Widget child) background;
 
   @override
   State<ConversationListScreen> createState() => _ConversationListScreenState();
@@ -30,7 +58,7 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = ConversationListController(repository: DI.mentorChatRepository);
+    _controller = ConversationListController(repository: widget.store, loadErrorMessage: () => widget.copy.loadError);
     _controller.addListener(_onChanged);
     _controller.load();
   }
@@ -49,6 +77,7 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
   Future<void> _rename(ConversationSummary conversation) async {
     final controller = TextEditingController(text: conversation.title);
     final tokens = context.colors;
+    final accent = context.brand.accent;
 
     final newTitle = await showDialog<String>(
       context: context,
@@ -56,29 +85,23 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
         backgroundColor: tokens.surfaceElevated,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          Translator.translate(AppStrings.mentorRenameConversationTitle),
+          widget.copy.renameTitle,
           style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold),
         ),
         content: TextField(
           controller: controller,
           autofocus: true,
           style: TextStyle(color: tokens.textPrimary),
-          decoration: InputDecoration(hintText: Translator.translate(AppStrings.mentorRenameConversationHint)),
+          decoration: InputDecoration(hintText: widget.copy.renameHint),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(
-              Translator.translate(AppStrings.cancelButton),
-              style: const TextStyle(color: AppColors.neonCyan),
-            ),
+            child: Text(widget.copy.cancelLabel, style: TextStyle(color: accent)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, controller.text.trim()),
-            child: Text(
-              Translator.translate(AppStrings.mentorRenameConversationSave),
-              style: const TextStyle(color: AppColors.neonCyan),
-            ),
+            child: Text(widget.copy.renameSave, style: TextStyle(color: accent)),
           ),
         ],
       ),
@@ -87,40 +110,32 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
     if (newTitle != null && newTitle.isNotEmpty && newTitle != conversation.title) {
       final success = await _controller.rename(conversation.id, newTitle);
       if (!success && mounted) {
-        GameSnack.show(context, Translator.translate(AppStrings.mentorRenameConversationFailed), isError: true);
+        GameSnack.show(context, widget.copy.renameFailed, isError: true);
       }
     }
   }
 
   Future<void> _confirmDelete(ConversationSummary conversation) async {
     final tokens = context.colors;
+    final accent = context.brand.accent;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: tokens.surfaceElevated,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          Translator.translate(AppStrings.mentorDeleteConversationTitle),
+          widget.copy.deleteTitle,
           style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold),
         ),
-        content: Text(
-          Translator.translate(AppStrings.mentorDeleteConversationConfirm),
-          style: TextStyle(color: tokens.textSecondary),
-        ),
+        content: Text(widget.copy.deleteConfirm, style: TextStyle(color: tokens.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(
-              Translator.translate(AppStrings.cancelButton),
-              style: const TextStyle(color: AppColors.neonCyan),
-            ),
+            child: Text(widget.copy.cancelLabel, style: TextStyle(color: accent)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(
-              Translator.translate(AppStrings.mentorDeleteConversationButton),
-              style: TextStyle(color: tokens.error),
-            ),
+            child: Text(widget.copy.deleteButton, style: TextStyle(color: tokens.error)),
           ),
         ],
       ),
@@ -130,7 +145,7 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
       unawaited(HapticFeedback.mediumImpact());
       final success = await _controller.delete(conversation.id);
       if (!success && mounted) {
-        GameSnack.show(context, Translator.translate(AppStrings.mentorDeleteConversationFailed), isError: true);
+        GameSnack.show(context, widget.copy.deleteFailed, isError: true);
       }
     }
   }
@@ -143,7 +158,7 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          Translator.translate(AppStrings.mentorConversationHistoryTitle),
+          widget.copy.historyTitle,
           style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
@@ -157,11 +172,11 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.pop(context, ConversationListScreen.newConversationSentinel),
-        backgroundColor: AppColors.neonViolet,
+        backgroundColor: context.brand.accentDeep,
         icon: const Icon(Icons.add_comment_outlined, color: Colors.white),
-        label: Text(Translator.translate(AppStrings.mentorNewChatTooltip), style: const TextStyle(color: Colors.white)),
+        label: Text(widget.copy.newChatLabel, style: const TextStyle(color: Colors.white)),
       ),
-      body: CosmicBackground(child: SafeArea(child: _buildBody())),
+      body: widget.background(SafeArea(child: _buildBody())),
     );
   }
 
@@ -171,11 +186,7 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
     }
 
     if (_controller.error != null) {
-      return ErrorStateView(
-        retryLabel: Translator.translate(AppStrings.retryButtonLabel),
-        message: _controller.error!,
-        onRetry: _controller.load,
-      );
+      return ErrorStateView(retryLabel: widget.copy.retryLabel, message: _controller.error!, onRetry: _controller.load);
     }
 
     if (_controller.conversations.isEmpty) {
@@ -189,6 +200,8 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
         final conversation = _controller.conversations[index];
         return ConversationListTile(
           conversation: conversation,
+          renameLabel: widget.copy.renameTitle,
+          deleteLabel: widget.copy.deleteButton,
           onTap: () => Navigator.pop(context, conversation.id),
           onRename: () => _rename(conversation),
           onDelete: () => _confirmDelete(conversation),
@@ -200,8 +213,8 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
   Widget _buildEmptyState() {
     return EmptyStateView(
       icon: Icons.chat_bubble_outline,
-      title: Translator.translate(AppStrings.mentorNoConversationsTitle),
-      message: Translator.translate(AppStrings.mentorNoConversationsSubtitle),
+      title: widget.copy.emptyTitle,
+      message: widget.copy.emptySubtitle,
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/screens/conversation_list_screen.dart';
+import 'package:petrimonium_wallet/features/mentor/presentation/conversation_list_route.dart';
 
 /// Perfil's "Privacidade e memória" — explains what the Mentor remembers
 /// (goal/horizon context on every message, stored conversations) and links
@@ -48,7 +48,7 @@ class PrivacyAndMemoryScreen extends StatelessWidget {
                   label: Translator.translate(AppStrings.privacyMemoryConversationsButton),
                   icon: Icons.chat_bubble_outline,
                   onPressed: () =>
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ConversationListScreen())),
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => buildConversationListScreen())),
                 ),
               ],
             ),

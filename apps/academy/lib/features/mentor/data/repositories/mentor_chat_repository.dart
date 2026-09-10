@@ -11,7 +11,7 @@ import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferenc
 /// now persisted server-side, scoped to the authenticated user — this class
 /// no longer caches chat history on-device (see [purgeLegacyLocalHistory]
 /// for the one-time cleanup of the old shared cache that predates this).
-class MentorChatRepository {
+class MentorChatRepository implements ConversationStore {
   MentorChatRepository({
     required MentorRemoteDataSource remoteDataSource,
     required PetPreferencesRepository petPreferencesRepository,
@@ -35,6 +35,7 @@ class MentorChatRepository {
     return _remoteDataSource.getConversationMessages(conversationId);
   }
 
+  @override
   Future<List<ConversationSummary>> listConversations() {
     return _remoteDataSource.listConversations();
   }
@@ -43,10 +44,12 @@ class MentorChatRepository {
     return _remoteDataSource.getSuggestedPrompts(language: Translator.currentLanguage);
   }
 
+  @override
   Future<void> renameConversation(int conversationId, String title) {
     return _remoteDataSource.renameConversation(conversationId, title);
   }
 
+  @override
   Future<void> deleteConversation(int conversationId) {
     return _remoteDataSource.deleteConversation(conversationId);
   }

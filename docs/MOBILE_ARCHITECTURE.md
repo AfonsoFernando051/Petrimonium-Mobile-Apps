@@ -195,14 +195,20 @@ it is product-branded no matter how identical the source looks.
 
 ## What is deliberately still duplicated
 
-Academy and Wallet still hold 31 clone files in `lib/` (~3700 lines) and 34
-in `test/` (~3500), down from 80 and 93. Every one that is left is behind a
+Academy and Wallet still hold 29 clone files in `lib/` (~3400 lines) and 31
+in `test/` (~3000), down from 80 and 93. Every one that is left is behind a
 decision or is duplicated on purpose.
 
-**1. Reaching the translator from a package (12 of the 31).** The Mentor
-screens, the auth screens and the Pet's speech still bind to `Translator` and
-`AppStrings`. What blocks them is *only* that those two are app-local classes:
-a widget in a package has no way to call them.
+Read the line count, not the group count. Extracting a screen leaves a thin
+per-app resolver behind — `conversation_list_route`, `level_title`,
+`friendly_error_message` — and those are byte-identical between the apps by
+their very nature, so they register as clones forever. That is the shape
+working, not duplication left behind.
+
+**1. Reaching the translator from a package (10 of the 29).** The auth
+screens and the Pet's speech still bind to `Translator` and `AppStrings`. What
+blocks them is *only* that those two are app-local classes: a widget in a
+package has no way to call them.
 
 Settings was the first slice through this and shows the shape the rest should
 take: the seven section widgets take their copy as constructor parameters, the
@@ -216,6 +222,16 @@ an `accentColor` too.
 The cost is that "the section rendered" no longer proves the screen passed it
 the right strings, so each app's `settings_screen_test` now asserts the copy
 itself. Budget one such test per screen that gets this treatment.
+
+The Mentor conversation history went next and shows the two things Settings
+did not need. At fifteen strings the parameter list stops being readable, so
+the screen takes a `ConversationListCopy` record instead, built by a per-app
+`buildConversationListScreen()` next to the navigation call. And it takes a
+`ConversationStore` — three methods — rather than `MentorChatRepository`,
+which would have dragged the remote datasource, `ChatMessage`,
+`PetPreferencesRepository` and two label-bearing enums into the package with
+it. Its backdrop is a parameter too: each app's `CosmicBackground` genuinely
+differs, unlike the sections' chrome.
 
 The copy itself is no longer in the way. Measured rather than assumed, the two
 catalogs held 1377 (language, key) pairs in common and **1324 of them were
