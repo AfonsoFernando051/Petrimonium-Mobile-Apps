@@ -5,8 +5,9 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/home/presentation/widgets/home_pet_hero.dart';
-import 'package:petrimonium_wallet/features/investment/presentation/screens/investment_configuration_screen.dart';
+import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
 /// Home's placeholder when the user has no holdings yet — the app must stay
 /// fully usable without a portfolio, so this replaces the wealth/holdings
@@ -15,14 +16,20 @@ import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/
 /// maior e aparecer mais no dashboard, nao ficar pequeno e discreto."
 ///
 /// There is no real brokerage connection anywhere in this app yet (see
-/// `docs/ECOSYSTEM.md`) — the manual-entry CTA opens
-/// [InvestmentConfigurationScreen], the only way holdings ever get in today;
-/// the B3 option is shown so the user knows it's coming, but only offers a
-/// "coming soon" acknowledgement, not a real connection.
+/// `docs/ECOSYSTEM.md`) — the manual-entry CTA opens [AddAssetScreen], the
+/// only way holdings ever get in today. The gamified, multi-asset
+/// onboarding wizard this used to open (`InvestmentConfigurationScreen`)
+/// was retired — [AddAssetScreen]'s plain, single-asset "Mentor mais
+/// discreto" form now covers both the zero-holdings first-time entry and
+/// adding one more asset later, instead of keeping two different screens
+/// for the same job. The B3 option is shown so the user knows a second,
+/// automatic way is coming, but only offers a "coming soon" acknowledgement,
+/// not a real connection.
 class PortfolioNotConnectedCard extends StatelessWidget {
-  const PortfolioNotConnectedCard({super.key, required this.mascotController, this.anchor});
+  const PortfolioNotConnectedCard({super.key, required this.mascotController, required this.controller, this.anchor});
 
   final MascotController mascotController;
+  final PortfolioController controller;
   final PetSpeechBubbleAnchor? anchor;
 
   @override
@@ -64,7 +71,7 @@ class PortfolioNotConnectedCard extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(
                       context,
-                    ).push(MaterialPageRoute(builder: (_) => const InvestmentConfigurationScreen()));
+                    ).push(MaterialPageRoute(builder: (_) => AddAssetScreen(controller: controller)));
                   },
                 ),
                 const SizedBox(height: 10),

@@ -23,9 +23,12 @@ cd "$(dirname "$0")/.."
 # only presentation resolves it, so no domain file needs a widget library.
 ALLOW_MATERIAL=()
 
-# `PendingPortfolioStatsBuilder` reads `AssetRegistrationModel`, a data model,
-# because no domain-side type for a not-yet-saved registration exists. Giving
-# it one, plus a mapper, is the remaining work here.
+# Empty, and meant to stay that way. `PendingPortfolioStatsBuilder` used to be
+# the one entry here — it read `AssetRegistrationModel`, a data model, because
+# no domain-side type for a not-yet-saved registration existed — but it was
+# deleted with `InvestmentConfigurationScreen`, its only caller, rather than
+# given the domain type/mapper that would have fixed the layering violation
+# properly.
 #
 # Known blind spot, recorded rather than papered over: this rule matches the
 # *path* `features/*/data/`, so a data model that moves into a shared package
@@ -36,9 +39,7 @@ ALLOW_MATERIAL=()
 # plus a mapper is what would actually fix that; the entries were dropped
 # because leaving them would fail the not-stale check below and read as if the
 # problem were solved.
-ALLOW_DOMAIN_TO_DATA=(
-  "apps/wallet/lib/features/investment/domain/services/pending_portfolio_stats_builder.dart"
-)
+ALLOW_DOMAIN_TO_DATA=()
 
 allowed() {
   local needle="$1"; shift

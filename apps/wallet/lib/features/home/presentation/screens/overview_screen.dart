@@ -132,7 +132,11 @@ class _OverviewScreenState extends State<OverviewScreen> {
             ],
 
             if (!hasPortfolio)
-              PortfolioNotConnectedCard(mascotController: widget.mascotController, anchor: widget.heroAnchor)
+              PortfolioNotConnectedCard(
+                mascotController: widget.mascotController,
+                controller: controller,
+                anchor: widget.heroAnchor,
+              )
             else ...[
               _WealthHeroCard(controller: controller),
               const SizedBox(height: 16),
@@ -310,10 +314,8 @@ class _WealthChangeCard extends StatelessWidget {
 
 /// Opens [AddAssetScreen] to add another asset once the portfolio already
 /// has at least one — [PortfolioNotConnectedCard] covers the zero-holdings
-/// case with its own full-width CTA into the Academy-style onboarding
-/// wizard (`InvestmentConfigurationScreen`), so this only needs to exist
-/// here in the "Meus ativos" section header, opening the plain Wallet
-/// single-asset screen instead.
+/// case with its own full-width CTA into that same [AddAssetScreen], so
+/// this only needs to exist here in the "Meus ativos" section header.
 class _AddAssetButton extends StatelessWidget {
   const _AddAssetButton({required this.controller});
 
