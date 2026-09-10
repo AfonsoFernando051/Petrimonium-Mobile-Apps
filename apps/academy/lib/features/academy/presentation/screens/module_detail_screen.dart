@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:petrimonium_academy/features/academy/presentation/icons/academy_icon_registry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
@@ -131,7 +132,11 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Icon(widget.module.icon, color: AppColors.neonCyan, size: 24),
+                                  Icon(
+                                    AcademyIconRegistry.resolve(widget.module.iconKey),
+                                    color: AppColors.neonCyan,
+                                    size: 24,
+                                  ),
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: Text(

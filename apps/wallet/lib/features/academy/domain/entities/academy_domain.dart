@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// A themed group of [School]s (e.g. "Investimentos" grouping "Renda Fixa",
 /// "Ações e Renda Variável", "Fundos, ETFs e FIIs", ...) — the top level of
 /// the Academy catalog, one step above [School]. Purely a client-side
@@ -12,7 +10,13 @@ class AcademyDomain {
   final String id;
   final String title;
   final String description;
-  final IconData icon;
+
+  /// Registry key for this entry's icon (e.g. `"savings_outlined"`), not the
+  /// `IconData` itself. The catalog arrives as JSON carrying this key; only
+  /// presentation turns it into a const `Icons.xxx`, through
+  /// `AcademyIconRegistry`. Keeping the key here is what lets this layer be
+  /// plain Dart with no widget binding.
+  final String iconKey;
   final int order;
   final List<String> schoolIds;
 
@@ -20,7 +24,7 @@ class AcademyDomain {
     required this.id,
     required this.title,
     required this.description,
-    required this.icon,
+    required this.iconKey,
     required this.order,
     this.schoolIds = const [],
   });

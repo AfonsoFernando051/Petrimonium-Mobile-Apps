@@ -3,7 +3,6 @@ import 'package:petrimonium_wallet/features/academy/domain/entities/academy_modu
 import 'package:petrimonium_wallet/features/academy/domain/entities/lesson.dart';
 import 'package:petrimonium_wallet/features/academy/domain/entities/lesson_step.dart';
 import 'package:petrimonium_wallet/features/academy/domain/entities/school.dart';
-import 'package:petrimonium_wallet/features/academy/domain/services/academy_icon_registry.dart';
 
 /// The full Academy curriculum for one language, as fetched from
 /// `GET /api/v1/academy/catalog` (see `AcademyCatalogRepository`) — 4 flat
@@ -103,7 +102,7 @@ class AcademyCatalogSnapshot {
     id: json['id'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
-    icon: AcademyIconRegistry.resolve(json['iconKey'] as String),
+    iconKey: json['iconKey'] as String,
     order: json['order'] as int,
     schoolIds: _stringList(json['schoolIds']),
   );
@@ -112,7 +111,7 @@ class AcademyCatalogSnapshot {
     'id': d.id,
     'title': d.title,
     'description': d.description,
-    'iconKey': AcademyIconRegistry.keyFor(d.icon),
+    'iconKey': d.iconKey,
     'order': d.order,
     'schoolIds': d.schoolIds,
   };
@@ -121,7 +120,7 @@ class AcademyCatalogSnapshot {
     id: json['id'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
-    icon: AcademyIconRegistry.resolve(json['iconKey'] as String),
+    iconKey: json['iconKey'] as String,
     order: json['order'] as int,
     prerequisites: _stringList(json['prerequisites']),
     contentAvailable: json['contentAvailable'] as bool,
@@ -131,7 +130,7 @@ class AcademyCatalogSnapshot {
     'id': s.id,
     'title': s.title,
     'description': s.description,
-    'iconKey': AcademyIconRegistry.keyFor(s.icon),
+    'iconKey': s.iconKey,
     'order': s.order,
     'prerequisites': s.prerequisites,
     'contentAvailable': s.contentAvailable,
@@ -142,7 +141,7 @@ class AcademyCatalogSnapshot {
     schoolId: json['schoolId'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
-    icon: AcademyIconRegistry.resolve(json['iconKey'] as String),
+    iconKey: json['iconKey'] as String,
     order: json['order'] as int,
     lessonIds: _stringList(json['lessonIds']),
     prerequisites: _stringList(json['prerequisites']),
@@ -154,7 +153,7 @@ class AcademyCatalogSnapshot {
     'schoolId': m.schoolId,
     'title': m.title,
     'description': m.description,
-    'iconKey': AcademyIconRegistry.keyFor(m.icon),
+    'iconKey': m.iconKey,
     'order': m.order,
     'lessonIds': m.lessonIds,
     'prerequisites': m.prerequisites,

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/features/academy/domain/entities/academy_module.dart';
 
@@ -10,7 +9,7 @@ void main() {
         schoolId: 'school_1',
         title: 'Investor Foundations',
         description: 'Basics',
-        icon: Icons.school,
+        iconKey: 'savings_outlined',
         order: 1,
         lessonIds: ['lesson_1', 'lesson_2'],
         prerequisites: ['module_0'],
@@ -21,7 +20,7 @@ void main() {
       expect(module.schoolId, 'school_1');
       expect(module.title, 'Investor Foundations');
       expect(module.description, 'Basics');
-      expect(module.icon, Icons.school);
+      expect(module.iconKey, 'savings_outlined');
       expect(module.order, 1);
       expect(module.lessonIds, ['lesson_1', 'lesson_2']);
       expect(module.prerequisites, ['module_0']);
@@ -34,7 +33,7 @@ void main() {
         schoolId: 's',
         title: 't',
         description: 'd',
-        icon: Icons.help_outline,
+        iconKey: 'help_outline',
         order: 0,
       );
 

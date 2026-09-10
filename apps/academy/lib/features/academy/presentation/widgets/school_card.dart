@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_academy/features/academy/presentation/icons/academy_icon_registry.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
@@ -78,7 +79,11 @@ class SchoolCard extends StatelessWidget {
                           color: accentColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        child: Icon(isLocked ? Icons.lock_outline : school.icon, color: accentColor, size: 22),
+                        child: Icon(
+                          isLocked ? Icons.lock_outline : AcademyIconRegistry.resolve(school.iconKey),
+                          color: accentColor,
+                          size: 22,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(

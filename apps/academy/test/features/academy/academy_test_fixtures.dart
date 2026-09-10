@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
@@ -26,7 +25,7 @@ const testDomain = AcademyDomain(
   id: 'test_domain',
   title: 'Test Domain',
   description: 'desc',
-  icon: Icons.school,
+  iconKey: 'savings_outlined',
   order: 1,
   schoolIds: ['test_school', 'test_coming_soon_school'],
 );
@@ -35,7 +34,7 @@ const testSchool = School(
   id: 'test_school',
   title: 'Test School',
   description: 'desc',
-  icon: Icons.school,
+  iconKey: 'savings_outlined',
   order: 1,
   contentAvailable: true,
 );
@@ -44,7 +43,7 @@ const testComingSoonSchool = School(
   id: 'test_coming_soon_school',
   title: 'Coming Soon School',
   description: 'desc',
-  icon: Icons.school,
+  iconKey: 'savings_outlined',
   order: 2,
   contentAvailable: false,
 );
@@ -54,7 +53,7 @@ const testModule = AcademyModule(
   schoolId: 'test_school',
   title: 'Test Module',
   description: 'desc',
-  icon: Icons.school,
+  iconKey: 'savings_outlined',
   order: 1,
   lessonIds: ['test_lesson_1', 'test_lesson_2', 'test_lesson_3'],
   contentAvailable: true,

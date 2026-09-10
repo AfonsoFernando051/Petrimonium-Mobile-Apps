@@ -18,26 +18,16 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
-# Academy curriculum content arrives as JSON carrying an icon *key*, which
-# `AcademyCatalogSnapshot` resolves into a const `IconData` on the entity
-# itself. Unwinding that means changing the data model's shape and the seed
-# tooling that writes it (tool/generate_academy_seed_json.dart), so it is its
-# own change rather than a line in someone else's.
-ALLOW_MATERIAL=(
-  "apps/academy/lib/features/academy/domain/entities/academy_domain.dart"
-  "apps/academy/lib/features/academy/domain/entities/academy_module.dart"
-  "apps/academy/lib/features/academy/domain/entities/school.dart"
-  "apps/academy/lib/features/academy/domain/services/academy_icon_registry.dart"
-  "apps/wallet/lib/features/academy/domain/entities/academy_domain.dart"
-  "apps/wallet/lib/features/academy/domain/entities/academy_module.dart"
-  "apps/wallet/lib/features/academy/domain/entities/school.dart"
-  "apps/wallet/lib/features/academy/domain/services/academy_icon_registry.dart"
-)
+# Empty, and meant to stay that way. The Academy catalog entities used to hold
+# a const IconData resolved at parse time; they hold the icon *key* now and
+# only presentation resolves it, so no domain file needs a widget library.
+ALLOW_MATERIAL=()
 
-# Same root cause: these domain services read `AcademyCatalogSnapshot`, a data
-# model, because no domain-side catalog type exists yet. Wallet's
-# `PendingPortfolioStatsBuilder` reads `AssetRegistrationModel` for the same
-# reason.
+# These domain services read `AcademyCatalogSnapshot`, a data model, because
+# no domain-side catalog type exists yet — the snapshot is both the wire shape
+# and the in-memory catalog. Wallet's `PendingPortfolioStatsBuilder` reads
+# `AssetRegistrationModel` for the same reason. Splitting either into a domain
+# type plus a mapper is the remaining work here.
 ALLOW_DOMAIN_TO_DATA=(
   "apps/academy/lib/features/academy/domain/services/academy_recommendation_service.dart"
   "apps/academy/lib/features/academy/domain/services/academy_progress_calculator.dart"
@@ -85,6 +75,10 @@ for entry in "${ALLOW_MATERIAL[@]}" "${ALLOW_DOMAIN_TO_DATA[@]}"; do
 done
 
 if [ "$status" -eq 0 ]; then
-  echo "OK: layering is intact (with ${#ALLOW_MATERIAL[@]} + ${#ALLOW_DOMAIN_TO_DATA[@]} allowlisted, see the file header)."
+  if [ "${#ALLOW_MATERIAL[@]}" -eq 0 ] && [ "${#ALLOW_DOMAIN_TO_DATA[@]}" -eq 0 ]; then
+    echo "OK: layering is intact, with nothing allowlisted."
+  else
+    echo "OK: layering is intact (${#ALLOW_MATERIAL[@]} widget-library + ${#ALLOW_DOMAIN_TO_DATA[@]} domain->data allowlisted, see the file header)."
+  fi
 fi
 exit "$status"

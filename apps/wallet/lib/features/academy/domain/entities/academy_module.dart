@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// A themed group of lessons (e.g. "Investor Foundations", "Fixed Income"),
 /// belonging to one [School] (see [schoolId]).
 /// [contentAvailable] distinguishes real, playable modules from curriculum
@@ -15,7 +13,13 @@ class AcademyModule {
   final String schoolId;
   final String title;
   final String description;
-  final IconData icon;
+
+  /// Registry key for this entry's icon (e.g. `"savings_outlined"`), not the
+  /// `IconData` itself. The catalog arrives as JSON carrying this key; only
+  /// presentation turns it into a const `Icons.xxx`, through
+  /// `AcademyIconRegistry`. Keeping the key here is what lets this layer be
+  /// plain Dart with no widget binding.
+  final String iconKey;
   final int order;
   final List<String> lessonIds;
   final List<String> prerequisites;
@@ -26,7 +30,7 @@ class AcademyModule {
     required this.schoolId,
     required this.title,
     required this.description,
-    required this.icon,
+    required this.iconKey,
     required this.order,
     this.lessonIds = const [],
     this.prerequisites = const [],

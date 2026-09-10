@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:petrimonium_academy/features/academy/presentation/icons/academy_icon_registry.dart';
 import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
 
@@ -83,20 +84,25 @@ void main() {
       snapshot = AcademyCatalogSnapshot.fromJson(_fixtureJson());
     });
 
-    test('parses domains, schools, modules and lessons with resolved icons', () {
+    test('parses domains, schools, modules and lessons with their icon keys', () {
       expect(snapshot.domains, hasLength(1));
-      expect(snapshot.domains.first.icon, Icons.savings_outlined);
-      expect(snapshot.schools.first.icon, Icons.account_balance_wallet_outlined);
-      expect(snapshot.modules.first.icon, Icons.payments_outlined);
+      expect(snapshot.domains.first.iconKey, 'savings_outlined');
+      expect(snapshot.schools.first.iconKey, 'account_balance_wallet_outlined');
+      expect(snapshot.modules.first.iconKey, 'payments_outlined');
     });
 
-    test('falls back to a default icon for an unknown iconKey', () {
+    test('keeps an unknown iconKey verbatim, and resolving it falls back', () {
       final json = _fixtureJson();
       ((json['domains'] as List)[0] as Map<String, dynamic>)['iconKey'] = 'totally_unknown_icon';
 
       final result = AcademyCatalogSnapshot.fromJson(json);
 
-      expect(result.domains.first.icon, Icons.help_outline);
+      // The key survives the parse — a round-trip through toJson no longer
+      // rewrites it to whatever the fallback icon happens to be named, which
+      // is what storing IconData on the entity used to cost.
+      expect(result.domains.first.iconKey, 'totally_unknown_icon');
+      // The fallback is presentation's job, and still happens.
+      expect(AcademyIconRegistry.resolve(result.domains.first.iconKey), Icons.help_outline);
     });
 
     test('parses every lesson step type with its type-specific fields', () {

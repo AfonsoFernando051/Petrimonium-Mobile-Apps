@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:petrimonium_academy/features/academy/presentation/icons/academy_icon_registry.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
@@ -29,7 +30,7 @@ void main() {
 
       expect(find.text(testDomain.title), findsOneWidget);
       expect(find.text(testDomain.description), findsOneWidget);
-      expect(find.byIcon(testDomain.icon), findsOneWidget);
+      expect(find.byIcon(AcademyIconRegistry.resolve(testDomain.iconKey)), findsOneWidget);
     });
 
     testWidgets('shows a lock icon and hides progress when comingSoon', (tester) async {

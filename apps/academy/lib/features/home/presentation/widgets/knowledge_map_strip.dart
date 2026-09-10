@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_academy/features/academy/presentation/icons/academy_icon_registry.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
@@ -111,7 +112,9 @@ class _ModuleRow extends StatelessWidget {
                     color: _active ? null : tokens.textPrimary.withValues(alpha: 0.08),
                   ),
                   child: Icon(
-                    status == ModuleStatus.completed ? Icons.check_rounded : module.icon,
+                    status == ModuleStatus.completed
+                        ? Icons.check_rounded
+                        : AcademyIconRegistry.resolve(module.iconKey),
                     color: _active || status == ModuleStatus.completed ? Colors.white : tokens.textTertiary,
                     size: 20,
                   ),

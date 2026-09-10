@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/features/academy/domain/services/academy_icon_registry.dart';
+import 'package:petrimonium_wallet/features/academy/presentation/icons/academy_icon_registry.dart';
 
 void main() {
   group('AcademyIconRegistry.resolve', () {

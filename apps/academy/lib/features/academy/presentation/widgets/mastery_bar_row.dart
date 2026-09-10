@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_academy/features/academy/presentation/icons/academy_icon_registry.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
@@ -45,7 +46,7 @@ class MasteryBarRow extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(school.icon, size: 16, color: tokens.textSecondary),
+              Icon(AcademyIconRegistry.resolve(school.iconKey), size: 16, color: tokens.textSecondary),
               const SizedBox(width: 8),
               SizedBox(
                 width: 116,
