@@ -23,16 +23,20 @@ cd "$(dirname "$0")/.."
 # only presentation resolves it, so no domain file needs a widget library.
 ALLOW_MATERIAL=()
 
-# These domain services read `AcademyCatalogSnapshot`, a data model, because
-# no domain-side catalog type exists yet — the snapshot is both the wire shape
-# and the in-memory catalog. Wallet's `PendingPortfolioStatsBuilder` reads
-# `AssetRegistrationModel` for the same reason. Splitting either into a domain
-# type plus a mapper is the remaining work here.
+# `PendingPortfolioStatsBuilder` reads `AssetRegistrationModel`, a data model,
+# because no domain-side type for a not-yet-saved registration exists. Giving
+# it one, plus a mapper, is the remaining work here.
+#
+# Known blind spot, recorded rather than papered over: this rule matches the
+# *path* `features/*/data/`, so a data model that moves into a shared package
+# stops tripping it. That is what happened to the four Academy domain services
+# that used to be on this list — they still read `AcademyCatalogSnapshot`, a
+# wire-shaped model, but it now lives in `petrimonium_shared_features` and the
+# import no longer matches. Splitting the snapshot into a domain catalog type
+# plus a mapper is what would actually fix that; the entries were dropped
+# because leaving them would fail the not-stale check below and read as if the
+# problem were solved.
 ALLOW_DOMAIN_TO_DATA=(
-  "apps/academy/lib/features/academy/domain/services/academy_recommendation_service.dart"
-  "apps/academy/lib/features/academy/domain/services/academy_progress_calculator.dart"
-  "apps/academy/lib/features/academy/domain/services/mastery_calculator.dart"
-  "apps/academy/lib/features/academy/domain/services/knowledge_progress_calculator.dart"
   "apps/wallet/lib/features/investment/domain/services/pending_portfolio_stats_builder.dart"
 )
 
@@ -65,11 +69,28 @@ while IFS= read -r file; do
   fi
 done < <(grep -rl --include='*.dart' -E "^import 'package:petrimonium_(academy|wallet|health)/features/[a-z_]+/data/" apps/*/lib/features/*/domain 2>/dev/null)
 
+# An allowlist is only honest while every entry still names a real violation.
+# Checking mere existence is not enough: a file that was fixed, or whose
+# offending import moved elsewhere, would sit here forever reading as
+# outstanding debt and quietly covering any future violation in that same file.
 echo "==> Allowlists are not stale"
-for entry in "${ALLOW_MATERIAL[@]}" "${ALLOW_DOMAIN_TO_DATA[@]}"; do
+for entry in "${ALLOW_MATERIAL[@]}"; do
   if [ ! -f "$entry" ]; then
     echo "ERROR: allowlisted path no longer exists: $entry" >&2
-    echo "       Delete the entry — a stale allowlist hides real violations." >&2
+    status=1
+  elif ! grep -qE "^import 'package:flutter/(material|widgets|cupertino)\.dart';" "$entry"; then
+    echo "ERROR: $entry is allowlisted for importing a widget library but no longer does." >&2
+    echo "       Delete the entry — the debt is paid." >&2
+    status=1
+  fi
+done
+for entry in "${ALLOW_DOMAIN_TO_DATA[@]}"; do
+  if [ ! -f "$entry" ]; then
+    echo "ERROR: allowlisted path no longer exists: $entry" >&2
+    status=1
+  elif ! grep -qE "^import 'package:petrimonium_(academy|wallet|health)/features/[a-z_]+/data/" "$entry"; then
+    echo "ERROR: $entry is allowlisted for importing the data layer but no longer does." >&2
+    echo "       Delete the entry — the debt is paid." >&2
     status=1
   fi
 done
