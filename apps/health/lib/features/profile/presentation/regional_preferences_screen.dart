@@ -61,7 +61,7 @@ class _RegionalPreferencesScreenState extends State<RegionalPreferencesScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).preferencesSaved)));
-      controller.closeSubScreen();
+      controller.navigation.closeSubScreen();
     } on CurrencyLockedException {
       if (!mounted) return;
       await showDialog<void>(
@@ -88,7 +88,7 @@ class _RegionalPreferencesScreenState extends State<RegionalPreferencesScreen> {
       backgroundColor: HealthColors.background,
       appBar: AppBar(
         backgroundColor: HealthColors.background,
-        leading: IconButton(onPressed: controller.openProfile, icon: const Icon(Icons.arrow_back)),
+        leading: IconButton(onPressed: controller.navigation.openProfile, icon: const Icon(Icons.arrow_back)),
         title: Text(l10n.preferences),
       ),
       body: SafeArea(

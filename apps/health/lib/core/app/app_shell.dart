@@ -22,7 +22,7 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = HealthScope.of(context);
-    switch (controller.subScreen) {
+    switch (controller.navigation.subScreen) {
       case AppSubScreen.profile:
         return const ProfileScreen();
       case AppSubScreen.regionalPreferences:
@@ -50,7 +50,7 @@ class _MainScaffold extends StatelessWidget {
           children: [
             _TopBar(controller: controller),
             Expanded(
-              child: switch (controller.tab) {
+              child: switch (controller.navigation.tab) {
                 AppTab.home => const HomeScreen(),
                 AppTab.transactions => const TransactionsScreen(),
                 AppTab.accounts => const AccountsCardsScreen(),
@@ -106,7 +106,7 @@ class _TopBar extends StatelessWidget {
               ),
               InkWell(
                 customBorder: const CircleBorder(),
-                onTap: controller.toggleNotif,
+                onTap: controller.navigation.toggleNotif,
                 child: SizedBox(
                   width: 32,
                   height: 32,
@@ -134,7 +134,7 @@ class _TopBar extends StatelessWidget {
               ),
               InkWell(
                 customBorder: const CircleBorder(),
-                onTap: controller.openProfile,
+                onTap: controller.navigation.openProfile,
                 child: const SizedBox(
                   width: 32,
                   height: 32,
@@ -144,7 +144,7 @@ class _TopBar extends StatelessWidget {
             ],
           ),
         ),
-        if (controller.notifOpen)
+        if (controller.navigation.notifOpen)
           Positioned(
             top: 44,
             right: 16,
@@ -254,30 +254,30 @@ class _BottomNav extends StatelessWidget {
           _NavItem(
             icon: Icons.home_rounded,
             label: l10n.homeTab,
-            active: controller.tab == AppTab.home,
+            active: controller.navigation.tab == AppTab.home,
             accent: accent,
-            onTap: () => controller.selectTab(AppTab.home),
+            onTap: () => controller.navigation.selectTab(AppTab.home),
           ),
           _NavItem(
             icon: Icons.receipt_long_rounded,
             label: l10n.transactionsTab,
-            active: controller.tab == AppTab.transactions,
+            active: controller.navigation.tab == AppTab.transactions,
             accent: accent,
-            onTap: () => controller.selectTab(AppTab.transactions),
+            onTap: () => controller.navigation.selectTab(AppTab.transactions),
           ),
           _NavItem(
             icon: Icons.account_balance_wallet_outlined,
             label: l10n.accountsTab,
-            active: controller.tab == AppTab.accounts,
+            active: controller.navigation.tab == AppTab.accounts,
             accent: accent,
-            onTap: () => controller.selectTab(AppTab.accounts),
+            onTap: () => controller.navigation.selectTab(AppTab.accounts),
           ),
           _NavItem(
             icon: Icons.auto_awesome_rounded,
             label: l10n.mentorTab,
-            active: controller.tab == AppTab.mentor,
+            active: controller.navigation.tab == AppTab.mentor,
             accent: accent,
-            onTap: () => controller.selectTab(AppTab.mentor),
+            onTap: () => controller.navigation.selectTab(AppTab.mentor),
           ),
         ],
       ),

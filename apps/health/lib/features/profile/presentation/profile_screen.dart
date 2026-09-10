@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
               child: Row(
                 children: [
                   InkWell(
-                    onTap: controller.closeSubScreen,
+                    onTap: controller.navigation.closeSubScreen,
                     borderRadius: BorderRadius.circular(16),
                     child: const SizedBox(
                       width: 32,
@@ -83,11 +83,14 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 24),
-                    _ProfileRow(label: l10n.profileRegionalSettings, onTap: controller.openRegionalPreferences),
+                    _ProfileRow(
+                      label: l10n.profileRegionalSettings,
+                      onTap: controller.navigation.openRegionalPreferences,
+                    ),
                     const SizedBox(height: 12),
-                    _ProfileRow(label: l10n.profileMentorPreferences, onTap: controller.openMentor),
+                    _ProfileRow(label: l10n.profileMentorPreferences, onTap: controller.navigation.openMentor),
                     const SizedBox(height: 12),
-                    _ProfileRow(label: l10n.profileAccountsAndCards, onTap: controller.openAccounts),
+                    _ProfileRow(label: l10n.profileAccountsAndCards, onTap: controller.navigation.openAccounts),
                     const SizedBox(height: 12),
                     _ProfileRow(label: l10n.logout, danger: true, onTap: controller.logout),
                     const SizedBox(height: 12),

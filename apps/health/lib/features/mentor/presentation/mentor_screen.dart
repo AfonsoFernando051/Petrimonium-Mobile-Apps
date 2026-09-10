@@ -34,7 +34,7 @@ class _MentorScreenState extends State<MentorScreen> {
     final message = text ?? _inputController.text;
     if (message.trim().isEmpty) return;
     _inputController.clear();
-    controller.sendMentorMessage(message);
+    controller.mentor.send(message);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -53,7 +53,7 @@ class _MentorScreenState extends State<MentorScreen> {
 
     if (!_requestedSuggestions) {
       _requestedSuggestions = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) => controller.loadMentorSuggestions());
+      WidgetsBinding.instance.addPostFrameCallback((_) => controller.mentor.loadSuggestions());
     }
 
     return Padding(
@@ -62,11 +62,11 @@ class _MentorScreenState extends State<MentorScreen> {
         children: [
           _MentorHeader(controller: controller, l10n: l10n),
           Expanded(
-            child: controller.mentorMessages.isEmpty
+            child: controller.mentor.messages.isEmpty
                 ? _EmptyState(controller: controller, l10n: l10n, onSend: (text) => _send(controller, text))
                 : _Transcript(controller: controller, scrollController: _scrollController),
           ),
-          if (controller.mentorError != null)
+          if (controller.mentor.error != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 6),
               child: Text(l10n.mentorSendError, style: const TextStyle(fontSize: 12, color: HealthColors.negative)),
@@ -74,7 +74,7 @@ class _MentorScreenState extends State<MentorScreen> {
           _InputBar(
             controller: _inputController,
             l10n: l10n,
-            busy: controller.mentorBusy,
+            busy: controller.mentor.busy,
             onSend: () => _send(controller),
           ),
         ],
@@ -126,7 +126,7 @@ class _MentorHeader extends StatelessWidget {
           ),
           IconButton(
             tooltip: l10n.mentorNewChat,
-            onPressed: controller.startNewMentorConversation,
+            onPressed: controller.mentor.startNewConversation,
             icon: const Icon(Icons.edit_outlined, size: 18, color: HealthColors.textSecondary),
           ),
         ],
@@ -175,7 +175,7 @@ class _EmptyState extends StatelessWidget {
             alignment: WrapAlignment.center,
             spacing: 8,
             runSpacing: 8,
-            children: controller.mentorSuggestions
+            children: controller.mentor.suggestions
                 .map((prompt) {
                   return GestureDetector(
                     onTap: () => onSend(prompt),
@@ -217,9 +217,9 @@ class _Transcript extends StatelessWidget {
     return ListView.builder(
       controller: scrollController,
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 2),
-      itemCount: controller.mentorMessages.length + (controller.mentorBusy ? 1 : 0),
+      itemCount: controller.mentor.messages.length + (controller.mentor.busy ? 1 : 0),
       itemBuilder: (context, index) {
-        if (index >= controller.mentorMessages.length) {
+        if (index >= controller.mentor.messages.length) {
           return const Padding(
             padding: EdgeInsets.symmetric(vertical: 6),
             child: Align(
@@ -228,7 +228,7 @@ class _Transcript extends StatelessWidget {
             ),
           );
         }
-        final message = controller.mentorMessages[index];
+        final message = controller.mentor.messages[index];
         final isUser = message.author == ChatAuthor.user;
         return Align(
           alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
@@ -269,7 +269,7 @@ class _Transcript extends StatelessWidget {
                   if (!isUser && message.sources.isNotEmpty) ...[
                     const SizedBox(height: 8),
                     GestureDetector(
-                      onTap: () => controller.toggleMessageWhy(message.id),
+                      onTap: () => controller.mentor.toggleWhy(message.id),
                       child: Text(
                         l10n.mentorInsightWhy,
                         style: TextStyle(

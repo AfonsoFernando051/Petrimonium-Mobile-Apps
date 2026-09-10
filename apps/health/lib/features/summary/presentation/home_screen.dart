@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 18),
               FilledButton.icon(
-                onPressed: controller.openAccounts,
+                onPressed: controller.navigation.openAccounts,
                 icon: const Icon(Icons.add),
                 label: Text(l10n.addAccount),
               ),
@@ -85,7 +85,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           _Greeting(controller: controller, l10n: l10n),
           const SizedBox(height: 16),
-          if (!controller.insightDismissed) ...[
+          if (!controller.navigation.insightDismissed) ...[
             _MentorInsightCard(controller: controller, l10n: l10n, locale: locale, summary: summary),
             const SizedBox(height: 16),
           ],
@@ -158,7 +158,7 @@ class _MentorInsightCard extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: controller.dismissInsight,
+                onTap: controller.navigation.dismissInsight,
                 child: const Text('×', style: TextStyle(fontSize: 18, color: Color(0xFFB7B0A5), height: 1)),
               ),
             ],
@@ -167,7 +167,7 @@ class _MentorInsightCard extends StatelessWidget {
           Text(text, style: const TextStyle(fontSize: 14, color: HealthColors.textPrimary, height: 1.45)),
           const SizedBox(height: 8),
           GestureDetector(
-            onTap: () => controller.selectTab(AppTab.mentor),
+            onTap: () => controller.navigation.selectTab(AppTab.mentor),
             child: Text(
               l10n.mentorInsightWhy,
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.primary),
@@ -356,7 +356,7 @@ class _IncomeCard extends StatelessWidget {
                   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: HealthColors.textPrimary),
                 ),
               ),
-              _AddLink(label: l10n.addLabel, onTap: controller.openAddIncome),
+              _AddLink(label: l10n.addLabel, onTap: controller.navigation.openAddIncome),
             ],
           ),
           const SizedBox(height: 2),
@@ -414,7 +414,7 @@ class _DebtsCard extends StatelessWidget {
                   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: HealthColors.textPrimary),
                 ),
               ),
-              _AddLink(label: l10n.addLabel, onTap: controller.openAddDebt),
+              _AddLink(label: l10n.addLabel, onTap: controller.navigation.openAddDebt),
             ],
           ),
           const SizedBox(height: 2),

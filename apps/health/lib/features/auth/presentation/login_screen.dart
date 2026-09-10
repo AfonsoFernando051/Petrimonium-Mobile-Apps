@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final l10n = AppLocalizations.of(context);
     setState(() => _formError = null);
     try {
-      if (controller.authMode == AuthMode.signup) {
+      if (controller.navigation.authMode == AuthMode.signup) {
         await controller.register(_nameController.text.trim(), _emailController.text.trim(), _passwordController.text);
       } else {
         await controller.login(_emailController.text.trim(), _passwordController.text);
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final controller = HealthScope.of(context);
     final l10n = AppLocalizations.of(context);
-    final isSignup = controller.authMode == AuthMode.signup;
+    final isSignup = controller.navigation.authMode == AuthMode.signup;
     final busy = controller.busy;
 
     return Scaffold(
@@ -103,7 +103,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         isSignup: isSignup,
                         loginLabel: l10n.loginToggleLogin,
                         signupLabel: l10n.loginToggleSignup,
-                        onChanged: (signup) => controller.setAuthMode(signup ? AuthMode.signup : AuthMode.login),
+                        onChanged: (signup) =>
+                            controller.navigation.setAuthMode(signup ? AuthMode.signup : AuthMode.login),
                       ),
                       const SizedBox(height: 28),
                       if (isSignup) ...[

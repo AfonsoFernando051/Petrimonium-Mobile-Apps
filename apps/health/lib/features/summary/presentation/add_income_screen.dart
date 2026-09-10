@@ -48,7 +48,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     try {
       await controller.addIncome(category: _type, name: name, value: value, recurring: _recurring);
       if (!mounted) return;
-      controller.closeSubScreen();
+      controller.navigation.closeSubScreen();
     } catch (_) {
       if (!mounted) return;
       setState(() => _error = l10n.genericError);
@@ -73,7 +73,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
               child: Row(
                 children: [
                   InkWell(
-                    onTap: controller.closeSubScreen,
+                    onTap: controller.navigation.closeSubScreen,
                     borderRadius: BorderRadius.circular(16),
                     child: const SizedBox(
                       width: 32,

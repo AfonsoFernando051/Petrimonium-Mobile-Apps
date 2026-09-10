@@ -80,13 +80,13 @@ void main() {
     // Selecção a branco, não a terracota cheio (que é o HealthChip usado
     // noutros ecrãs e que aqui destoava do artboard).
     expect(faceColour('Criar Conta'), Colors.transparent);
-    expect(controller.authMode, AuthMode.login);
+    expect(controller.navigation.authMode, AuthMode.login);
 
     await tester.tap(find.text('Criar Conta'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 250));
 
-    expect(controller.authMode, AuthMode.signup);
+    expect(controller.navigation.authMode, AuthMode.signup);
     expect(faceColour('Criar Conta'), HealthColors.card);
   });
 
