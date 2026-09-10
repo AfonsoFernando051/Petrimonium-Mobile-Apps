@@ -78,8 +78,16 @@ class AppStrings {
   static const String homeHoldingsSectionTitle = 'homeHoldingsSectionTitle';
   static const String homeAddAssetLabel = 'homeAddAssetLabel';
 
-  // AddAssetScreen — Wallet's own single-asset "add asset" screen, distinct
-  // from InvestmentConfigurationScreen's Academy-style onboarding wizard.
+  // Home — empty-portfolio state: the Pet's speech-bubble caption above its
+  // big hero treatment, and the two ways to bring assets in (manual entry
+  // works today, B3 sync doesn't exist yet).
+  static const String portfolioNotConnectedPetCaption = 'portfolioNotConnectedPetCaption';
+  static const String connectAssetsManualCta = 'connectAssetsManualCta';
+  static const String connectAssetsB3Cta = 'connectAssetsB3Cta';
+  static const String connectAssetsB3Badge = 'connectAssetsB3Badge';
+
+  // AddAssetScreen — Wallet's own single-asset "add asset" screen, used for
+  // both the zero-holdings first-time entry and adding one more asset later.
   static const String addAssetTitle = 'addAssetTitle';
   static const String addAssetMentorTip = 'addAssetMentorTip';
   static const String addAssetTypeLabel = 'addAssetTypeLabel';
@@ -241,7 +249,6 @@ class AppStrings {
   static const String portfolioGuidanceContinueButton = SharedStrings.portfolioGuidanceContinueButton;
   static const String importPortfolioButton = SharedStrings.importPortfolioButton;
   static const String addManuallyButton = SharedStrings.addManuallyButton;
-  static const String skipForNowButton = SharedStrings.skipForNowButton;
   static const String importComingSoonBody = SharedStrings.importComingSoonBody;
 
   // Portfolio Activation (Portfolio tab's zero-holdings experience)
@@ -653,9 +660,6 @@ class AppStrings {
   static const String mentorDeleteConversationConfirm = SharedStrings.mentorDeleteConversationConfirm;
   static const String mentorDeleteConversationButton = SharedStrings.mentorDeleteConversationButton;
   static const String mentorDeleteConversationFailed = SharedStrings.mentorDeleteConversationFailed;
-
-  // Investment configuration
-  static const String initialPortfolioTitle = SharedStrings.initialPortfolioTitle;
 
   // Portfolio summary card (investment feature)
   static const String portfolioCardTitle = SharedStrings.portfolioCardTitle;

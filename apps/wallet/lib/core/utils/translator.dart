@@ -106,6 +106,11 @@ class Translator {
       AppStrings.homeChangeRendimentosLabel: 'Rendimentos',
       AppStrings.homeHoldingsSectionTitle: 'Meus ativos',
       AppStrings.homeAddAssetLabel: 'Adicionar',
+      AppStrings.portfolioNotConnectedPetCaption:
+          'Vamos montar sua carteira juntos? Cadastre seu primeiro ativo — leva menos de um minuto.',
+      AppStrings.connectAssetsManualCta: 'Cadastrar ativo manualmente',
+      AppStrings.connectAssetsB3Cta: 'Conectar com a B3',
+      AppStrings.connectAssetsB3Badge: 'EM BREVE',
       AppStrings.addAssetTitle: 'Adicionar ativo',
       AppStrings.addAssetMentorTip:
           'Cada ativo que você registra deixa sua carteira mais completa — eu uso isso para te dar leituras melhores.',
@@ -225,6 +230,11 @@ class Translator {
       AppStrings.homeChangeRendimentosLabel: 'Income',
       AppStrings.homeHoldingsSectionTitle: 'My assets',
       AppStrings.homeAddAssetLabel: 'Add',
+      AppStrings.portfolioNotConnectedPetCaption:
+          "Shall we build your portfolio together? Add your first asset — it takes less than a minute.",
+      AppStrings.connectAssetsManualCta: 'Add an asset manually',
+      AppStrings.connectAssetsB3Cta: 'Connect with B3',
+      AppStrings.connectAssetsB3Badge: 'COMING SOON',
       AppStrings.addAssetTitle: 'Add asset',
       AppStrings.addAssetMentorTip:
           'Every asset you register makes your portfolio more complete — I use it to give you better insights.',
@@ -335,6 +345,11 @@ class Translator {
       AppStrings.homeChangeRendimentosLabel: 'Ingresos',
       AppStrings.homeHoldingsSectionTitle: 'Mis activos',
       AppStrings.homeAddAssetLabel: 'Agregar',
+      AppStrings.portfolioNotConnectedPetCaption:
+          '¿Armamos tu cartera juntos? Registra tu primer activo — toma menos de un minuto.',
+      AppStrings.connectAssetsManualCta: 'Registrar activo manualmente',
+      AppStrings.connectAssetsB3Cta: 'Conectar con la B3',
+      AppStrings.connectAssetsB3Badge: 'PRÓXIMAMENTE',
       AppStrings.addAssetTitle: 'Agregar activo',
       AppStrings.addAssetMentorTip:
           'Cada activo que registras hace tu cartera más completa — uso esto para darte mejores lecturas.',

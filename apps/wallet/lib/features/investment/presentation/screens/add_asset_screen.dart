@@ -13,13 +13,14 @@ import 'package:petrimonium_wallet/features/investment/domain/services/ticker_ty
 import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
-/// Wallet's own "add one asset" screen — reached from Home's "Adicionar"
-/// action once a portfolio already exists. Deliberately separate from
-/// `InvestmentConfigurationScreen`: that screen is the gamified, multi-asset
-/// Academy-style onboarding wizard (nebula background, Pet companion,
-/// unlockable rewards, "Portfólio Inicial") kept as-is for the zero-holdings
-/// first-time setup; this one is the plain, single-asset, "Mentor mais
-/// discreto" Wallet screen the design calls for.
+/// Wallet's own "add one asset" screen — reached both from
+/// `PortfolioNotConnectedCard`'s CTA (zero-holdings first-time entry) and
+/// from Home's "Adicionar" action once a portfolio already exists. Used to
+/// be paired with a separate, gamified multi-asset Academy-style onboarding
+/// wizard (`InvestmentConfigurationScreen`: nebula background, Pet
+/// companion, unlockable rewards, "Portfólio Inicial") for the first-time
+/// case; that wizard was retired in favor of this single plain,
+/// single-asset, "Mentor mais discreto" Wallet screen for both cases.
 ///
 /// Submits via `POST /api/investments` — a single-lot append that never
 /// touches any other holding (see DEM-30). The portfolio total shown below
@@ -110,8 +111,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   }
 
   /// Re-fetches the ticker's historical price so editing the purchase date
-  /// keeps the price field truthful to that date — same behavior as
-  /// `InvestmentConfigurationScreen`.
+  /// keeps the price field truthful to that date.
   Future<void> _refreshPriceForSelectedDate() async {
     final ticker = _nameController.text.trim();
     if (ticker.isEmpty || _selectedDate == null) return;
@@ -391,30 +391,41 @@ class _MentorTipCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GlassCard(
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: tokens.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: tokens.border),
-      ),
+      borderRadius: 18,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipOval(
-            child: Image.asset(
-              'assets/images/generated_fox.png',
-              width: 36,
-              height: 36,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Icon(Icons.pets, size: 24, color: tokens.mentor),
+          Container(
+            width: 44,
+            height: 44,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [tokens.primary.withValues(alpha: 0.22), tokens.primary.withValues(alpha: 0)],
+                stops: const [0.0, 0.85],
+              ),
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                'assets/images/generated_fox.png',
+                width: 36,
+                height: 36,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Icon(Icons.pets, size: 22, color: tokens.mentor),
+              ),
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              Translator.translate(AppStrings.addAssetMentorTip),
-              style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                Translator.translate(AppStrings.addAssetMentorTip),
+                style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4),
+              ),
             ),
           ),
         ],
@@ -438,7 +449,7 @@ class _TypeGrid extends StatelessWidget {
       crossAxisCount: 3,
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
-      childAspectRatio: 2.4,
+      childAspectRatio: 1.08,
       children: [
         for (final type in InvestmentTypeEnum.values)
           _TypeCard(type: type, selected: type == selected, tokens: tokens, onTap: () => onSelect(type)),
@@ -459,23 +470,33 @@ class _TypeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
         decoration: BoxDecoration(
           color: selected ? tokens.primaryContainer : tokens.surface,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(color: selected ? tokens.primary : tokens.border, width: selected ? 1.5 : 1),
         ),
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              selected ? Icons.check_circle : type.icon,
-              size: 16,
-              color: selected ? tokens.primary : tokens.textSecondary,
+            Container(
+              width: 34,
+              height: 34,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: selected ? tokens.primary.withValues(alpha: 0.18) : tokens.surfaceElevated,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                selected ? Icons.check_circle : type.icon,
+                size: 17,
+                color: selected ? tokens.primary : tokens.textSecondary,
+              ),
             ),
-            const SizedBox(width: 6),
+            const SizedBox(height: 8),
             Flexible(
               child: Text(
                 type.shortLabel,
@@ -517,15 +538,15 @@ class _DateField extends StatelessWidget {
           border: Border.all(color: tokens.border),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Icon(Icons.calendar_today_outlined, size: 18, color: tokens.textSecondary),
+            const SizedBox(width: 10),
             Text(
               date == null
                   ? hint
                   : "${date!.day.toString().padLeft(2, '0')}/${date!.month.toString().padLeft(2, '0')}/${date!.year}",
               style: TextStyle(color: date == null ? tokens.textTertiary : tokens.textPrimary, fontSize: 14),
             ),
-            Icon(Icons.calendar_today_outlined, size: 18, color: tokens.textSecondary),
           ],
         ),
       ),
@@ -542,13 +563,9 @@ class _SummaryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GlassCard(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: tokens.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: tokens.border),
-      ),
+      borderRadius: 16,
       child: Row(
         children: [
           Expanded(

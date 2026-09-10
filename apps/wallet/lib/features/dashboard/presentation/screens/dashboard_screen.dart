@@ -45,7 +45,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // Where the Pet actually renders on screen, for `PetSpeechBubbleOverlay`
   // to glue its bubble to (see `PetSpeechBubbleAnchor`'s doc comment).
-  // `_heroAnchor` is Home's big, more expressive pet (`LearningHeroCard`)
+  // `_heroAnchor` is Home's big, more expressive pet (`HomePetHero`, inside
+  // `PortfolioNotConnectedCard` or the greeting row — see `OverviewScreen`)
   // and takes priority whenever Home is the visible tab; `_headerAnchor` is
   // the always-present AppBar avatar every other tab falls back to.
   final PetSpeechBubbleAnchor _heroAnchor = PetSpeechBubbleAnchor();
@@ -390,7 +391,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // ── Início: unified patrimônio + Mentor dashboard, absorbing what used to
   // be a separate Carteira tab (see `DashboardTabRouter`'s class doc). ─────
   Widget _buildHomeContent() {
-    return OverviewScreen(controller: _portfolioController, onOpenMentor: _openMentorFromHome);
+    return OverviewScreen(
+      controller: _portfolioController,
+      onOpenMentor: _openMentorFromHome,
+      mascotController: _mascotController,
+      heroAnchor: _heroAnchor,
+    );
   }
 
   void _openMentorFromHome(int? conversationId) {
