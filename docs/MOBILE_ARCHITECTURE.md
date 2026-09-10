@@ -184,11 +184,12 @@ is product-branded no matter how identical the source looks.
 
 ## What is deliberately still duplicated
 
-Academy and Wallet still hold 51 clone files in `lib/` (~5100 lines) and 52
-in `test/` (~4900). That is down from 80 and 93, and what is left is blocked
-by three decisions rather than by effort.
+Academy and Wallet still hold 39 clone files in `lib/` (~4200 lines) and 40
+in `test/` (~3800). That is down from 80 and 93, and every one that is left
+is behind a product decision or is duplicated on purpose — the mechanical
+extractions are done.
 
-**1. The localization mechanism (24 of the 51).** Settings, the Mentor
+**1. The localization mechanism (24 of the 39).** Settings, the Mentor
 screens, the auth screens and the Pet's speech all bind to `Translator` and
 `AppStrings`, and **the two catalogs have already diverged by roughly 650
 lines**. Health is a third system entirely, using ARB files and `gen_l10n`.
@@ -214,21 +215,18 @@ emit directly — but it would also make every product's event vocabulary one
 shared vocabulary, and Health has no `AppEvent` at all. That is a design
 decision, not a mechanical move.
 
-**3. The Academy content-icon chain (9 files).** `AcademyCatalogSnapshot`
-deserializes an icon *key* from content JSON straight into a const
-`IconData` on the entity, which is why `academy/domain/entities/*` still
-import `flutter/material`. Unwinding it means changing the data model's shape
-and the seed tooling that writes it
-(`tool/generate_academy_seed_json.dart`). Both allowlists in
-`tooling/check_layering.sh` enumerate these files by path, so the debt is a
-list to work through rather than a number in a report — and a stale entry
-fails the check.
+**3. The five copy catalogs** — `AchievementCatalog`, `Achievement`,
+`InvestmentTypeDisplay`, `MissionDisplayCatalog` and `HealthMetricDisplay` —
+are duplicated **on purpose** and should stay that way. They read as clones
+today only because the two products happen to say the
+same thing; they are the half of the rules/copy split that each product owns,
+and the moment one product's wording changes they stop looking alike.
 
-A fourth group is duplicated **on purpose** and should stay that way: the
-copy catalogs (`AchievementCatalog`, `InvestmentTypeDisplay`,
-`MissionDisplayCatalog`, `HealthMetricDisplay`). They read as clones today
-because the two products happen to say the same thing; they are the half of
-the rules/copy split that each product owns.
+The Academy content-icon chain used to be a fourth blocker. It is resolved:
+the catalog entities carry an icon *key* and only presentation resolves it,
+so the whole nine-file block moved to `petrimonium_shared_features`. That is
+also why `tooling/check_layering.sh`'s widget-library allowlist is empty —
+all 21 domain files that imported a Flutter widget library are clean.
 
 Auth was the exception, and is done: verified byte-for-byte identical (or a
 single cosmetic line apart) before touching it, so no localization decision
