@@ -13,7 +13,9 @@ void main() {
   }
 
   group('IndicatorEducationSheet', () {
-    testWidgets('renders the indicator label/value header and the three-part explanation for a known indicator', (WidgetTester tester) async {
+    testWidgets('renders the indicator label/value header and the three-part explanation for a known indicator', (
+      WidgetTester tester,
+    ) async {
       const indicator = AssetIndicator(id: 'pe', label: 'P/L', value: '5.20', rawValue: 5.2, unit: 'x');
 
       await tester.pumpWidget(buildTestableWidget(indicator));
@@ -47,7 +49,9 @@ void main() {
       expect(find.textContaining('Vamos entender o P/L!'), findsOneWidget);
     });
 
-    testWidgets('shows a "coming soon" fallback for an indicator with no catalog explanation', (WidgetTester tester) async {
+    testWidgets('shows a "coming soon" fallback for an indicator with no catalog explanation', (
+      WidgetTester tester,
+    ) async {
       const indicator = AssetIndicator(id: 'unknown_indicator', label: 'Mistério', value: '--');
 
       await tester.pumpWidget(buildTestableWidget(indicator));

@@ -42,12 +42,9 @@ class PortfolioLearningBridge {
       final explanation = IndicatorEducationCatalog.getExplanation(indicator.id);
       if (explanation == null) continue;
 
-      applied.add(AppliedConcept(
-        indicator: indicator,
-        explanation: explanation,
-        lessonId: lesson.id,
-        lessonTitle: lesson.title,
-      ));
+      applied.add(
+        AppliedConcept(indicator: indicator, explanation: explanation, lessonId: lesson.id, lessonTitle: lesson.title),
+      );
     }
     return applied;
   }

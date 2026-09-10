@@ -19,9 +19,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// This means the screen opens immediately with user-known data, and
 /// progressively enhances with real market data.
 class AssetDetailsController extends ChangeNotifier {
-  AssetDetailsController({
-    required AssetDetailsRepository repository,
-  }) : _repository = repository;
+  AssetDetailsController({required AssetDetailsRepository repository}) : _repository = repository;
 
   final AssetDetailsRepository _repository;
 

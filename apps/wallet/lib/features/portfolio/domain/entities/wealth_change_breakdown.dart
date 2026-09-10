@@ -14,9 +14,5 @@ class WealthChangeBreakdown {
   final double aportes;
   final double rendimentos;
 
-  const WealthChangeBreakdown({
-    required this.valorizacao,
-    required this.aportes,
-    required this.rendimentos,
-  });
+  const WealthChangeBreakdown({required this.valorizacao, required this.aportes, required this.rendimentos});
 }

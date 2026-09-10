@@ -89,10 +89,7 @@ void main() {
 
   group('PendingPortfolioStatsBuilder.build — malformed purchase date', () {
     test('an unparsable date falls back to now rather than throwing', () {
-      expect(
-        () => PendingPortfolioStatsBuilder.build([asset(purchaseDate: 'not-a-date')]),
-        returnsNormally,
-      );
+      expect(() => PendingPortfolioStatsBuilder.build([asset(purchaseDate: 'not-a-date')]), returnsNormally);
     });
   });
 

@@ -95,7 +95,9 @@ void main() {
       expect(find.byType(PortfolioContextCard), findsNothing);
     });
 
-    testWidgets('shows the user position and portfolio context cards when the asset is owned', (WidgetTester tester) async {
+    testWidgets('shows the user position and portfolio context cards when the asset is owned', (
+      WidgetTester tester,
+    ) async {
       const details = AssetDetails(
         ticker: 'PETR4',
         shortName: 'Petrobras',
@@ -121,7 +123,9 @@ void main() {
       expect(find.byType(ConcentrationWarning), findsNothing); // 15% weight, under the 20% threshold
     });
 
-    testWidgets('shows a concentration warning when the position exceeds 20% of the portfolio', (WidgetTester tester) async {
+    testWidgets('shows a concentration warning when the position exceeds 20% of the portfolio', (
+      WidgetTester tester,
+    ) async {
       const details = AssetDetails(
         ticker: 'PETR4',
         shortName: 'Petrobras',
@@ -144,7 +148,11 @@ void main() {
 
       // The ListView's children are only built once scrolled into the
       // (cached) viewport — scroll down to reach ConcentrationWarning.
-      await tester.scrollUntilVisible(find.byType(ConcentrationWarning), 300, scrollable: find.byType(Scrollable).first);
+      await tester.scrollUntilVisible(
+        find.byType(ConcentrationWarning),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
 
       expect(find.byType(ConcentrationWarning), findsOneWidget);
     });
@@ -153,21 +161,23 @@ void main() {
       const details = AssetDetails(ticker: 'PETR4', shortName: 'Petrobras', assetType: 'stock');
       when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) async => details);
 
-      await tester.pumpWidget(MaterialApp(
-        theme: AppTheme.dark,
-        home: Builder(
-          builder: (context) => Scaffold(
-            body: Center(
-              child: ElevatedButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const AssetDetailsScreen(ticker: 'PETR4')),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark,
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (_) => const AssetDetailsScreen(ticker: 'PETR4'))),
+                  child: const Text('open'),
                 ),
-                child: const Text('open'),
               ),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.tap(find.text('open'));
       await tester.pump();
@@ -212,20 +222,28 @@ void main() {
         return Holding.fromLots(lots).first;
       }
 
-      testWidgets('renders the valuation chart and purchase history when a holding is passed', (WidgetTester tester) async {
+      testWidgets('renders the valuation chart and purchase history when a holding is passed', (
+        WidgetTester tester,
+      ) async {
         const details = AssetDetails(ticker: 'PETR4', shortName: 'Petrobras', assetType: 'stock');
         when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) async => details);
 
-        await tester.pumpWidget(MaterialApp(
-          theme: AppTheme.dark,
-          home: AssetDetailsScreen(ticker: 'PETR4', holding: buildHolding()),
-        ));
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.dark,
+            home: AssetDetailsScreen(ticker: 'PETR4', holding: buildHolding()),
+          ),
+        );
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 300));
 
         expect(find.byType(AssetValuationChartCard), findsOneWidget);
 
-        await tester.scrollUntilVisible(find.byType(PurchaseHistoryCard), 300, scrollable: find.byType(Scrollable).first);
+        await tester.scrollUntilVisible(
+          find.byType(PurchaseHistoryCard),
+          300,
+          scrollable: find.byType(Scrollable).first,
+        );
         expect(find.byType(PurchaseHistoryCard), findsOneWidget);
         expect(find.text('01/01/2024'), findsOneWidget);
         expect(find.text('01/02/2024'), findsOneWidget);
@@ -235,10 +253,12 @@ void main() {
         const details = AssetDetails(ticker: 'PETR4', shortName: 'Petrobras', assetType: 'stock');
         when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) async => details);
 
-        await tester.pumpWidget(MaterialApp(
-          theme: AppTheme.dark,
-          home: AssetDetailsScreen(ticker: 'PETR4', holding: buildHolding()),
-        ));
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.dark,
+            home: AssetDetailsScreen(ticker: 'PETR4', holding: buildHolding()),
+          ),
+        );
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 300));
 

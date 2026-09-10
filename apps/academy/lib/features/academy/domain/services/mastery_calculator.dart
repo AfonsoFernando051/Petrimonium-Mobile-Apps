@@ -46,8 +46,7 @@ class MasteryCalculator {
     if (module.lessonIds.isEmpty) return 0.0;
     final sum = module.lessonIds.fold<double>(
       0,
-      (acc, id) => acc +
-          lessonMasteryScore(completed: completedIds.contains(id), perfect: perfectIds.contains(id)),
+      (acc, id) => acc + lessonMasteryScore(completed: completedIds.contains(id), perfect: perfectIds.contains(id)),
     );
     return sum / module.lessonIds.length;
   }
@@ -65,8 +64,7 @@ class MasteryCalculator {
       totalLessons += module.lessonIds.length;
       scoreSum += module.lessonIds.fold<double>(
         0,
-        (acc, id) => acc +
-            lessonMasteryScore(completed: completedIds.contains(id), perfect: perfectIds.contains(id)),
+        (acc, id) => acc + lessonMasteryScore(completed: completedIds.contains(id), perfect: perfectIds.contains(id)),
       );
     }
     if (totalLessons == 0) return 0.0;

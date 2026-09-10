@@ -12,14 +12,9 @@ import 'package:petrimonium_health/features/transactions/presentation/transactio
 import 'package:petrimonium_health/l10n/app_localizations.dart';
 
 void main() {
-  testWidgets('editing a recurrence keeps its billing day and start date', (
-    tester,
-  ) async {
+  testWidgets('editing a recurrence keeps its billing day and start date', (tester) async {
     final repository = _RecurrenceRepository();
-    final controller = HealthController(
-      repository: repository,
-      localeController: LocaleController(),
-    );
+    final controller = HealthController(repository: repository, localeController: LocaleController());
     // refreshData() is a no-op until a profile is loaded, so go through the
     // same entry point onboarding uses.
     await controller.saveOnboarding(
@@ -42,10 +37,7 @@ void main() {
           GlobalCupertinoLocalizations.delegate,
         ],
         home: Scaffold(
-          body: HealthScope(
-            controller: controller,
-            child: const TransactionsScreen(),
-          ),
+          body: HealthScope(controller: controller, child: const TransactionsScreen()),
         ),
       ),
     );
@@ -54,21 +46,13 @@ void main() {
     // Open the recurrences section and edit the only entry.
     await tester.tap(find.text('Repetir mensalmente'));
     await tester.pumpAndSettle();
-    await tester.tap(
-      find.descendant(
-        of: find.byType(ExpansionTile),
-        matching: find.byType(PopupMenuButton<String>),
-      ),
-    );
+    await tester.tap(find.descendant(of: find.byType(ExpansionTile), matching: find.byType(PopupMenuButton<String>)));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Editar esta e as futuras').last);
     await tester.pumpAndSettle();
 
     // Change only the amount, exactly as a user raising the rent would.
-    await tester.enterText(
-      find.widgetWithText(TextField, 'Valor').last,
-      '1950,00',
-    );
+    await tester.enterText(find.widgetWithText(TextField, 'Valor').last, '1950,00');
     await tester.tap(find.text('Salvar').last);
     await tester.pumpAndSettle();
 
@@ -78,11 +62,7 @@ void main() {
     // Rent charged on the 10th must stay on the 10th: seeding the dialog from
     // startDate instead would show — and then save — day 1.
     expect(saved.dayOfMonth, 10, reason: 'billing day survives an edit');
-    expect(
-      saved.startDate,
-      DateTime(2026, 9, 1),
-      reason: 'editing an amount must not move when the series began',
-    );
+    expect(saved.startDate, DateTime(2026, 9, 1), reason: 'editing an amount must not move when the series began');
   });
 }
 
@@ -138,8 +118,7 @@ class _RecurrenceRepository implements HealthRepository {
   }) async => const [];
 
   @override
-  Future<MonthlySummary> getSummary(DateTime month) async =>
-      MonthlySummary.empty(CurrencyCode.brl, month);
+  Future<MonthlySummary> getSummary(DateTime month) async => MonthlySummary.empty(CurrencyCode.brl, month);
 
   @override
   Future<HealthProfile?> getProfile() async => const HealthProfile(

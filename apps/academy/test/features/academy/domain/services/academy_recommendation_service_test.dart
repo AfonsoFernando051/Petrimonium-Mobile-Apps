@@ -10,7 +10,11 @@ void main() {
 
   group('recommendationsFor', () {
     test('with nothing completed, only continueLearning is recommended', () {
-      final recommendations = AcademyRecommendationService.recommendationsFor(catalog: catalog, completedIds: {}, perfectIds: {});
+      final recommendations = AcademyRecommendationService.recommendationsFor(
+        catalog: catalog,
+        completedIds: {},
+        perfectIds: {},
+      );
       expect(recommendations, hasLength(1));
       expect(recommendations.single.type, RecommendationType.continueLearning);
     });
@@ -67,7 +71,10 @@ void main() {
 
   group('reviewEstimatedMinutes', () {
     test('zero when the review queue is empty', () {
-      expect(AcademyRecommendationService.reviewEstimatedMinutes(catalog: catalog, completedIds: {}, perfectIds: {}), 0);
+      expect(
+        AcademyRecommendationService.reviewEstimatedMinutes(catalog: catalog, completedIds: {}, perfectIds: {}),
+        0,
+      );
     });
 
     test('at least 1 minute once the queue is non-empty', () {

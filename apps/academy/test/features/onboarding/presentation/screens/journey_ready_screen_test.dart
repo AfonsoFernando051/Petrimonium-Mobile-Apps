@@ -49,10 +49,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const JourneyReadyScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const JourneyReadyScreen());
   }
 
   group('JourneyReadyScreen', () {

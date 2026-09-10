@@ -35,21 +35,13 @@ class AcademyCatalogErrorState extends StatelessWidget {
                 Text(
                   Translator.translate(AppStrings.academyCatalogErrorTitle),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: tokens.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
+                  style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   Translator.translate(AppStrings.academyCatalogErrorBody),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: tokens.textSecondary,
-                    fontSize: 12,
-                    height: 1.4,
-                  ),
+                  style: TextStyle(color: tokens.textSecondary, fontSize: 12, height: 1.4),
                 ),
                 const SizedBox(height: 16),
                 GameButton(

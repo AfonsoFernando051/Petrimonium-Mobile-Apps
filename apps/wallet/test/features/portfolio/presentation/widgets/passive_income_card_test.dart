@@ -8,7 +8,9 @@ void main() {
   Widget buildTestableWidget(PassiveIncomeEstimate estimate) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: SingleChildScrollView(child: PassiveIncomeCard(estimate: estimate))),
+      home: Scaffold(
+        body: SingleChildScrollView(child: PassiveIncomeCard(estimate: estimate)),
+      ),
     );
   }
 
@@ -21,14 +23,13 @@ void main() {
       expect(find.textContaining('Projeção para os próximos 6 meses'), findsNothing);
     });
 
-    testWidgets('renders monthly/annual totals and a breakdown row per type when populated', (WidgetTester tester) async {
+    testWidgets('renders monthly/annual totals and a breakdown row per type when populated', (
+      WidgetTester tester,
+    ) async {
       const estimate = PassiveIncomeEstimate(
         monthlyEstimate: 100,
         annualEstimate: 1200,
-        monthlyByType: {
-          InvestmentTypeEnum.FIXED_INCOME: 80,
-          InvestmentTypeEnum.REAL_ESTATE: 20,
-        },
+        monthlyByType: {InvestmentTypeEnum.FIXED_INCOME: 80, InvestmentTypeEnum.REAL_ESTATE: 20},
       );
 
       // The month chip's fixed-height Container overflows by a few pixels

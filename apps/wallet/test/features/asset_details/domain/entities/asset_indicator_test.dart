@@ -4,13 +4,7 @@ import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_
 void main() {
   group('AssetIndicator', () {
     test('constructs with the given fields', () {
-      const indicator = AssetIndicator(
-        id: 'pe',
-        label: 'P/E',
-        value: '12.3x',
-        rawValue: 12.3,
-        unit: 'x',
-      );
+      const indicator = AssetIndicator(id: 'pe', label: 'P/E', value: '12.3x', rawValue: 12.3, unit: 'x');
 
       expect(indicator.id, 'pe');
       expect(indicator.label, 'P/E');

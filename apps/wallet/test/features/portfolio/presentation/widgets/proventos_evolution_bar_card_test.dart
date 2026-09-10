@@ -43,7 +43,9 @@ void main() {
       expect(find.byType(BarChart), findsNothing);
     });
 
-    testWidgets('renders a bar chart when the radar has history within the last 12 months', (WidgetTester tester) async {
+    testWidgets('renders a bar chart when the radar has history within the last 12 months', (
+      WidgetTester tester,
+    ) async {
       final now = DateTime.now();
       final radar = DividendRadar(
         upcoming: const [],

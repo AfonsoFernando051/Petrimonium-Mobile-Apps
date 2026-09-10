@@ -9,17 +9,14 @@ enum WalletBaseCurrencyEnum { brl }
 
 extension WalletBaseCurrencyEnumDisplay on WalletBaseCurrencyEnum {
   String get code => switch (this) {
-        WalletBaseCurrencyEnum.brl => 'BRL',
-      };
+    WalletBaseCurrencyEnum.brl => 'BRL',
+  };
 
   String get label => switch (this) {
-        WalletBaseCurrencyEnum.brl => 'BRL — Real',
-      };
+    WalletBaseCurrencyEnum.brl => 'BRL — Real',
+  };
 
   static WalletBaseCurrencyEnum fromName(String? name) {
-    return WalletBaseCurrencyEnum.values.firstWhere(
-      (c) => c.name == name,
-      orElse: () => WalletBaseCurrencyEnum.brl,
-    );
+    return WalletBaseCurrencyEnum.values.firstWhere((c) => c.name == name, orElse: () => WalletBaseCurrencyEnum.brl);
   }
 }

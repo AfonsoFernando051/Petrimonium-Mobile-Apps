@@ -22,11 +22,7 @@ void main() {
     });
 
     test('parses an empty options list', () {
-      final question = QuestionModel.fromJson(const {
-        'id': 'q2',
-        'text': 'Empty',
-        'options': <Map<String, dynamic>>[],
-      });
+      final question = QuestionModel.fromJson(const {'id': 'q2', 'text': 'Empty', 'options': <Map<String, dynamic>>[]});
 
       expect(question.options, isEmpty);
     });

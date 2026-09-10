@@ -1,17 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Supported tail placement directions for [ComicBubblePainter].
-enum PetBubbleTailPosition {
-  bottomLeft,
-  bottomRight,
-  bottomCenter,
-  topLeft,
-  topRight,
-  topCenter,
-  left,
-  right,
-  none,
-}
+enum PetBubbleTailPosition { bottomLeft, bottomRight, bottomCenter, topLeft, topRight, topCenter, left, right, none }
 
 /// Custom vector painter that renders a comic-inspired dialogue bubble shell
 /// complete with integrated pointer tail, dual stroke, and soft drop shadow.
@@ -75,13 +65,15 @@ class ComicBubblePainter extends CustomPainter {
 
     // Adjust body bounds based on tail position so tail extends outward
     final double left = tailPosition == PetBubbleTailPosition.left ? tailHeight : 0.0;
-    final double top = (tailPosition == PetBubbleTailPosition.topLeft ||
+    final double top =
+        (tailPosition == PetBubbleTailPosition.topLeft ||
             tailPosition == PetBubbleTailPosition.topRight ||
             tailPosition == PetBubbleTailPosition.topCenter)
         ? tailHeight
         : 0.0;
     final double right = tailPosition == PetBubbleTailPosition.right ? size.width - tailHeight : size.width;
-    final double bottom = (tailPosition == PetBubbleTailPosition.bottomLeft ||
+    final double bottom =
+        (tailPosition == PetBubbleTailPosition.bottomLeft ||
             tailPosition == PetBubbleTailPosition.bottomRight ||
             tailPosition == PetBubbleTailPosition.bottomCenter)
         ? size.height - tailHeight
@@ -106,22 +98,8 @@ class ComicBubblePainter extends CustomPainter {
 
       path.lineTo(tLeft, top);
       // Bezier curve to tip pointing UP
-      path.cubicTo(
-        tLeft + tailWidth * 0.2,
-        top,
-        tailCX - tailWidth * 0.1,
-        0.0,
-        tailCX,
-        0.0,
-      );
-      path.cubicTo(
-        tailCX + tailWidth * 0.1,
-        0.0,
-        tRight - tailWidth * 0.2,
-        top,
-        tRight,
-        top,
-      );
+      path.cubicTo(tLeft + tailWidth * 0.2, top, tailCX - tailWidth * 0.1, 0.0, tailCX, 0.0);
+      path.cubicTo(tailCX + tailWidth * 0.1, 0.0, tRight - tailWidth * 0.2, top, tRight, top);
     }
     path.lineTo(right - r, top);
     path.arcToPoint(Offset(right, top + r), radius: Radius.circular(r));
@@ -133,22 +111,8 @@ class ComicBubblePainter extends CustomPainter {
       final double tBottom = tailCY + tailWidth / 2;
 
       path.lineTo(right, tTop);
-      path.cubicTo(
-        right,
-        tTop + tailWidth * 0.2,
-        size.width,
-        tailCY - tailWidth * 0.1,
-        size.width,
-        tailCY,
-      );
-      path.cubicTo(
-        size.width,
-        tailCY + tailWidth * 0.1,
-        right,
-        tBottom - tailWidth * 0.2,
-        right,
-        tBottom,
-      );
+      path.cubicTo(right, tTop + tailWidth * 0.2, size.width, tailCY - tailWidth * 0.1, size.width, tailCY);
+      path.cubicTo(size.width, tailCY + tailWidth * 0.1, right, tBottom - tailWidth * 0.2, right, tBottom);
     }
     path.lineTo(right, bottom - r);
     path.arcToPoint(Offset(right - r, bottom), radius: Radius.circular(r));
@@ -167,22 +131,8 @@ class ComicBubblePainter extends CustomPainter {
 
       path.lineTo(tRight, bottom);
       // Bezier curve to tip pointing DOWN towards Pet
-      path.cubicTo(
-        tRight - tailWidth * 0.2,
-        bottom,
-        tailCX + tailWidth * 0.1,
-        size.height,
-        tailCX,
-        size.height,
-      );
-      path.cubicTo(
-        tailCX - tailWidth * 0.1,
-        size.height,
-        tLeft + tailWidth * 0.2,
-        bottom,
-        tLeft,
-        bottom,
-      );
+      path.cubicTo(tRight - tailWidth * 0.2, bottom, tailCX + tailWidth * 0.1, size.height, tailCX, size.height);
+      path.cubicTo(tailCX - tailWidth * 0.1, size.height, tLeft + tailWidth * 0.2, bottom, tLeft, bottom);
     }
     path.lineTo(left + r, bottom);
     path.arcToPoint(Offset(left, bottom - r), radius: Radius.circular(r));
@@ -194,22 +144,8 @@ class ComicBubblePainter extends CustomPainter {
       final double tBottom = tailCY + tailWidth / 2;
 
       path.lineTo(left, tBottom);
-      path.cubicTo(
-        left,
-        tBottom - tailWidth * 0.2,
-        0.0,
-        tailCY + tailWidth * 0.1,
-        0.0,
-        tailCY,
-      );
-      path.cubicTo(
-        0.0,
-        tailCY - tailWidth * 0.1,
-        left,
-        tTop + tailWidth * 0.2,
-        left,
-        tTop,
-      );
+      path.cubicTo(left, tBottom - tailWidth * 0.2, 0.0, tailCY + tailWidth * 0.1, 0.0, tailCY);
+      path.cubicTo(0.0, tailCY - tailWidth * 0.1, left, tTop + tailWidth * 0.2, left, tTop);
     }
     path.lineTo(left, top + r);
     path.arcToPoint(Offset(left + r, top), radius: Radius.circular(r));

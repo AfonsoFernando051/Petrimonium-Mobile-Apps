@@ -64,11 +64,7 @@ class KeyIndicatorsSection extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: indicators.map((ind) => _IndicatorChip(indicator: ind)).toList(),
-            ),
+            Wrap(spacing: 8, runSpacing: 8, children: indicators.map((ind) => _IndicatorChip(indicator: ind)).toList()),
           ],
         ),
       ),
@@ -119,28 +115,17 @@ class _IndicatorChip extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    indicator.label,
-                    style: TextStyle(color: context.colors.textSecondary, fontSize: 10),
-                  ),
+                  Text(indicator.label, style: TextStyle(color: context.colors.textSecondary, fontSize: 10)),
                   if (hasExplanation) ...[
                     const SizedBox(width: 3),
-                    Icon(
-                      Icons.info_outline,
-                      size: 11,
-                      color: AppColors.neonCyan.withValues(alpha: 0.5),
-                    ),
+                    Icon(Icons.info_outline, size: 11, color: AppColors.neonCyan.withValues(alpha: 0.5)),
                   ],
                 ],
               ),
               const SizedBox(height: 2),
               Text(
                 indicator.value ?? '--',
-                style: TextStyle(
-                  color: context.colors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
               ),
             ],
           ),

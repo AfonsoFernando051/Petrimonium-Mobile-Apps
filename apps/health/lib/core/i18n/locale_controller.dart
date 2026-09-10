@@ -4,8 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../profile/health_profile.dart';
 
 final class LocaleController extends ChangeNotifier {
-  LocaleController({InterfaceLocale initial = InterfaceLocale.ptBr})
-      : _current = initial;
+  LocaleController({InterfaceLocale initial = InterfaceLocale.ptBr}) : _current = initial;
 
   static const _cacheKey = 'health_last_locale';
   InterfaceLocale _current;

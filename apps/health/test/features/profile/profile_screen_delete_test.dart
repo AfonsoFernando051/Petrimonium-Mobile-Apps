@@ -12,15 +12,9 @@ import 'package:petrimonium_health/l10n/app_localizations.dart';
 /// por isso interessa provar o diálogo obrigatório, a limpeza da sessão local
 /// e — sobretudo — que uma falha não deixa o utilizador a achar que apagou.
 void main() {
-  Future<_DeleteRepository> pumpProfile(
-    WidgetTester tester, {
-    bool failDelete = false,
-  }) async {
+  Future<_DeleteRepository> pumpProfile(WidgetTester tester, {bool failDelete = false}) async {
     final repository = _DeleteRepository(failDelete: failDelete);
-    final controller = HealthController(
-      repository: repository,
-      localeController: LocaleController(),
-    );
+    final controller = HealthController(repository: repository, localeController: LocaleController());
 
     await tester.pumpWidget(
       MaterialApp(
@@ -60,9 +54,7 @@ void main() {
     expect(repository.logoutCalls, 0);
   });
 
-  testWidgets('confirming deletes the account and clears the local session', (
-    tester,
-  ) async {
+  testWidgets('confirming deletes the account and clears the local session', (tester) async {
     final repository = await pumpProfile(tester);
 
     await openDeleteDialog(tester);
@@ -76,9 +68,7 @@ void main() {
     expect(repository.logoutCalls, 1);
   });
 
-  testWidgets('a failed deletion is reported and keeps the session', (
-    tester,
-  ) async {
+  testWidgets('a failed deletion is reported and keeps the session', (tester) async {
     final repository = await pumpProfile(tester, failDelete: true);
 
     await openDeleteDialog(tester);

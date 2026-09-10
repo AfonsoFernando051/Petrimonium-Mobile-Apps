@@ -131,13 +131,7 @@ void main() {
           },
         ],
         'history': [
-          {
-            'ticker': 'VALE3',
-            'type': 'JCP',
-            'userQuantity': 2.0,
-            'estimatedGrossAmount': 2.0,
-            'status': 'PAID',
-          },
+          {'ticker': 'VALE3', 'type': 'JCP', 'userQuantity': 2.0, 'estimatedGrossAmount': 2.0, 'status': 'PAID'},
         ],
       });
 
@@ -157,17 +151,17 @@ void main() {
       final now = DateTime(2026, 9, 1);
 
       DividendEvent paidOn(DateTime date, double amount) => DividendEvent(
-            ticker: 'PETR4',
-            type: DividendType.DIVIDENDO,
-            rawLabel: '',
-            ratePerShare: 1,
-            dataCom: null,
-            paymentDate: date,
-            approvedOn: null,
-            userQuantity: 100,
-            estimatedGrossAmount: amount,
-            status: DividendStatus.PAID,
-          );
+        ticker: 'PETR4',
+        type: DividendType.DIVIDENDO,
+        rawLabel: '',
+        ratePerShare: 1,
+        dataCom: null,
+        paymentDate: date,
+        approvedOn: null,
+        userQuantity: 100,
+        estimatedGrossAmount: amount,
+        status: DividendStatus.PAID,
+      );
 
       test('sums only history events within the trailing 12 months', () {
         final radar = DividendRadar(
@@ -183,10 +177,7 @@ void main() {
       });
 
       test('ignores upcoming (not-yet-paid) events entirely', () {
-        final radar = DividendRadar(
-          upcoming: [paidOn(DateTime(2026, 8, 15), 999)],
-          history: const [],
-        );
+        final radar = DividendRadar(upcoming: [paidOn(DateTime(2026, 8, 15), 999)], history: const []);
 
         expect(radar.receivedInLast12Months(now: now), 0);
       });
@@ -218,17 +209,17 @@ void main() {
       final now = DateTime(2026, 9, 1);
 
       DividendEvent paidOn(DateTime date, double amount) => DividendEvent(
-            ticker: 'PETR4',
-            type: DividendType.DIVIDENDO,
-            rawLabel: '',
-            ratePerShare: 1,
-            dataCom: null,
-            paymentDate: date,
-            approvedOn: null,
-            userQuantity: 100,
-            estimatedGrossAmount: amount,
-            status: DividendStatus.PAID,
-          );
+        ticker: 'PETR4',
+        type: DividendType.DIVIDENDO,
+        rawLabel: '',
+        ratePerShare: 1,
+        dataCom: null,
+        paymentDate: date,
+        approvedOn: null,
+        userQuantity: 100,
+        estimatedGrossAmount: amount,
+        status: DividendStatus.PAID,
+      );
 
       test('sums only history events within the trailing N days', () {
         final radar = DividendRadar(

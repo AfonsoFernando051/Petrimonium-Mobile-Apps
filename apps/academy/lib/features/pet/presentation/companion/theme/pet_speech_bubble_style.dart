@@ -24,10 +24,7 @@ class PetSpeechBubbleStateStyle {
   final String badgeTitleKey;
 
   /// Resolves the complete visual style for a given [state] and dark/light [context].
-  factory PetSpeechBubbleStateStyle.forState(
-    PetSpeechBubbleState state,
-    BuildContext context,
-  ) {
+  factory PetSpeechBubbleStateStyle.forState(PetSpeechBubbleState state, BuildContext context) {
     final isDark = context.isDarkMode;
     final tokens = context.colors;
 
@@ -40,14 +37,8 @@ class PetSpeechBubbleStateStyle {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: isDark
-                ? [
-                    tokens.surfaceElevated.withValues(alpha: 0.92),
-                    const Color(0xFF0D1F2D).withValues(alpha: 0.94),
-                  ]
-                : [
-                    tokens.surfaceElevated,
-                    const Color(0xFFE0F7FA),
-                  ],
+                ? [tokens.surfaceElevated.withValues(alpha: 0.92), const Color(0xFF0D1F2D).withValues(alpha: 0.94)]
+                : [tokens.surfaceElevated, const Color(0xFFE0F7FA)],
           ),
           borderColor: AppColors.neonCyan.withValues(alpha: isDark ? 0.65 : 0.8),
           glowColor: AppColors.neonCyan.withValues(alpha: isDark ? 0.22 : 0.15),
@@ -65,14 +56,8 @@ class PetSpeechBubbleStateStyle {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: isDark
-                ? [
-                    tokens.surfaceElevated.withValues(alpha: 0.92),
-                    const Color(0xFF191338).withValues(alpha: 0.94),
-                  ]
-                : [
-                    tokens.surfaceElevated,
-                    const Color(0xFFEDE7F6),
-                  ],
+                ? [tokens.surfaceElevated.withValues(alpha: 0.92), const Color(0xFF191338).withValues(alpha: 0.94)]
+                : [tokens.surfaceElevated, const Color(0xFFEDE7F6)],
           ),
           borderColor: indigoAccent.withValues(alpha: isDark ? 0.7 : 0.85),
           glowColor: indigoAccent.withValues(alpha: isDark ? 0.25 : 0.15),
@@ -90,14 +75,8 @@ class PetSpeechBubbleStateStyle {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: isDark
-                ? [
-                    tokens.surfaceElevated.withValues(alpha: 0.92),
-                    const Color(0xFF062C1B).withValues(alpha: 0.94),
-                  ]
-                : [
-                    tokens.surfaceElevated,
-                    const Color(0xFFE8F5E9),
-                  ],
+                ? [tokens.surfaceElevated.withValues(alpha: 0.92), const Color(0xFF062C1B).withValues(alpha: 0.94)]
+                : [tokens.surfaceElevated, const Color(0xFFE8F5E9)],
           ),
           borderColor: emeraldAccent.withValues(alpha: isDark ? 0.75 : 0.85),
           glowColor: emeraldAccent.withValues(alpha: isDark ? 0.28 : 0.18),
@@ -115,14 +94,8 @@ class PetSpeechBubbleStateStyle {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: isDark
-                ? [
-                    tokens.surfaceElevated.withValues(alpha: 0.92),
-                    const Color(0xFF2C1217).withValues(alpha: 0.94),
-                  ]
-                : [
-                    tokens.surfaceElevated,
-                    const Color(0xFFFFEBEE),
-                  ],
+                ? [tokens.surfaceElevated.withValues(alpha: 0.92), const Color(0xFF2C1217).withValues(alpha: 0.94)]
+                : [tokens.surfaceElevated, const Color(0xFFFFEBEE)],
           ),
           borderColor: coralAccent.withValues(alpha: isDark ? 0.75 : 0.85),
           glowColor: coralAccent.withValues(alpha: isDark ? 0.25 : 0.15),
@@ -140,14 +113,8 @@ class PetSpeechBubbleStateStyle {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: isDark
-                ? [
-                    const Color(0xFF240046).withValues(alpha: 0.94),
-                    const Color(0xFF10002B).withValues(alpha: 0.96),
-                  ]
-                : [
-                    tokens.surfaceElevated,
-                    const Color(0xFFF3E5F5),
-                  ],
+                ? [const Color(0xFF240046).withValues(alpha: 0.94), const Color(0xFF10002B).withValues(alpha: 0.96)]
+                : [tokens.surfaceElevated, const Color(0xFFF3E5F5)],
           ),
           borderColor: goldAccent.withValues(alpha: isDark ? 0.85 : 0.9),
           glowColor: purpleAccent.withValues(alpha: isDark ? 0.35 : 0.22),
@@ -165,14 +132,8 @@ class PetSpeechBubbleStateStyle {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: isDark
-                ? [
-                    tokens.surfaceElevated.withValues(alpha: 0.92),
-                    const Color(0xFF2A1B00).withValues(alpha: 0.94),
-                  ]
-                : [
-                    tokens.surfaceElevated,
-                    const Color(0xFFFFF8E1),
-                  ],
+                ? [tokens.surfaceElevated.withValues(alpha: 0.92), const Color(0xFF2A1B00).withValues(alpha: 0.94)]
+                : [tokens.surfaceElevated, const Color(0xFFFFF8E1)],
           ),
           borderColor: amberAccent.withValues(alpha: isDark ? 0.8 : 0.9),
           glowColor: amberAccent.withValues(alpha: isDark ? 0.28 : 0.18),

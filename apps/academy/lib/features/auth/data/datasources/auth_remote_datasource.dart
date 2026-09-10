@@ -9,14 +9,11 @@ class AuthRemoteDataSource {
   AuthRemoteDataSource({required this.apiClient});
 
   Future<UserModel> login(String email, String password) async {
-    final response = await apiClient.post(
-      ApiConstants.loginEndpoint,
-      {
-        'email': email,
-        'password': password,
-        'appContext': ApiConstants.appContext,
-      },
-    );
+    final response = await apiClient.post(ApiConstants.loginEndpoint, {
+      'email': email,
+      'password': password,
+      'appContext': ApiConstants.appContext,
+    });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body);
@@ -27,34 +24,35 @@ class AuthRemoteDataSource {
   }
 
   Future<UserModel> loginWithGoogle(String idToken) async {
-    final response = await apiClient.post(
-      ApiConstants.googleLoginEndpoint,
-      {'idToken': idToken, 'appContext': ApiConstants.appContext},
-    );
+    final response = await apiClient.post(ApiConstants.googleLoginEndpoint, {
+      'idToken': idToken,
+      'appContext': ApiConstants.appContext,
+    });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body);
       return UserModel.fromJson(data);
     } else {
-      throw Exception(extractErrorDetail(response, fallback: 'Failed to sign in with Google. Status Code: ${response.statusCode}'));
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to sign in with Google. Status Code: ${response.statusCode}'),
+      );
     }
   }
 
   Future<UserModel> register(String name, String email, String password) async {
-    final response = await apiClient.post(
-      ApiConstants.registerEndpoint,
-      {
-        'username': name,
-        'email': email,
-        'password': password,
-      },
-    );
+    final response = await apiClient.post(ApiConstants.registerEndpoint, {
+      'username': name,
+      'email': email,
+      'password': password,
+    });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body);
       return UserModel.fromJson(data);
     } else {
-      throw Exception(extractErrorDetail(response, fallback: 'Failed to register. Status Code: ${response.statusCode}'));
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to register. Status Code: ${response.statusCode}'),
+      );
     }
   }
 
@@ -62,10 +60,7 @@ class AuthRemoteDataSource {
   /// avoid user enumeration, so the only failure mode worth surfacing is a
   /// transport-level error, which `apiClient.post` already throws for.
   Future<void> requestPasswordReset(String email) async {
-    final response = await apiClient.post(
-      ApiConstants.forgotPasswordEndpoint,
-      {'email': email},
-    );
+    final response = await apiClient.post(ApiConstants.forgotPasswordEndpoint, {'email': email});
 
     if (response.statusCode != 200) {
       throw Exception(
@@ -75,10 +70,10 @@ class AuthRemoteDataSource {
   }
 
   Future<void> resetPassword(String token, String newPassword) async {
-    final response = await apiClient.post(
-      ApiConstants.resetPasswordEndpoint,
-      {'token': token, 'newPassword': newPassword},
-    );
+    final response = await apiClient.post(ApiConstants.resetPasswordEndpoint, {
+      'token': token,
+      'newPassword': newPassword,
+    });
 
     if (response.statusCode != 200) {
       throw Exception(
@@ -109,9 +104,6 @@ class AuthRemoteDataSource {
   /// out. Best-effort by design: callers should still clear local state even
   /// if this fails (e.g. offline logout) — see `AuthRepository.logout`.
   Future<void> logout(String refreshToken) async {
-    await apiClient.post(
-      ApiConstants.logoutEndpoint,
-      {'refreshToken': refreshToken},
-    );
+    await apiClient.post(ApiConstants.logoutEndpoint, {'refreshToken': refreshToken});
   }
 }

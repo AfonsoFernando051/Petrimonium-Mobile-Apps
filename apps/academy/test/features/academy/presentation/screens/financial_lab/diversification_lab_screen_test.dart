@@ -24,9 +24,7 @@ class FakeMascotRepository implements MascotRepository {
   @override
   Future<void> saveNetWorth(double netWorth) async {}
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
   @override
@@ -42,9 +40,7 @@ void main() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     mascotController = MascotController(repository: FakeMascotRepository());
-    companionController = PetCompanionController(
-      mascotController: mascotController,
-    );
+    companionController = PetCompanionController(mascotController: mascotController);
     completionController = LabCompletionController(
       repository: AcademyProgressLocalRepository(),
       mascotController: mascotController,
@@ -64,35 +60,23 @@ void main() {
   }
 
   group('DiversificationLabScreen', () {
-    testWidgets(
-      'renders six category sliders and a valid default allocation',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 400));
-
-        expect(find.byType(Slider), findsNWidgets(6));
-        // Default allocation sums to 100 — the total indicator shows it.
-        expect(find.textContaining('100%'), findsWidgets);
-        expect(
-          find.text(
-            Translator.translate('labDiversificationEffectiveAssetsLabel'),
-          ),
-          findsOneWidget,
-        );
-      },
-    );
-
-    testWidgets('shows the concentration shock result after tapping its button', (
-      tester,
-    ) async {
+    testWidgets('renders six category sliders and a valid default allocation', (tester) async {
       await tester.pumpWidget(buildTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      final shockButton = find.text(
-        Translator.translate('labDiversificationConcentrationShockButton'),
-      );
+      expect(find.byType(Slider), findsNWidgets(6));
+      // Default allocation sums to 100 — the total indicator shows it.
+      expect(find.textContaining('100%'), findsWidgets);
+      expect(find.text(Translator.translate('labDiversificationEffectiveAssetsLabel')), findsOneWidget);
+    });
+
+    testWidgets('shows the concentration shock result after tapping its button', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      final shockButton = find.text(Translator.translate('labDiversificationConcentrationShockButton'));
       await tester.ensureVisible(shockButton);
       await tester.pump();
       await tester.tap(shockButton);
@@ -102,25 +86,18 @@ void main() {
       expect(find.textContaining('12.0%'), findsWidgets);
     });
 
-    testWidgets('the market shock result is always exactly 15%', (
-      tester,
-    ) async {
+    testWidgets('the market shock result is always exactly 15%', (tester) async {
       await tester.pumpWidget(buildTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      final shockButton = find.text(
-        Translator.translate('labDiversificationMarketShockButton'),
-      );
+      final shockButton = find.text(Translator.translate('labDiversificationMarketShockButton'));
       await tester.ensureVisible(shockButton);
       await tester.pump();
       await tester.tap(shockButton);
       await tester.pump();
 
-      expect(
-        find.text(Translator.translate('labDiversificationMarketShockResult')),
-        findsOneWidget,
-      );
+      expect(find.text(Translator.translate('labDiversificationMarketShockResult')), findsOneWidget);
     });
   });
 }

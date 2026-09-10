@@ -53,8 +53,7 @@ class _MentorScreenState extends State<MentorScreen> {
     // IndexedStack — switching tabs alone never re-runs initState, so a new
     // initialConversationId (Home's "Por que estou vendo isto?" link) has to
     // be picked up here instead.
-    if (widget.initialConversationId != null &&
-        widget.initialConversationId != oldWidget.initialConversationId) {
+    if (widget.initialConversationId != null && widget.initialConversationId != oldWidget.initialConversationId) {
       _controller.loadConversation(widget.initialConversationId);
     }
   }
@@ -95,25 +94,22 @@ class _MentorScreenState extends State<MentorScreen> {
   Route<T> _fadeRoute<T>(Widget page) {
     return PageRouteBuilder<T>(
       pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-                  .animate(
-                    CurvedAnimation(parent: animation, curve: Curves.easeOut),
-                  ),
-              child: child,
-            ),
-          ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+        opacity: animation,
+        child: SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+          child: child,
+        ),
+      ),
       transitionDuration: AppMotion.pageTransition,
     );
   }
 
   Future<void> _openHistory() async {
-    final result = await Navigator.of(
-      context,
-    ).push<int?>(_fadeRoute(const ConversationListScreen()));
+    final result = await Navigator.of(context).push<int?>(_fadeRoute(const ConversationListScreen()));
     if (result == null) return;
     if (result == ConversationListScreen.newConversationSentinel) {
       _controller.startNewChat();
@@ -150,11 +146,7 @@ class _MentorScreenState extends State<MentorScreen> {
           const SizedBox(height: 12),
           Expanded(child: _buildBody()),
           const SizedBox(height: 8),
-          MentorInputBar(
-            controller: _textController,
-            onSend: _send,
-            isSending: _controller.isSending,
-          ),
+          MentorInputBar(controller: _textController, onSend: _send, isSending: _controller.isSending),
           const SizedBox(height: 8),
         ],
       ),
@@ -208,8 +200,7 @@ class _MentorScreenState extends State<MentorScreen> {
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) =>
-                      Icon(Icons.pets, color: tokens.textSecondary, size: 20),
+                  errorBuilder: (_, _, _) => Icon(Icons.pets, color: tokens.textSecondary, size: 20),
                 ),
               ),
             ),
@@ -221,11 +212,7 @@ class _MentorScreenState extends State<MentorScreen> {
               children: [
                 Text(
                   'Mentor',
-                  style: TextStyle(
-                    color: tokens.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 Text(
                   'Não executa transações · não é consultoria regulada',
@@ -235,15 +222,9 @@ class _MentorScreenState extends State<MentorScreen> {
             ),
           ),
           IconButton(
-            icon: Icon(
-              Icons.add_comment_outlined,
-              color: tokens.textSecondary,
-              size: 20,
-            ),
+            icon: Icon(Icons.add_comment_outlined, color: tokens.textSecondary, size: 20),
             tooltip: Translator.translate(AppStrings.mentorNewChatTooltip),
-            onPressed: _controller.messages.isEmpty
-                ? null
-                : _controller.startNewChat,
+            onPressed: _controller.messages.isEmpty ? null : _controller.startNewChat,
           ),
           IconButton(
             icon: Icon(Icons.history, color: tokens.textSecondary, size: 20),
@@ -262,7 +243,7 @@ class _MentorScreenState extends State<MentorScreen> {
 
     if (_controller.historyError != null) {
       return ErrorStateView(
-            retryLabel: Translator.translate(AppStrings.retryButtonLabel),
+        retryLabel: Translator.translate(AppStrings.retryButtonLabel),
         message: _controller.historyError!,
         onRetry: () => _controller.loadConversation(_controller.conversationId),
       );
@@ -325,8 +306,7 @@ class _MentorScreenState extends State<MentorScreen> {
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) =>
-                      Icon(Icons.pets, color: tokens.textSecondary, size: 20),
+                  errorBuilder: (_, _, _) => Icon(Icons.pets, color: tokens.textSecondary, size: 20),
                 ),
               ),
             ),
@@ -335,11 +315,7 @@ class _MentorScreenState extends State<MentorScreen> {
           Text(
             'Posso te ajudar a entender sua carteira ou tirar dúvidas.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: tokens.textPrimary,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 6),
           Text(
@@ -354,12 +330,7 @@ class _MentorScreenState extends State<MentorScreen> {
               spacing: 8,
               runSpacing: 8,
               children: _controller.suggestedPrompts
-                  .map(
-                    (prompt) => SuggestedPromptChip(
-                      label: prompt,
-                      onTap: () => _send(prompt),
-                    ),
-                  )
+                  .map((prompt) => SuggestedPromptChip(label: prompt, onTap: () => _send(prompt)))
                   .toList(),
             ),
         ],
@@ -382,8 +353,8 @@ class _DateSeparator extends StatelessWidget {
     final label = date == today
         ? 'Hoje'
         : date == yesterday
-            ? 'Ontem'
-            : AppFormatters.date(date);
+        ? 'Ontem'
+        : AppFormatters.date(date);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),

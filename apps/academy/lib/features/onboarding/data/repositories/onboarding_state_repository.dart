@@ -21,8 +21,7 @@ class OnboardingStateRepository {
   static const _portfolioConnectedKey = 'onboarding_portfolio_connected';
   static const _portfolioSkippedAtKey = 'onboarding_portfolio_skipped_at';
   static const _sessionCountKey = 'onboarding_session_count';
-  static const _reminderShownAtSessionKey =
-      'onboarding_reminder_shown_at_session';
+  static const _reminderShownAtSessionKey = 'onboarding_reminder_shown_at_session';
   static const _portfolioActivationSeenKey = 'portfolio_activation_seen';
 
   Future<bool> hasSetGoal() async {
@@ -70,10 +69,7 @@ class OnboardingStateRepository {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_portfolioStepDoneKey, true);
     await prefs.setBool(_portfolioConnectedKey, false);
-    await prefs.setString(
-      _portfolioSkippedAtKey,
-      (now ?? DateTime.now()).toIso8601String(),
-    );
+    await prefs.setString(_portfolioSkippedAtKey, (now ?? DateTime.now()).toIso8601String());
   }
 
   /// Increments and returns the number of app sessions (cold starts) so
@@ -103,17 +99,14 @@ class OnboardingStateRepository {
   /// skip, and enough sessions have passed since the last reminder.
   Future<bool> shouldShowPortfolioReminder() async {
     final prefs = await SharedPreferences.getInstance();
-    final skipped =
-        prefs.getBool(_portfolioConnectedKey) == false &&
-        prefs.getString(_portfolioSkippedAtKey) != null;
+    final skipped = prefs.getBool(_portfolioConnectedKey) == false && prefs.getString(_portfolioSkippedAtKey) != null;
     if (!skipped) return false;
 
     final sessionCount = prefs.getInt(_sessionCountKey) ?? 0;
     if (sessionCount < kPortfolioReminderAfterSessions) return false;
 
     final lastShown = prefs.getInt(_reminderShownAtSessionKey);
-    if (lastShown != null &&
-        sessionCount - lastShown < kPortfolioReminderCooldownSessions) {
+    if (lastShown != null && sessionCount - lastShown < kPortfolioReminderCooldownSessions) {
       return false;
     }
     return true;

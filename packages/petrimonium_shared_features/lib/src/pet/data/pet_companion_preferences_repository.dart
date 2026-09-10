@@ -19,9 +19,7 @@ class PetCompanionPreferencesRepository {
 
     try {
       final decoded = jsonDecode(raw) as Map<String, dynamic>;
-      return decoded.map(
-        (id, iso) => MapEntry(id, DateTime.parse(iso as String)),
-      );
+      return decoded.map((id, iso) => MapEntry(id, DateTime.parse(iso as String)));
     } catch (_) {
       // Corrupted/old-format value — treat as no history rather than crash.
       return {};
@@ -32,9 +30,7 @@ class PetCompanionPreferencesRepository {
     final prefs = await SharedPreferences.getInstance();
     final current = await loadLastShown();
     current[id] = at;
-    final encoded = jsonEncode(
-      current.map((id, at) => MapEntry(id, at.toIso8601String())),
-    );
+    final encoded = jsonEncode(current.map((id, at) => MapEntry(id, at.toIso8601String())));
     await prefs.setString(_lastShownKey, encoded);
   }
 }

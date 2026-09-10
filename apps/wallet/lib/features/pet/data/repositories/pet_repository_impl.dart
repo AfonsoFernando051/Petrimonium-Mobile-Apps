@@ -9,16 +9,16 @@ class PetRepositoryImpl implements PetRepository {
 
   @override
   Future<void> configurePet(PetSpecieEnum specie) async {
-    return await remoteDataSource.configurePet(specie);
+    return remoteDataSource.configurePet(specie);
   }
 
   @override
   Future<bool> getPetStatus() async {
-    return await remoteDataSource.getPetStatus();
+    return remoteDataSource.getPetStatus();
   }
 
   @override
   Future<Map<String, dynamic>?> getMyPet() async {
-    return await remoteDataSource.getMyPet();
+    return remoteDataSource.getMyPet();
   }
 }

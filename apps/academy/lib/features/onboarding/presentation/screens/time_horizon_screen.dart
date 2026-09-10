@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
@@ -34,9 +35,7 @@ class _TimeHorizonScreenState extends State<TimeHorizonScreen> {
       await DI.petPreferencesRepository.saveHorizon(_selected);
       await DI.onboardingStateRepository.setGoalChosen();
       if (mounted) {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (_) => const ExperienceLevelScreen()));
+        unawaited(Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ExperienceLevelScreen())));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -57,11 +56,7 @@ class _TimeHorizonScreenState extends State<TimeHorizonScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           for (final horizon in InvestmentHorizonEnum.values)
-            _HorizonRow(
-              horizon: horizon,
-              isSelected: horizon == _selected,
-              onTap: () => _select(horizon),
-            ),
+            _HorizonRow(horizon: horizon, isSelected: horizon == _selected, onTap: () => _select(horizon)),
         ],
       ),
     );
@@ -89,7 +84,9 @@ class _HorizonRow extends StatelessWidget {
             duration: const Duration(milliseconds: 180),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.neonCyan.withValues(alpha: 0.14) : tokens.textPrimary.withValues(alpha: 0.05),
+              color: isSelected
+                  ? AppColors.neonCyan.withValues(alpha: 0.14)
+                  : tokens.textPrimary.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isSelected ? AppColors.neonCyan : tokens.textPrimary.withValues(alpha: 0.12),

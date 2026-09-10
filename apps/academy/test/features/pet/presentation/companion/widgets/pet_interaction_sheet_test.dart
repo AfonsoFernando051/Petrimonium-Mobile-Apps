@@ -67,9 +67,7 @@ void main() {
   Widget buildTestableWidget() {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(
-        body: PetInteractionSheet(controller: companionController),
-      ),
+      home: Scaffold(body: PetInteractionSheet(controller: companionController)),
     );
   }
 
@@ -113,23 +111,25 @@ void main() {
     testWidgets('tapping "Aprender" pops with PetContext.academy', (tester) async {
       PetContext? popped;
 
-      await tester.pumpWidget(MaterialApp(
-        theme: AppTheme.dark,
-        home: Builder(
-          builder: (context) => Scaffold(
-            body: Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  popped = await Navigator.of(context).push<PetContext>(
-                    MaterialPageRoute(builder: (_) => PetInteractionSheet(controller: companionController)),
-                  );
-                },
-                child: const Text('open'),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark,
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    popped = await Navigator.of(context).push<PetContext>(
+                      MaterialPageRoute(builder: (_) => PetInteractionSheet(controller: companionController)),
+                    );
+                  },
+                  child: const Text('open'),
+                ),
               ),
             ),
           ),
         ),
-      ));
+      );
       await tester.pump();
 
       await tester.tap(find.text('open'));

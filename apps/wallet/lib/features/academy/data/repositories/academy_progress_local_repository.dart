@@ -18,8 +18,7 @@ class AcademyProgressLocalRepository {
   static const _perfectLessonIdsKey = 'academy_perfect_lesson_ids';
   static const _pendingSyncLessonIdsKey = 'academy_pending_sync_lesson_ids';
   static const _completedSimulatorIdsKey = 'academy_completed_simulator_ids';
-  static const _pendingSyncSimulatorIdsKey =
-      'academy_pending_sync_simulator_ids';
+  static const _pendingSyncSimulatorIdsKey = 'academy_pending_sync_simulator_ids';
 
   Future<Set<String>> loadCompletedLessonIds() async {
     final prefs = await SharedPreferences.getInstance();
@@ -150,28 +149,20 @@ class AcademyProgressLocalRepository {
 
     final merged = {...existing, simulatorId};
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-      await UserScopedPrefs.key(_completedSimulatorIdsKey),
-      merged.toList(),
-    );
+    await prefs.setStringList(await UserScopedPrefs.key(_completedSimulatorIdsKey), merged.toList());
     return merged;
   }
 
   /// Unions [serverSimulatorIds] into local storage — reconciles progress
   /// reported by the backend (e.g. completed on another device) without
   /// ever hiding a simulator completed locally but not yet synced.
-  Future<Set<String>> mergeCompletedSimulatorIds(
-    Set<String> serverSimulatorIds,
-  ) async {
+  Future<Set<String>> mergeCompletedSimulatorIds(Set<String> serverSimulatorIds) async {
     final existing = await loadCompletedSimulatorIds();
     final merged = {...existing, ...serverSimulatorIds};
     if (merged.length == existing.length) return existing;
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-      await UserScopedPrefs.key(_completedSimulatorIdsKey),
-      merged.toList(),
-    );
+    await prefs.setStringList(await UserScopedPrefs.key(_completedSimulatorIdsKey), merged.toList());
     return merged;
   }
 
@@ -190,10 +181,7 @@ class AcademyProgressLocalRepository {
 
     final merged = {...existing, simulatorId};
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-      await UserScopedPrefs.key(_pendingSyncSimulatorIdsKey),
-      merged.toList(),
-    );
+    await prefs.setStringList(await UserScopedPrefs.key(_pendingSyncSimulatorIdsKey), merged.toList());
   }
 
   /// Removed once the backend has confirmed the completion (an initial sync
@@ -204,10 +192,7 @@ class AcademyProgressLocalRepository {
 
     final updated = {...existing}..remove(simulatorId);
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-      await UserScopedPrefs.key(_pendingSyncSimulatorIdsKey),
-      updated.toList(),
-    );
+    await prefs.setStringList(await UserScopedPrefs.key(_pendingSyncSimulatorIdsKey), updated.toList());
   }
 
   /// Returns [baseKey]'s scoped form, first copying over any data still

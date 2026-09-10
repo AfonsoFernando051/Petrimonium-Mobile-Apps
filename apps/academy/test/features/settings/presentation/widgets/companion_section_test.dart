@@ -13,11 +13,7 @@ void main() {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: CompanionSection(
-          sectionLabel: (label) => Text(label),
-          petName: petName,
-          onRename: onRename ?? () {},
-        ),
+        body: CompanionSection(sectionLabel: (label) => Text(label), petName: petName, onRename: onRename ?? () {}),
       ),
     );
   }

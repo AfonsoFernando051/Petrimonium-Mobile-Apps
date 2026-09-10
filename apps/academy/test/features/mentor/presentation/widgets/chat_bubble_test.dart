@@ -46,13 +46,10 @@ void main() {
       expect(align.alignment, Alignment.centerLeft);
     });
 
-    testWidgets('renders an empty mentor message without a MarkdownBody (typewriter reveal in progress)', (tester) async {
-      final message = ChatMessage(
-        id: '3',
-        role: ChatRole.mentor,
-        text: '',
-        timestamp: DateTime(2024, 1, 1),
-      );
+    testWidgets('renders an empty mentor message without a MarkdownBody (typewriter reveal in progress)', (
+      tester,
+    ) async {
+      final message = ChatMessage(id: '3', role: ChatRole.mentor, text: '', timestamp: DateTime(2024, 1, 1));
 
       await tester.pumpWidget(buildTestableWidget(message));
 
@@ -75,11 +72,14 @@ void main() {
       expect(align.alignment, Alignment.centerLeft);
     });
 
-    testWidgets('renders the layered content/interpretation chips when the reply uses the structured format', (tester) async {
+    testWidgets('renders the layered content/interpretation chips when the reply uses the structured format', (
+      tester,
+    ) async {
       final message = ChatMessage(
         id: '5',
         role: ChatRole.mentor,
-        text: '[[CONTENT]]\nReserva de emergência é dinheiro acessível.\n[[INTERPRETATION]]\nIsso conecta com sua última aula.',
+        text:
+            '[[CONTENT]]\nReserva de emergência é dinheiro acessível.\n[[INTERPRETATION]]\nIsso conecta com sua última aula.',
         timestamp: DateTime(2024, 1, 1),
       );
 

@@ -22,10 +22,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const ConversationListScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const ConversationListScreen());
   }
 
   group('ConversationListScreen', () {
@@ -68,10 +65,12 @@ void main() {
     });
 
     testWidgets('renders one tile per conversation', (WidgetTester tester) async {
-      when(() => mockRepository.listConversations()).thenAnswer((_) async => [
-            ConversationSummary(id: 1, title: 'Dividendos', updatedAt: DateTime(2024, 1, 1)),
-            ConversationSummary(id: 2, title: 'ETFs', updatedAt: DateTime(2024, 1, 2)),
-          ]);
+      when(() => mockRepository.listConversations()).thenAnswer(
+        (_) async => [
+          ConversationSummary(id: 1, title: 'Dividendos', updatedAt: DateTime(2024, 1, 1)),
+          ConversationSummary(id: 2, title: 'ETFs', updatedAt: DateTime(2024, 1, 2)),
+        ],
+      );
 
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
@@ -83,28 +82,30 @@ void main() {
     });
 
     testWidgets('tapping a conversation pops the screen with its id', (WidgetTester tester) async {
-      when(() => mockRepository.listConversations()).thenAnswer((_) async => [
-            ConversationSummary(id: 42, title: 'Dividendos', updatedAt: DateTime(2024, 1, 1)),
-          ]);
+      when(
+        () => mockRepository.listConversations(),
+      ).thenAnswer((_) async => [ConversationSummary(id: 42, title: 'Dividendos', updatedAt: DateTime(2024, 1, 1))]);
 
       int? poppedValue;
-      await tester.pumpWidget(MaterialApp(
-        theme: AppTheme.dark,
-        home: Builder(
-          builder: (context) => Scaffold(
-            body: Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  poppedValue = await Navigator.of(context).push<int?>(
-                    MaterialPageRoute(builder: (_) => const ConversationListScreen()),
-                  );
-                },
-                child: const Text('open'),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark,
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    poppedValue = await Navigator.of(
+                      context,
+                    ).push<int?>(MaterialPageRoute(builder: (_) => const ConversationListScreen()));
+                  },
+                  child: const Text('open'),
+                ),
               ),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.tap(find.text('open'));
       await tester.pump();
@@ -117,27 +118,31 @@ void main() {
       expect(poppedValue, 42);
     });
 
-    testWidgets('tapping the new-chat FAB pops the screen with the newConversationSentinel', (WidgetTester tester) async {
+    testWidgets('tapping the new-chat FAB pops the screen with the newConversationSentinel', (
+      WidgetTester tester,
+    ) async {
       when(() => mockRepository.listConversations()).thenAnswer((_) async => []);
 
       int? poppedValue;
-      await tester.pumpWidget(MaterialApp(
-        theme: AppTheme.dark,
-        home: Builder(
-          builder: (context) => Scaffold(
-            body: Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  poppedValue = await Navigator.of(context).push<int?>(
-                    MaterialPageRoute(builder: (_) => const ConversationListScreen()),
-                  );
-                },
-                child: const Text('open'),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark,
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    poppedValue = await Navigator.of(
+                      context,
+                    ).push<int?>(MaterialPageRoute(builder: (_) => const ConversationListScreen()));
+                  },
+                  child: const Text('open'),
+                ),
               ),
             ),
           ),
         ),
-      ));
+      );
 
       await tester.tap(find.text('open'));
       await tester.pump();
@@ -155,9 +160,9 @@ void main() {
       // listConversations() after renaming (no optimistic local update), so
       // the stub must reflect the new title on the second call.
       var title = 'Dividendos';
-      when(() => mockRepository.listConversations()).thenAnswer(
-        (_) async => [ConversationSummary(id: 1, title: title, updatedAt: DateTime(2024, 1, 1))],
-      );
+      when(
+        () => mockRepository.listConversations(),
+      ).thenAnswer((_) async => [ConversationSummary(id: 1, title: title, updatedAt: DateTime(2024, 1, 1))]);
       when(() => mockRepository.renameConversation(1, 'Ações')).thenAnswer((_) async {
         title = 'Ações';
       });
@@ -186,9 +191,9 @@ void main() {
     });
 
     testWidgets('deleting a conversation calls the repository and removes the tile', (WidgetTester tester) async {
-      when(() => mockRepository.listConversations()).thenAnswer((_) async => [
-            ConversationSummary(id: 1, title: 'Dividendos', updatedAt: DateTime(2024, 1, 1)),
-          ]);
+      when(
+        () => mockRepository.listConversations(),
+      ).thenAnswer((_) async => [ConversationSummary(id: 1, title: 'Dividendos', updatedAt: DateTime(2024, 1, 1))]);
       when(() => mockRepository.deleteConversation(1)).thenAnswer((_) async {});
 
       await tester.pumpWidget(buildTestableWidget());

@@ -24,9 +24,6 @@ extension ExperienceLevelEnumDisplay on ExperienceLevelEnum {
   };
 
   static ExperienceLevelEnum fromName(String? name) {
-    return ExperienceLevelEnum.values.firstWhere(
-      (e) => e.name == name,
-      orElse: () => ExperienceLevelEnum.novice,
-    );
+    return ExperienceLevelEnum.values.firstWhere((e) => e.name == name, orElse: () => ExperienceLevelEnum.novice);
   }
 }

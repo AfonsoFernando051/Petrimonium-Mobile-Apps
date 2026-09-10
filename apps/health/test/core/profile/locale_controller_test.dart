@@ -8,18 +8,15 @@ void main() {
 
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  test(
-    'persists and restores pt-PT independently from the device locale',
-    () async {
-      final first = LocaleController();
-      await first.setLocale(InterfaceLocale.ptPt);
+  test('persists and restores pt-PT independently from the device locale', () async {
+    final first = LocaleController();
+    await first.setLocale(InterfaceLocale.ptPt);
 
-      final restored = LocaleController();
-      await restored.loadCached();
+    final restored = LocaleController();
+    await restored.loadCached();
 
-      expect(restored.current, InterfaceLocale.ptPt);
-    },
-  );
+    expect(restored.current, InterfaceLocale.ptPt);
+  });
 
   test('ignores an invalid cached locale and keeps the safe default', () async {
     SharedPreferences.setMockInitialValues({'health_last_locale': 'en-US'});

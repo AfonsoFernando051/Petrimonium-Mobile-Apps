@@ -20,12 +20,7 @@ void main() {
 
   group('CorePetBehavior.pageEnter — contexts it does not own', () {
     test('offers nothing for home/academy/portfolio/mentor', () {
-      for (final context in [
-        PetContext.home,
-        PetContext.academy,
-        PetContext.portfolio,
-        PetContext.mentor,
-      ]) {
+      for (final context in [PetContext.home, PetContext.academy, PetContext.portfolio, PetContext.mentor]) {
         expect(behavior.pageEnter(context, userXp: 0), isNull);
       }
     });
@@ -33,9 +28,7 @@ void main() {
 
   group('CorePetBehavior.onEvent', () {
     test('xpGained carries the amount', () {
-      final message = behavior.onEvent(
-        const XpGainedEvent(amount: 15, newTotalXp: 115),
-      );
+      final message = behavior.onEvent(const XpGainedEvent(amount: 15, newTotalXp: 115));
       expect(message!.id, 'event_xp_gained');
       expect(message.params, {'xp': '15'});
       expect(message.priority, PetMessagePriority.normal);
@@ -50,9 +43,7 @@ void main() {
     });
 
     test("evolved carries the new stage's label", () {
-      final message = behavior.onEvent(
-        const PetEvolvedEvent(PetEvolutionStage.royalDog),
-      );
+      final message = behavior.onEvent(const PetEvolvedEvent(PetEvolutionStage.royalDog));
       expect(message!.id, 'event_evolved');
       expect(message.params, {'stage': 'Real'});
       expect(message.priority, PetMessagePriority.high);

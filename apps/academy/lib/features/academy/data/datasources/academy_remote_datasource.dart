@@ -21,10 +21,9 @@ class AcademyRemoteDataSource {
   /// never downgrades it). Defaults to `false` so callers that don't track
   /// it yet keep working unchanged.
   Future<LessonCompletionResult> completeLesson(String lessonId, {bool perfectFirstTry = false}) async {
-    final response = await apiClient.post(
-      ApiConstants.learningLessonCompleteEndpoint(lessonId),
-      {'perfectFirstTry': perfectFirstTry},
-    );
+    final response = await apiClient.post(ApiConstants.learningLessonCompleteEndpoint(lessonId), {
+      'perfectFirstTry': perfectFirstTry,
+    });
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception(
         extractErrorDetail(response, fallback: 'Failed to sync lesson completion. Status Code: ${response.statusCode}'),

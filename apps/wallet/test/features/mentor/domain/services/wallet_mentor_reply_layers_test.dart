@@ -12,9 +12,7 @@ void main() {
     });
 
     test('parses a data-only reply', () {
-      final layers = WalletMentorReplyLayers.tryParse(
-        '[[DATA]]\nSuas ações e FIIs desvalorizaram no período.',
-      );
+      final layers = WalletMentorReplyLayers.tryParse('[[DATA]]\nSuas ações e FIIs desvalorizaram no período.');
 
       expect(layers, isNotNull);
       expect(layers!.data, 'Suas ações e FIIs desvalorizaram no período.');
@@ -36,9 +34,7 @@ void main() {
     });
 
     test('handles markers out of the documented order', () {
-      final layers = WalletMentorReplyLayers.tryParse(
-        '[[INTERPRETATION]]\nMinha leitura.\n[[DATA]]\nO fato.',
-      );
+      final layers = WalletMentorReplyLayers.tryParse('[[INTERPRETATION]]\nMinha leitura.\n[[DATA]]\nO fato.');
 
       expect(layers, isNotNull);
       expect(layers!.interpretation, 'Minha leitura.');

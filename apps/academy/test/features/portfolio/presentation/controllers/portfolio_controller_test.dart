@@ -244,8 +244,7 @@ void main() {
     // session, so it must never be called here — it would 403 on every
     // single invocation (Demanda #91). Unlock state comes from the local
     // cache only; [achievementsRepository] stays wired only to prove that.
-    test('reads achievement unlock state from the local cache, never from the Wallet-only backend endpoint',
-        () async {
+    test('reads achievement unlock state from the local cache, never from the Wallet-only backend endpoint', () async {
       await achievementsLocalRepository.cacheUnlocked({'first_investment': DateTime(2026, 1, 1)});
       // A different, real catalog id the fake backend claims is unlocked —
       // if the old code path ran, this would end up unlocked too.

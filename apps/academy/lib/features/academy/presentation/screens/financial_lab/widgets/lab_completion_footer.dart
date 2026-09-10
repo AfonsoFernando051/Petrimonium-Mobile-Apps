@@ -46,23 +46,13 @@ class LabCompletionFooter extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GameButton(
-              label: Translator.translate(
-                completed
-                    ? AppStrings.labCompletedLabel
-                    : AppStrings.labCompleteButton,
-              ),
+              label: Translator.translate(completed ? AppStrings.labCompletedLabel : AppStrings.labCompleteButton),
               icon: completed ? Icons.check_circle : null,
               onPressed: completed || !canComplete
                   ? null
-                  : () => controller.completeSimulator(
-                      simulatorId,
-                      resolvedTitle,
-                    ),
+                  : () => controller.completeSimulator(simulatorId, resolvedTitle),
             ),
-            if (completed) ...[
-              const SizedBox(height: 8),
-              WalletBridgeCta(onOpenWallet: onOpenWallet),
-            ],
+            if (completed) ...[const SizedBox(height: 8), WalletBridgeCta(onOpenWallet: onOpenWallet)],
           ],
         );
       },

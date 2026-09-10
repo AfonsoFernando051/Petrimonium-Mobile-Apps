@@ -32,10 +32,9 @@ class _PortfolioChoiceScreenState extends State<PortfolioChoiceScreen> {
   }
 
   void _goHome() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const DashboardScreen()),
-      (route) => false,
-    );
+    Navigator.of(
+      context,
+    ).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const DashboardScreen()), (route) => false);
   }
 
   Future<void> _startLearning() async {
@@ -61,30 +60,18 @@ class _PortfolioChoiceScreenState extends State<PortfolioChoiceScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Icon(
-                        Icons.menu_book_outlined,
-                        color: AppColors.neonCyan.withValues(alpha: 0.85),
-                        size: 40,
-                      ),
+                      Icon(Icons.menu_book_outlined, color: AppColors.neonCyan.withValues(alpha: 0.85), size: 40),
                       const SizedBox(height: 16),
                       Text(
                         Translator.translate(AppStrings.portfolioChoiceTitle),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: context.colors.textPrimary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextStyle(color: context.colors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 12),
                       Text(
                         Translator.translate(AppStrings.portfolioChoiceBody),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: context.colors.textSecondary,
-                          fontSize: 14,
-                          height: 1.4,
-                        ),
+                        style: TextStyle(color: context.colors.textSecondary, fontSize: 14, height: 1.4),
                       ),
                       const SizedBox(height: 24),
                       _GuidanceItem(
@@ -106,9 +93,7 @@ class _PortfolioChoiceScreenState extends State<PortfolioChoiceScreen> {
                       ),
                       const SizedBox(height: 24),
                       GameButton(
-                        label: Translator.translate(
-                          AppStrings.portfolioGuidanceContinueButton,
-                        ),
+                        label: Translator.translate(AppStrings.portfolioGuidanceContinueButton),
                         icon: Icons.school_outlined,
                         color: AppColors.neonViolet,
                         onPressed: _startLearning,
@@ -116,10 +101,7 @@ class _PortfolioChoiceScreenState extends State<PortfolioChoiceScreen> {
                       if (_petName != null && _petName!.isNotEmpty) ...[
                         const SizedBox(height: 8),
                         Text(
-                          Translator.translate(
-                            AppStrings.portfolioChoiceFootnote,
-                            params: {'petName': _petName!},
-                          ),
+                          Translator.translate(AppStrings.portfolioChoiceFootnote, params: {'petName': _petName!}),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: context.colors.textSecondary,
@@ -141,11 +123,7 @@ class _PortfolioChoiceScreenState extends State<PortfolioChoiceScreen> {
 }
 
 class _GuidanceItem extends StatelessWidget {
-  const _GuidanceItem({
-    required this.icon,
-    required this.title,
-    required this.body,
-  });
+  const _GuidanceItem({required this.icon, required this.title, required this.body});
 
   final IconData icon;
   final String title;
@@ -164,20 +142,12 @@ class _GuidanceItem extends StatelessWidget {
             children: [
               Text(
                 Translator.translate(title),
-                style: TextStyle(
-                  color: context.colors.textPrimary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(color: context.colors.textPrimary, fontSize: 14, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 3),
               Text(
                 Translator.translate(body),
-                style: TextStyle(
-                  color: context.colors.textSecondary,
-                  fontSize: 12,
-                  height: 1.35,
-                ),
+                style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.35),
               ),
             ],
           ),

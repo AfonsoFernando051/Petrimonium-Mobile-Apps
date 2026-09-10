@@ -33,14 +33,14 @@ extension PetEvolutionStageTier on PetEvolutionStage {
   /// displayed (`LearningHeroCard`, `RpgIntegrationCard`) — single source of
   /// truth so the two don't drift.
   String get label => switch (this) {
-        PetEvolutionStage.babyDog => 'Filhote',
-        PetEvolutionStage.teenDog => 'Jovem',
-        PetEvolutionStage.adultDog => 'Adulto',
-        PetEvolutionStage.masterDog => 'Mestre',
-        PetEvolutionStage.legendaryDog => 'Lendário',
-        PetEvolutionStage.royalDog => 'Real',
-        PetEvolutionStage.cyberMysticDog => 'Ciber-Místico',
-        PetEvolutionStage.cosmicGuardianDog => 'Guardião Cósmico',
-        PetEvolutionStage.goldenFinanceDog => 'Dourado das Finanças',
-      };
+    PetEvolutionStage.babyDog => 'Filhote',
+    PetEvolutionStage.teenDog => 'Jovem',
+    PetEvolutionStage.adultDog => 'Adulto',
+    PetEvolutionStage.masterDog => 'Mestre',
+    PetEvolutionStage.legendaryDog => 'Lendário',
+    PetEvolutionStage.royalDog => 'Real',
+    PetEvolutionStage.cyberMysticDog => 'Ciber-Místico',
+    PetEvolutionStage.cosmicGuardianDog => 'Guardião Cósmico',
+    PetEvolutionStage.goldenFinanceDog => 'Dourado das Finanças',
+  };
 }

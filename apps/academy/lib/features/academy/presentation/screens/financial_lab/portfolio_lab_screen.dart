@@ -104,8 +104,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
         _buildTotalAmountInput(),
         LabAllocationEditor(
           weightsPercent: _weights,
-          onChanged: (type, value) =>
-              setState(() => _weights = {..._weights, type: value}),
+          onChanged: (type, value) => setState(() => _weights = {..._weights, type: value}),
           totalPercent: _totalWeight,
           isValid: _isAllocationValid,
         ),
@@ -113,9 +112,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
           _buildScenarioChips(),
           if (result != null) _buildScenarioResult(result),
           LabNarrativeCard(
-            text: Translator.translate(
-              AppStrings.labPortfolioForecastDisclaimer,
-            ),
+            text: Translator.translate(AppStrings.labPortfolioForecastDisclaimer),
             variant: LabNarrativeVariant.disclaimer,
           ),
           LabComprehensionCheck(
@@ -157,10 +154,8 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
     final tokens = context.colors;
     final scenarios = {
       LabScenario.equitiesDown15: AppStrings.labPortfolioScenarioEquitiesDown15,
-      LabScenario.largestPositionDown20:
-          AppStrings.labPortfolioScenarioLargestPositionDown20,
-      LabScenario.broadMarketDown10:
-          AppStrings.labPortfolioScenarioBroadMarketDown10,
+      LabScenario.largestPositionDown20: AppStrings.labPortfolioScenarioLargestPositionDown20,
+      LabScenario.broadMarketDown10: AppStrings.labPortfolioScenarioBroadMarketDown10,
       LabScenario.fixedIncomeUp5: AppStrings.labPortfolioScenarioFixedIncomeUp5,
     };
 
@@ -183,9 +178,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
   }
 
   Widget _buildScenarioResult(PortfolioScenarioResult result) {
-    final impactColor = result.deltaPercent >= 0
-        ? AppColors.positiveGreen
-        : AppColors.negativeRed;
+    final impactColor = result.deltaPercent >= 0 ? AppColors.positiveGreen : AppColors.negativeRed;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -195,9 +188,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
           children: [
             Expanded(
               child: StatCard(
-                label: Translator.translate(
-                  AppStrings.labPortfolioNewValueLabel,
-                ),
+                label: Translator.translate(AppStrings.labPortfolioNewValueLabel),
                 value: AppFormatters.compactCurrency(result.newValue),
                 accent: impactColor,
               ),
@@ -217,14 +208,8 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
             AppStrings.labPortfolioScenarioResult,
             params: {
               'deltaPercent': result.deltaPercent.toStringAsFixed(1),
-              'before': AppFormatters.currency(
-                result.totalAmount,
-                showCents: false,
-              ),
-              'after': AppFormatters.currency(
-                result.newValue,
-                showCents: false,
-              ),
+              'before': AppFormatters.currency(result.totalAmount, showCents: false),
+              'after': AppFormatters.currency(result.newValue, showCents: false),
             },
           ),
           variant: LabNarrativeVariant.interpretation,
@@ -235,12 +220,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
 }
 
 class _ScenarioChip extends StatelessWidget {
-  const _ScenarioChip({
-    required this.label,
-    required this.selected,
-    required this.tokens,
-    required this.onTap,
-  });
+  const _ScenarioChip({required this.label, required this.selected, required this.tokens, required this.onTap});
 
   final String label;
   final bool selected;
@@ -256,20 +236,11 @@ class _ScenarioChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.lg),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: 8,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 8),
           decoration: BoxDecoration(
-            color: selected
-                ? AppColors.neonCyan.withValues(alpha: 0.18)
-                : tokens.textTertiary.withValues(alpha: 0.08),
+            color: selected ? AppColors.neonCyan.withValues(alpha: 0.18) : tokens.textTertiary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(AppRadii.lg),
-            border: Border.all(
-              color: selected
-                  ? AppColors.neonCyan.withValues(alpha: 0.7)
-                  : tokens.border,
-            ),
+            border: Border.all(color: selected ? AppColors.neonCyan.withValues(alpha: 0.7) : tokens.border),
           ),
           child: Text(
             label,

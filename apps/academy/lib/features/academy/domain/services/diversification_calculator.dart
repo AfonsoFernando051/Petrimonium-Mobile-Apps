@@ -69,19 +69,12 @@ class DiversificationCalculator {
 
   static const double _validityTolerance = 0.01;
 
-  static DiversificationResult evaluate(
-    Map<InvestmentTypeEnum, double> weightsPercent,
-  ) {
+  static DiversificationResult evaluate(Map<InvestmentTypeEnum, double> weightsPercent) {
     final sum = weightsPercent.values.fold(0.0, (a, b) => a + b);
     final remainder = 100 - sum;
-    final isValid =
-        remainder.abs() < _validityTolerance &&
-        weightsPercent.values.every((w) => w >= 0);
+    final isValid = remainder.abs() < _validityTolerance && weightsPercent.values.every((w) => w >= 0);
 
-    final hhi = weightsPercent.values.fold(
-      0.0,
-      (s, w) => s + (w / 100) * (w / 100),
-    );
+    final hhi = weightsPercent.values.fold(0.0, (s, w) => s + (w / 100) * (w / 100));
     final score = ((1 - hhi) * 100).clamp(0, 100).toDouble();
 
     InvestmentTypeEnum? largestCategory;
@@ -95,9 +88,7 @@ class DiversificationCalculator {
 
     final band = largestWeight <= 30
         ? ConcentrationBand.wellSpread
-        : (largestWeight <= 50
-              ? ConcentrationBand.moderate
-              : ConcentrationBand.concentrated);
+        : (largestWeight <= 50 ? ConcentrationBand.moderate : ConcentrationBand.concentrated);
 
     return DiversificationResult(
       isValid: isValid,

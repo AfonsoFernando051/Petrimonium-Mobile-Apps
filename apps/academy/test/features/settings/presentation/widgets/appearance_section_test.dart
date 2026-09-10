@@ -41,7 +41,9 @@ void main() {
       expect(selected.first.label, 'Escuro');
     });
 
-    testWidgets('tapping a card calls ThemeController.setThemeMode and updates the highlight', (WidgetTester tester) async {
+    testWidgets('tapping a card calls ThemeController.setThemeMode and updates the highlight', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
 
       await tester.tap(find.text('Escuro'));

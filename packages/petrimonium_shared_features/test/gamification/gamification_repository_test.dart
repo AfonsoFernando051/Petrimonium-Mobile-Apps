@@ -15,14 +15,16 @@ void main() {
 
   group('fetchSummary', () {
     test('maps the raw JSON into a GamificationSummary', () async {
-      when(() => mockDataSource.fetchSummary()).thenAnswer((_) async => {
-            'totalXp': 220,
-            'level': 3,
-            'xpIntoLevel': 20,
-            'xpForNextLevel': 100,
-            'currentStreak': 5,
-            'longestStreak': 12,
-          });
+      when(() => mockDataSource.fetchSummary()).thenAnswer(
+        (_) async => {
+          'totalXp': 220,
+          'level': 3,
+          'xpIntoLevel': 20,
+          'xpForNextLevel': 100,
+          'currentStreak': 5,
+          'longestStreak': 12,
+        },
+      );
 
       final summary = await repository.fetchSummary();
 

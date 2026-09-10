@@ -69,10 +69,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const AcademyIntroScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const AcademyIntroScreen());
   }
 
   group('AcademyIntroScreen', () {
@@ -87,7 +84,9 @@ void main() {
       expect(find.text('O resto libera conforme você avança — sem pular etapas.'), findsOneWidget);
     });
 
-    testWidgets('renders a track step for each catalog module, real lesson counts, no fabricated claims', (tester) async {
+    testWidgets('renders a track step for each catalog module, real lesson counts, no fabricated claims', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump();

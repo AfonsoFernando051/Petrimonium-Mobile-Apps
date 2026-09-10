@@ -22,8 +22,11 @@ class HoldingsSection extends StatelessWidget {
       byType.putIfAbsent(holding.type, () => []).add(holding);
     }
     final sortedTypes = byType.keys.toList()
-      ..sort((a, b) => byType[b]!.fold<double>(0, (s, h) => s + h.currentValue)
-          .compareTo(byType[a]!.fold<double>(0, (s, h) => s + h.currentValue)));
+      ..sort(
+        (a, b) => byType[b]!
+            .fold<double>(0, (s, h) => s + h.currentValue)
+            .compareTo(byType[a]!.fold<double>(0, (s, h) => s + h.currentValue)),
+      );
 
     return GlassCard(
       backgroundColor: context.colors.surface.withValues(alpha: context.isDarkMode ? 0.55 : 0.94),

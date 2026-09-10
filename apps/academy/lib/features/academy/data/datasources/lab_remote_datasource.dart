@@ -18,10 +18,7 @@ class LabRemoteDataSource {
   /// never fabricated client-side. The server decides the XP amount from
   /// [SimulatorCatalog]; the client sends only the id.
   Future<SimulatorCompletionResult> completeSimulator(String simulatorId) async {
-    final response = await apiClient.post(
-      ApiConstants.labSimulatorCompleteEndpoint(simulatorId),
-      const {},
-    );
+    final response = await apiClient.post(ApiConstants.labSimulatorCompleteEndpoint(simulatorId), const {});
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception(
         extractErrorDetail(

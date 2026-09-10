@@ -26,16 +26,17 @@ class PortfolioController extends ChangeNotifier {
     required MissionsRepository missionsRepository,
     MascotController? mascotController,
     AppEventBus? eventBus,
-  })  : _repository = repository,
-        _achievementsLocalRepository = achievementsLocalRepository,
-        _achievementsRepository = achievementsRepository,
-        _gamificationRepository = gamificationRepository,
-        _missionsRepository = missionsRepository,
-        _mascotController = mascotController,
-        _eventBus = eventBus ?? AppEventBus.instance;
+  }) : _repository = repository,
+       _achievementsLocalRepository = achievementsLocalRepository,
+       _achievementsRepository = achievementsRepository,
+       _gamificationRepository = gamificationRepository,
+       _missionsRepository = missionsRepository,
+       _mascotController = mascotController,
+       _eventBus = eventBus ?? AppEventBus.instance;
 
   final PortfolioRepository _repository;
   final AchievementsLocalRepository _achievementsLocalRepository;
+
   /// Deliberately never called: `GET /api/v1/achievements` requires
   /// `APP_CONTEXT_WALLET` (backend `SecurityConfig`) and this controller only
   /// ever runs in an Academy session, so a live evaluation would 403 on every
@@ -243,15 +244,18 @@ class PortfolioController extends ChangeNotifier {
     // Not yet fetched from the backend for this range — compute locally from
     // already-loaded lots so the UI responds instantly, then fetch+replace.
     chartPoints = WealthHistoryCalculator.compute(_allLots, selectedRange);
-    _repository.fetchHistory(selectedRange).then((points) {
-      _backendHistoryCache[selectedRange] = points;
-      if (selectedAssetFilter == null) {
-        chartPoints = points;
-        notifyListeners();
-      }
-    }).catchError((_) {
-      // Keep the locally-computed series if the backend call fails.
-    });
+    _repository
+        .fetchHistory(selectedRange)
+        .then((points) {
+          _backendHistoryCache[selectedRange] = points;
+          if (selectedAssetFilter == null) {
+            chartPoints = points;
+            notifyListeners();
+          }
+        })
+        .catchError((_) {
+          // Keep the locally-computed series if the backend call fails.
+        });
   }
 
   /// [MissionsRepository.evaluate] re-checks every mission's current
@@ -302,10 +306,7 @@ class PortfolioController extends ChangeNotifier {
     final isConcentrated = stats.largestHoldingPercent > 40;
     if (isConcentrated && !_wasHighlyConcentrated) {
       final biggest = holdings.first;
-      _eventBus.emit(HighConcentrationDetectedEvent(
-        ticker: biggest.ticker,
-        percent: biggest.portfolioPercent,
-      ));
+      _eventBus.emit(HighConcentrationDetectedEvent(ticker: biggest.ticker, percent: biggest.portfolioPercent));
     }
     _wasHighlyConcentrated = isConcentrated;
   }

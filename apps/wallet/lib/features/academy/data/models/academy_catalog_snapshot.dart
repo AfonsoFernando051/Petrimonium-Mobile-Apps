@@ -37,11 +37,11 @@ class AcademyCatalogSnapshot {
   }
 
   Map<String, dynamic> toJson() => {
-        'domains': domains.map(_domainToJson).toList(),
-        'schools': schools.map(_schoolToJson).toList(),
-        'modules': modules.map(_moduleToJson).toList(),
-        'lessons': lessons.map(_lessonToJson).toList(),
-      };
+    'domains': domains.map(_domainToJson).toList(),
+    'schools': schools.map(_schoolToJson).toList(),
+    'modules': modules.map(_moduleToJson).toList(),
+    'lessons': lessons.map(_lessonToJson).toList(),
+  };
 
   AcademyModule? moduleById(String id) {
     for (final module in modules) {
@@ -100,86 +100,86 @@ class AcademyCatalogSnapshot {
   }
 
   static AcademyDomain _domainFromJson(Map<String, dynamic> json) => AcademyDomain(
-        id: json['id'] as String,
-        title: json['title'] as String,
-        description: json['description'] as String,
-        icon: AcademyIconRegistry.resolve(json['iconKey'] as String),
-        order: json['order'] as int,
-        schoolIds: _stringList(json['schoolIds']),
-      );
+    id: json['id'] as String,
+    title: json['title'] as String,
+    description: json['description'] as String,
+    icon: AcademyIconRegistry.resolve(json['iconKey'] as String),
+    order: json['order'] as int,
+    schoolIds: _stringList(json['schoolIds']),
+  );
 
   static Map<String, dynamic> _domainToJson(AcademyDomain d) => {
-        'id': d.id,
-        'title': d.title,
-        'description': d.description,
-        'iconKey': AcademyIconRegistry.keyFor(d.icon),
-        'order': d.order,
-        'schoolIds': d.schoolIds,
-      };
+    'id': d.id,
+    'title': d.title,
+    'description': d.description,
+    'iconKey': AcademyIconRegistry.keyFor(d.icon),
+    'order': d.order,
+    'schoolIds': d.schoolIds,
+  };
 
   static School _schoolFromJson(Map<String, dynamic> json) => School(
-        id: json['id'] as String,
-        title: json['title'] as String,
-        description: json['description'] as String,
-        icon: AcademyIconRegistry.resolve(json['iconKey'] as String),
-        order: json['order'] as int,
-        prerequisites: _stringList(json['prerequisites']),
-        contentAvailable: json['contentAvailable'] as bool,
-      );
+    id: json['id'] as String,
+    title: json['title'] as String,
+    description: json['description'] as String,
+    icon: AcademyIconRegistry.resolve(json['iconKey'] as String),
+    order: json['order'] as int,
+    prerequisites: _stringList(json['prerequisites']),
+    contentAvailable: json['contentAvailable'] as bool,
+  );
 
   static Map<String, dynamic> _schoolToJson(School s) => {
-        'id': s.id,
-        'title': s.title,
-        'description': s.description,
-        'iconKey': AcademyIconRegistry.keyFor(s.icon),
-        'order': s.order,
-        'prerequisites': s.prerequisites,
-        'contentAvailable': s.contentAvailable,
-      };
+    'id': s.id,
+    'title': s.title,
+    'description': s.description,
+    'iconKey': AcademyIconRegistry.keyFor(s.icon),
+    'order': s.order,
+    'prerequisites': s.prerequisites,
+    'contentAvailable': s.contentAvailable,
+  };
 
   static AcademyModule _moduleFromJson(Map<String, dynamic> json) => AcademyModule(
-        id: json['id'] as String,
-        schoolId: json['schoolId'] as String,
-        title: json['title'] as String,
-        description: json['description'] as String,
-        icon: AcademyIconRegistry.resolve(json['iconKey'] as String),
-        order: json['order'] as int,
-        lessonIds: _stringList(json['lessonIds']),
-        prerequisites: _stringList(json['prerequisites']),
-        contentAvailable: json['contentAvailable'] as bool,
-      );
+    id: json['id'] as String,
+    schoolId: json['schoolId'] as String,
+    title: json['title'] as String,
+    description: json['description'] as String,
+    icon: AcademyIconRegistry.resolve(json['iconKey'] as String),
+    order: json['order'] as int,
+    lessonIds: _stringList(json['lessonIds']),
+    prerequisites: _stringList(json['prerequisites']),
+    contentAvailable: json['contentAvailable'] as bool,
+  );
 
   static Map<String, dynamic> _moduleToJson(AcademyModule m) => {
-        'id': m.id,
-        'schoolId': m.schoolId,
-        'title': m.title,
-        'description': m.description,
-        'iconKey': AcademyIconRegistry.keyFor(m.icon),
-        'order': m.order,
-        'lessonIds': m.lessonIds,
-        'prerequisites': m.prerequisites,
-        'contentAvailable': m.contentAvailable,
-      };
+    'id': m.id,
+    'schoolId': m.schoolId,
+    'title': m.title,
+    'description': m.description,
+    'iconKey': AcademyIconRegistry.keyFor(m.icon),
+    'order': m.order,
+    'lessonIds': m.lessonIds,
+    'prerequisites': m.prerequisites,
+    'contentAvailable': m.contentAvailable,
+  };
 
   static Lesson _lessonFromJson(Map<String, dynamic> json) => Lesson(
-        id: json['id'] as String,
-        moduleId: json['moduleId'] as String,
-        title: json['title'] as String,
-        order: json['order'] as int,
-        xpReward: json['xpReward'] as int,
-        portfolioConcepts: _stringList(json['portfolioConcepts']),
-        steps: (json['steps'] as List<dynamic>).map((e) => _stepFromJson(e as Map<String, dynamic>)).toList(),
-      );
+    id: json['id'] as String,
+    moduleId: json['moduleId'] as String,
+    title: json['title'] as String,
+    order: json['order'] as int,
+    xpReward: json['xpReward'] as int,
+    portfolioConcepts: _stringList(json['portfolioConcepts']),
+    steps: (json['steps'] as List<dynamic>).map((e) => _stepFromJson(e as Map<String, dynamic>)).toList(),
+  );
 
   static Map<String, dynamic> _lessonToJson(Lesson l) => {
-        'id': l.id,
-        'moduleId': l.moduleId,
-        'title': l.title,
-        'order': l.order,
-        'xpReward': l.xpReward,
-        'portfolioConcepts': l.portfolioConcepts,
-        'steps': l.steps.map(_stepToJson).toList(),
-      };
+    'id': l.id,
+    'moduleId': l.moduleId,
+    'title': l.title,
+    'order': l.order,
+    'xpReward': l.xpReward,
+    'portfolioConcepts': l.portfolioConcepts,
+    'steps': l.steps.map(_stepToJson).toList(),
+  };
 
   static LessonStep _stepFromJson(Map<String, dynamic> json) {
     final type = json['type'] as String;
@@ -207,7 +207,14 @@ class AcademyCatalogSnapshot {
     return switch (step) {
       ExplanationStep(title: final t, body: final b) => {'type': 'explanation', 'title': t, 'body': b},
       ExampleStep(title: final t, body: final b) => {'type': 'example', 'title': t, 'body': b},
-      ChoiceQuestionStep(framing: final f, prompt: final p, options: final o, correctIndex: final c, explanation: final e) => {
+      ChoiceQuestionStep(
+        framing: final f,
+        prompt: final p,
+        options: final o,
+        correctIndex: final c,
+        explanation: final e,
+      ) =>
+        {
           'type': 'choice_question',
           'framing': f == ChoiceStepFraming.apply ? 'apply' : 'micro_exercise',
           'prompt': p,
@@ -219,5 +226,6 @@ class AcademyCatalogSnapshot {
     };
   }
 
-  static List<String> _stringList(dynamic value) => (value as List<dynamic>? ?? const []).map((e) => e as String).toList();
+  static List<String> _stringList(dynamic value) =>
+      (value as List<dynamic>? ?? const []).map((e) => e as String).toList();
 }

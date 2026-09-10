@@ -171,9 +171,7 @@ void main() {
       });
 
       test('portfolioPercent is 0 for every holding when total current value is 0', () {
-        final lots = [
-          _lot(ticker: 'PETR4', quantity: 1, purchasePrice: 1, currentPrice: 0, currentValue: 0),
-        ];
+        final lots = [_lot(ticker: 'PETR4', quantity: 1, purchasePrice: 1, currentPrice: 0, currentValue: 0)];
 
         final holdings = Holding.fromLots(lots);
 
@@ -182,18 +180,8 @@ void main() {
 
       test('uses the type of the first (oldest) lot and currentPrice of the last (newest) lot', () {
         final lots = [
-          _lot(
-            ticker: 'PETR4',
-            type: InvestmentTypeEnum.STOCKS,
-            purchaseDate: DateTime(2022, 1, 1),
-            currentPrice: 11,
-          ),
-          _lot(
-            ticker: 'PETR4',
-            type: InvestmentTypeEnum.STOCKS,
-            purchaseDate: DateTime(2023, 1, 1),
-            currentPrice: 15,
-          ),
+          _lot(ticker: 'PETR4', type: InvestmentTypeEnum.STOCKS, purchaseDate: DateTime(2022, 1, 1), currentPrice: 11),
+          _lot(ticker: 'PETR4', type: InvestmentTypeEnum.STOCKS, purchaseDate: DateTime(2023, 1, 1), currentPrice: 15),
         ];
 
         final holdings = Holding.fromLots(lots);

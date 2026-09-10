@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -136,14 +137,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _handleCountrySelected(String countryCode) async {
     if (countryCode == CountryPreference.current) return;
-    HapticFeedback.selectionClick();
+    unawaited(HapticFeedback.selectionClick());
     await CountryPreference.setCountry(countryCode);
     await DI.settingsRepository.syncCountry(countryCode);
   }
 
   Future<void> _handleLanguageSelected(String language) async {
     if (language == Translator.currentLanguage) return;
-    HapticFeedback.selectionClick();
+    unawaited(HapticFeedback.selectionClick());
     await Translator.setLanguage(language);
     await DI.settingsRepository.syncLanguage(language);
     if (!mounted) return;
@@ -161,7 +162,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
     if (!confirmed || !mounted) return;
 
-    HapticFeedback.heavyImpact();
+    unawaited(HapticFeedback.heavyImpact());
     try {
       await DI.settingsRepository.deleteAccount();
     } catch (e) {
@@ -178,24 +179,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } catch (_) {}
 
     if (mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-        (route) => false,
+      unawaited(
+        Navigator.of(
+          context,
+        ).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false),
       );
     }
   }
 
   Future<void> _confirmLogout() async {
     final confirmed = await ConfirmLogoutDialog.show(
-        context,
-        title: Translator.translate(AppStrings.logoutConfirmTitle),
-        message: Translator.translate(AppStrings.logoutConfirmMessage),
-        cancelLabel: Translator.translate(AppStrings.cancelButton),
-        confirmLabel: Translator.translate(AppStrings.logoutButton),
-      );
+      context,
+      title: Translator.translate(AppStrings.logoutConfirmTitle),
+      message: Translator.translate(AppStrings.logoutConfirmMessage),
+      cancelLabel: Translator.translate(AppStrings.cancelButton),
+      confirmLabel: Translator.translate(AppStrings.logoutButton),
+    );
 
     if (confirmed && mounted) {
-      HapticFeedback.mediumImpact();
+      unawaited(HapticFeedback.mediumImpact());
       try {
         await DI.authRepository.logout();
       } catch (e) {
@@ -204,9 +206,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return;
       }
       if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-          (route) => false,
+        unawaited(
+          Navigator.of(
+            context,
+          ).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false),
         );
       }
     }
@@ -240,16 +243,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: _loadingPrefs
               ? const AppLoadingIndicator()
               : _loadError != null
-                  ? ErrorStateView(
-            retryLabel: Translator.translate(AppStrings.retryButtonLabel),message: _loadError!, onRetry: _retryLoadLocalPreferences)
-                  : SingleChildScrollView(
+              ? ErrorStateView(
+                  retryLabel: Translator.translate(AppStrings.retryButtonLabel),
+                  message: _loadError!,
+                  onRetry: _retryLoadLocalPreferences,
+                )
+              : SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
                         Translator.translate(AppStrings.settingsSubtitle),
-                        style: AppTextStyles.bodyEmphasis.copyWith(color: tokens.textSecondary, fontWeight: FontWeight.normal),
+                        style: AppTextStyles.bodyEmphasis.copyWith(
+                          color: tokens.textSecondary,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                       const SizedBox(height: AppSpacing.xl),
                       CompanionSection(sectionLabel: _sectionLabel, petName: _petName, onRename: _handleRenamePet),

@@ -75,10 +75,7 @@ class AllocationDonutCard extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: AppTextStyles.title.copyWith(color: tokens.textPrimary, fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          'Total',
-                          style: AppTextStyles.caption.copyWith(color: tokens.textSecondary),
-                        ),
+                        Text('Total', style: AppTextStyles.caption.copyWith(color: tokens.textSecondary)),
                       ],
                     ),
                   ],
@@ -90,12 +87,14 @@ class AllocationDonutCard extends StatelessWidget {
                 runSpacing: AppSpacing.xs,
                 children: [
                   for (final slice in allocation)
-                    ChartLegend(items: [
-                      ChartLegendItem(
-                        color: slice.type.color,
-                        label: '${slice.type.shortLabel} · ${slice.portfolioPercent.toStringAsFixed(0)}%',
-                      ),
-                    ]),
+                    ChartLegend(
+                      items: [
+                        ChartLegendItem(
+                          color: slice.type.color,
+                          label: '${slice.type.shortLabel} · ${slice.portfolioPercent.toStringAsFixed(0)}%',
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ],

@@ -40,8 +40,7 @@ class ProfileScreen extends StatelessWidget {
           children: [
             PetCompanionHeader(
               controller: companionController,
-              onDestinationSelected: (destination) =>
-                  Navigator.of(context).pop(destination),
+              onDestinationSelected: (destination) => Navigator.of(context).pop(destination),
               anchor: _headerAnchor,
             ),
             const SizedBox(width: 10),
@@ -63,9 +62,7 @@ class ProfileScreen extends StatelessWidget {
             SafeArea(
               child: Center(
                 child: GlassCard(
-                  backgroundColor: tokens.surface.withValues(
-                    alpha: context.isDarkMode ? 0.6 : 0.94,
-                  ),
+                  backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
                   borderColor: AppColors.neonPink.withValues(alpha: 0.3),
                   borderRadius: 24,
                   borderWidth: 1,
@@ -74,19 +71,11 @@ class ProfileScreen extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          Icons.manage_accounts,
-                          size: 64,
-                          color: AppColors.neonPink.withValues(alpha: 0.7),
-                        ),
+                        Icon(Icons.manage_accounts, size: 64, color: AppColors.neonPink.withValues(alpha: 0.7)),
                         const SizedBox(height: 16),
                         Text(
                           Translator.translate(AppStrings.profileCommanderTitle),
-                          style: TextStyle(
-                            color: tokens.textPrimary,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 20),
                         Row(
@@ -94,11 +83,7 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             Text(
                               Translator.translate(AppStrings.profileAchievementsLabel),
-                              style: TextStyle(
-                                color: tokens.textPrimary,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: TextStyle(color: tokens.textPrimary, fontSize: 13, fontWeight: FontWeight.w600),
                             ),
                             const SizedBox(width: 8),
                             UnavailableBadge(label: Translator.translate(AppStrings.labComingSoon)),
@@ -108,49 +93,29 @@ class ProfileScreen extends StatelessWidget {
                         Text(
                           Translator.translate(AppStrings.profileAchievementsComingSoonBody),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: tokens.textSecondary,
-                            fontSize: 13,
-                            height: 1.4,
-                          ),
+                          style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           Translator.translate(AppStrings.profileSettingsHint),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: tokens.textTertiary,
-                            fontSize: 12,
-                          ),
+                          style: TextStyle(color: tokens.textTertiary, fontSize: 12),
                         ),
                         const SizedBox(height: 24),
                         OutlinedButton.icon(
-                          icon: const Icon(
-                            Icons.settings_outlined,
-                            color: AppColors.neonPink,
-                          ),
+                          icon: const Icon(Icons.settings_outlined, color: AppColors.neonPink),
                           label: const Text(
                             'Configurações',
-                            style: TextStyle(
-                              color: AppColors.neonPink,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: TextStyle(color: AppColors.neonPink, fontWeight: FontWeight.bold),
                           ),
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(color: AppColors.neonPink),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 14,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                           ),
                           onPressed: () {
                             HapticFeedback.selectionClick();
-                            Navigator.of(
-                              context,
-                            ).push(fadeRoute(const SettingsScreen()));
+                            Navigator.of(context).push(fadeRoute(const SettingsScreen()));
                           },
                         ),
                       ],
@@ -163,8 +128,7 @@ class ProfileScreen extends StatelessWidget {
               child: PetSpeechBubbleOverlay(
                 controller: companionController,
                 anchor: _headerAnchor,
-                onActionSelected: (action) =>
-                    Navigator.of(context).pop(action.destination),
+                onActionSelected: (action) => Navigator.of(context).pop(action.destination),
               ),
             ),
           ],

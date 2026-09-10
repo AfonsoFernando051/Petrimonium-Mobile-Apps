@@ -21,7 +21,12 @@ void main() {
       // 3 dots + the outer AnimatedBuilder-driven containers.
       final containers = find.descendant(
         of: find.byType(TypingIndicator),
-        matching: find.byWidgetPredicate((w) => w is Container && w.decoration is BoxDecoration && (w.decoration! as BoxDecoration).shape == BoxShape.circle),
+        matching: find.byWidgetPredicate(
+          (w) =>
+              w is Container &&
+              w.decoration is BoxDecoration &&
+              (w.decoration! as BoxDecoration).shape == BoxShape.circle,
+        ),
       );
       expect(containers, findsNWidgets(3));
     });
@@ -38,10 +43,7 @@ void main() {
 
     testWidgets('honors disableAnimations — still renders its three dots, no crash', (tester) async {
       await tester.pumpWidget(
-        MediaQuery(
-          data: const MediaQueryData(disableAnimations: true),
-          child: buildTestableWidget(),
-        ),
+        MediaQuery(data: const MediaQueryData(disableAnimations: true), child: buildTestableWidget()),
       );
       await tester.pump();
       await tester.pump(const Duration(seconds: 2));
@@ -49,7 +51,12 @@ void main() {
       expect(tester.takeException(), isNull);
       final containers = find.descendant(
         of: find.byType(TypingIndicator),
-        matching: find.byWidgetPredicate((w) => w is Container && w.decoration is BoxDecoration && (w.decoration! as BoxDecoration).shape == BoxShape.circle),
+        matching: find.byWidgetPredicate(
+          (w) =>
+              w is Container &&
+              w.decoration is BoxDecoration &&
+              (w.decoration! as BoxDecoration).shape == BoxShape.circle,
+        ),
       );
       expect(containers, findsNWidgets(3));
     });

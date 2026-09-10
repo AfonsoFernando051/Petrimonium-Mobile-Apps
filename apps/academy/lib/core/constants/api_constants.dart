@@ -6,10 +6,7 @@ class ApiConstants {
   //   flutter build apk --dart-define=API_BASE_URL=https://api.example.com  (prod)
   // Defaults to http://localhost:8081, which works for iOS Simulator/Web but
   // NOT the Android emulator (use 10.0.2.2 there) — see README.md.
-  static const String baseUrl = String.fromEnvironment(
-    'API_BASE_URL',
-    defaultValue: 'http://localhost:8081',
-  );
+  static const String baseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: 'http://localhost:8081');
 
   static const String _devDefaultBaseUrl = 'http://localhost:8081';
 
@@ -18,9 +15,7 @@ class ApiConstants {
   // this backend's `google.oauth.client-ids` audience check. Empty by
   // default — Google Sign-In is not usable until this is supplied, e.g.:
   //   flutter run --dart-define=GOOGLE_SERVER_CLIENT_ID=<web-client-id>.apps.googleusercontent.com
-  static const String googleServerClientId = String.fromEnvironment(
-    'GOOGLE_SERVER_CLIENT_ID',
-  );
+  static const String googleServerClientId = String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID');
 
   /// A release build that never received --dart-define=API_BASE_URL=... would otherwise
   /// silently ship pointed at a developer's own machine — fail loudly and immediately
@@ -60,38 +55,28 @@ class ApiConstants {
   static const String settingsAccountEndpoint = '/api/settings/account';
 
   static const String mentorChatEndpoint = '/api/mentor/chat';
-  static String mentorSuggestionsEndpoint(String language) =>
-      '/api/mentor/suggestions?language=$language';
+  static String mentorSuggestionsEndpoint(String language) => '/api/mentor/suggestions?language=$language';
   static const String mentorConversationsEndpoint = '/api/mentor/conversations';
-  static String mentorConversationEndpoint(int id) =>
-      '/api/mentor/conversations/$id';
+  static String mentorConversationEndpoint(int id) => '/api/mentor/conversations/$id';
 
-  static String learningLessonCompleteEndpoint(String lessonId) =>
-      '/api/v1/learning/lessons/$lessonId/complete';
+  static String learningLessonCompleteEndpoint(String lessonId) => '/api/v1/learning/lessons/$lessonId/complete';
   static const String learningProgressEndpoint = '/api/v1/learning/progress';
 
-  static String labSimulatorCompleteEndpoint(String simulatorId) =>
-      '/api/v1/lab/simulators/$simulatorId/complete';
-  static const String labSimulatorsProgressEndpoint =
-      '/api/v1/lab/simulators/progress';
+  static String labSimulatorCompleteEndpoint(String simulatorId) => '/api/v1/lab/simulators/$simulatorId/complete';
+  static const String labSimulatorsProgressEndpoint = '/api/v1/lab/simulators/progress';
   static const String academyCatalogEndpoint = '/api/v1/academy/catalog';
 
-  static const String gamificationSummaryEndpoint =
-      '/api/v1/gamification/summary';
+  static const String gamificationSummaryEndpoint = '/api/v1/gamification/summary';
   static const String achievementsEndpoint = '/api/v1/achievements';
   static const String missionsEndpoint = '/api/v1/missions';
 
   // Academy's simulated wallet — entirely separate backend context
   // (simulated_portfolio), never real_portfolio's /api/investments/*. See
   // Petrimonium-Backend docs/BACKEND_MODULE_PLAN.md §11.
-  static const String simulatedPortfolioMeEndpoint =
-      '/api/v1/simulated-portfolios/me';
-  static const String simulatedPortfolioOrdersEndpoint =
-      '/api/v1/simulated-portfolios/orders';
-  static const String simulatedPortfolioResetEndpoint =
-      '/api/v1/simulated-portfolios/reset';
+  static const String simulatedPortfolioMeEndpoint = '/api/v1/simulated-portfolios/me';
+  static const String simulatedPortfolioOrdersEndpoint = '/api/v1/simulated-portfolios/orders';
+  static const String simulatedPortfolioResetEndpoint = '/api/v1/simulated-portfolios/reset';
   static String simulatedPortfolioQuoteSearchEndpoint(String query) =>
       '/api/v1/simulated-portfolios/quotes/search?query=$query';
-  static String simulatedPortfolioQuoteEndpoint(String ticker) =>
-      '/api/v1/simulated-portfolios/quotes/$ticker';
+  static String simulatedPortfolioQuoteEndpoint(String ticker) => '/api/v1/simulated-portfolios/quotes/$ticker';
 }

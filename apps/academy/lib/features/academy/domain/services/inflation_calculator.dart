@@ -8,11 +8,7 @@ class InflationYearPoint {
   final double nominalValue;
   final double realValue;
 
-  const InflationYearPoint({
-    required this.year,
-    required this.nominalValue,
-    required this.realValue,
-  });
+  const InflationYearPoint({required this.year, required this.nominalValue, required this.realValue});
 }
 
 /// The outcome of one [InflationCalculator.simulate] run.
@@ -68,14 +64,11 @@ class InflationCalculator {
         InflationYearPoint(
           year: year,
           nominalValue: initialAmount,
-          realValue:
-              initialAmount / math.pow(1 + inflationRate, year).toDouble(),
+          realValue: initialAmount / math.pow(1 + inflationRate, year).toDouble(),
         ),
     ];
 
-    final basketCostMultiplier = math
-        .pow(1 + inflationRate, years)
-        .toDouble();
+    final basketCostMultiplier = math.pow(1 + inflationRate, years).toDouble();
     final finalRealValue = initialAmount / basketCostMultiplier;
     // basketCostMultiplier = (1 + inflationRate)^years is always >= 1 for a
     // non-negative inflation rate (the slider's own floor), so this never

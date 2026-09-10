@@ -40,10 +40,7 @@ void main() {
     });
 
     test('learningLessonCompleteEndpoint interpolates the given lesson id', () {
-      expect(
-        ApiConstants.learningLessonCompleteEndpoint('lesson_abc'),
-        '/api/v1/learning/lessons/lesson_abc/complete',
-      );
+      expect(ApiConstants.learningLessonCompleteEndpoint('lesson_abc'), '/api/v1/learning/lessons/lesson_abc/complete');
     });
 
     test('assertConfiguredForRelease does not throw in debug/profile test builds', () {

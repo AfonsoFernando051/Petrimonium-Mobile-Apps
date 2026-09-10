@@ -1,12 +1,7 @@
 /// One entry in the Mentor conversation history list — everything needed to
 /// render a row without fetching the full message thread.
 class ConversationSummary {
-  const ConversationSummary({
-    required this.id,
-    required this.title,
-    required this.updatedAt,
-    this.lastMessagePreview,
-  });
+  const ConversationSummary({required this.id, required this.title, required this.updatedAt, this.lastMessagePreview});
 
   final int id;
   final String title;

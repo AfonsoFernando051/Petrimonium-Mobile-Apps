@@ -4,8 +4,7 @@ import '../test_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
-  setUp(() {
-  });
+  setUp(() {});
 
   Widget buildTestableWidget({
     String? title,
@@ -17,18 +16,21 @@ void main() {
       theme: TestTheme.dark,
       home: Scaffold(
         body: ErrorStateView(
-            retryLabel: 'Tentar novamente',title: title, message: message, onRetry: onRetry, style: style),
+          retryLabel: 'Tentar novamente',
+          title: title,
+          message: message,
+          onRetry: onRetry,
+          style: style,
+        ),
       ),
     );
   }
 
   group('ErrorStateView', () {
     testWidgets('standard style renders title and message', (tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        title: 'Oops',
-        message: 'Something went wrong',
-        onRetry: () async {},
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(title: 'Oops', message: 'Something went wrong', onRetry: () async {}),
+      );
 
       expect(find.text('Oops'), findsOneWidget);
       expect(find.text('Something went wrong'), findsOneWidget);
@@ -36,10 +38,7 @@ void main() {
     });
 
     testWidgets('standard style with no title omits it', (tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        message: 'Something went wrong',
-        onRetry: () async {},
-      ));
+      await tester.pumpWidget(buildTestableWidget(message: 'Something went wrong', onRetry: () async {}));
 
       expect(find.text('Something went wrong'), findsOneWidget);
       // Only the message + retry Text widgets should exist as titleLarge-style.
@@ -47,23 +46,23 @@ void main() {
     });
 
     testWidgets('card style wraps content in a GlassCard', (tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        message: 'Card error',
-        onRetry: () async {},
-        style: ErrorStateStyle.card,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(message: 'Card error', onRetry: () async {}, style: ErrorStateStyle.card),
+      );
 
       expect(find.byType(GlassCard), findsOneWidget);
       expect(find.text('Card error'), findsOneWidget);
     });
 
     testWidgets('compact style renders a text-only retry action, no title support', (tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        title: 'Ignored',
-        message: 'Compact error',
-        onRetry: () async {},
-        style: ErrorStateStyle.compact,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          title: 'Ignored',
+          message: 'Compact error',
+          onRetry: () async {},
+          style: ErrorStateStyle.compact,
+        ),
+      );
 
       expect(find.text('Ignored'), findsNothing);
       expect(find.text('Compact error'), findsOneWidget);
@@ -73,12 +72,14 @@ void main() {
 
     testWidgets('tapping retry invokes onRetry — standard style', (tester) async {
       var called = false;
-      await tester.pumpWidget(buildTestableWidget(
-        message: 'msg',
-        onRetry: () async {
-          called = true;
-        },
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          message: 'msg',
+          onRetry: () async {
+            called = true;
+          },
+        ),
+      );
 
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
@@ -88,13 +89,15 @@ void main() {
 
     testWidgets('tapping retry invokes onRetry — compact style', (tester) async {
       var called = false;
-      await tester.pumpWidget(buildTestableWidget(
-        message: 'msg',
-        onRetry: () async {
-          called = true;
-        },
-        style: ErrorStateStyle.compact,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          message: 'msg',
+          onRetry: () async {
+            called = true;
+          },
+          style: ErrorStateStyle.compact,
+        ),
+      );
 
       await tester.tap(find.byType(TextButton));
       await tester.pumpAndSettle();

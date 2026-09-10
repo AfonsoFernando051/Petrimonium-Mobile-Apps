@@ -4,14 +4,16 @@ import '../test_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
-  Widget wrap(Widget child) => MaterialApp(theme: TestTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    theme: TestTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   group('TooltipSummary', () {
     testWidgets('renders its children in a Row', (tester) async {
-      await tester.pumpWidget(wrap(const TooltipSummary(
-        accentColor: Colors.cyan,
-        children: [Text('Left'), Text('Right')],
-      )));
+      await tester.pumpWidget(
+        wrap(const TooltipSummary(accentColor: Colors.cyan, children: [Text('Left'), Text('Right')])),
+      );
 
       expect(find.text('Left'), findsOneWidget);
       expect(find.text('Right'), findsOneWidget);
@@ -19,10 +21,7 @@ void main() {
     });
 
     testWidgets('applies the accent color to the container border', (tester) async {
-      await tester.pumpWidget(wrap(const TooltipSummary(
-        accentColor: Colors.cyan,
-        children: [Text('A')],
-      )));
+      await tester.pumpWidget(wrap(const TooltipSummary(accentColor: Colors.cyan, children: [Text('A')])));
 
       final container = tester.widget<Container>(find.byType(Container));
       final decoration = container.decoration as BoxDecoration;

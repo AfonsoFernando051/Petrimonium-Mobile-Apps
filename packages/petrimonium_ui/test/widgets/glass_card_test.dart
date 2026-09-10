@@ -4,8 +4,10 @@ import '../test_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
-  Widget wrap(Widget child, {ThemeData? theme}) =>
-      MaterialApp(theme: theme ?? TestTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child, {ThemeData? theme}) => MaterialApp(
+    theme: theme ?? TestTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   group('GlassCard', () {
     testWidgets('renders its child', (tester) async {
@@ -28,11 +30,9 @@ void main() {
     });
 
     testWidgets('explicit backgroundColor/borderColor override the resolved surface look', (tester) async {
-      await tester.pumpWidget(wrap(GlassCard(
-        backgroundColor: Colors.red,
-        borderColor: Colors.yellow,
-        child: const Text('inside'),
-      )));
+      await tester.pumpWidget(
+        wrap(GlassCard(backgroundColor: Colors.red, borderColor: Colors.yellow, child: const Text('inside'))),
+      );
 
       // Find the Container that carries the BoxDecoration with our override colors.
       final decorated = tester
@@ -45,10 +45,12 @@ void main() {
 
     testWidgets('renders correctly across every CardSurface value in Light theme', (tester) async {
       for (final surface in CardSurface.values) {
-        await tester.pumpWidget(wrap(
-          GlassCard(surface: surface, child: const Text('inside')),
-          theme: TestTheme.light,
-        ));
+        await tester.pumpWidget(
+          wrap(
+            GlassCard(surface: surface, child: const Text('inside')),
+            theme: TestTheme.light,
+          ),
+        );
         expect(find.text('inside'), findsOneWidget);
       }
     });

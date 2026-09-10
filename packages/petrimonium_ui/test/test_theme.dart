@@ -63,15 +63,9 @@ abstract final class TestPalette {
 
 /// The theme every widget test in this package renders against.
 abstract final class TestTheme {
-  static ThemeData get dark => PetrimoniumTheme.build(
-        brightness: Brightness.dark,
-        colors: TestPalette.dark,
-        accents: TestPalette.accents,
-      );
+  static ThemeData get dark =>
+      PetrimoniumTheme.build(brightness: Brightness.dark, colors: TestPalette.dark, accents: TestPalette.accents);
 
-  static ThemeData get light => PetrimoniumTheme.build(
-        brightness: Brightness.light,
-        colors: TestPalette.light,
-        accents: TestPalette.accents,
-      );
+  static ThemeData get light =>
+      PetrimoniumTheme.build(brightness: Brightness.light, colors: TestPalette.light, accents: TestPalette.accents);
 }

@@ -4,12 +4,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// A deterministic, named "what if" scenario for [PortfolioScenarioCalculator]
 /// — never random, so nothing here can read as a forecast
 /// (`docs/DECISIONS.md` DECISION-037).
-enum LabScenario {
-  equitiesDown15,
-  largestPositionDown20,
-  broadMarketDown10,
-  fixedIncomeUp5,
-}
+enum LabScenario { equitiesDown15, largestPositionDown20, broadMarketDown10, fixedIncomeUp5 }
 
 /// One category's contribution to a scenario's total impact.
 class CategoryImpact {
@@ -67,10 +62,7 @@ class PortfolioScenarioCalculator {
   ) {
     switch (scenario) {
       case LabScenario.equitiesDown15:
-        return {
-          for (final type in weightsPercent.keys)
-            type: type == InvestmentTypeEnum.STOCKS ? -0.15 : 0.0,
-        };
+        return {for (final type in weightsPercent.keys) type: type == InvestmentTypeEnum.STOCKS ? -0.15 : 0.0};
       case LabScenario.largestPositionDown20:
         InvestmentTypeEnum? largest;
         var largestWeight = -1.0;
@@ -80,17 +72,11 @@ class PortfolioScenarioCalculator {
             largest = type;
           }
         });
-        return {
-          for (final type in weightsPercent.keys)
-            type: type == largest ? -0.20 : 0.0,
-        };
+        return {for (final type in weightsPercent.keys) type: type == largest ? -0.20 : 0.0};
       case LabScenario.broadMarketDown10:
         return {for (final type in weightsPercent.keys) type: -0.10};
       case LabScenario.fixedIncomeUp5:
-        return {
-          for (final type in weightsPercent.keys)
-            type: type == InvestmentTypeEnum.FIXED_INCOME ? 0.05 : 0.0,
-        };
+        return {for (final type in weightsPercent.keys) type: type == InvestmentTypeEnum.FIXED_INCOME ? 0.05 : 0.0};
     }
   }
 

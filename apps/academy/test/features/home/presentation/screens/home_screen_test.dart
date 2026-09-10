@@ -170,9 +170,7 @@ void main() {
     mascotController.dispose();
   });
 
-  Widget buildTestableWidget({
-    VoidCallback? onOpenAcademyTab,
-  }) {
+  Widget buildTestableWidget({VoidCallback? onOpenAcademyTab}) {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
@@ -229,7 +227,9 @@ void main() {
   });
 
   group('HomeScreen — greeting, streak and Mentor insight', () {
-    testWidgets('shows the real name once resolved and the streak badge from the real gamification summary', (tester) async {
+    testWidgets('shows the real name once resolved and the streak badge from the real gamification summary', (
+      tester,
+    ) async {
       when(() => mockAuthRepository.getSavedUserName()).thenAnswer((_) async => 'Camila');
       when(() => mockAuthRepository.refreshUserName()).thenAnswer((_) async => 'Camila');
       gamificationRepository.summaryToReturn = const GamificationSummary(
@@ -260,10 +260,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(
-        find.text('Você estava progredindo em "${testLesson1.title}". Continuar de onde parou?'),
-        findsOneWidget,
-      );
+      expect(find.text('Você estava progredindo em "${testLesson1.title}". Continuar de onde parou?'), findsOneWidget);
       expect(find.text('Por que estou vendo isto?'), findsOneWidget);
 
       // The real next-lesson data also triggers PetCompanionController's own

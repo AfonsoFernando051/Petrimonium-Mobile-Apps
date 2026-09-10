@@ -36,9 +36,7 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveNetWorth(double netWorth) async {}
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
 
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
@@ -58,15 +56,11 @@ void main() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     mascotController = MascotController(repository: FakeMascotRepository());
-    companionController = PetCompanionController(
-      mascotController: mascotController,
-    );
+    companionController = PetCompanionController(mascotController: mascotController);
 
     DI.academyProgressRepository = AcademyProgressLocalRepository();
     mockLabRemoteDataSource = MockLabRemoteDataSource();
-    when(
-      () => mockLabRemoteDataSource.getCompletedSimulatorIds(),
-    ).thenAnswer((_) async => {});
+    when(() => mockLabRemoteDataSource.getCompletedSimulatorIds()).thenAnswer((_) async => {});
     DI.labRemoteDataSource = mockLabRemoteDataSource;
   });
 
@@ -82,37 +76,31 @@ void main() {
   }
 
   group('FinancialLabHomeScreen', () {
-    testWidgets(
-      'renders all five simulator tiles as available',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        // CosmicBackground has repeating AnimationControllers — never
-        // pumpAndSettle here.
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 300));
+    testWidgets('renders all five simulator tiles as available', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      // CosmicBackground has repeating AnimationControllers — never
+      // pumpAndSettle here.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-        expect(find.byIcon(Icons.trending_up_rounded), findsOneWidget);
-        expect(find.byIcon(Icons.shopping_basket_outlined), findsOneWidget);
-        // All five simulators are available now.
-        expect(find.byIcon(Icons.chevron_right), findsNWidgets(5));
-        expect(find.byIcon(Icons.account_balance_outlined), findsOneWidget);
-        expect(find.text('EM BREVE'), findsNothing);
-      },
-    );
+      expect(find.byIcon(Icons.trending_up_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.shopping_basket_outlined), findsOneWidget);
+      // All five simulators are available now.
+      expect(find.byIcon(Icons.chevron_right), findsNWidgets(5));
+      expect(find.byIcon(Icons.account_balance_outlined), findsOneWidget);
+      expect(find.text('EM BREVE'), findsNothing);
+    });
 
-    testWidgets(
-      'navigates to CompoundInterestLabScreen when the compound interest tile is tapped',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 300));
+    testWidgets('navigates to CompoundInterestLabScreen when the compound interest tile is tapped', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-        await tester.tap(find.byIcon(Icons.trending_up_rounded));
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.byIcon(Icons.trending_up_rounded));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
 
-        expect(find.byType(CompoundInterestLabScreen), findsOneWidget);
-      },
-    );
+      expect(find.byType(CompoundInterestLabScreen), findsOneWidget);
+    });
   });
 }

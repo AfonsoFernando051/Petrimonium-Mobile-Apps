@@ -6,27 +6,24 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 void main() {
   group('SettingsToggleCard', () {
     testWidgets('renders all children passed to it', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        theme: TestTheme.dark,
-        home: Scaffold(
-          body: SettingsToggleCard(children: const [
-            Text('Row One'),
-            Text('Row Two'),
-          ]),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TestTheme.dark,
+          home: Scaffold(body: SettingsToggleCard(children: const [Text('Row One'), Text('Row Two')])),
         ),
-      ));
+      );
 
       expect(find.text('Row One'), findsOneWidget);
       expect(find.text('Row Two'), findsOneWidget);
     });
 
     testWidgets('renders empty when no children are passed', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        theme: TestTheme.dark,
-        home: const Scaffold(
-          body: SettingsToggleCard(children: []),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TestTheme.dark,
+          home: const Scaffold(body: SettingsToggleCard(children: [])),
         ),
-      ));
+      );
 
       expect(find.byType(SettingsToggleCard), findsOneWidget);
       expect(find.byType(Column), findsWidgets);

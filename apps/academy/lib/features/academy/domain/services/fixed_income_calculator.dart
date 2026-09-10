@@ -9,11 +9,7 @@ class FixedIncomePoint {
   final double principal;
   final double value;
 
-  const FixedIncomePoint({
-    required this.year,
-    required this.principal,
-    required this.value,
-  });
+  const FixedIncomePoint({required this.year, required this.principal, required this.value});
 }
 
 /// The outcome of one [FixedIncomeCalculator.simulate] run. Deliberately
@@ -76,12 +72,9 @@ class FixedIncomeCalculator {
     );
 
     final monthlyRate = annualRatePercent / 100 / 12;
-    final effectiveAnnualRatePercent =
-        (math.pow(1 + monthlyRate, 12).toDouble() - 1) * 100;
+    final effectiveAnnualRatePercent = (math.pow(1 + monthlyRate, 12).toDouble() - 1) * 100;
 
-    final interestSharePercent = base.finalValue == 0
-        ? 0.0
-        : (base.totalGrowth / base.finalValue) * 100;
+    final interestSharePercent = base.finalValue == 0 ? 0.0 : (base.totalGrowth / base.finalValue) * 100;
 
     return FixedIncomeResult(
       totalPrincipal: base.totalContributions,
@@ -92,11 +85,7 @@ class FixedIncomeCalculator {
       effectiveAnnualRatePercent: effectiveAnnualRatePercent,
       yearlyBreakdown: [
         for (final point in base.yearlyBreakdown)
-          FixedIncomePoint(
-            year: point.year,
-            principal: point.contributions,
-            value: point.value,
-          ),
+          FixedIncomePoint(year: point.year, principal: point.contributions, value: point.value),
       ],
     );
   }

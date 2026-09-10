@@ -12,12 +12,16 @@ void main() {
   }) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: TickerSuggestionTile(symbol: symbol, name: name, price: price, onTap: onTap)),
+      home: Scaffold(
+        body: TickerSuggestionTile(symbol: symbol, name: name, price: price, onTap: onTap),
+      ),
     );
   }
 
   group('TickerSuggestionTile', () {
-    testWidgets('renders uppercased symbol, name, formatted price and 2-letter avatar initials', (WidgetTester tester) async {
+    testWidgets('renders uppercased symbol, name, formatted price and 2-letter avatar initials', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget(symbol: 'petr4', name: 'Petrobras', price: 32.5, onTap: () {}));
       await tester.pump();
 
@@ -44,7 +48,9 @@ void main() {
 
     testWidgets('fires onTap when tapped', (WidgetTester tester) async {
       var tapped = false;
-      await tester.pumpWidget(buildTestableWidget(symbol: 'petr4', name: 'Petrobras', price: 32.5, onTap: () => tapped = true));
+      await tester.pumpWidget(
+        buildTestableWidget(symbol: 'petr4', name: 'Petrobras', price: 32.5, onTap: () => tapped = true),
+      );
       await tester.pump();
 
       await tester.tap(find.byType(TickerSuggestionTile));

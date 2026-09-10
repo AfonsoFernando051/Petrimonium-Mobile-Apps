@@ -15,13 +15,13 @@ void main() {
 
   group('evaluate', () {
     test('maps the raw JSON into an AchievementEvaluationResult', () async {
-      when(() => mockDataSource.evaluate()).thenAnswer((_) async => {
-            'unlockedAt': {
-              'first_investment': '2024-01-01T00:00:00.000Z',
-            },
-            'newlyUnlockedCodes': ['first_investment'],
-            'achievementXpTotal': 50,
-          });
+      when(() => mockDataSource.evaluate()).thenAnswer(
+        (_) async => {
+          'unlockedAt': {'first_investment': '2024-01-01T00:00:00.000Z'},
+          'newlyUnlockedCodes': ['first_investment'],
+          'achievementXpTotal': 50,
+        },
+      );
 
       final result = await repository.evaluate();
 

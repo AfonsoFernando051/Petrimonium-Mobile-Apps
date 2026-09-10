@@ -6,12 +6,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 /// buttons from the product spec are future work (see docs/AI_MENTOR.md) —
 /// no placeholder icons for capabilities that don't exist yet.
 class MentorInputBar extends StatelessWidget {
-  const MentorInputBar({
-    super.key,
-    required this.controller,
-    required this.onSend,
-    required this.isSending,
-  });
+  const MentorInputBar({super.key, required this.controller, required this.onSend, required this.isSending});
 
   final TextEditingController controller;
   final VoidCallback onSend;

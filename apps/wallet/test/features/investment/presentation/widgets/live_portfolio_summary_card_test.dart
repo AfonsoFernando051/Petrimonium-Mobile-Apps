@@ -11,12 +11,16 @@ void main() {
   Widget buildTestableWidget(PortfolioStats stats, {Set<String> alreadyUnlockedIds = const {}}) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: LivePortfolioSummaryCard(stats: stats, alreadyUnlockedIds: alreadyUnlockedIds)),
+      home: Scaffold(
+        body: LivePortfolioSummaryCard(stats: stats, alreadyUnlockedIds: alreadyUnlockedIds),
+      ),
     );
   }
 
   group('LivePortfolioSummaryCard', () {
-    testWidgets('shows a dash for passive income and no achievement banner when the portfolio has no assets', (WidgetTester tester) async {
+    testWidgets('shows a dash for passive income and no achievement banner when the portfolio has no assets', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget(PortfolioStats.empty));
       await tester.pump();
 
@@ -35,9 +39,7 @@ void main() {
           totalAssets: 1,
         ),
         holdings: holdings,
-        allocation: const [
-          AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 1000, portfolioPercent: 100),
-        ],
+        allocation: const [AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 1000, portfolioPercent: 100)],
       );
 
       await tester.pumpWidget(buildTestableWidget(stats));
@@ -48,7 +50,9 @@ void main() {
       expect(find.text('—'), findsNothing);
     });
 
-    testWidgets('shows the real XP reward for a newly-qualifying achievement, not already-unlocked ones', (WidgetTester tester) async {
+    testWidgets('shows the real XP reward for a newly-qualifying achievement, not already-unlocked ones', (
+      WidgetTester tester,
+    ) async {
       final holdings = Holding.fromLots([lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10, currentPrice: 10)]);
       final stats = PortfolioStats(
         summary: const PortfolioSummary(
@@ -70,7 +74,9 @@ void main() {
       expect(find.text('+$expectedXp XP'), findsOneWidget);
     });
 
-    testWidgets('shows 0 XP when everything the portfolio qualifies for is already unlocked', (WidgetTester tester) async {
+    testWidgets('shows 0 XP when everything the portfolio qualifies for is already unlocked', (
+      WidgetTester tester,
+    ) async {
       final holdings = Holding.fromLots([lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10, currentPrice: 10)]);
       final stats = PortfolioStats(
         summary: const PortfolioSummary(

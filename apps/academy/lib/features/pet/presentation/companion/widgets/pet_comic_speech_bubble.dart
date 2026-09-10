@@ -57,18 +57,14 @@ class _PetComicSpeechBubbleState extends State<PetComicSpeechBubble> {
   @override
   void didUpdateWidget(covariant PetComicSpeechBubble oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.message.textKey != widget.message.textKey ||
-        oldWidget.message.params != widget.message.params) {
+    if (oldWidget.message.textKey != widget.message.textKey || oldWidget.message.params != widget.message.params) {
       _startOrSkipTypewriter();
     }
   }
 
   void _startOrSkipTypewriter() {
     _typewriterTimer?.cancel();
-    _fullText = Translator.translate(
-      widget.message.textKey,
-      params: widget.message.params,
-    );
+    _fullText = Translator.translate(widget.message.textKey, params: widget.message.params);
 
     // If typewriter is disabled, in test environment, or animations disabled, reveal immediately
     final isTestEnvironment = WidgetsBinding.instance.runtimeType.toString().contains('Test');
@@ -81,23 +77,20 @@ class _PetComicSpeechBubbleState extends State<PetComicSpeechBubble> {
     _visibleCharCount = 0;
     _isTypewriterComplete = false;
 
-    _typewriterTimer = Timer.periodic(
-      Duration(milliseconds: widget.typewriterSpeedMs),
-      (timer) {
-        if (!mounted) {
-          timer.cancel();
-          return;
-        }
-        if (_visibleCharCount < _fullText.length) {
-          setState(() {
-            _visibleCharCount++;
-          });
-        } else {
-          _isTypewriterComplete = true;
-          timer.cancel();
-        }
-      },
-    );
+    _typewriterTimer = Timer.periodic(Duration(milliseconds: widget.typewriterSpeedMs), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      if (_visibleCharCount < _fullText.length) {
+        setState(() {
+          _visibleCharCount++;
+        });
+      } else {
+        _isTypewriterComplete = true;
+        timer.cancel();
+      }
+    });
   }
 
   void _completeTypewriterInstantly() {
@@ -135,17 +128,19 @@ class _PetComicSpeechBubbleState extends State<PetComicSpeechBubble> {
     const double tailHeight = 12.0;
     final EdgeInsets innerPadding = EdgeInsets.fromLTRB(
       16 + (widget.tailPosition == PetBubbleTailPosition.left ? tailHeight : 0),
-      12 + (widget.tailPosition == PetBubbleTailPosition.topLeft ||
-              widget.tailPosition == PetBubbleTailPosition.topRight ||
-              widget.tailPosition == PetBubbleTailPosition.topCenter
-          ? tailHeight
-          : 0),
+      12 +
+          (widget.tailPosition == PetBubbleTailPosition.topLeft ||
+                  widget.tailPosition == PetBubbleTailPosition.topRight ||
+                  widget.tailPosition == PetBubbleTailPosition.topCenter
+              ? tailHeight
+              : 0),
       14 + (widget.tailPosition == PetBubbleTailPosition.right ? tailHeight : 0),
-      12 + (widget.tailPosition == PetBubbleTailPosition.bottomLeft ||
-              widget.tailPosition == PetBubbleTailPosition.bottomRight ||
-              widget.tailPosition == PetBubbleTailPosition.bottomCenter
-          ? tailHeight
-          : 0),
+      12 +
+          (widget.tailPosition == PetBubbleTailPosition.bottomLeft ||
+                  widget.tailPosition == PetBubbleTailPosition.bottomRight ||
+                  widget.tailPosition == PetBubbleTailPosition.bottomCenter
+              ? tailHeight
+              : 0),
     );
 
     return Semantics(
@@ -186,26 +181,16 @@ class _PetComicSpeechBubbleState extends State<PetComicSpeechBubble> {
                       // that, not this chrome).
                       Flexible(
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
                             color: style.primaryAccent.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: style.primaryAccent.withValues(alpha: 0.4),
-                              width: 1,
-                            ),
+                            border: Border.all(color: style.primaryAccent.withValues(alpha: 0.4), width: 1),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
-                                style.badgeIcon,
-                                size: 13,
-                                color: style.primaryAccent,
-                              ),
+                              Icon(style.badgeIcon, size: 13, color: style.primaryAccent),
                               const SizedBox(width: 5),
                               Flexible(
                                 child: Text(
@@ -230,23 +215,12 @@ class _PetComicSpeechBubbleState extends State<PetComicSpeechBubble> {
                       // Close / Dismiss Button
                       Semantics(
                         button: true,
-                        label: Translator.translate(
-                          AppStrings.companionDismissTooltip,
-                        ),
+                        label: Translator.translate(AppStrings.companionDismissTooltip),
                         child: IconButton(
-                          icon: Icon(
-                            Icons.close,
-                            size: 16,
-                            color: tokens.textTertiary,
-                          ),
-                          tooltip: Translator.translate(
-                            AppStrings.companionDismissTooltip,
-                          ),
+                          icon: Icon(Icons.close, size: 16, color: tokens.textTertiary),
+                          tooltip: Translator.translate(AppStrings.companionDismissTooltip),
                           padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(
-                            minWidth: 28,
-                            minHeight: 28,
-                          ),
+                          constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
                           onPressed: () {
                             HapticFeedback.lightImpact();
                             widget.onDismiss();
@@ -280,37 +254,21 @@ class _PetComicSpeechBubbleState extends State<PetComicSpeechBubble> {
                       },
                       borderRadius: BorderRadius.circular(8),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
                           color: style.primaryAccent.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: style.primaryAccent.withValues(alpha: 0.5),
-                            width: 1,
-                          ),
+                          border: Border.all(color: style.primaryAccent.withValues(alpha: 0.5), width: 1),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              Translator.translate(
-                                widget.message.action!.labelKey,
-                              ),
-                              style: TextStyle(
-                                color: style.primaryAccent,
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              Translator.translate(widget.message.action!.labelKey),
+                              style: TextStyle(color: style.primaryAccent, fontSize: 12.5, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(width: 4),
-                            Icon(
-                              Icons.arrow_forward_rounded,
-                              size: 14,
-                              color: style.primaryAccent,
-                            ),
+                            Icon(Icons.arrow_forward_rounded, size: 14, color: style.primaryAccent),
                           ],
                         ),
                       ),
@@ -325,4 +283,3 @@ class _PetComicSpeechBubbleState extends State<PetComicSpeechBubble> {
     );
   }
 }
-

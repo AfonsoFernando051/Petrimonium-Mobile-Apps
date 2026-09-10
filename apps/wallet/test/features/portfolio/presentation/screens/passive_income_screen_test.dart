@@ -74,7 +74,9 @@ void main() {
       expect(find.text('CÁLCULO DETERMINÍSTICO'), findsOneWidget);
     });
 
-    testWidgets('shows an ErrorBanner when the controller reports an error, without blocking the rest of the screen', (WidgetTester tester) async {
+    testWidgets('shows an ErrorBanner when the controller reports an error, without blocking the rest of the screen', (
+      WidgetTester tester,
+    ) async {
       repository.holdingsError = Exception('network down');
       await controller.loadAll();
 

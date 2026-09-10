@@ -4,10 +4,7 @@ import '../test_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
-  Widget buildTestableWidget({
-    required bool selected,
-    required VoidCallback onTap,
-  }) {
+  Widget buildTestableWidget({required bool selected, required VoidCallback onTap}) {
     return MaterialApp(
       theme: TestTheme.dark,
       home: Scaffold(

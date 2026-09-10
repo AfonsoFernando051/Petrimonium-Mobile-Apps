@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
@@ -30,14 +31,7 @@ class PetConfigurationScreen extends StatefulWidget {
 }
 
 class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
-  static const _nameSuggestions = [
-    'Atlas',
-    'Bolt',
-    'Loki',
-    'Charlie',
-    'Max',
-    'Nino',
-  ];
+  static const _nameSuggestions = ['Atlas', 'Bolt', 'Loki', 'Charlie', 'Max', 'Nino'];
 
   // Lobo por omissão: é o mascote da Academy (o mesmo do ecrã de login) e é
   // o que o artboard `PetAcademy` do canvas mostra pré-selecionado.
@@ -72,9 +66,7 @@ class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
       await DI.petRepository.configurePet(_selectedSpecie, name: name);
       await DI.mascotRepository.saveName(name);
       if (mounted) {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (_) => const AcademyIntroScreen()));
+        unawaited(Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AcademyIntroScreen())));
       }
     } catch (e) {
       if (mounted) {
@@ -119,11 +111,7 @@ class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
                 height: 96,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    Icons.pets,
-                    size: 48,
-                    color: context.colors.textSecondary,
-                  );
+                  return Icon(Icons.pets, size: 48, color: context.colors.textSecondary);
                 },
               ),
             ),
@@ -133,8 +121,7 @@ class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
               const SizedBox(height: 10),
               PetSpeciesSelector(
                 selected: _selectedSpecie,
-                onSelected: (specie) =>
-                    setState(() => _selectedSpecie = specie),
+                onSelected: (specie) => setState(() => _selectedSpecie = specie),
               ),
               const SizedBox(height: 20),
             ],

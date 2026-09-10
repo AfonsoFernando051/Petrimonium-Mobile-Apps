@@ -47,9 +47,8 @@ class PrivacyAndMemoryScreen extends StatelessWidget {
                 GameButton(
                   label: Translator.translate(AppStrings.privacyMemoryConversationsButton),
                   icon: Icons.chat_bubble_outline,
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const ConversationListScreen()),
-                  ),
+                  onPressed: () =>
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ConversationListScreen())),
                 ),
               ],
             ),

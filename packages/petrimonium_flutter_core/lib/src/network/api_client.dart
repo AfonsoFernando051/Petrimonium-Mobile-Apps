@@ -47,13 +47,12 @@ class ApiClient {
     String? refreshTokenEndpoint,
     void Function()? onSessionExpired,
     Duration? sessionCheckTimeout,
-  })  : _client = client ?? http.Client(),
-        _tokenStore = tokenStore ?? SecureTokenStore(storage: secureStorage),
-        _baseUrl = baseUrl ?? PetrimoniumEnvironment.baseUrl,
-        _refreshTokenEndpoint =
-            refreshTokenEndpoint ?? PetrimoniumEnvironment.refreshTokenEndpoint,
-        _onSessionExpired = onSessionExpired,
-        _sessionCheckTimeout = sessionCheckTimeout ?? const Duration(seconds: 5);
+  }) : _client = client ?? http.Client(),
+       _tokenStore = tokenStore ?? SecureTokenStore(storage: secureStorage),
+       _baseUrl = baseUrl ?? PetrimoniumEnvironment.baseUrl,
+       _refreshTokenEndpoint = refreshTokenEndpoint ?? PetrimoniumEnvironment.refreshTokenEndpoint,
+       _onSessionExpired = onSessionExpired,
+       _sessionCheckTimeout = sessionCheckTimeout ?? const Duration(seconds: 5);
 
   final String _baseUrl;
   final String _refreshTokenEndpoint;
@@ -126,10 +125,7 @@ class ApiClient {
   Future<Map<String, String>> _getHeaders() async {
     final token = await readToken();
 
-    return {
-      'Content-Type': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
-    };
+    return {'Content-Type': 'application/json', if (token != null) 'Authorization': 'Bearer $token'};
   }
 
   /// [timeout] overrides [_requestTimeout] for callers that know their
@@ -137,31 +133,39 @@ class ApiClient {
   /// Mentor chat endpoint, which waits on an LLM reply rather than a
   /// straightforward database read.
   Future<http.Response> post(String endpoint, dynamic body, {Duration? timeout}) {
-    return _sendWithAuth((headers) => _client
-        .post(Uri.parse('$_baseUrl$endpoint'), headers: headers, body: jsonEncode(body))
-        .timeout(timeout ?? _requestTimeout));
+    return _sendWithAuth(
+      (headers) => _client
+          .post(Uri.parse('$_baseUrl$endpoint'), headers: headers, body: jsonEncode(body))
+          .timeout(timeout ?? _requestTimeout),
+    );
   }
 
   Future<http.Response> get(String endpoint) {
     return _sendWithAuth(
-        (headers) => _client.get(Uri.parse('$_baseUrl$endpoint'), headers: headers).timeout(_requestTimeout));
+      (headers) => _client.get(Uri.parse('$_baseUrl$endpoint'), headers: headers).timeout(_requestTimeout),
+    );
   }
 
   Future<http.Response> put(String endpoint, dynamic body) {
-    return _sendWithAuth((headers) => _client
-        .put(Uri.parse('$_baseUrl$endpoint'), headers: headers, body: jsonEncode(body))
-        .timeout(_requestTimeout));
+    return _sendWithAuth(
+      (headers) => _client
+          .put(Uri.parse('$_baseUrl$endpoint'), headers: headers, body: jsonEncode(body))
+          .timeout(_requestTimeout),
+    );
   }
 
   Future<http.Response> patch(String endpoint, dynamic body) {
-    return _sendWithAuth((headers) => _client
-        .patch(Uri.parse('$_baseUrl$endpoint'), headers: headers, body: jsonEncode(body))
-        .timeout(_requestTimeout));
+    return _sendWithAuth(
+      (headers) => _client
+          .patch(Uri.parse('$_baseUrl$endpoint'), headers: headers, body: jsonEncode(body))
+          .timeout(_requestTimeout),
+    );
   }
 
   Future<http.Response> delete(String endpoint) {
     return _sendWithAuth(
-        (headers) => _client.delete(Uri.parse('$_baseUrl$endpoint'), headers: headers).timeout(_requestTimeout));
+      (headers) => _client.delete(Uri.parse('$_baseUrl$endpoint'), headers: headers).timeout(_requestTimeout),
+    );
   }
 
   /// Sends a POST with no bearer token and no 401-refresh handling — for

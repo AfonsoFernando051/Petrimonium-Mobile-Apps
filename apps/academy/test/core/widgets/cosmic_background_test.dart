@@ -10,9 +10,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.dark,
-          home: const Scaffold(
-            body: CosmicBackground(child: Text('content')),
-          ),
+          home: const Scaffold(body: CosmicBackground(child: Text('content'))),
         ),
       );
       // CosmicBackground has a repeating twinkle AnimationController — never
@@ -31,9 +29,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.light,
-          home: const Scaffold(
-            body: CosmicBackground(child: Text('content')),
-          ),
+          home: const Scaffold(body: CosmicBackground(child: Text('content'))),
         ),
       );
       await tester.pump();

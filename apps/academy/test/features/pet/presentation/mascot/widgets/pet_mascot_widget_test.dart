@@ -114,10 +114,7 @@ void main() {
 
     testWidgets('honors disableAnimations — still renders, no crash', (tester) async {
       await tester.pumpWidget(
-        MediaQuery(
-          data: const MediaQueryData(disableAnimations: true),
-          child: buildTestableWidget(),
-        ),
+        MediaQuery(data: const MediaQueryData(disableAnimations: true), child: buildTestableWidget()),
       );
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));

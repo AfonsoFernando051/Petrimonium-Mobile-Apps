@@ -18,10 +18,7 @@ class SettingsRemoteDataSource {
   }
 
   Future<String> updateLanguage(String language) async {
-    final response = await apiClient.put(
-      ApiConstants.settingsLanguageEndpoint,
-      {'language': language},
-    );
+    final response = await apiClient.put(ApiConstants.settingsLanguageEndpoint, {'language': language});
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       return data['language'] as String;
@@ -41,10 +38,7 @@ class SettingsRemoteDataSource {
   }
 
   Future<String> updateCountry(String countryCode) async {
-    final response = await apiClient.put(
-      ApiConstants.settingsCountryEndpoint,
-      {'countryCode': countryCode},
-    );
+    final response = await apiClient.put(ApiConstants.settingsCountryEndpoint, {'countryCode': countryCode});
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       return data['countryCode'] as String;

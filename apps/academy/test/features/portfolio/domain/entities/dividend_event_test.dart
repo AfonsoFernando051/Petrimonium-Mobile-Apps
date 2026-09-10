@@ -131,13 +131,7 @@ void main() {
           },
         ],
         'history': [
-          {
-            'ticker': 'VALE3',
-            'type': 'JCP',
-            'userQuantity': 2.0,
-            'estimatedGrossAmount': 2.0,
-            'status': 'PAID',
-          },
+          {'ticker': 'VALE3', 'type': 'JCP', 'userQuantity': 2.0, 'estimatedGrossAmount': 2.0, 'status': 'PAID'},
         ],
       });
 

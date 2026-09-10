@@ -14,10 +14,7 @@ void main() {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: LanguageSection(
-          sectionLabel: (label) => Text(label),
-          onLanguageSelected: onLanguageSelected ?? (_) {},
-        ),
+        body: LanguageSection(sectionLabel: (label) => Text(label), onLanguageSelected: onLanguageSelected ?? (_) {}),
       ),
     );
   }
@@ -39,24 +36,15 @@ void main() {
       // escolhidas — e só a escolhida leva o visto dentro.
       expect(find.byType(OptionRow), findsNWidgets(4));
       expect(find.byIcon(Icons.check), findsOneWidget);
-      expect(
-        tester.widgetList<OptionRow>(find.byType(OptionRow)).where((r) => r.selected).length,
-        1,
-      );
+      expect(tester.widgetList<OptionRow>(find.byType(OptionRow)).where((r) => r.selected).length, 1);
     });
 
     testWidgets('shows the check next to English when currentLanguage is en', (tester) async {
       Translator.currentLanguage = 'en';
       await tester.pumpWidget(buildTestableWidget());
 
-      final englishRow = find.ancestor(
-        of: find.text('English'),
-        matching: find.byType(InkWell),
-      );
-      expect(
-        find.descendant(of: englishRow, matching: find.byIcon(Icons.check)),
-        findsOneWidget,
-      );
+      final englishRow = find.ancestor(of: find.text('English'), matching: find.byType(InkWell));
+      expect(find.descendant(of: englishRow, matching: find.byIcon(Icons.check)), findsOneWidget);
     });
 
     testWidgets('invokes onLanguageSelected with the tapped language code', (tester) async {

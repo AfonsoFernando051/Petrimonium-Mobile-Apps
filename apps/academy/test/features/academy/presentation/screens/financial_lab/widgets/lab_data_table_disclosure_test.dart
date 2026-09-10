@@ -9,22 +9,19 @@ void main() {
     Translator.currentLanguage = 'pt';
   });
 
-  Widget wrap(Widget child) =>
-      MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    theme: AppTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   group('LabDataTableDisclosure', () {
-    testWidgets('is collapsed by default, hiding row content', (
-      tester,
-    ) async {
+    testWidgets('is collapsed by default, hiding row content', (tester) async {
       await tester.pumpWidget(
         wrap(
           const LabDataTableDisclosure(
             columnLabels: ['Ano', 'Investido', 'Rendimento'],
             rows: [
-              LabDataTableRow(
-                label: '1',
-                values: ['R\$ 1.000', 'R\$ 50'],
-              ),
+              LabDataTableRow(label: '1', values: ['R\$ 1.000', 'R\$ 50']),
             ],
           ),
         ),
@@ -39,10 +36,7 @@ void main() {
           const LabDataTableDisclosure(
             columnLabels: ['Ano', 'Investido', 'Rendimento'],
             rows: [
-              LabDataTableRow(
-                label: '1',
-                values: ['R\$ 1.000', 'R\$ 50'],
-              ),
+              LabDataTableRow(label: '1', values: ['R\$ 1.000', 'R\$ 50']),
             ],
           ),
         ),

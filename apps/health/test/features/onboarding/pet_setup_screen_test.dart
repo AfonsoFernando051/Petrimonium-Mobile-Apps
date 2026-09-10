@@ -22,10 +22,7 @@ import 'package:petrimonium_health/l10n/app_localizations.dart';
 /// não a grelha interativa.
 void main() {
   Future<void> pumpPetSetup(WidgetTester tester) async {
-    final controller = HealthController(
-      repository: _StubRepository(),
-      localeController: LocaleController(),
-    );
+    final controller = HealthController(repository: _StubRepository(), localeController: LocaleController());
     await tester.pumpWidget(
       MaterialApp(
         locale: const Locale('pt', 'BR'),
@@ -93,10 +90,7 @@ void main() {
     expect(tester.getTopLeft(title).dx, tester.getTopLeft(nameLabel).dx);
 
     // A nota de rodapé é uma caixa com fundo e contorno, não texto solto.
-    final noteBox = find.ancestor(
-      of: find.text(l10n.petSetupFooterNote),
-      matching: find.byType(Container),
-    );
+    final noteBox = find.ancestor(of: find.text(l10n.petSetupFooterNote), matching: find.byType(Container));
     final decoration = tester.widget<Container>(noteBox.first).decoration as BoxDecoration;
     expect(decoration.color, HealthColors.inputFill);
     expect(decoration.border, isNotNull);

@@ -21,15 +21,14 @@ Border investmentFieldBorder({double alpha = 0.4}) {
 OutlineInputBorder _outline({required double alpha, double width = 1.0}) {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(AppRadii.md),
-    borderSide: BorderSide(color: AppColors.neonCyan.withValues(alpha: alpha), width: width),
+    borderSide: BorderSide(
+      color: AppColors.neonCyan.withValues(alpha: alpha),
+      width: width,
+    ),
   );
 }
 
-InputDecoration investmentInputDecoration(
-  BuildContext context, {
-  required String label,
-  Widget? suffixIcon,
-}) {
+InputDecoration investmentInputDecoration(BuildContext context, {required String label, Widget? suffixIcon}) {
   final tokens = context.colors;
   return InputDecoration(
     labelText: label,

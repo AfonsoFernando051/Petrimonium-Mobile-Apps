@@ -16,23 +16,23 @@ extension InvestmentTypeRules on InvestmentTypeEnum {
   /// personalized recommendation engine) used to power the allocation
   /// "ideal vs current" comparison and rebalance insights.
   double get idealTargetPercent => switch (this) {
-        InvestmentTypeEnum.STOCKS => 35,
-        InvestmentTypeEnum.FIXED_INCOME => 30,
-        InvestmentTypeEnum.REAL_ESTATE => 15,
-        InvestmentTypeEnum.FUNDS => 12,
-        InvestmentTypeEnum.CRYPTO => 5,
-        InvestmentTypeEnum.OTHERS => 3,
-      };
+    InvestmentTypeEnum.STOCKS => 35,
+    InvestmentTypeEnum.FIXED_INCOME => 30,
+    InvestmentTypeEnum.REAL_ESTATE => 15,
+    InvestmentTypeEnum.FUNDS => 12,
+    InvestmentTypeEnum.CRYPTO => 5,
+    InvestmentTypeEnum.OTHERS => 3,
+  };
 
   /// Assumed average annual yield used only to *estimate* passive income,
   /// since no real dividend/coupon data source exists yet. Always surfaced
   /// to the user as "estimated", never presented as a confirmed payment.
   double get assumedAnnualYield => switch (this) {
-        InvestmentTypeEnum.STOCKS => 0.05,
-        InvestmentTypeEnum.FIXED_INCOME => 0.11,
-        InvestmentTypeEnum.REAL_ESTATE => 0.08,
-        InvestmentTypeEnum.FUNDS => 0.04,
-        InvestmentTypeEnum.CRYPTO => 0.0,
-        InvestmentTypeEnum.OTHERS => 0.0,
-      };
+    InvestmentTypeEnum.STOCKS => 0.05,
+    InvestmentTypeEnum.FIXED_INCOME => 0.11,
+    InvestmentTypeEnum.REAL_ESTATE => 0.08,
+    InvestmentTypeEnum.FUNDS => 0.04,
+    InvestmentTypeEnum.CRYPTO => 0.0,
+    InvestmentTypeEnum.OTHERS => 0.0,
+  };
 }

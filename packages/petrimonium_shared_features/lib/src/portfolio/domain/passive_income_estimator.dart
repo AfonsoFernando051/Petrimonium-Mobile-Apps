@@ -18,10 +18,6 @@ class PassiveIncomeEstimator {
       if (annualForType > 0) monthlyByType[slice.type] = annualForType / 12;
     }
 
-    return PassiveIncomeEstimate(
-      monthlyEstimate: annual / 12,
-      annualEstimate: annual,
-      monthlyByType: monthlyByType,
-    );
+    return PassiveIncomeEstimate(monthlyEstimate: annual / 12, annualEstimate: annual, monthlyByType: monthlyByType);
   }
 }

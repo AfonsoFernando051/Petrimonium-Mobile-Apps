@@ -23,14 +23,14 @@ void main() {
   Widget buildTestableWidget() {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: const Scaffold(
-        body: LoginCard(),
-      ),
+      home: const Scaffold(body: LoginCard()),
     );
   }
 
   group('LoginCard', () {
-    testWidgets('renders the dog mascot, brand title, the Entrar/Criar Conta toggle and LoginForm by default', (tester) async {
+    testWidgets('renders the dog mascot, brand title, the Entrar/Criar Conta toggle and LoginForm by default', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
 
       expect(find.byType(Image), findsOneWidget);

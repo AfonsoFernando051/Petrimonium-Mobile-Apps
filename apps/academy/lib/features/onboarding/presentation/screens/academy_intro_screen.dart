@@ -55,15 +55,11 @@ class _AcademyIntroScreenState extends State<AcademyIntroScreen> {
   }
 
   void _goNext(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const GamificationIntroScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GamificationIntroScreen()));
   }
 
   void _skip(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const FinancialGoalScreen()),
-    );
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const FinancialGoalScreen()));
   }
 
   @override
@@ -149,10 +145,7 @@ class _TrackStep extends StatelessWidget {
                   ),
                 ),
               ),
-              if (!isLast)
-                Expanded(
-                  child: Container(width: 1.5, color: tokens.textPrimary.withValues(alpha: 0.12)),
-                ),
+              if (!isLast) Expanded(child: Container(width: 1.5, color: tokens.textPrimary.withValues(alpha: 0.12))),
             ],
           ),
           const SizedBox(width: 14),

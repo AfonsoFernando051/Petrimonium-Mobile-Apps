@@ -32,10 +32,10 @@ class StartRouteResolver {
     PetRepository? petRepository,
     MascotRepository? mascotRepository,
     OnboardingStateRepository? onboardingStateRepository,
-  })  : _authRepository = authRepository ?? DI.authRepository,
-        _petRepository = petRepository ?? DI.petRepository,
-        _mascotRepository = mascotRepository ?? DI.mascotRepository,
-        _onboardingStateRepository = onboardingStateRepository ?? DI.onboardingStateRepository;
+  }) : _authRepository = authRepository ?? DI.authRepository,
+       _petRepository = petRepository ?? DI.petRepository,
+       _mascotRepository = mascotRepository ?? DI.mascotRepository,
+       _onboardingStateRepository = onboardingStateRepository ?? DI.onboardingStateRepository;
 
   final AuthRepository _authRepository;
   final PetRepository _petRepository;

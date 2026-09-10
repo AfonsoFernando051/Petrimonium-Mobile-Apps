@@ -30,10 +30,7 @@ class ConfirmLogoutDialog {
           title,
           style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold),
         ),
-        content: Text(
-          message,
-          style: TextStyle(color: tokens.textSecondary),
-        ),
+        content: Text(message, style: TextStyle(color: tokens.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),

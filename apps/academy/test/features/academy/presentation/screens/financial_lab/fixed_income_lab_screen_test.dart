@@ -24,9 +24,7 @@ class FakeMascotRepository implements MascotRepository {
   @override
   Future<void> saveNetWorth(double netWorth) async {}
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
   @override
@@ -42,9 +40,7 @@ void main() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     mascotController = MascotController(repository: FakeMascotRepository());
-    companionController = PetCompanionController(
-      mascotController: mascotController,
-    );
+    companionController = PetCompanionController(mascotController: mascotController);
     completionController = LabCompletionController(
       repository: AcademyProgressLocalRepository(),
       mascotController: mascotController,
@@ -64,47 +60,33 @@ void main() {
   }
 
   group('FixedIncomeLabScreen', () {
-    testWidgets('renders sliders and the gross-values disclaimer', (
-      tester,
-    ) async {
+    testWidgets('renders sliders and the gross-values disclaimer', (tester) async {
       await tester.pumpWidget(buildTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
       expect(find.byType(Slider), findsNWidgets(4));
-      expect(
-        find.text(Translator.translate('labFixedIncomeGrossDisclaimer')),
-        findsOneWidget,
-      );
+      expect(find.text(Translator.translate('labFixedIncomeGrossDisclaimer')), findsOneWidget);
     });
 
-    testWidgets('completes after answering the comprehension check correctly', (
-      tester,
-    ) async {
+    testWidgets('completes after answering the comprehension check correctly', (tester) async {
       await tester.pumpWidget(buildTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      final optionB = find.text(
-        Translator.translate('labFixedIncomeOptionB'),
-      );
+      final optionB = find.text(Translator.translate('labFixedIncomeOptionB'));
       await tester.ensureVisible(optionB);
       await tester.pump();
       await tester.tap(optionB);
       await tester.pump();
 
-      final completeButton = find.text(
-        Translator.translate('labCompleteButton'),
-      );
+      final completeButton = find.text(Translator.translate('labCompleteButton'));
       await tester.ensureVisible(completeButton);
       await tester.pump();
       await tester.tap(completeButton);
       await tester.pump();
 
-      expect(
-        find.text(Translator.translate('labCompletedLabel')),
-        findsOneWidget,
-      );
+      expect(find.text(Translator.translate('labCompletedLabel')), findsOneWidget);
     });
   });
 }

@@ -155,12 +155,7 @@ void main() {
     testWidgets('does not invoke onSelect once answeredCorrectly is true', (tester) async {
       var callCount = 0;
       await tester.pumpWidget(
-        buildTestable(
-          selectedIndex: 1,
-          hasAnswered: true,
-          answeredCorrectly: true,
-          onSelect: (_) => callCount++,
-        ),
+        buildTestable(selectedIndex: 1, hasAnswered: true, answeredCorrectly: true, onSelect: (_) => callCount++),
       );
 
       await tester.tap(find.text('3'), warnIfMissed: false);
@@ -172,12 +167,7 @@ void main() {
     testWidgets('still invokes onSelect after a wrong answer, allowing a retry', (tester) async {
       var callCount = 0;
       await tester.pumpWidget(
-        buildTestable(
-          selectedIndex: 0,
-          hasAnswered: true,
-          answeredCorrectly: false,
-          onSelect: (_) => callCount++,
-        ),
+        buildTestable(selectedIndex: 0, hasAnswered: true, answeredCorrectly: false, onSelect: (_) => callCount++),
       );
 
       await tester.tap(find.text('4'));

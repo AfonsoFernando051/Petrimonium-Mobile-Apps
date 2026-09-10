@@ -7,17 +7,16 @@ import '../tokens/app_motion.dart';
 Route<T> fadeRoute<T>(Widget page) {
   return PageRouteBuilder<T>(
     pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-        FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-                .animate(
-                  CurvedAnimation(parent: animation, curve: Curves.easeOut),
-                ),
-            child: child,
-          ),
-        ),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+      opacity: animation,
+      child: SlideTransition(
+        position: Tween(
+          begin: const Offset(0, 0.04),
+          end: Offset.zero,
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+        child: child,
+      ),
+    ),
     transitionDuration: AppMotion.pageTransition,
   );
 }

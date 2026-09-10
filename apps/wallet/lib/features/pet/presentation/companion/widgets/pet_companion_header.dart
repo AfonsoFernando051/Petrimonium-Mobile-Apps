@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_wallet/core/constants/app_colors.dart';
@@ -19,13 +20,7 @@ import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/p
 /// is the host screen's job (`PetSpeechBubbleOverlay`) since it needs to
 /// float above page content, not just below the avatar.
 class PetCompanionHeader extends StatelessWidget {
-  const PetCompanionHeader({
-    super.key,
-    required this.controller,
-    this.onDestinationSelected,
-    this.size,
-    this.anchor,
-  });
+  const PetCompanionHeader({super.key, required this.controller, this.onDestinationSelected, this.size, this.anchor});
 
   final PetCompanionController controller;
 
@@ -63,7 +58,7 @@ class PetCompanionHeader extends StatelessWidget {
   }
 
   Future<void> _openInteraction(BuildContext context) async {
-    HapticFeedback.selectionClick();
+    unawaited(HapticFeedback.selectionClick());
     controller.openInteraction();
     final destination = await showModalBottomSheet<PetContext>(
       context: context,
@@ -103,14 +98,10 @@ class PetCompanionHeader extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: speaking
-                            ? AppColors.neonCyan
-                            : AppColors.neonCyan.withValues(alpha: 0.6),
+                        color: speaking ? AppColors.neonCyan : AppColors.neonCyan.withValues(alpha: 0.6),
                         width: speaking ? 2 : 1.5,
                       ),
-                      color: context.colors.surface.withValues(
-                        alpha: context.isDarkMode ? 0.6 : 0.9,
-                      ),
+                      color: context.colors.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.9),
                       boxShadow: speaking
                           ? [
                               BoxShadow(

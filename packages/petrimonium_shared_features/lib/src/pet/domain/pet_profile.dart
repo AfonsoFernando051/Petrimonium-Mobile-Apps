@@ -33,9 +33,9 @@ class PetProfile {
     Set<PetAccessoryId>? unlockedAccessories,
     Map<AccessoryType, PetAccessoryId>? equippedAccessories,
     DateTime? lastActiveAt,
-  })  : unlockedAccessories = unlockedAccessories ?? const {},
-        equippedAccessories = equippedAccessories ?? const {},
-        lastActiveAt = lastActiveAt ?? DateTime.now();
+  }) : unlockedAccessories = unlockedAccessories ?? const {},
+       equippedAccessories = equippedAccessories ?? const {},
+       lastActiveAt = lastActiveAt ?? DateTime.now();
 
   PetProfile copyWith({
     PetSpecieEnum? specie,
@@ -78,15 +78,15 @@ class PetProfile {
 
   @override
   int get hashCode => Object.hash(
-        specie,
-        name,
-        stage,
-        netWorth,
-        xp,
-        animationState,
-        lastActiveAt,
-        Object.hashAllUnordered(unlockedAccessories),
-      );
+    specie,
+    name,
+    stage,
+    netWorth,
+    xp,
+    animationState,
+    lastActiveAt,
+    Object.hashAllUnordered(unlockedAccessories),
+  );
 
   @override
   String toString() =>

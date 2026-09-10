@@ -8,11 +8,7 @@ import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 /// (contributions/principal), [total] is the full bar height. The stacked
 /// "growth" segment is `total - base`.
 class LabStackedBarPoint {
-  const LabStackedBarPoint({
-    required this.xLabel,
-    required this.base,
-    required this.total,
-  });
+  const LabStackedBarPoint({required this.xLabel, required this.base, required this.total});
 
   final String xLabel;
   final double base;
@@ -62,14 +58,8 @@ class _LabStackedBarChartState extends State<LabStackedBarChart> {
           children: [
             ChartLegend(
               items: [
-                ChartLegendItem(
-                  color: widget.baseColor,
-                  label: widget.baseLegendLabel,
-                ),
-                ChartLegendItem(
-                  color: widget.growthColor,
-                  label: widget.growthLegendLabel,
-                ),
+                ChartLegendItem(color: widget.baseColor, label: widget.baseLegendLabel),
+                ChartLegendItem(color: widget.growthColor, label: widget.growthLegendLabel),
               ],
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -98,34 +88,20 @@ class _LabStackedBarChartState extends State<LabStackedBarChart> {
     return TooltipSummary(
       accentColor: widget.baseColor,
       children: [
-        Text(
-          point.xLabel,
-          style: TextStyle(color: tokens.textSecondary, fontSize: 11),
-        ),
+        Text(point.xLabel, style: TextStyle(color: tokens.textSecondary, fontSize: 11)),
         Text(
           AppFormatters.currency(point.base, showCents: false),
-          style: TextStyle(
-            color: widget.baseColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-          ),
+          style: TextStyle(color: widget.baseColor, fontWeight: FontWeight.bold, fontSize: 12),
         ),
         Text(
           '+${AppFormatters.currency(growth, showCents: false)}',
-          style: TextStyle(
-            color: widget.growthColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-          ),
+          style: TextStyle(color: widget.growthColor, fontWeight: FontWeight.bold, fontSize: 12),
         ),
       ],
     );
   }
 
-  BarChartData _chartData(
-    List<LabStackedBarPoint> points,
-    AppColorTokens tokens,
-  ) {
+  BarChartData _chartData(List<LabStackedBarPoint> points, AppColorTokens tokens) {
     final maxY = points.last.total * 1.15;
     final double safeMaxY = maxY == 0 ? 1 : maxY;
 
@@ -137,16 +113,13 @@ class _LabStackedBarChartState extends State<LabStackedBarChart> {
         show: true,
         drawVerticalLine: false,
         horizontalInterval: safeMaxY / 4,
-        getDrawingHorizontalLine: (_) =>
-            FlLine(color: tokens.divider, strokeWidth: 1),
+        getDrawingHorizontalLine: (_) => FlLine(color: tokens.divider, strokeWidth: 1),
       ),
       borderData: FlBorderData(show: false),
       titlesData: FlTitlesData(
         show: true,
         topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
+        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -165,10 +138,7 @@ class _LabStackedBarChartState extends State<LabStackedBarChart> {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 22,
-            interval: (points.length / 6).ceilToDouble().clamp(
-              1.0,
-              double.infinity,
-            ),
+            interval: (points.length / 6).ceilToDouble().clamp(1.0, double.infinity),
             getTitlesWidget: (value, meta) {
               final index = value.toInt();
               if (index < 0 || index >= points.length) {
@@ -176,26 +146,17 @@ class _LabStackedBarChartState extends State<LabStackedBarChart> {
               }
               return Padding(
                 padding: const EdgeInsets.only(top: 6),
-                child: Text(
-                  points[index].xLabel,
-                  style: TextStyle(color: tokens.textSecondary, fontSize: 9),
-                ),
+                child: Text(points[index].xLabel, style: TextStyle(color: tokens.textSecondary, fontSize: 9)),
               );
             },
           ),
         ),
       ),
       barTouchData: BarTouchData(
-        touchTooltipData: BarTouchTooltipData(
-          getTooltipItem: (a, b, c, d) => null,
-        ),
+        touchTooltipData: BarTouchTooltipData(getTooltipItem: (a, b, c, d) => null),
         touchCallback: (event, response) {
-          if (!event.isInterestedForInteractions ||
-              response == null ||
-              response.spot == null) {
-            if (event is FlTapUpEvent ||
-                event is FlPanEndEvent ||
-                event is FlLongPressEnd) {
+          if (!event.isInterestedForInteractions || response == null || response.spot == null) {
+            if (event is FlTapUpEvent || event is FlPanEndEvent || event is FlLongPressEnd) {
               setState(() => _touchedIndex = null);
             }
             return;
@@ -213,23 +174,17 @@ class _LabStackedBarChartState extends State<LabStackedBarChart> {
                 toY: points[i].total,
                 fromY: 0,
                 width: 10,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(3),
-                ),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(3)),
                 rodStackItems: [
                   BarChartRodStackItem(
                     0,
                     points[i].base,
-                    widget.baseColor.withValues(
-                      alpha: i == _touchedIndex ? 1 : 0.85,
-                    ),
+                    widget.baseColor.withValues(alpha: i == _touchedIndex ? 1 : 0.85),
                   ),
                   BarChartRodStackItem(
                     points[i].base,
                     points[i].total,
-                    widget.growthColor.withValues(
-                      alpha: i == _touchedIndex ? 1 : 0.85,
-                    ),
+                    widget.growthColor.withValues(alpha: i == _touchedIndex ? 1 : 0.85),
                   ),
                 ],
               ),

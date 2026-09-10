@@ -69,10 +69,7 @@ class ConversationListTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  _relativeTime(conversation.updatedAt),
-                  style: TextStyle(color: tokens.textTertiary, fontSize: 11),
-                ),
+                Text(_relativeTime(conversation.updatedAt), style: TextStyle(color: tokens.textTertiary, fontSize: 11)),
                 PopupMenuButton<String>(
                   icon: Icon(Icons.more_vert, color: tokens.textSecondary, size: 18),
                   onSelected: (value) {

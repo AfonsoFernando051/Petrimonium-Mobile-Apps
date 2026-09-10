@@ -107,9 +107,9 @@ void main() {
             builder: (context) => Scaffold(
               body: Center(
                 child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => AllModulesScreen(mascotController: mascotController)),
-                  ),
+                  onPressed: () => Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (_) => AllModulesScreen(mascotController: mascotController))),
                   child: const Text('open'),
                 ),
               ),

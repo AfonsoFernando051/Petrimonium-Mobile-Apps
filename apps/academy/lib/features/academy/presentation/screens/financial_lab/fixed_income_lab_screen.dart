@@ -69,9 +69,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
       Translator.translate(AppStrings.labFixedIncomeOptionC),
     ],
     correctIndex: 1,
-    explanation: Translator.translate(
-      AppStrings.labFixedIncomeAnswerExplanation,
-    ),
+    explanation: Translator.translate(AppStrings.labFixedIncomeAnswerExplanation),
   );
 
   @override
@@ -92,20 +90,12 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
         LabStackedBarChart(
           points: [
             for (final p in result.yearlyBreakdown)
-              LabStackedBarPoint(
-                xLabel: '${p.year}',
-                base: p.principal,
-                total: p.value,
-              ),
+              LabStackedBarPoint(xLabel: '${p.year}', base: p.principal, total: p.value),
           ],
           baseColor: AppColors.positiveGreen,
           growthColor: AppColors.goldenBorder,
-          baseLegendLabel: Translator.translate(
-            AppStrings.labFixedIncomePrincipalLabel,
-          ),
-          growthLegendLabel: Translator.translate(
-            AppStrings.labFixedIncomeInterestLabel,
-          ),
+          baseLegendLabel: Translator.translate(AppStrings.labFixedIncomePrincipalLabel),
+          growthLegendLabel: Translator.translate(AppStrings.labFixedIncomeInterestLabel),
         ),
         LabDataTableDisclosure(
           columnLabels: [
@@ -119,10 +109,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
                 label: '${p.year}',
                 values: [
                   AppFormatters.currency(p.principal, showCents: false),
-                  AppFormatters.currency(
-                    p.value - p.principal,
-                    showCents: false,
-                  ),
+                  AppFormatters.currency(p.value - p.principal, showCents: false),
                 ],
               ),
           ],
@@ -130,10 +117,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
         LabNarrativeCard(
           text: Translator.translate(
             AppStrings.labFixedIncomeInterpretation,
-            params: {
-              'years': '$_years',
-              'interestShare': result.interestSharePercent.toStringAsFixed(1),
-            },
+            params: {'years': '$_years', 'interestShare': result.interestSharePercent.toStringAsFixed(1)},
           ),
           variant: LabNarrativeVariant.interpretation,
         ),
@@ -168,10 +152,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
           children: [
             LabeledSlider(
               label: Translator.translate(AppStrings.labInitialAmountLabel),
-              valueLabel: AppFormatters.currency(
-                _initialAmount,
-                showCents: false,
-              ),
+              valueLabel: AppFormatters.currency(_initialAmount, showCents: false),
               value: _initialAmount,
               min: 0,
               max: 100000,
@@ -179,13 +160,8 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
               onChanged: (v) => setState(() => _initialAmount = v),
             ),
             LabeledSlider(
-              label: Translator.translate(
-                AppStrings.labMonthlyContributionLabel,
-              ),
-              valueLabel: AppFormatters.currency(
-                _monthlyContribution,
-                showCents: false,
-              ),
+              label: Translator.translate(AppStrings.labMonthlyContributionLabel),
+              valueLabel: AppFormatters.currency(_monthlyContribution, showCents: false),
               value: _monthlyContribution,
               min: 0,
               max: 5000,
@@ -193,17 +169,13 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
               onChanged: (v) => setState(() => _monthlyContribution = v),
             ),
             LabeledSlider(
-              label: Translator.translate(
-                AppStrings.labFixedIncomeNominalRateLabel,
-              ),
+              label: Translator.translate(AppStrings.labFixedIncomeNominalRateLabel),
               valueLabel: AppFormatters.percentPlain(_annualRatePercent),
               value: _annualRatePercent,
               min: 0,
               max: 20,
               divisions: 40,
-              onChanged: (v) => setState(
-                () => _annualRatePercent = double.parse(v.toStringAsFixed(1)),
-              ),
+              onChanged: (v) => setState(() => _annualRatePercent = double.parse(v.toStringAsFixed(1))),
             ),
             LabeledSlider(
               label: Translator.translate(AppStrings.labYearsLabel),
@@ -233,13 +205,8 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
         const SizedBox(width: 10),
         Expanded(
           child: StatCard(
-            label: Translator.translate(
-              AppStrings.labFixedIncomeEffectiveRateLabel,
-            ),
-            value: AppFormatters.percentPlain(
-              result.effectiveAnnualRatePercent,
-              decimals: 2,
-            ),
+            label: Translator.translate(AppStrings.labFixedIncomeEffectiveRateLabel),
+            value: AppFormatters.percentPlain(result.effectiveAnnualRatePercent, decimals: 2),
             accent: AppColors.neonCyan,
           ),
         ),

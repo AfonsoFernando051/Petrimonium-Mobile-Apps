@@ -83,10 +83,7 @@ void main() {
         years: 7,
       );
 
-      expect(
-        result.totalPrincipal + result.totalInterest,
-        closeTo(result.grossFinalValue, 0.001),
-      );
+      expect(result.totalPrincipal + result.totalInterest, closeTo(result.grossFinalValue, 0.001));
     });
 
     test('all-zero inputs produce zero values, never NaN', () {

@@ -40,10 +40,7 @@ void main() {
   group('PetEvolutionRule.defaultRules', () {
     test('has exactly 9 rules, one per evolution stage, in ascending order', () {
       expect(PetEvolutionRule.defaultRules, hasLength(9));
-      expect(
-        PetEvolutionRule.defaultRules.map((r) => r.stage).toList(),
-        PetEvolutionStage.values,
-      );
+      expect(PetEvolutionRule.defaultRules.map((r) => r.stage).toList(), PetEvolutionStage.values);
     });
 
     test('minXp is strictly increasing and starts at 0', () {

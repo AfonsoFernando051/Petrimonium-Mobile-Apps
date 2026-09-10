@@ -28,19 +28,19 @@ void main() {
         // fixed 800x600 test surface.
         body: SingleChildScrollView(
           child: SignupForm(
-          nameHint: 'Nome',
-          emailHint: 'E-mail',
-          passwordHint: 'Senha',
-          confirmPasswordHint: 'Confirmar senha',
-          signupButtonLabel: 'Criar conta',
-          googleButtonLabel: 'Continuar com o Google',
-          orDividerLabel: 'ou',
-          sharedAccountNoticeText: 'Sua conta é a mesma nos apps Petrimonium.',
-          onRegister: onRegister ?? (_, _, _) async {},
-          onLoginAfterRegister: onLoginAfterRegister ?? (_, _) async {},
-          onGoogleSignup: onGoogleSignup ?? () async {},
-          onSuccess: onSuccess ?? () {},
-          errorMessageBuilder: errorMessageBuilder ?? (e) => e.toString(),
+            nameHint: 'Nome',
+            emailHint: 'E-mail',
+            passwordHint: 'Senha',
+            confirmPasswordHint: 'Confirmar senha',
+            signupButtonLabel: 'Criar conta',
+            googleButtonLabel: 'Continuar com o Google',
+            orDividerLabel: 'ou',
+            sharedAccountNoticeText: 'Sua conta é a mesma nos apps Petrimonium.',
+            onRegister: onRegister ?? (_, _, _) async {},
+            onLoginAfterRegister: onLoginAfterRegister ?? (_, _) async {},
+            onGoogleSignup: onGoogleSignup ?? () async {},
+            onSuccess: onSuccess ?? () {},
+            errorMessageBuilder: errorMessageBuilder ?? (e) => e.toString(),
           ),
         ),
       ),
@@ -61,9 +61,13 @@ void main() {
 
     testWidgets('shows an error snack and does not call onRegister when fields are empty', (tester) async {
       var registerCalled = false;
-      await tester.pumpWidget(buildTestableWidget(onRegister: (_, _, _) async {
-        registerCalled = true;
-      }));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          onRegister: (_, _, _) async {
+            registerCalled = true;
+          },
+        ),
+      );
 
       await tester.tap(find.text('Criar conta'));
       await tester.pump();
@@ -85,11 +89,13 @@ void main() {
 
     testWidgets('registers, then logs in, then calls onSuccess', (tester) async {
       final calls = <String>[];
-      await tester.pumpWidget(buildTestableWidget(
-        onRegister: (name, email, password) async => calls.add('register:$name:$email:$password'),
-        onLoginAfterRegister: (email, password) async => calls.add('login:$email:$password'),
-        onSuccess: () => calls.add('success'),
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          onRegister: (name, email, password) async => calls.add('register:$name:$email:$password'),
+          onLoginAfterRegister: (email, password) async => calls.add('login:$email:$password'),
+          onSuccess: () => calls.add('success'),
+        ),
+      );
 
       await tester.enterText(nameField(), 'Ana');
       await tester.enterText(emailField(), 'ana@example.com');
@@ -101,18 +107,16 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(calls, [
-        'register:Ana:ana@example.com:$validPassword',
-        'login:ana@example.com:$validPassword',
-        'success',
-      ]);
+      expect(calls, ['register:Ana:ana@example.com:$validPassword', 'login:ana@example.com:$validPassword', 'success']);
     });
 
     testWidgets('shows a snack built from errorMessageBuilder when onRegister throws', (tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        onRegister: (_, _, _) async => throw Exception('email in use'),
-        errorMessageBuilder: (_) => 'e-mail já cadastrado',
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          onRegister: (_, _, _) async => throw Exception('email in use'),
+          errorMessageBuilder: (_) => 'e-mail já cadastrado',
+        ),
+      );
 
       await tester.enterText(nameField(), 'Ana');
       await tester.enterText(emailField(), 'ana@example.com');
@@ -130,10 +134,9 @@ void main() {
     testWidgets('calls onGoogleSignup and onSuccess when the Google button is tapped', (tester) async {
       var googleCalled = false;
       var succeeded = false;
-      await tester.pumpWidget(buildTestableWidget(
-        onGoogleSignup: () async => googleCalled = true,
-        onSuccess: () => succeeded = true,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(onGoogleSignup: () async => googleCalled = true, onSuccess: () => succeeded = true),
+      );
 
       await tester.tap(find.byType(GoogleSignInButton));
       await tester.pump();

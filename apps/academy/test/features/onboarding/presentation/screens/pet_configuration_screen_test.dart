@@ -33,10 +33,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const PetConfigurationScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const PetConfigurationScreen());
   }
 
   group('PetConfigurationScreen', () {
@@ -47,10 +44,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('Escolha seu parceiro de jornada'), findsOneWidget);
-      expect(
-        find.text('Ele evolui com o que você aprende — nunca com quanto você tem.'),
-        findsOneWidget,
-      );
+      expect(find.text('Ele evolui com o que você aprende — nunca com quanto você tem.'), findsOneWidget);
       expect(find.text('Mas antes... eu preciso de um nome!'), findsOneWidget);
       expect(find.text('Como você gostaria de chamar seu companheiro?'), findsOneWidget);
       // Picker escondido enquanto o custo de rigging no Rive prende cada app
@@ -145,6 +139,5 @@ void main() {
         reason: 'o nome vem depois do retrato, como no canvas',
       );
     });
-
   });
 }

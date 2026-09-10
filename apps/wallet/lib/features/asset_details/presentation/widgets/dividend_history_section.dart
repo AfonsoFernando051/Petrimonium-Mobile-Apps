@@ -62,11 +62,7 @@ class _DividendHistorySectionState extends State<DividendHistorySection> {
                   children: [
                     Text(
                       'Próximos pagamentos',
-                      style: TextStyle(
-                        color: tokens.success,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 11,
-                      ),
+                      style: TextStyle(color: tokens.success, fontWeight: FontWeight.bold, fontSize: 11),
                     ),
                     const SizedBox(height: 8),
                     for (final div in upcoming) _DividendTile(event: div, isUpcoming: true),
@@ -91,11 +87,7 @@ class _DividendHistorySectionState extends State<DividendHistorySection> {
                   onTap: () => setState(() => _expanded = !_expanded),
                   child: Text(
                     _expanded ? 'Mostrar menos' : 'Ver todos (${history.length})',
-                    style: TextStyle(
-                      color: AppColors.neonCyan,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(color: AppColors.neonCyan, fontSize: 11, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
@@ -124,9 +116,7 @@ class _DividendTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
-    final dateStr = event.paymentDate != null
-        ? AppFormatters.shortDate(event.paymentDate!)
-        : '—';
+    final dateStr = event.paymentDate != null ? AppFormatters.shortDate(event.paymentDate!) : '—';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -139,10 +129,7 @@ class _DividendTile extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
-              dateStr,
-              style: TextStyle(color: tokens.textSecondary, fontSize: 11),
-            ),
+            child: Text(dateStr, style: TextStyle(color: tokens.textSecondary, fontSize: 11)),
           ),
           Text(
             'R\$ ${event.ratePerShare.toStringAsFixed(2)}/cota',
@@ -151,7 +138,8 @@ class _DividendTile extends StatelessWidget {
           if (event.estimatedGrossAmount > 0) ...[
             const SizedBox(width: 8),
             Text(
-              isUpcoming ? 'est. ${AppFormatters.currency(event.estimatedGrossAmount)}'
+              isUpcoming
+                  ? 'est. ${AppFormatters.currency(event.estimatedGrossAmount)}'
                   : AppFormatters.currency(event.estimatedGrossAmount),
               style: TextStyle(
                 color: isUpcoming ? tokens.success : AppColors.goldenBorder,

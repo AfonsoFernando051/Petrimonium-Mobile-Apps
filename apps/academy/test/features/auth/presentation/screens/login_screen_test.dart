@@ -27,23 +27,15 @@ void main() {
 
     mockOnboardingRepository = MockOnboardingRepository();
     DI.onboardingRepository = mockOnboardingRepository;
-    when(() => mockOnboardingRepository.getStatus()).thenAnswer(
-      (_) async => const OnboardingStatusModel(
-        hasAnswered: false,
-        profile: null,
-      ),
-    );
+    when(
+      () => mockOnboardingRepository.getStatus(),
+    ).thenAnswer((_) async => const OnboardingStatusModel(hasAnswered: false, profile: null));
 
-    when(() => mockOnboardingRepository.getQuestions()).thenAnswer(
-      (_) async => <QuestionModel>[],
-    );
+    when(() => mockOnboardingRepository.getQuestions()).thenAnswer((_) async => <QuestionModel>[]);
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const LoginScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const LoginScreen());
   }
 
   group('LoginScreen', () {
@@ -75,18 +67,12 @@ void main() {
 
     testWidgets('TextFields accept text input properly and attempt login', (WidgetTester tester) async {
       when(() => mockAuthRepository.login(any(), any())).thenAnswer((_) async {});
-      
+
       await tester.pumpWidget(buildTestableWidget());
 
-      final emailField = find.descendant(
-        of: find.byType(CustomTextField),
-        matching: find.byType(TextField),
-      ).first;
-      
-      final passwordField = find.descendant(
-        of: find.byType(CustomTextField),
-        matching: find.byType(TextField),
-      ).last;
+      final emailField = find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField)).first;
+
+      final passwordField = find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField)).last;
 
       await tester.enterText(emailField, 'test@example.com');
       await tester.enterText(passwordField, 'password123');

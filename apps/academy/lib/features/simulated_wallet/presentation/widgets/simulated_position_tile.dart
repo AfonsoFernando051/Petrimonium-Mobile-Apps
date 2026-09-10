@@ -18,10 +18,7 @@ class SimulatedPositionTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  position.ticker,
-                  style: AppTextStyles.bodyEmphasis.copyWith(color: tokens.textPrimary),
-                ),
+                Text(position.ticker, style: AppTextStyles.bodyEmphasis.copyWith(color: tokens.textPrimary)),
                 Text(
                   '${position.quantity.toStringAsFixed(position.quantity.truncateToDouble() == position.quantity ? 0 : 6)} '
                   '@ R\$ ${position.averagePrice.toStringAsFixed(2)}',

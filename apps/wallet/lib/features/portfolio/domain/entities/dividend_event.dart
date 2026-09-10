@@ -57,10 +57,7 @@ class DividendEvent {
 
   static DividendType _parseType(String? raw) {
     if (raw == null) return DividendType.OUTRO;
-    return DividendType.values.firstWhere(
-      (t) => t.name == raw,
-      orElse: () => DividendType.OUTRO,
-    );
+    return DividendType.values.firstWhere((t) => t.name == raw, orElse: () => DividendType.OUTRO);
   }
 
   static DateTime? _parseDate(dynamic value) {

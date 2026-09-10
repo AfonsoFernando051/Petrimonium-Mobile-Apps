@@ -12,12 +12,7 @@ import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/
 /// equipped accessories layered on top. Tapping/petting the mascot plays a
 /// brief `happy` reaction with light haptic feedback.
 class PetMascotWidget extends StatefulWidget {
-  const PetMascotWidget({
-    super.key,
-    required this.controller,
-    this.size = 220,
-    this.interactive = true,
-  });
+  const PetMascotWidget({super.key, required this.controller, this.size = 220, this.interactive = true});
 
   final MascotController controller;
   final double size;
@@ -32,8 +27,7 @@ class PetMascotWidget extends StatefulWidget {
   State<PetMascotWidget> createState() => _PetMascotWidgetState();
 }
 
-class _PetMascotWidgetState extends State<PetMascotWidget>
-    with TickerProviderStateMixin {
+class _PetMascotWidgetState extends State<PetMascotWidget> with TickerProviderStateMixin {
   late final AnimationController _breatheController;
   late final Animation<double> _breatheAnimation;
 
@@ -49,18 +43,13 @@ class _PetMascotWidgetState extends State<PetMascotWidget>
 
     // Not started here — see didChangeDependencies, which gates it on
     // MediaQuery's disableAnimations once that's reliably available.
-    _breatheController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2500),
-    );
-    _breatheAnimation = Tween<double>(begin: 0.96, end: 1.04).animate(
-      CurvedAnimation(parent: _breatheController, curve: Curves.easeInOutSine),
-    );
+    _breatheController = AnimationController(vsync: this, duration: const Duration(milliseconds: 2500));
+    _breatheAnimation = Tween<double>(
+      begin: 0.96,
+      end: 1.04,
+    ).animate(CurvedAnimation(parent: _breatheController, curve: Curves.easeInOutSine));
 
-    _bumpController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
+    _bumpController = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
     _bumpAnimation = TweenSequence([
       TweenSequenceItem(
         tween: Tween<double>(begin: 0, end: -18).chain(CurveTween(curve: Curves.easeOutCubic)),
@@ -99,10 +88,7 @@ class _PetMascotWidgetState extends State<PetMascotWidget>
   void _handlePet() {
     HapticFeedback.lightImpact();
     if (!_bumpController.isAnimating) _bumpController.forward(from: 0);
-    widget.controller.triggerEventAnimation(
-      PetAnimationState.happy,
-      duration: const Duration(milliseconds: 900),
-    );
+    widget.controller.triggerEventAnimation(PetAnimationState.happy, duration: const Duration(milliseconds: 900));
   }
 
   @override
@@ -122,10 +108,7 @@ class _PetMascotWidgetState extends State<PetMascotWidget>
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, _bumpAnimation.value),
-          child: Transform.scale(
-            scale: _breatheAnimation.value,
-            child: child,
-          ),
+          child: Transform.scale(scale: _breatheAnimation.value, child: child),
         );
       },
       child: SizedBox(
@@ -135,8 +118,7 @@ class _PetMascotWidgetState extends State<PetMascotWidget>
           alignment: Alignment.center,
           clipBehavior: Clip.none,
           children: [
-            if (_showsAura(profile.stage, profile.animationState))
-              _AuraLayer(stage: profile.stage, size: widget.size),
+            if (_showsAura(profile.stage, profile.animationState)) _AuraLayer(stage: profile.stage, size: widget.size),
             _BaseMascotLayer(
               state: profile.animationState,
               stage: profile.stage,
@@ -144,11 +126,7 @@ class _PetMascotWidgetState extends State<PetMascotWidget>
               size: widget.size,
             ),
             for (final entry in profile.equippedAccessories.entries)
-              _AccessoryLayer(
-                slot: entry.key,
-                accessoryId: entry.value,
-                size: widget.size,
-              ),
+              _AccessoryLayer(slot: entry.key, accessoryId: entry.value, size: widget.size),
           ],
         ),
       ),
@@ -159,9 +137,7 @@ class _PetMascotWidgetState extends State<PetMascotWidget>
   }
 
   bool _showsAura(PetEvolutionStage stage, PetAnimationState state) {
-    return stage.hasAura ||
-        state == PetAnimationState.celebrate ||
-        state == PetAnimationState.victory;
+    return stage.hasAura || state == PetAnimationState.celebrate || state == PetAnimationState.victory;
   }
 }
 
@@ -187,11 +163,7 @@ class _AuraLayer extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         boxShadow: [
-          BoxShadow(
-            color: _color.withValues(alpha: 0.35),
-            blurRadius: size * 0.25,
-            spreadRadius: size * 0.05,
-          ),
+          BoxShadow(color: _color.withValues(alpha: 0.35), blurRadius: size * 0.25, spreadRadius: size * 0.05),
         ],
       ),
     );
@@ -199,12 +171,7 @@ class _AuraLayer extends StatelessWidget {
 }
 
 class _BaseMascotLayer extends StatelessWidget {
-  const _BaseMascotLayer({
-    required this.state,
-    required this.stage,
-    required this.specie,
-    required this.size,
-  });
+  const _BaseMascotLayer({required this.state, required this.stage, required this.specie, required this.size});
 
   final PetAnimationState state;
   final PetEvolutionStage stage;
@@ -224,11 +191,7 @@ class _BaseMascotLayer extends StatelessWidget {
       width: mascotSize,
       height: mascotSize,
       fit: BoxFit.contain,
-      errorBuilder: (context, error, stackTrace) => _EvolutionFallback(
-        stage: stage,
-        specie: specie,
-        size: mascotSize,
-      ),
+      errorBuilder: (context, error, stackTrace) => _EvolutionFallback(stage: stage, specie: specie, size: mascotSize),
     );
   }
 }
@@ -238,11 +201,7 @@ class _BaseMascotLayer extends StatelessWidget {
 /// portrait (never a hardcoded species) while per-stage PNGs aren't authored
 /// either.
 class _EvolutionFallback extends StatelessWidget {
-  const _EvolutionFallback({
-    required this.stage,
-    required this.specie,
-    required this.size,
-  });
+  const _EvolutionFallback({required this.stage, required this.specie, required this.size});
 
   final PetEvolutionStage stage;
   final String? specie;
@@ -260,22 +219,15 @@ class _EvolutionFallback extends StatelessWidget {
         width: size,
         height: size,
         fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) => Icon(
-          Icons.pets,
-          size: size * 0.6,
-          color: context.colors.textSecondary,
-        ),
+        errorBuilder: (context, error, stackTrace) =>
+            Icon(Icons.pets, size: size * 0.6, color: context.colors.textSecondary),
       ),
     );
   }
 }
 
 class _AccessoryLayer extends StatelessWidget {
-  const _AccessoryLayer({
-    required this.slot,
-    required this.accessoryId,
-    required this.size,
-  });
+  const _AccessoryLayer({required this.slot, required this.accessoryId, required this.size});
 
   final AccessoryType slot;
   final PetAccessoryId accessoryId;

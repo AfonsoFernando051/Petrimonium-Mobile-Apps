@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
@@ -50,8 +51,7 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
 
   bool get _canSubmit => _nameController.text.trim().isNotEmpty && !_isLoading;
 
-  void _selectSpecie(PetSpecieEnum specie) =>
-      setState(() => _selectedSpecie = specie);
+  void _selectSpecie(PetSpecieEnum specie) => setState(() => _selectedSpecie = specie);
 
   Future<void> _handleSubmit() async {
     final name = _nameController.text.trim();
@@ -62,10 +62,10 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
       await DI.petRepository.configurePet(_selectedSpecie);
       await DI.mascotRepository.saveName(name);
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => const MentorWelcomeScreen(totalSteps: 3),
-          ),
+        unawaited(
+          Navigator.of(
+            context,
+          ).pushReplacement(MaterialPageRoute(builder: (_) => const MentorWelcomeScreen(totalSteps: 3))),
         );
       }
     } catch (e) {
@@ -104,11 +104,7 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
               height: 96,
               fit: BoxFit.contain,
               errorBuilder: (context, error, stackTrace) {
-                return Icon(
-                  Icons.pets,
-                  size: 48,
-                  color: context.colors.textSecondary,
-                );
+                return Icon(Icons.pets, size: 48, color: context.colors.textSecondary);
               },
             ),
           ),
@@ -129,17 +125,11 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
             decoration: BoxDecoration(
               color: context.colors.textPrimary.withValues(alpha: 0.03),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: context.colors.textPrimary.withValues(alpha: 0.12),
-              ),
+              border: Border.all(color: context.colors.textPrimary.withValues(alpha: 0.12)),
             ),
             child: Text(
               Translator.translate(AppStrings.petSetupFooterNote),
-              style: TextStyle(
-                color: context.colors.textSecondary,
-                fontSize: 12,
-                height: 1.45,
-              ),
+              style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.45),
             ),
           ),
         ],
@@ -165,22 +155,14 @@ class _SpeciesGrid extends StatelessWidget {
       childAspectRatio: 0.85,
       children: [
         for (final specie in PetSpecieEnumExtension.displayOrder)
-          _SpeciesCard(
-            specie: specie,
-            selected: specie == selected,
-            onTap: () => onSelect(specie),
-          ),
+          _SpeciesCard(specie: specie, selected: specie == selected, onTap: () => onSelect(specie)),
       ],
     );
   }
 }
 
 class _SpeciesCard extends StatelessWidget {
-  const _SpeciesCard({
-    required this.specie,
-    required this.selected,
-    required this.onTap,
-  });
+  const _SpeciesCard({required this.specie, required this.selected, required this.onTap});
 
   final PetSpecieEnum specie;
   final bool selected;
@@ -198,14 +180,9 @@ class _SpeciesCard extends StatelessWidget {
           // Não-selecionado é totalmente transparente (o artboard usa
           // `transparent` no contorno e no fundo), para a grelha não virar
           // uma grade de caixas.
-          color: selected
-              ? tokens.textPrimary.withValues(alpha: 0.06)
-              : Colors.transparent,
+          color: selected ? tokens.textPrimary.withValues(alpha: 0.06) : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: selected ? tokens.primary : Colors.transparent,
-            width: 1.5,
-          ),
+          border: Border.all(color: selected ? tokens.primary : Colors.transparent, width: 1.5),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -260,10 +237,7 @@ class _PetNameField extends StatelessWidget {
         decoration: InputDecoration(
           counterText: '',
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 14,
-          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           hintText: Translator.translate(AppStrings.petSetupNameHint),
           hintStyle: TextStyle(color: tokens.textTertiary, fontSize: 14),
         ),

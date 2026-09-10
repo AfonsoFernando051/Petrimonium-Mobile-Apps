@@ -10,20 +10,17 @@ void main() {
     Translator.currentLanguage = 'pt';
   });
 
-  Widget wrap(Widget child) =>
-      MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    theme: AppTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   group('LabAllocationEditor', () {
-    testWidgets('a valid 100% allocation shows the valid total indicator', (
-      tester,
-    ) async {
+    testWidgets('a valid 100% allocation shows the valid total indicator', (tester) async {
       await tester.pumpWidget(
         wrap(
           LabAllocationEditor(
-            weightsPercent: const {
-              InvestmentTypeEnum.STOCKS: 60,
-              InvestmentTypeEnum.FIXED_INCOME: 40,
-            },
+            weightsPercent: const {InvestmentTypeEnum.STOCKS: 60, InvestmentTypeEnum.FIXED_INCOME: 40},
             onChanged: (_, _) {},
             totalPercent: 100,
             isValid: true,
@@ -35,16 +32,11 @@ void main() {
       expect(find.byIcon(Icons.error_outline), findsNothing);
     });
 
-    testWidgets('an invalid allocation shows the error indicator, not the valid one', (
-      tester,
-    ) async {
+    testWidgets('an invalid allocation shows the error indicator, not the valid one', (tester) async {
       await tester.pumpWidget(
         wrap(
           LabAllocationEditor(
-            weightsPercent: const {
-              InvestmentTypeEnum.STOCKS: 60,
-              InvestmentTypeEnum.FIXED_INCOME: 20,
-            },
+            weightsPercent: const {InvestmentTypeEnum.STOCKS: 60, InvestmentTypeEnum.FIXED_INCOME: 20},
             onChanged: (_, _) {},
             totalPercent: 80,
             isValid: false,
@@ -57,13 +49,8 @@ void main() {
       expect(find.textContaining('80%'), findsWidgets);
     });
 
-    testWidgets('dragging a slider calls onChanged, never mutating the weights map itself', (
-      tester,
-    ) async {
-      final weights = {
-        InvestmentTypeEnum.STOCKS: 60.0,
-        InvestmentTypeEnum.FIXED_INCOME: 40.0,
-      };
+    testWidgets('dragging a slider calls onChanged, never mutating the weights map itself', (tester) async {
+      final weights = {InvestmentTypeEnum.STOCKS: 60.0, InvestmentTypeEnum.FIXED_INCOME: 40.0};
       final before = Map.of(weights);
       InvestmentTypeEnum? changedType;
       double? changedValue;

@@ -74,10 +74,7 @@ void main() {
       var tapped = false;
       final conversation = ConversationSummary(id: 1, title: 'Dividendos', updatedAt: DateTime.now());
 
-      await tester.pumpWidget(buildTestableWidget(
-        conversation: conversation,
-        onTap: () => tapped = true,
-      ));
+      await tester.pumpWidget(buildTestableWidget(conversation: conversation, onTap: () => tapped = true));
 
       // .first: the tile's own InkWell (wrapping the whole row) is the
       // outer one; PopupMenuButton's icon renders a second, inner InkWell,
@@ -92,10 +89,7 @@ void main() {
       var renamed = false;
       final conversation = ConversationSummary(id: 1, title: 'Dividendos', updatedAt: DateTime.now());
 
-      await tester.pumpWidget(buildTestableWidget(
-        conversation: conversation,
-        onRename: () => renamed = true,
-      ));
+      await tester.pumpWidget(buildTestableWidget(conversation: conversation, onRename: () => renamed = true));
 
       await tester.tap(find.byType(PopupMenuButton<String>));
       await tester.pumpAndSettle();
@@ -109,10 +103,7 @@ void main() {
       var deleted = false;
       final conversation = ConversationSummary(id: 1, title: 'Dividendos', updatedAt: DateTime.now());
 
-      await tester.pumpWidget(buildTestableWidget(
-        conversation: conversation,
-        onDelete: () => deleted = true,
-      ));
+      await tester.pumpWidget(buildTestableWidget(conversation: conversation, onDelete: () => deleted = true));
 
       await tester.tap(find.byType(PopupMenuButton<String>));
       await tester.pumpAndSettle();

@@ -24,9 +24,7 @@ class FakeMascotRepository implements MascotRepository {
   @override
   Future<void> saveNetWorth(double netWorth) async {}
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
   @override
@@ -42,9 +40,7 @@ void main() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     mascotController = MascotController(repository: FakeMascotRepository());
-    companionController = PetCompanionController(
-      mascotController: mascotController,
-    );
+    companionController = PetCompanionController(mascotController: mascotController);
     completionController = LabCompletionController(
       repository: AcademyProgressLocalRepository(),
       mascotController: mascotController,
@@ -64,9 +60,7 @@ void main() {
   }
 
   group('InflationLabScreen', () {
-    testWidgets('renders sliders and summary stats with default inputs', (
-      tester,
-    ) async {
+    testWidgets('renders sliders and summary stats with default inputs', (tester) async {
       await tester.pumpWidget(buildTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
@@ -76,31 +70,21 @@ void main() {
       expect(find.text('5.0%'), findsOneWidget); // default inflation
     });
 
-    testWidgets(
-      'tapping complete before answering the question does not mark it done',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 400));
+    testWidgets('tapping complete before answering the question does not mark it done', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
 
-        final completeButton = find.text(
-          Translator.translate('labCompleteButton'),
-        );
-        await tester.ensureVisible(completeButton);
-        await tester.pump();
-        await tester.tap(completeButton);
-        await tester.pump();
+      final completeButton = find.text(Translator.translate('labCompleteButton'));
+      await tester.ensureVisible(completeButton);
+      await tester.pump();
+      await tester.tap(completeButton);
+      await tester.pump();
 
-        expect(
-          find.text(Translator.translate('labCompletedLabel')),
-          findsNothing,
-        );
-      },
-    );
+      expect(find.text(Translator.translate('labCompletedLabel')), findsNothing);
+    });
 
-    testWidgets('tapping complete after answering correctly marks it done', (
-      tester,
-    ) async {
+    testWidgets('tapping complete after answering correctly marks it done', (tester) async {
       await tester.pumpWidget(buildTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
@@ -111,18 +95,13 @@ void main() {
       await tester.tap(optionB);
       await tester.pump();
 
-      final completeButton = find.text(
-        Translator.translate('labCompleteButton'),
-      );
+      final completeButton = find.text(Translator.translate('labCompleteButton'));
       await tester.ensureVisible(completeButton);
       await tester.pump();
       await tester.tap(completeButton);
       await tester.pump();
 
-      expect(
-        find.text(Translator.translate('labCompletedLabel')),
-        findsOneWidget,
-      );
+      expect(find.text(Translator.translate('labCompletedLabel')), findsOneWidget);
     });
   });
 }

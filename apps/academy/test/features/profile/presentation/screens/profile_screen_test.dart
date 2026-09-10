@@ -91,11 +91,9 @@ void main() {
             builder: (context) => Scaffold(
               body: Center(
                 child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => ProfileScreen(companionController: companionController),
-                    ),
-                  ),
+                  onPressed: () => Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (_) => ProfileScreen(companionController: companionController))),
                   child: const Text('open'),
                 ),
               ),

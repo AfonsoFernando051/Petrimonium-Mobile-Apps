@@ -28,13 +28,14 @@ class AcademyContinueCard extends StatelessWidget {
           children: [
             Text(
               Translator.translate(AppStrings.academyContinueSectionLabel),
-              style: AppTextStyles.caption.copyWith(color: AppColors.goldenBorder, fontWeight: FontWeight.w700, letterSpacing: 2),
+              style: AppTextStyles.caption.copyWith(
+                color: AppColors.goldenBorder,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 2,
+              ),
             ),
             const SizedBox(height: 6),
-            Text(
-              lesson.title,
-              style: AppTextStyles.titleLarge.copyWith(color: tokens.textPrimary),
-            ),
+            Text(lesson.title, style: AppTextStyles.titleLarge.copyWith(color: tokens.textPrimary)),
             const SizedBox(height: 4),
             Text(
               Translator.translate(AppStrings.academyXpToCompleteLabel, params: {'xp': '${lesson.xpReward}'}),

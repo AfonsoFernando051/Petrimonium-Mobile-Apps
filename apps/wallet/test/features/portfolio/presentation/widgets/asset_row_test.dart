@@ -48,8 +48,7 @@ void main() {
     testWidgets('opens AssetDetailsScreen on tap', (WidgetTester tester) async {
       final mockRepository = MockAssetDetailsRepository();
       DI.assetDetailsRepository = mockRepository;
-      when(() => mockRepository.fetchAssetDetails(any()))
-          .thenAnswer((_) async => const AssetDetails(ticker: 'PETR4'));
+      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) async => const AssetDetails(ticker: 'PETR4'));
 
       await tester.pumpWidget(buildTestableWidget(buildHolding()));
 

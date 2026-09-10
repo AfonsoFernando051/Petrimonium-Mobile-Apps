@@ -49,10 +49,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const InvestmentConfigurationScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const InvestmentConfigurationScreen());
   }
 
   // The narrow (<=800px) layout stacks a 520px left panel and a 720px right
@@ -70,7 +67,12 @@ void main() {
   /// Fills the ticker/quantity/price fields and picks today's date, without
   /// selecting an investment type (callers add that separately) or tapping
   /// "Adicionar Ativo".
-  Future<void> fillCommonFields(WidgetTester tester, {String ticker = 'PETR4', String quantity = '10', String price = '25'}) async {
+  Future<void> fillCommonFields(
+    WidgetTester tester, {
+    String ticker = 'PETR4',
+    String quantity = '10',
+    String price = '25',
+  }) async {
     final textFields = find.byType(TextFormField);
     await tester.ensureVisible(textFields.at(0));
     await tester.enterText(textFields.at(0), ticker); // autocomplete ticker field
@@ -88,7 +90,9 @@ void main() {
   Finder addAssetButton() => find.widgetWithText(GameButton, 'Adicionar Ativo');
 
   group('InvestmentConfigurationScreen', () {
-    testWidgets('renders the left panel, the form, and a disabled confirm button with 0 assets', (WidgetTester tester) async {
+    testWidgets('renders the left panel, the form, and a disabled confirm button with 0 assets', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -123,7 +127,9 @@ void main() {
       expect(find.byType(AddedAssetTile), findsNothing);
     });
 
-    testWidgets('adds an asset end-to-end: tile appears, confirm label updates, success snack shows, fields reset', (WidgetTester tester) async {
+    testWidgets('adds an asset end-to-end: tile appears, confirm label updates, success snack shows, fields reset', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -143,7 +149,9 @@ void main() {
       expect(tester.widget<TextFormField>(textFields.at(2)).controller!.text, '');
     });
 
-    testWidgets('flags a ticker/type mismatch (HGLG11 under Renda Fixa) with an inline validation message', (WidgetTester tester) async {
+    testWidgets('flags a ticker/type mismatch (HGLG11 under Renda Fixa) with an inline validation message', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -157,9 +165,12 @@ void main() {
       expect(find.byType(AddedAssetTile), findsNothing);
     });
 
-    testWidgets('picking a purchase date fetches that date\'s historical price and fills the price field', (WidgetTester tester) async {
-      when(() => mockInvestmentRepository.fetchQuoteAtDate('PETR4', any()))
-          .thenAnswer((_) async => <String, dynamic>{'regularMarketPrice': 42.5});
+    testWidgets('picking a purchase date fetches that date\'s historical price and fills the price field', (
+      WidgetTester tester,
+    ) async {
+      when(
+        () => mockInvestmentRepository.fetchQuoteAtDate('PETR4', any()),
+      ).thenAnswer((_) async => <String, dynamic>{'regularMarketPrice': 42.5});
 
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
@@ -184,46 +195,53 @@ void main() {
     /// result's live quote, even when a purchase date was already chosen —
     /// silently turning today's price into an old lot's recorded cost the
     /// next time a ticker was picked/corrected from autocomplete.
-    testWidgets('selecting a ticker from autocomplete after a date is already set re-fetches the historical price instead of using the live quote', (WidgetTester tester) async {
-      when(() => mockInvestmentRepository.searchQuotes('PETR'))
-          .thenAnswer((_) async => <Map<String, dynamic>>[
-                {'symbol': 'PETR4', 'regularMarketPrice': 99.0},
-              ]);
-      when(() => mockInvestmentRepository.fetchQuoteAtDate('PETR4', any()))
-          .thenAnswer((_) async => <String, dynamic>{'regularMarketPrice': 30.0});
+    testWidgets(
+      'selecting a ticker from autocomplete after a date is already set re-fetches the historical price instead of using the live quote',
+      (WidgetTester tester) async {
+        when(() => mockInvestmentRepository.searchQuotes('PETR')).thenAnswer(
+          (_) async => <Map<String, dynamic>>[
+            {'symbol': 'PETR4', 'regularMarketPrice': 99.0},
+          ],
+        );
+        when(
+          () => mockInvestmentRepository.fetchQuoteAtDate('PETR4', any()),
+        ).thenAnswer((_) async => <String, dynamic>{'regularMarketPrice': 30.0});
 
-      await tester.pumpWidget(buildTestableWidget());
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
+        await tester.pumpWidget(buildTestableWidget());
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
 
-      // Pick the purchase date first, before the ticker even exists yet —
-      // fetchQuoteAtDate isn't called (empty ticker), matching _refreshPriceForSelectedDate's guard.
-      await tapVisible(tester, find.text('Data de Compra'));
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.tap(find.text('OK'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
+        // Pick the purchase date first, before the ticker even exists yet —
+        // fetchQuoteAtDate isn't called (empty ticker), matching _refreshPriceForSelectedDate's guard.
+        await tapVisible(tester, find.text('Data de Compra'));
+        await tester.pump(const Duration(milliseconds: 300));
+        await tester.tap(find.text('OK'));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
 
-      // Now select the ticker from the autocomplete dropdown — the actual
-      // onSelected callback, not enterText (which never fires it).
-      final textFields = find.byType(TextFormField);
-      await tester.ensureVisible(textFields.at(0));
-      await tester.enterText(textFields.at(0), 'PETR');
-      await tester.pump(const Duration(milliseconds: 300));
+        // Now select the ticker from the autocomplete dropdown — the actual
+        // onSelected callback, not enterText (which never fires it).
+        final textFields = find.byType(TextFormField);
+        await tester.ensureVisible(textFields.at(0));
+        await tester.enterText(textFields.at(0), 'PETR');
+        await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.text('PETR4'), findsOneWidget, reason: 'the autocomplete option must be showing');
-      await tester.tap(find.text('PETR4'));
-      await tester.pump(const Duration(milliseconds: 300));
+        expect(find.text('PETR4'), findsOneWidget, reason: 'the autocomplete option must be showing');
+        await tester.tap(find.text('PETR4'));
+        await tester.pump(const Duration(milliseconds: 300));
 
-      verify(() => mockInvestmentRepository.fetchQuoteAtDate('PETR4', any())).called(1);
-      expect(
-        tester.widget<TextFormField>(textFields.at(2)).controller!.text,
-        '30.0',
-        reason: 'must show the historical price for the already-chosen date, not the live quote (99.0)',
-      );
-    });
+        verify(() => mockInvestmentRepository.fetchQuoteAtDate('PETR4', any())).called(1);
+        expect(
+          tester.widget<TextFormField>(textFields.at(2)).controller!.text,
+          '30.0',
+          reason: 'must show the historical price for the already-chosen date, not the live quote (99.0)',
+        );
+      },
+    );
 
-    testWidgets('editing an added asset pre-fills the form and switches the button to "Salvar Alteração"', (WidgetTester tester) async {
+    testWidgets('editing an added asset pre-fills the form and switches the button to "Salvar Alteração"', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -245,7 +263,9 @@ void main() {
       expect(tester.widget<TextFormField>(textFields.at(2)).controller!.text, '25');
     });
 
-    testWidgets('removing an added asset drops it from the list and updates the confirm label', (WidgetTester tester) async {
+    testWidgets('removing an added asset drops it from the list and updates the confirm label', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -290,9 +310,15 @@ void main() {
         final confirmButton = tester.widget<GameButton>(
           find.byWidgetPredicate((w) => w is GameButton && (w.label?.contains('Continuar') ?? false)),
         );
-        expect(confirmButton.onPressed, isNull, reason: 'Confirm must stay disabled while the current portfolio is unknown');
+        expect(
+          confirmButton.onPressed,
+          isNull,
+          reason: 'Confirm must stay disabled while the current portfolio is unknown',
+        );
 
-        verifyNever(() => mockInvestmentRepository.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace')));
+        verifyNever(
+          () => mockInvestmentRepository.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace')),
+        );
       });
 
       testWidgets('a successful retry seeds the existing lots and re-enables Confirm', (WidgetTester tester) async {
@@ -364,30 +390,37 @@ void main() {
       });
     });
 
-    testWidgets('tapping Confirm with assets calls configureInvestments and shows a friendly error on failure, without navigating away', (WidgetTester tester) async {
-      when(() => mockInvestmentRepository.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace'))).thenThrow(Exception('server exploded'));
+    testWidgets(
+      'tapping Confirm with assets calls configureInvestments and shows a friendly error on failure, without navigating away',
+      (WidgetTester tester) async {
+        when(
+          () => mockInvestmentRepository.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace')),
+        ).thenThrow(Exception('server exploded'));
 
-      await tester.pumpWidget(buildTestableWidget());
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
+        await tester.pumpWidget(buildTestableWidget());
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
 
-      await tapVisible(tester, find.text('Ações'));
-      await fillCommonFields(tester);
-      await tapVisible(tester, addAssetButton());
-      await tester.pump(const Duration(milliseconds: 300));
-      // Let the "asset added" success SnackBar (bottom of the screen, same
-      // area as the Confirm button) fully dismiss before tapping — while
-      // visible it absorbs the tap meant for the button underneath it.
-      await tester.pump(const Duration(seconds: 5));
+        await tapVisible(tester, find.text('Ações'));
+        await fillCommonFields(tester);
+        await tapVisible(tester, addAssetButton());
+        await tester.pump(const Duration(milliseconds: 300));
+        // Let the "asset added" success SnackBar (bottom of the screen, same
+        // area as the Confirm button) fully dismiss before tapping — while
+        // visible it absorbs the tap meant for the button underneath it.
+        await tester.pump(const Duration(seconds: 5));
 
-      final confirmButton = find.byWidgetPredicate((w) => w is GameButton && (w.label?.contains('ativo adicionado') ?? false));
-      await tapVisible(tester, confirmButton);
-      await tester.pump(const Duration(milliseconds: 300));
+        final confirmButton = find.byWidgetPredicate(
+          (w) => w is GameButton && (w.label?.contains('ativo adicionado') ?? false),
+        );
+        await tapVisible(tester, confirmButton);
+        await tester.pump(const Duration(milliseconds: 300));
 
-      verify(() => mockInvestmentRepository.configureInvestments(any(), confirmReplace: true)).called(1);
-      expect(find.textContaining('Falha ao salvar investimentos'), findsOneWidget);
-      // Still on this screen — the asset tile added earlier is still present.
-      expect(find.byType(AddedAssetTile), findsOneWidget);
-    });
+        verify(() => mockInvestmentRepository.configureInvestments(any(), confirmReplace: true)).called(1);
+        expect(find.textContaining('Falha ao salvar investimentos'), findsOneWidget);
+        // Still on this screen — the asset tile added earlier is still present.
+        expect(find.byType(AddedAssetTile), findsOneWidget);
+      },
+    );
   });
 }

@@ -11,35 +11,18 @@ void main() {
   const behavior = PortfolioPetBehavior();
 
   group('PortfolioPetBehavior.pageEnter — portfolio', () {
-    test(
-      'offers a diversification nudge when spread across more than 1 asset',
-      () {
-        final message = behavior.pageEnter(
-          PetContext.portfolio,
-          userXp: 0,
-          data: {'count': '3'},
-        );
+    test('offers a diversification nudge when spread across more than 1 asset', () {
+      final message = behavior.pageEnter(PetContext.portfolio, userXp: 0, data: {'count': '3'});
 
-        expect(message, isNotNull);
-        expect(message!.id, 'portfolio_diversified');
-        expect(message.priority, PetMessagePriority.low);
-        expect(message.params, {'count': '3'});
-      },
-    );
+      expect(message, isNotNull);
+      expect(message!.id, 'portfolio_diversified');
+      expect(message.priority, PetMessagePriority.low);
+      expect(message.params, {'count': '3'});
+    });
 
-    test(
-      'offers nothing at exactly 1 holding — celebrated separately by onEvent(FirstInvestmentAddedEvent)',
-      () {
-        expect(
-          behavior.pageEnter(
-            PetContext.portfolio,
-            userXp: 0,
-            data: {'count': '1'},
-          ),
-          isNull,
-        );
-      },
-    );
+    test('offers nothing at exactly 1 holding — celebrated separately by onEvent(FirstInvestmentAddedEvent)', () {
+      expect(behavior.pageEnter(PetContext.portfolio, userXp: 0, data: {'count': '1'}), isNull);
+    });
 
     test('offers the activation nudge at 0 holdings (missing count)', () {
       final message = behavior.pageEnter(PetContext.portfolio, userXp: 0);
@@ -51,11 +34,7 @@ void main() {
     });
 
     test('treats an unparseable count as 0, offering the activation nudge', () {
-      final message = behavior.pageEnter(
-        PetContext.portfolio,
-        userXp: 0,
-        data: {'count': 'not-a-number'},
-      );
+      final message = behavior.pageEnter(PetContext.portfolio, userXp: 0, data: {'count': 'not-a-number'});
       expect(message, isNotNull);
       expect(message!.id, 'portfolio_activation_nudge');
     });
@@ -63,17 +42,11 @@ void main() {
 
   group('PortfolioPetBehavior.investorStatusReaction', () {
     test('returns the already-invests key when true', () {
-      expect(
-        PortfolioPetBehavior.investorStatusReaction(alreadyInvests: true),
-        AppStrings.companionInvestorStatusYes,
-      );
+      expect(PortfolioPetBehavior.investorStatusReaction(alreadyInvests: true), AppStrings.companionInvestorStatusYes);
     });
 
     test('returns the not-yet key when false', () {
-      expect(
-        PortfolioPetBehavior.investorStatusReaction(alreadyInvests: false),
-        AppStrings.companionInvestorStatusNo,
-      );
+      expect(PortfolioPetBehavior.investorStatusReaction(alreadyInvests: false), AppStrings.companionInvestorStatusNo);
     });
   });
 
@@ -88,60 +61,43 @@ void main() {
 
   group('PortfolioPetBehavior.pageEnter — contexts it does not own', () {
     test('offers nothing for home/academy/profile', () {
-      for (final context in [
-        PetContext.home,
-        PetContext.academy,
-        PetContext.profile,
-      ]) {
+      for (final context in [PetContext.home, PetContext.academy, PetContext.profile]) {
         expect(behavior.pageEnter(context, userXp: 0), isNull);
       }
     });
   });
 
   group('PortfolioPetBehavior — event-triggered reactions', () {
-    test(
-      'firstInvestment is high priority with an Academy CTA and no fabricated ticker',
-      () {
-        final message = behavior.onEvent(const FirstInvestmentAddedEvent());
-        expect(message!.id, 'event_first_investment');
-        expect(message.priority, PetMessagePriority.high);
-        // Was `celebrate` until DEM-43: an aporte is real money, and the PRD
-        // reserves the celebratory moods for educational milestones. It is
-        // still high priority and still bridges into Academy — only the
-        // reward framing is gone. See financial_event_mood_guardrail_test.
-        expect(message.mood, PetAnimationState.idle);
-        expect(message.params, isNull);
-        expect(message.action?.destination, PetContext.academy);
-      },
-    );
+    test('firstInvestment is high priority with an Academy CTA and no fabricated ticker', () {
+      final message = behavior.onEvent(const FirstInvestmentAddedEvent());
+      expect(message!.id, 'event_first_investment');
+      expect(message.priority, PetMessagePriority.high);
+      // Was `celebrate` until DEM-43: an aporte is real money, and the PRD
+      // reserves the celebratory moods for educational milestones. It is
+      // still high priority and still bridges into Academy — only the
+      // reward framing is gone. See financial_event_mood_guardrail_test.
+      expect(message.mood, PetAnimationState.idle);
+      expect(message.params, isNull);
+      expect(message.action?.destination, PetContext.academy);
+    });
 
-    test(
-      'highConcentration carries the ticker/percent and bridges to Mentor',
-      () {
-        final message = behavior.onEvent(
-          const HighConcentrationDetectedEvent(ticker: 'PETR4', percent: 55.4),
-        );
-        expect(message!.id, 'event_high_concentration_PETR4');
-        expect(message.priority, PetMessagePriority.normal);
-        expect(message.mood, PetAnimationState.think);
-        expect(message.params, {'ticker': 'PETR4', 'percent': '55'});
-        expect(message.action?.destination, PetContext.mentor);
-      },
-    );
+    test('highConcentration carries the ticker/percent and bridges to Mentor', () {
+      final message = behavior.onEvent(const HighConcentrationDetectedEvent(ticker: 'PETR4', percent: 55.4));
+      expect(message!.id, 'event_high_concentration_PETR4');
+      expect(message.priority, PetMessagePriority.normal);
+      expect(message.mood, PetAnimationState.think);
+      expect(message.params, {'ticker': 'PETR4', 'percent': '55'});
+      expect(message.action?.destination, PetContext.mentor);
+    });
 
-    test(
-      "missionCompleted is per-title, high priority, and mirrors achievementUnlocked's shape",
-      () {
-        final message = behavior.onEvent(
-          const MissionCompletedEvent('Aula do Dia'),
-        );
-        expect(message!.id, 'event_mission_completed_Aula do Dia');
-        expect(message.params, {'title': 'Aula do Dia'});
-        expect(message.priority, PetMessagePriority.high);
-        expect(message.mood, PetAnimationState.celebrate);
-        expect(message.context, PetContext.portfolio);
-      },
-    );
+    test("missionCompleted is per-title, high priority, and mirrors achievementUnlocked's shape", () {
+      final message = behavior.onEvent(const MissionCompletedEvent('Aula do Dia'));
+      expect(message!.id, 'event_mission_completed_Aula do Dia');
+      expect(message.params, {'title': 'Aula do Dia'});
+      expect(message.priority, PetMessagePriority.high);
+      expect(message.mood, PetAnimationState.celebrate);
+      expect(message.context, PetContext.portfolio);
+    });
 
     test('achievementUnlocked is per-title and high priority', () {
       final message = behavior.onEvent(

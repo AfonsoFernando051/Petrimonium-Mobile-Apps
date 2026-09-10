@@ -13,4 +13,3 @@ class OnboardingRepository {
   Future<String> submitAssessment(List<String> selectedOptionIds) =>
       remoteDataSource.submitAssessment(selectedOptionIds);
 }
-

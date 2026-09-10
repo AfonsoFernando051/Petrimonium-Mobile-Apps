@@ -26,14 +26,16 @@ void main() {
 
   group('loadProfile', () {
     test('overwrites xp and specie with the backend\'s real values and caches them', () async {
-      when(() => mockGamificationDataSource.fetchSummary()).thenAnswer((_) async => {
-            'totalXp': 120,
-            'level': 2,
-            'xpIntoLevel': 20,
-            'xpForNextLevel': 100,
-            'currentStreak': 0,
-            'longestStreak': 0,
-          });
+      when(() => mockGamificationDataSource.fetchSummary()).thenAnswer(
+        (_) async => {
+          'totalXp': 120,
+          'level': 2,
+          'xpIntoLevel': 20,
+          'xpForNextLevel': 100,
+          'currentStreak': 0,
+          'longestStreak': 0,
+        },
+      );
       when(() => mockPetDataSource.getMyPet()).thenAnswer((_) async => {'specie': 'FOX'});
 
       final profile = await repository.loadProfile();

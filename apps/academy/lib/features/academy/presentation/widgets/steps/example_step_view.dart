@@ -44,7 +44,10 @@ class ExampleStepView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              Text(step.title, style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(
+                step.title,
+                style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 6),
               Text(step.body, style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4)),
             ],

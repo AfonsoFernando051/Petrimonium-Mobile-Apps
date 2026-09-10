@@ -3,13 +3,7 @@
 /// `AppEvent`/analytics-safe string id — never expose `.name`/`.index` for
 /// these purposes, since renaming or reordering the enum must never
 /// silently change a user's XP ledger key.
-enum LabSimulatorId {
-  compoundInterest,
-  inflation,
-  fixedIncome,
-  diversification,
-  portfolio,
-}
+enum LabSimulatorId { compoundInterest, inflation, fixedIncome, diversification, portfolio }
 
 extension LabSimulatorSource on LabSimulatorId {
   String get sourceId => switch (this) {

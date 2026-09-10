@@ -24,7 +24,9 @@ void main() {
   }
 
   group('PrivacySection', () {
-    testWidgets('renders the section label and the ranking-visibility switch reflecting its value', (WidgetTester tester) async {
+    testWidgets('renders the section label and the ranking-visibility switch reflecting its value', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget(showOnRankings: true));
 
       expect(find.text('PRIVACIDADE'), findsOneWidget);

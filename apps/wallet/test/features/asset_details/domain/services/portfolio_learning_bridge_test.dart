@@ -90,12 +90,7 @@ void main() {
     });
 
     test('surfaces every applicable concept across multiple completed lessons', () {
-      const asset = AssetDetails(
-        ticker: 'PETR4',
-        assetType: 'stock',
-        priceToEarnings: 8.5,
-        returnOnEquity: 0.22,
-      );
+      const asset = AssetDetails(ticker: 'PETR4', assetType: 'stock', priceToEarnings: 8.5, returnOnEquity: 0.22);
 
       final result = PortfolioLearningBridge.resolve(
         lessons: const [_peLesson, _roeLesson],
@@ -123,12 +118,7 @@ void main() {
     });
 
     test('never fabricates a concept for an asset the user has not completed a lesson for', () {
-      const asset = AssetDetails(
-        ticker: 'PETR4',
-        assetType: 'stock',
-        priceToEarnings: 8.5,
-        returnOnEquity: 0.22,
-      );
+      const asset = AssetDetails(ticker: 'PETR4', assetType: 'stock', priceToEarnings: 8.5, returnOnEquity: 0.22);
 
       // Only the P/E lesson was completed -- ROE must not appear even though the asset
       // has a real ROE value and a ROE lesson exists in the catalog.

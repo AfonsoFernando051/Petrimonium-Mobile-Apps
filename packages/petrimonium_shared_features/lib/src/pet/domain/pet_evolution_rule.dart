@@ -12,32 +12,20 @@ class PetEvolutionRule {
   final PetEvolutionStage stage;
   final int minXp;
 
-  const PetEvolutionRule({
-    required this.stage,
-    required this.minXp,
-  });
+  const PetEvolutionRule({required this.stage, required this.minXp});
 
   bool isSatisfiedBy({required int xp}) {
     return xp >= minXp;
   }
 
-  PetEvolutionRule copyWith({
-    PetEvolutionStage? stage,
-    int? minXp,
-  }) {
-    return PetEvolutionRule(
-      stage: stage ?? this.stage,
-      minXp: minXp ?? this.minXp,
-    );
+  PetEvolutionRule copyWith({PetEvolutionStage? stage, int? minXp}) {
+    return PetEvolutionRule(stage: stage ?? this.stage, minXp: minXp ?? this.minXp);
   }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PetEvolutionRule &&
-          runtimeType == other.runtimeType &&
-          stage == other.stage &&
-          minXp == other.minXp;
+      other is PetEvolutionRule && runtimeType == other.runtimeType && stage == other.stage && minXp == other.minXp;
 
   @override
   int get hashCode => Object.hash(stage, minXp);

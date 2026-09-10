@@ -21,9 +21,7 @@ abstract class MascotRepository {
 
   Future<void> saveNetWorth(double netWorth);
 
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  );
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped);
 
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked);
 

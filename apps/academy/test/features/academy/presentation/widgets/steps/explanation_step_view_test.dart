@@ -16,7 +16,9 @@ void main() {
         MaterialApp(
           theme: AppTheme.dark,
           home: const Scaffold(
-            body: ExplanationStepView(step: ExplanationStep(title: 'Explain This', body: 'The full body text.')),
+            body: ExplanationStepView(
+              step: ExplanationStep(title: 'Explain This', body: 'The full body text.'),
+            ),
           ),
         ),
       );

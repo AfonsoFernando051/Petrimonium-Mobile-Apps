@@ -83,6 +83,5 @@ void main() {
 
       expect(loggedOut, isFalse);
     });
-
   });
 }

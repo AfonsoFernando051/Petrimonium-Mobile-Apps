@@ -23,13 +23,7 @@ void main() {
     });
 
     test('schoolIds defaults to an empty list when omitted', () {
-      const domain = AcademyDomain(
-        id: 'x',
-        title: 'x',
-        description: 'x',
-        icon: Icons.help_outline,
-        order: 0,
-      );
+      const domain = AcademyDomain(id: 'x', title: 'x', description: 'x', icon: Icons.help_outline, order: 0);
 
       expect(domain.schoolIds, isEmpty);
     });

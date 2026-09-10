@@ -12,10 +12,7 @@ import 'package:petrimonium_health/l10n/app_localizations.dart';
 /// Estrutura do artboard `LoginHealth` do canvas de design.
 void main() {
   Future<HealthController> pumpLogin(WidgetTester tester) async {
-    final controller = HealthController(
-      repository: _StubRepository(),
-      localeController: LocaleController(),
-    );
+    final controller = HealthController(repository: _StubRepository(), localeController: LocaleController());
     await tester.pumpWidget(
       AnimatedBuilder(
         animation: controller,

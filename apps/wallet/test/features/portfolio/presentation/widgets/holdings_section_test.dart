@@ -16,7 +16,9 @@ void main() {
   Widget buildTestableWidget(List<Holding> holdings, double totalPortfolioValue) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: HoldingsSection(holdings: holdings, totalPortfolioValue: totalPortfolioValue)),
+      home: Scaffold(
+        body: HoldingsSection(holdings: holdings, totalPortfolioValue: totalPortfolioValue),
+      ),
     );
   }
 

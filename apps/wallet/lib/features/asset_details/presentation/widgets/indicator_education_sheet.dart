@@ -38,11 +38,9 @@ class IndicatorEducationSheet extends StatelessWidget {
               // ── Drag handle ────────────────────────────────────
               Center(
                 child: Container(
-                  width: 40, height: 4,
-                  decoration: BoxDecoration(
-                    color: tokens.divider,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(color: tokens.divider, borderRadius: BorderRadius.circular(4)),
                 ),
               ),
               const SizedBox(height: 20),
@@ -59,21 +57,13 @@ class IndicatorEducationSheet extends StatelessWidget {
                     ),
                     child: Text(
                       indicator.label,
-                      style: const TextStyle(
-                        color: AppColors.neonCyan,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
+                      style: const TextStyle(color: AppColors.neonCyan, fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     indicator.value ?? '--',
-                    style: TextStyle(
-                      color: tokens.textPrimary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+                    style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ],
               ),
@@ -125,11 +115,7 @@ class IndicatorEducationSheet extends StatelessWidget {
                         Expanded(
                           child: Text(
                             explanation.petDialogue!,
-                            style: TextStyle(
-                              color: tokens.textSecondary,
-                              fontSize: 12,
-                              fontStyle: FontStyle.italic,
-                            ),
+                            style: TextStyle(color: tokens.textSecondary, fontSize: 12, fontStyle: FontStyle.italic),
                           ),
                         ),
                       ],
@@ -137,10 +123,7 @@ class IndicatorEducationSheet extends StatelessWidget {
                   ),
                 ],
               ] else
-                Text(
-                  'Explicação educacional em breve.',
-                  style: TextStyle(color: tokens.textSecondary, fontSize: 13),
-                ),
+                Text('Explicação educacional em breve.', style: TextStyle(color: tokens.textSecondary, fontSize: 13)),
 
               const SizedBox(height: 24),
             ],
@@ -152,12 +135,7 @@ class IndicatorEducationSheet extends StatelessWidget {
 }
 
 class _EducationSection extends StatelessWidget {
-  const _EducationSection({
-    required this.icon,
-    required this.title,
-    required this.content,
-    required this.accentColor,
-  });
+  const _EducationSection({required this.icon, required this.title, required this.content, required this.accentColor});
 
   final IconData icon;
   final String title;
@@ -176,20 +154,13 @@ class _EducationSection extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(
-                  color: accentColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                ),
+                style: TextStyle(color: accentColor, fontWeight: FontWeight.bold, fontSize: 13),
               ),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        Text(
-          content,
-          style: TextStyle(color: context.colors.textSecondary, fontSize: 13, height: 1.5),
-        ),
+        Text(content, style: TextStyle(color: context.colors.textSecondary, fontSize: 13, height: 1.5)),
       ],
     );
   }

@@ -33,8 +33,7 @@ class FakeMascotRepository implements MascotRepository {
   final List<String> savedNames = [];
 
   @override
-  Future<PetProfile> loadProfile() async =>
-      PetProfile(name: savedNames.isEmpty ? null : savedNames.last);
+  Future<PetProfile> loadProfile() async => PetProfile(name: savedNames.isEmpty ? null : savedNames.last);
 
   @override
   Future<void> saveName(String name) async {
@@ -77,10 +76,7 @@ void main() {
   });
 
   Widget buildThemedTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const PetSetupScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const PetSetupScreen());
   }
 
   group('PetSetupScreen', () {

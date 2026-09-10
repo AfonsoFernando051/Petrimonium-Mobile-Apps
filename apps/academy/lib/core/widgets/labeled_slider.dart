@@ -46,17 +46,11 @@ class LabeledSlider extends StatelessWidget {
           children: [
             Text(
               label,
-              style: AppTextStyles.label.copyWith(
-                color: tokens.textSecondary,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyles.label.copyWith(color: tokens.textSecondary, fontWeight: FontWeight.w600),
             ),
             Text(
               valueLabel,
-              style: AppTextStyles.body.copyWith(
-                color: tokens.textPrimary,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTextStyles.body.copyWith(color: tokens.textPrimary, fontWeight: FontWeight.bold),
             ),
           ],
         ),

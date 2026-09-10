@@ -3,14 +3,7 @@
 /// [idle], [celebrate], [think], [sleep] and [victory] are driven by app
 /// events (see `MascotController.triggerEventAnimation`). [happy] is a
 /// short-lived reaction to direct user interaction (tap / pet).
-enum PetAnimationState {
-  idle,
-  celebrate,
-  think,
-  sleep,
-  victory,
-  happy,
-}
+enum PetAnimationState { idle, celebrate, think, sleep, victory, happy }
 
 extension PetAnimationStateAsset on PetAnimationState {
   /// File name (without extension) used to look up the Lottie animation

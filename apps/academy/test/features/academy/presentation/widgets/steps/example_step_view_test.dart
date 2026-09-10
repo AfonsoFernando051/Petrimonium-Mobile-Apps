@@ -16,7 +16,9 @@ void main() {
         MaterialApp(
           theme: AppTheme.dark,
           home: const Scaffold(
-            body: ExampleStepView(step: ExampleStep(title: 'A Worked Example', body: 'Here is the math.')),
+            body: ExampleStepView(
+              step: ExampleStep(title: 'A Worked Example', body: 'Here is the math.'),
+            ),
           ),
         ),
       );

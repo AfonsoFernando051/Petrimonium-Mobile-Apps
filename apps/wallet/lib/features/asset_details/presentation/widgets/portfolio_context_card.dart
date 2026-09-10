@@ -39,22 +39,17 @@ class PortfolioContextCard extends StatelessWidget {
 
             _ContextLine(
               icon: Icons.pie_chart_outline,
-              text: '${asset.displayName} representa '
+              text:
+                  '${asset.displayName} representa '
                   '${pos.portfolioWeight.toStringAsFixed(1)}% do seu portfólio total.',
             ),
             const SizedBox(height: 8),
 
-            _ContextLine(
-              icon: Icons.category_outlined,
-              text: 'Categoria: $typeLabel.',
-            ),
+            _ContextLine(icon: Icons.category_outlined, text: 'Categoria: $typeLabel.'),
 
             if (asset.sector != null) ...[
               const SizedBox(height: 8),
-              _ContextLine(
-                icon: Icons.business_outlined,
-                text: 'Setor: ${asset.sector}.',
-              ),
+              _ContextLine(icon: Icons.business_outlined, text: 'Setor: ${asset.sector}.'),
             ],
           ],
         ),
@@ -77,10 +72,7 @@ class _ContextLine extends StatelessWidget {
         Icon(icon, color: AppColors.neonBlue, size: 16),
         const SizedBox(width: 8),
         Expanded(
-          child: Text(
-            text,
-            style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.4),
-          ),
+          child: Text(text, style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.4)),
         ),
       ],
     );

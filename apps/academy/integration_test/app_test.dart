@@ -52,11 +52,9 @@ class MockMascotRepository extends Mock implements MascotRepository {}
 
 class MockOnboardingRepository extends Mock implements OnboardingRepository {}
 
-class MockOnboardingStateRepository extends Mock
-    implements OnboardingStateRepository {}
+class MockOnboardingStateRepository extends Mock implements OnboardingStateRepository {}
 
-class MockPetCompanionPreferencesRepository extends Mock
-    implements PetCompanionPreferencesRepository {}
+class MockPetCompanionPreferencesRepository extends Mock implements PetCompanionPreferencesRepository {}
 
 class MockMentorChatRepository extends Mock implements MentorChatRepository {}
 
@@ -88,8 +86,7 @@ void main() {
   late MockMascotRepository mockMascotRepository;
   late MockOnboardingRepository mockOnboardingRepository;
   late MockOnboardingStateRepository mockOnboardingStateRepository;
-  late MockPetCompanionPreferencesRepository
-  mockPetCompanionPreferencesRepository;
+  late MockPetCompanionPreferencesRepository mockPetCompanionPreferencesRepository;
   late MockMentorChatRepository mockMentorChatRepository;
 
   setUp(() {
@@ -102,15 +99,11 @@ void main() {
 
     mockAuthRepository = MockAuthRepository();
     DI.authRepository = mockAuthRepository;
-    when(
-      () => mockAuthRepository.isLoggedIn(),
-    ).thenAnswer((_) async => loggedIn);
+    when(() => mockAuthRepository.isLoggedIn()).thenAnswer((_) async => loggedIn);
     when(() => mockAuthRepository.login(any(), any())).thenAnswer((_) async {
       loggedIn = true;
     });
-    when(
-      () => mockAuthRepository.register(any(), any(), any()),
-    ).thenAnswer((_) async {});
+    when(() => mockAuthRepository.register(any(), any(), any())).thenAnswer((_) async {});
     // HomeScreen.initState calls both on every mount; unstubbed, mocktail
     // returns null where a Future<String?> is awaited and the whole dashboard
     // fails to build. Null is the "no display name known" case, which these
@@ -120,13 +113,10 @@ void main() {
 
     mockOnboardingRepository = MockOnboardingRepository();
     DI.onboardingRepository = mockOnboardingRepository;
-    when(() => mockOnboardingRepository.getStatus()).thenAnswer(
-      (_) async =>
-          const OnboardingStatusModel(hasAnswered: true, profile: 'moderate'),
-    );
     when(
-      () => mockOnboardingRepository.getQuestions(),
-    ).thenAnswer((_) async => <QuestionModel>[]);
+      () => mockOnboardingRepository.getStatus(),
+    ).thenAnswer((_) async => const OnboardingStatusModel(hasAnswered: true, profile: 'moderate'));
+    when(() => mockOnboardingRepository.getQuestions()).thenAnswer((_) async => <QuestionModel>[]);
 
     // Fully onboarded: every StartRouteResolver gate before StartRoute.home
     // resolves as already-done.
@@ -150,83 +140,48 @@ void main() {
         'Como analisar minha carteira?',
       ],
     );
-    when(
-      () => mockMentorChatRepository.purgeLegacyLocalHistory(),
-    ).thenAnswer((_) async {});
+    when(() => mockMentorChatRepository.purgeLegacyLocalHistory()).thenAnswer((_) async {});
 
     mockMascotRepository = MockMascotRepository();
     DI.mascotRepository = mockMascotRepository;
-    when(() => mockMascotRepository.loadProfile()).thenAnswer(
-      (_) async => PetProfile(
-        specie: PetSpecieEnum.DOG,
-        name: 'Rex',
-        stage: PetEvolutionStage.babyDog,
-      ),
-    );
     when(
-      () => mockMascotRepository.saveLastActiveAt(any()),
-    ).thenAnswer((_) async {});
-    when(
-      () => mockMascotRepository.saveNetWorth(any()),
-    ).thenAnswer((_) async {});
+      () => mockMascotRepository.loadProfile(),
+    ).thenAnswer((_) async => PetProfile(specie: PetSpecieEnum.DOG, name: 'Rex', stage: PetEvolutionStage.babyDog));
+    when(() => mockMascotRepository.saveLastActiveAt(any())).thenAnswer((_) async {});
+    when(() => mockMascotRepository.saveNetWorth(any())).thenAnswer((_) async {});
     when(() => mockMascotRepository.saveXp(any())).thenAnswer((_) async {});
     when(() => mockMascotRepository.saveStage(any())).thenAnswer((_) async {});
 
     mockOnboardingStateRepository = MockOnboardingStateRepository();
     DI.onboardingStateRepository = mockOnboardingStateRepository;
-    when(
-      () => mockOnboardingStateRepository.hasSetGoal(),
-    ).thenAnswer((_) async => true);
-    when(
-      () => mockOnboardingStateRepository.isTutorialCompleted(),
-    ).thenAnswer((_) async => true);
-    when(
-      () => mockOnboardingStateRepository.isPortfolioStepDone(),
-    ).thenAnswer((_) async => true);
+    when(() => mockOnboardingStateRepository.hasSetGoal()).thenAnswer((_) async => true);
+    when(() => mockOnboardingStateRepository.isTutorialCompleted()).thenAnswer((_) async => true);
+    when(() => mockOnboardingStateRepository.isPortfolioStepDone()).thenAnswer((_) async => true);
     // Dashboard mounts the empty-portfolio activation view in these flows.
     // Stub its persisted state as well so the async initState path has the
     // same concrete return type it receives in production.
-    when(
-      () => mockOnboardingStateRepository.hasSeenPortfolioActivation(),
-    ).thenAnswer((_) async => false);
-    when(
-      () => mockOnboardingStateRepository.markPortfolioActivationSeen(),
-    ).thenAnswer((_) async {});
-    when(
-      () => mockOnboardingStateRepository.shouldShowPortfolioReminder(),
-    ).thenAnswer((_) async => false);
-    when(
-      () => mockOnboardingStateRepository.currentSessionCount(),
-    ).thenAnswer((_) async => 3);
-    when(
-      () => mockOnboardingStateRepository.markReminderShown(any()),
-    ).thenAnswer((_) async {});
-    when(
-      () => mockOnboardingStateRepository.markPortfolioSkipped(),
-    ).thenAnswer((_) async {});
+    when(() => mockOnboardingStateRepository.hasSeenPortfolioActivation()).thenAnswer((_) async => false);
+    when(() => mockOnboardingStateRepository.markPortfolioActivationSeen()).thenAnswer((_) async {});
+    when(() => mockOnboardingStateRepository.shouldShowPortfolioReminder()).thenAnswer((_) async => false);
+    when(() => mockOnboardingStateRepository.currentSessionCount()).thenAnswer((_) async => 3);
+    when(() => mockOnboardingStateRepository.markReminderShown(any())).thenAnswer((_) async {});
+    when(() => mockOnboardingStateRepository.markPortfolioSkipped()).thenAnswer((_) async {});
 
     // Academy catalog — a real (fake-backed) snapshot with one contentAvailable
     // school and one comingSoon school, so the "does a school still render
     // with zero investments / after skipping portfolio setup" flow below has
     // real content to assert on rather than an empty catalog.
     final mockAcademyCatalogRepository = MockAcademyCatalogRepository();
-    when(
-      () => mockAcademyCatalogRepository.loadCached(any()),
-    ).thenAnswer((_) async => buildAcademyCatalogSnapshot());
+    when(() => mockAcademyCatalogRepository.loadCached(any())).thenAnswer((_) async => buildAcademyCatalogSnapshot());
     when(
       () => mockAcademyCatalogRepository.fetchAndCache(any()),
     ).thenAnswer((_) async => buildAcademyCatalogSnapshot());
     DI.academyCatalogRepository = mockAcademyCatalogRepository;
 
     final mockAcademyRemoteDataSource = MockAcademyRemoteDataSource();
+    when(() => mockAcademyRemoteDataSource.getCompletedLessonIds()).thenAnswer((_) async => {});
     when(
-      () => mockAcademyRemoteDataSource.getCompletedLessonIds(),
-    ).thenAnswer((_) async => {});
-    when(
-      () => mockAcademyRemoteDataSource.completeLesson(
-        any(),
-        perfectFirstTry: any(named: 'perfectFirstTry'),
-      ),
+      () => mockAcademyRemoteDataSource.completeLesson(any(), perfectFirstTry: any(named: 'perfectFirstTry')),
     ).thenAnswer(
       (_) async => const LessonCompletionResult(
         lessonId: 'test_lesson_3',
@@ -251,21 +206,13 @@ void main() {
     DI.gamificationRepository = FakeGamificationRepository();
     DI.missionsRepository = FakeMissionsRepository();
 
-    mockPetCompanionPreferencesRepository =
-        MockPetCompanionPreferencesRepository();
-    DI.petCompanionPreferencesRepository =
-        mockPetCompanionPreferencesRepository;
-    when(
-      () => mockPetCompanionPreferencesRepository.loadLastShown(),
-    ).thenAnswer((_) async => {});
-    when(
-      () => mockPetCompanionPreferencesRepository.recordShown(any(), any()),
-    ).thenAnswer((_) async {});
+    mockPetCompanionPreferencesRepository = MockPetCompanionPreferencesRepository();
+    DI.petCompanionPreferencesRepository = mockPetCompanionPreferencesRepository;
+    when(() => mockPetCompanionPreferencesRepository.loadLastShown()).thenAnswer((_) async => {});
+    when(() => mockPetCompanionPreferencesRepository.recordShown(any(), any())).thenAnswer((_) async {});
   });
 
-  testWidgets('login lands on the dashboard for a fully-onboarded user', (
-    tester,
-  ) async {
+  testWidgets('login lands on the dashboard for a fully-onboarded user', (tester) async {
     await tester.pumpWidget(const MyApp());
     // Let MyApp's FutureBuilder resolve StartRouteResolver().resolve().
     await tester.pump();
@@ -273,10 +220,7 @@ void main() {
 
     expect(find.byType(LoginScreen), findsOneWidget);
 
-    final fields = find.descendant(
-      of: find.byType(CustomTextField),
-      matching: find.byType(TextField),
-    );
+    final fields = find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField));
     await tester.enterText(fields.first, 'investor@test.com');
     await tester.enterText(fields.last, 'Str0ngPass1');
     await tester.pump();
@@ -292,8 +236,7 @@ void main() {
     // pumps to drain the chained async calls MyApp's re-resolve and
     // DashboardScreen.initState() both kick off (isLoggedIn, pet/mascot/
     // onboarding signals, portfolio loadAll, companion greeting).
-    await tester
-        .pump(); // login() resolves, loading state, pushAndRemoveUntil starts
+    await tester.pump(); // login() resolves, loading state, pushAndRemoveUntil starts
     await tester.pump(const Duration(milliseconds: 300)); // page transition
     for (var i = 0; i < 6; i++) {
       await tester.pump();
@@ -303,127 +246,92 @@ void main() {
     expect(find.byType(LoginScreen), findsNothing);
   });
 
-  testWidgets(
-    'registration reaches the learn-first onboarding before any asset entry',
-    (tester) async {
-      // This account has already completed the earlier onboarding steps
-      // (pet, goal and tutorial). Its first post-registration route must be
-      // the learn-first guidance, rather than a forced asset-entry screen.
-      when(
-        () => mockOnboardingStateRepository.isPortfolioStepDone(),
-      ).thenAnswer((_) async => false);
+  testWidgets('registration reaches the learn-first onboarding before any asset entry', (tester) async {
+    // This account has already completed the earlier onboarding steps
+    // (pet, goal and tutorial). Its first post-registration route must be
+    // the learn-first guidance, rather than a forced asset-entry screen.
+    when(() => mockOnboardingStateRepository.isPortfolioStepDone()).thenAnswer((_) async => false);
 
-      await tester.pumpWidget(const MyApp());
-      await tester.pump();
-      await tester.pump();
-
-      // Login/signup is now an inline Entrar/Criar conta toggle (no modal) —
-      // switch to the signup side by its label.
-      final signupToggle = find.text(Translator.translate(AppStrings.createAccount));
-      await tester.ensureVisible(signupToggle);
-      await tester.tap(signupToggle);
-      await tester.pump(const Duration(milliseconds: 300));
-      expect(find.byType(SignupForm), findsOneWidget);
-
-      final fields = find.descendant(
-        of: find.byType(SignupForm),
-        matching: find.byType(TextField),
-      );
-      expect(fields, findsNWidgets(4));
-      await tester.enterText(fields.at(0), 'Novo Investidor');
-      await tester.enterText(fields.at(1), 'novo.investidor@test.com');
-      await tester.enterText(fields.at(2), 'Str0ngPass1');
-      await tester.enterText(fields.at(3), 'Str0ngPass1');
-      await tester.pump();
-
-      final signupAction = find.widgetWithText(GameButton, 'Cadastrar');
-      await tester.ensureVisible(signupAction);
-      await tester.tap(signupAction);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-      for (var i = 0; i < 6; i++) {
-        await tester.pump();
-      }
-
-      expect(find.byType(PortfolioChoiceScreen), findsOneWidget);
-      expect(find.byType(DashboardScreen), findsNothing);
-      expect(
-        find.text(
-          Translator.translate(AppStrings.portfolioGuidanceContinueButton),
-        ),
-        findsOneWidget,
-      );
-      expect(
-        find.text(Translator.translate(AppStrings.addManuallyButton)),
-        findsNothing,
-      );
-      expect(
-        find.text(Translator.translate(AppStrings.importPortfolioButton)),
-        findsNothing,
-      );
-
-      // Continue the learn-first onboarding without ever asking the user to
-      // register an asset — the portfolio stays optional and unconnected.
-      await tester.tap(
-        find.text(
-          Translator.translate(AppStrings.portfolioGuidanceContinueButton),
-        ),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-      for (var i = 0; i < 6; i++) {
-        await tester.pump();
-      }
-
-      verify(
-        () => mockOnboardingStateRepository.markPortfolioSkipped(),
-      ).called(1);
-      expect(find.byType(DashboardScreen), findsOneWidget);
-      expect(find.byType(PortfolioChoiceScreen), findsNothing);
-
-      // Switch to the Academy tab and let AcademyController's catalog load
-      // (loadCached, then fetchAndCache) drain.
-      await tester.tap(
-        find.descendant(
-          of: find.byType(BottomNavigationBar),
-          matching: find.byIcon(Icons.school_outlined),
-        ),
-      );
-      for (var i = 0; i < 6; i++) {
-        await tester.pump();
-      }
-
-      expect(find.byType(AcademyHomeScreen), findsOneWidget);
-
-      // Drill into the one domain in the fake catalog to reach its schools —
-      // AcademyHomeScreen itself lists domains, not schools directly.
-      await tester.ensureVisible(find.byType(AcademyDomainCard).first);
-      await tester.pump();
-      await tester.tap(find.byType(AcademyDomainCard).first);
-      await tester.pump(); // HapticFeedback + Navigator.push starts
-      await tester.pump(
-        const Duration(milliseconds: 300),
-      ); // fade/slide page transition
-      for (var i = 0; i < 6; i++) {
-        await tester.pump();
-      }
-
-      expect(find.byType(AcademyDomainDetailScreen), findsOneWidget);
-      expect(find.byType(SchoolCard), findsWidgets);
-    },
-  );
-
-  testWidgets('mentor displays the suggestions returned by the backend', (
-    tester,
-  ) async {
     await tester.pumpWidget(const MyApp());
     await tester.pump();
     await tester.pump();
 
-    final fields = find.descendant(
-      of: find.byType(CustomTextField),
-      matching: find.byType(TextField),
+    // Login/signup is now an inline Entrar/Criar conta toggle (no modal) —
+    // switch to the signup side by its label.
+    final signupToggle = find.text(Translator.translate(AppStrings.createAccount));
+    await tester.ensureVisible(signupToggle);
+    await tester.tap(signupToggle);
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(SignupForm), findsOneWidget);
+
+    final fields = find.descendant(of: find.byType(SignupForm), matching: find.byType(TextField));
+    expect(fields, findsNWidgets(4));
+    await tester.enterText(fields.at(0), 'Novo Investidor');
+    await tester.enterText(fields.at(1), 'novo.investidor@test.com');
+    await tester.enterText(fields.at(2), 'Str0ngPass1');
+    await tester.enterText(fields.at(3), 'Str0ngPass1');
+    await tester.pump();
+
+    final signupAction = find.widgetWithText(GameButton, 'Cadastrar');
+    await tester.ensureVisible(signupAction);
+    await tester.tap(signupAction);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    for (var i = 0; i < 6; i++) {
+      await tester.pump();
+    }
+
+    expect(find.byType(PortfolioChoiceScreen), findsOneWidget);
+    expect(find.byType(DashboardScreen), findsNothing);
+    expect(find.text(Translator.translate(AppStrings.portfolioGuidanceContinueButton)), findsOneWidget);
+    expect(find.text(Translator.translate(AppStrings.addManuallyButton)), findsNothing);
+    expect(find.text(Translator.translate(AppStrings.importPortfolioButton)), findsNothing);
+
+    // Continue the learn-first onboarding without ever asking the user to
+    // register an asset — the portfolio stays optional and unconnected.
+    await tester.tap(find.text(Translator.translate(AppStrings.portfolioGuidanceContinueButton)));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    for (var i = 0; i < 6; i++) {
+      await tester.pump();
+    }
+
+    verify(() => mockOnboardingStateRepository.markPortfolioSkipped()).called(1);
+    expect(find.byType(DashboardScreen), findsOneWidget);
+    expect(find.byType(PortfolioChoiceScreen), findsNothing);
+
+    // Switch to the Academy tab and let AcademyController's catalog load
+    // (loadCached, then fetchAndCache) drain.
+    await tester.tap(
+      find.descendant(of: find.byType(BottomNavigationBar), matching: find.byIcon(Icons.school_outlined)),
     );
+    for (var i = 0; i < 6; i++) {
+      await tester.pump();
+    }
+
+    expect(find.byType(AcademyHomeScreen), findsOneWidget);
+
+    // Drill into the one domain in the fake catalog to reach its schools —
+    // AcademyHomeScreen itself lists domains, not schools directly.
+    await tester.ensureVisible(find.byType(AcademyDomainCard).first);
+    await tester.pump();
+    await tester.tap(find.byType(AcademyDomainCard).first);
+    await tester.pump(); // HapticFeedback + Navigator.push starts
+    await tester.pump(const Duration(milliseconds: 300)); // fade/slide page transition
+    for (var i = 0; i < 6; i++) {
+      await tester.pump();
+    }
+
+    expect(find.byType(AcademyDomainDetailScreen), findsOneWidget);
+    expect(find.byType(SchoolCard), findsWidgets);
+  });
+
+  testWidgets('mentor displays the suggestions returned by the backend', (tester) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.pump();
+    await tester.pump();
+
+    final fields = find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField));
     await tester.enterText(fields.first, 'investor@test.com');
     await tester.enterText(fields.last, 'Str0ngPass1');
     await tester.tap(find.widgetWithText(GameButton, 'Entrar'));
@@ -434,33 +342,22 @@ void main() {
     }
 
     await tester.tap(
-      find.descendant(
-        of: find.byType(BottomNavigationBar),
-        matching: find.byIcon(Icons.auto_awesome_outlined),
-      ),
+      find.descendant(of: find.byType(BottomNavigationBar), matching: find.byIcon(Icons.auto_awesome_outlined)),
     );
     for (var i = 0; i < 6; i++) {
       await tester.pump();
     }
 
     expect(find.byType(MentorScreen), findsOneWidget);
-    expect(
-      find.text('Como montar minha reserva de emergência?'),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Qual a diferença entre ETF e fundo imobiliário?'),
-      findsOneWidget,
-    );
+    expect(find.text('Como montar minha reserva de emergência?'), findsOneWidget);
+    expect(find.text('Qual a diferença entre ETF e fundo imobiliário?'), findsOneWidget);
     expect(find.text('Como funciona a diversificação?'), findsOneWidget);
     expect(find.text('O que devo estudar antes de investir?'), findsOneWidget);
     expect(find.text('Como analisar minha carteira?'), findsOneWidget);
     verify(() => mockMentorChatRepository.loadSuggestedPrompts()).called(1);
   });
 
-  testWidgets('finishing a module opens its social-share celebration', (
-    tester,
-  ) async {
+  testWidgets('finishing a module opens its social-share celebration', (tester) async {
     // Simulate a learner who already completed the first two lessons and is
     // now completing the module's final lesson through the real lesson UI.
     await DI.academyProgressRepository.markLessonCompleted(testLesson1.id);
@@ -540,20 +437,13 @@ void main() {
     final currentCatalog = {
       ...staleCatalog,
       'schools': [
-        {
-          ...staleCatalog['schools']!.single,
-          'contentAvailable': true,
-        },
+        {...staleCatalog['schools']!.single, 'contentAvailable': true},
       ],
     };
 
-    SharedPreferences.setMockInitialValues({
-      'academy_catalog_cache_pt': jsonEncode(staleCatalog),
-    });
+    SharedPreferences.setMockInitialValues({'academy_catalog_cache_pt': jsonEncode(staleCatalog)});
     final apiClient = MockApiClient();
-    when(() => apiClient.get(any())).thenAnswer(
-      (_) async => http.Response(jsonEncode(currentCatalog), 200),
-    );
+    when(() => apiClient.get(any())).thenAnswer((_) async => http.Response(jsonEncode(currentCatalog), 200));
     final repository = AcademyCatalogRepository(apiClient: apiClient);
 
     expect(await repository.loadCached('pt'), isNull);

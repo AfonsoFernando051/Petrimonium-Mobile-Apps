@@ -49,10 +49,7 @@ class LabAllocationEditor extends StatelessWidget {
                     width: 10,
                     height: 10,
                     margin: const EdgeInsets.only(right: 8, top: 18),
-                    decoration: BoxDecoration(
-                      color: entry.key.color,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: entry.key.color, shape: BoxShape.circle),
                   ),
                   Expanded(
                     child: LabeledSlider(
@@ -90,19 +87,12 @@ class LabAllocationEditor extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            isValid ? Icons.check_circle_outline : Icons.error_outline,
-            color: color,
-            size: 16,
-          ),
+          Icon(isValid ? Icons.check_circle_outline : Icons.error_outline, color: color, size: 16),
           const SizedBox(width: 6),
           Text(
             '${Translator.translate(AppStrings.labAllocationTotalLabel)}: '
             '${totalPercent.round()}%',
-            style: AppTextStyles.label.copyWith(
-              color: color,
-              fontWeight: FontWeight.w700,
-            ),
+            style: AppTextStyles.label.copyWith(color: color, fontWeight: FontWeight.w700),
           ),
         ],
       ),

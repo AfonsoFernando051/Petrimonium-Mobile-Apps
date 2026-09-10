@@ -5,13 +5,13 @@ enum SimulatedOrderSide {
   sell;
 
   String get apiValue => switch (this) {
-        SimulatedOrderSide.buy => 'BUY',
-        SimulatedOrderSide.sell => 'SELL',
-      };
+    SimulatedOrderSide.buy => 'BUY',
+    SimulatedOrderSide.sell => 'SELL',
+  };
 
   static SimulatedOrderSide fromApiValue(String value) => switch (value) {
-        'BUY' => SimulatedOrderSide.buy,
-        'SELL' => SimulatedOrderSide.sell,
-        _ => throw ArgumentError('Unknown SimulatedOrderSide: $value'),
-      };
+    'BUY' => SimulatedOrderSide.buy,
+    'SELL' => SimulatedOrderSide.sell,
+    _ => throw ArgumentError('Unknown SimulatedOrderSide: $value'),
+  };
 }

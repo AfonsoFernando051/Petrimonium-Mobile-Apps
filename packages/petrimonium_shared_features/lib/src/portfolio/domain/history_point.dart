@@ -11,11 +11,7 @@ class HistoryPoint {
   final double investedCapital;
   final double portfolioValue;
 
-  const HistoryPoint({
-    required this.date,
-    required this.investedCapital,
-    required this.portfolioValue,
-  });
+  const HistoryPoint({required this.date, required this.investedCapital, required this.portfolioValue});
 
   double get profit => portfolioValue - investedCapital;
 

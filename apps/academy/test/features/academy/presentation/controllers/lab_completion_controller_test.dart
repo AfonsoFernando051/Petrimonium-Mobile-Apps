@@ -41,9 +41,7 @@ class RecordingMascotRepository implements MascotRepository {
   Future<void> saveNetWorth(double netWorth) async {}
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
 
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
@@ -78,103 +76,66 @@ void main() {
     test('marks completed locally before attempting the remote sync', () async {
       // The remote call never resolves during this assertion — proves the
       // local mark happens independent of (and before) the network attempt.
-      when(() => remoteDataSource.completeSimulator(any())).thenAnswer(
-        (_) => Completer<SimulatorCompletionResult>().future,
-      );
+      when(
+        () => remoteDataSource.completeSimulator(any()),
+      ).thenAnswer((_) => Completer<SimulatorCompletionResult>().future);
 
-      final future = controller.completeSimulator(
-        LabSimulatorId.compoundInterest,
-        'Juros Compostos',
-      );
+      final future = controller.completeSimulator(LabSimulatorId.compoundInterest, 'Juros Compostos');
       await Future.delayed(Duration.zero);
 
       expect(controller.isCompleted(LabSimulatorId.compoundInterest), isTrue);
-      expect(
-        await repository.loadPendingSyncSimulatorIds(),
-        contains('compound_interest'),
-      );
+      expect(await repository.loadPendingSyncSimulatorIds(), contains('compound_interest'));
 
       // Avoid leaking a pending timer/future into the next test.
       unawaited(future);
     });
 
-    test(
-      'emits FinancialLabSimulatorCompletedEvent exactly once regardless of sync outcome',
-      () async {
-        when(
-          () => remoteDataSource.completeSimulator('compound_interest'),
-        ).thenThrow(Exception('offline'));
-        final subscription = AppEventBus.instance.stream.listen(
-          emittedEvents.add,
-        );
+    test('emits FinancialLabSimulatorCompletedEvent exactly once regardless of sync outcome', () async {
+      when(() => remoteDataSource.completeSimulator('compound_interest')).thenThrow(Exception('offline'));
+      final subscription = AppEventBus.instance.stream.listen(emittedEvents.add);
 
-        await controller.completeSimulator(
-          LabSimulatorId.compoundInterest,
-          'Juros Compostos',
-        );
-        // AppEventBus's broadcast controller dispatches asynchronously —
-        // flush the microtask queue before reading what was delivered.
-        await Future<void>.delayed(Duration.zero);
-        await subscription.cancel();
+      await controller.completeSimulator(LabSimulatorId.compoundInterest, 'Juros Compostos');
+      // AppEventBus's broadcast controller dispatches asynchronously —
+      // flush the microtask queue before reading what was delivered.
+      await Future<void>.delayed(Duration.zero);
+      await subscription.cancel();
 
-        final labEvents = emittedEvents
-            .whereType<FinancialLabSimulatorCompletedEvent>()
-            .toList();
-        expect(labEvents, hasLength(1));
-        expect(labEvents.single.simulatorTitle, 'Juros Compostos');
-      },
-    );
+      final labEvents = emittedEvents.whereType<FinancialLabSimulatorCompletedEvent>().toList();
+      expect(labEvents, hasLength(1));
+      expect(labEvents.single.simulatorTitle, 'Juros Compostos');
+    });
 
-    test(
-      'a throwing remote call leaves the simulator pending, without rethrowing',
-      () async {
-        when(
-          () => remoteDataSource.completeSimulator('inflation'),
-        ).thenThrow(Exception('offline'));
+    test('a throwing remote call leaves the simulator pending, without rethrowing', () async {
+      when(() => remoteDataSource.completeSimulator('inflation')).thenThrow(Exception('offline'));
 
-        await controller.completeSimulator(LabSimulatorId.inflation, 'Inflação');
+      await controller.completeSimulator(LabSimulatorId.inflation, 'Inflação');
 
-        expect(
-          await repository.loadPendingSyncSimulatorIds(),
-          contains('inflation'),
-        );
-      },
-    );
+      expect(await repository.loadPendingSyncSimulatorIds(), contains('inflation'));
+    });
 
-    test(
-      'on success, clears the pending flag and feeds the server\'s totalXp to MascotController',
-      () async {
-        when(() => remoteDataSource.completeSimulator('compound_interest'))
-            .thenAnswer(
-          (_) async => const SimulatorCompletionResult(
-            simulatorId: 'compound_interest',
-            alreadyCompleted: false,
-            xpAwarded: 50,
-            totalXp: 250,
-            level: 3,
-            xpIntoLevel: 0,
-            xpForNextLevel: 100,
-          ),
-        );
+    test('on success, clears the pending flag and feeds the server\'s totalXp to MascotController', () async {
+      when(() => remoteDataSource.completeSimulator('compound_interest')).thenAnswer(
+        (_) async => const SimulatorCompletionResult(
+          simulatorId: 'compound_interest',
+          alreadyCompleted: false,
+          xpAwarded: 50,
+          totalXp: 250,
+          level: 3,
+          xpIntoLevel: 0,
+          xpForNextLevel: 100,
+        ),
+      );
 
-        await controller.completeSimulator(
-          LabSimulatorId.compoundInterest,
-          'Juros Compostos',
-        );
+      await controller.completeSimulator(LabSimulatorId.compoundInterest, 'Juros Compostos');
 
-        expect(
-          await repository.loadPendingSyncSimulatorIds(),
-          isNot(contains('compound_interest')),
-        );
-        // The controller never fabricates XP client-side — it must pass
-        // through exactly the server's number.
-        expect(mascotRepository.lastSavedXp, 250);
-      },
-    );
+      expect(await repository.loadPendingSyncSimulatorIds(), isNot(contains('compound_interest')));
+      // The controller never fabricates XP client-side — it must pass
+      // through exactly the server's number.
+      expect(mascotRepository.lastSavedXp, 250);
+    });
 
     test('never emits XpGainedEvent directly — only MascotController may', () async {
-      when(() => remoteDataSource.completeSimulator('compound_interest'))
-          .thenAnswer(
+      when(() => remoteDataSource.completeSimulator('compound_interest')).thenAnswer(
         (_) async => const SimulatorCompletionResult(
           simulatorId: 'compound_interest',
           alreadyCompleted: false,
@@ -185,14 +146,9 @@ void main() {
           xpForNextLevel: 100,
         ),
       );
-      final subscription = AppEventBus.instance.stream.listen(
-        emittedEvents.add,
-      );
+      final subscription = AppEventBus.instance.stream.listen(emittedEvents.add);
 
-      await controller.completeSimulator(
-        LabSimulatorId.compoundInterest,
-        'Juros Compostos',
-      );
+      await controller.completeSimulator(LabSimulatorId.compoundInterest, 'Juros Compostos');
       // AppEventBus's broadcast controller dispatches asynchronously — flush
       // the microtask queue before reading what was delivered.
       await Future<void>.delayed(Duration.zero);
@@ -205,8 +161,7 @@ void main() {
     });
 
     test('completing an already-completed simulator is a no-op', () async {
-      when(() => remoteDataSource.completeSimulator('compound_interest'))
-          .thenAnswer(
+      when(() => remoteDataSource.completeSimulator('compound_interest')).thenAnswer(
         (_) async => const SimulatorCompletionResult(
           simulatorId: 'compound_interest',
           alreadyCompleted: false,
@@ -218,18 +173,10 @@ void main() {
         ),
       );
 
-      await controller.completeSimulator(
-        LabSimulatorId.compoundInterest,
-        'Juros Compostos',
-      );
-      await controller.completeSimulator(
-        LabSimulatorId.compoundInterest,
-        'Juros Compostos',
-      );
+      await controller.completeSimulator(LabSimulatorId.compoundInterest, 'Juros Compostos');
+      await controller.completeSimulator(LabSimulatorId.compoundInterest, 'Juros Compostos');
 
-      verify(
-        () => remoteDataSource.completeSimulator('compound_interest'),
-      ).called(1);
+      verify(() => remoteDataSource.completeSimulator('compound_interest')).called(1);
     });
   });
 
@@ -237,9 +184,7 @@ void main() {
     test('retries a pending sync left over from a killed app', () async {
       await repository.markSimulatorCompleted('inflation');
       await repository.markSimulatorPendingSync('inflation');
-      when(
-        () => remoteDataSource.getCompletedSimulatorIds(),
-      ).thenAnswer((_) async => {});
+      when(() => remoteDataSource.getCompletedSimulatorIds()).thenAnswer((_) async => {});
       when(() => remoteDataSource.completeSimulator('inflation')).thenAnswer(
         (_) async => const SimulatorCompletionResult(
           simulatorId: 'inflation',
@@ -254,10 +199,7 @@ void main() {
 
       await controller.load();
 
-      expect(
-        await repository.loadPendingSyncSimulatorIds(),
-        isNot(contains('inflation')),
-      );
+      expect(await repository.loadPendingSyncSimulatorIds(), isNot(contains('inflation')));
     });
   });
 }

@@ -50,8 +50,7 @@ class Holding {
   /// return. False means the price is a fallback and any "0%" is an artifact.
   bool get hasLiveQuote => priceStatus.isLive;
 
-  DateTime get firstPurchaseDate =>
-      lots.map((l) => l.purchaseDate).reduce((a, b) => a.isBefore(b) ? a : b);
+  DateTime get firstPurchaseDate => lots.map((l) => l.purchaseDate).reduce((a, b) => a.isBefore(b) ? a : b);
 
   /// Groups raw lots by ticker and computes each aggregate's share of the
   /// total portfolio current value.

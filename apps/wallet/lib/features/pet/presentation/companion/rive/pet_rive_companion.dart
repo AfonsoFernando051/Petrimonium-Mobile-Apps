@@ -321,10 +321,7 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
   /// and own their own tap handling instead.
   void _handleTap() {
     HapticFeedback.lightImpact();
-    widget.controller.triggerEventAnimation(
-      PetAnimationState.happy,
-      duration: const Duration(milliseconds: 900),
-    );
+    widget.controller.triggerEventAnimation(PetAnimationState.happy, duration: const Duration(milliseconds: 900));
   }
 
   @override
@@ -338,11 +335,7 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
   Widget build(BuildContext context) {
     final file = _riveFile;
     if (file == null) {
-      return PetMascotWidget(
-        controller: widget.controller,
-        size: widget.size,
-        interactive: widget.interactive,
-      );
+      return PetMascotWidget(controller: widget.controller, size: widget.size, interactive: widget.interactive);
     }
     final rig = _rig;
 

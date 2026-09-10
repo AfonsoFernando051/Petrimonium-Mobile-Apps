@@ -19,11 +19,7 @@ class LabDataTableRow {
 /// `PieChart`'s bars/points/slices). One shared widget so every simulator
 /// gets this for free instead of it being an afterthought per chart.
 class LabDataTableDisclosure extends StatelessWidget {
-  const LabDataTableDisclosure({
-    super.key,
-    required this.columnLabels,
-    required this.rows,
-  });
+  const LabDataTableDisclosure({super.key, required this.columnLabels, required this.rows});
 
   /// Column headers, first one being the implicit row [LabDataTableRow.label]
   /// column (e.g. `['Ano', 'Aportes', 'Crescimento']`).
@@ -39,29 +35,15 @@ class LabDataTableDisclosure extends StatelessWidget {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          tilePadding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: 0,
-          ),
-          childrenPadding: const EdgeInsets.fromLTRB(
-            AppSpacing.md,
-            0,
-            AppSpacing.md,
-            AppSpacing.md,
-          ),
+          tilePadding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 0),
+          childrenPadding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
           iconColor: tokens.textSecondary,
           collapsedIconColor: tokens.textSecondary,
           title: Text(
             Translator.translate(AppStrings.labDataTableDisclosureTitle),
-            style: AppTextStyles.label.copyWith(
-              color: tokens.textSecondary,
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTextStyles.label.copyWith(color: tokens.textSecondary, fontWeight: FontWeight.w600),
           ),
-          children: [
-            _headerRow(tokens),
-            for (final row in rows) _dataRow(tokens, row),
-          ],
+          children: [_headerRow(tokens), for (final row in rows) _dataRow(tokens, row)],
         ),
       ),
     );
@@ -76,10 +58,7 @@ class LabDataTableDisclosure extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: AppTextStyles.caption.copyWith(
-                  color: tokens.textTertiary,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: AppTextStyles.caption.copyWith(color: tokens.textTertiary, fontWeight: FontWeight.w700),
               ),
             ),
         ],
@@ -93,19 +72,11 @@ class LabDataTableDisclosure extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Text(
-              row.label,
-              style: AppTextStyles.caption.copyWith(color: tokens.textPrimary),
-            ),
+            child: Text(row.label, style: AppTextStyles.caption.copyWith(color: tokens.textPrimary)),
           ),
           for (final value in row.values)
             Expanded(
-              child: Text(
-                value,
-                style: AppTextStyles.caption.copyWith(
-                  color: tokens.textSecondary,
-                ),
-              ),
+              child: Text(value, style: AppTextStyles.caption.copyWith(color: tokens.textSecondary)),
             ),
         ],
       ),

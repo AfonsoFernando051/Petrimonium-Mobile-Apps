@@ -88,11 +88,7 @@ class AssetRow extends StatelessWidget {
                   ),
                 ),
               const SizedBox(width: 2),
-              Icon(
-                isPositive ? Icons.chevron_right : Icons.chevron_right,
-                color: tokens.textTertiary,
-                size: 16,
-              ),
+              Icon(isPositive ? Icons.chevron_right : Icons.chevron_right, color: tokens.textTertiary, size: 16),
             ],
           ),
         ),

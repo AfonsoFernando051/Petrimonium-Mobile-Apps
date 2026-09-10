@@ -16,12 +16,7 @@ void main() {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: DividendRadarSection(
-          isLoading: isLoading,
-          error: error,
-          radar: radar,
-          onRetry: onRetry ?? () {},
-        ),
+        body: DividendRadarSection(isLoading: isLoading, error: error, radar: radar, onRetry: onRetry ?? () {}),
       ),
     );
   }
@@ -48,11 +43,9 @@ void main() {
 
     testWidgets('shows an error row with retry when loading fails with an empty radar', (WidgetTester tester) async {
       var retried = false;
-      await tester.pumpWidget(buildTestableWidget(
-        isLoading: false,
-        error: 'network error',
-        onRetry: () => retried = true,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(isLoading: false, error: 'network error', onRetry: () => retried = true),
+      );
 
       expect(find.text('Não foi possível carregar o radar de dividendos.'), findsOneWidget);
 
@@ -68,10 +61,12 @@ void main() {
     });
 
     testWidgets('renders upcoming and history sections with a tile per event', (WidgetTester tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        isLoading: false,
-        radar: const DividendRadar(upcoming: [event], history: [event, event]),
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          isLoading: false,
+          radar: const DividendRadar(upcoming: [event], history: [event, event]),
+        ),
+      );
 
       expect(find.text('PRÓXIMOS PAGAMENTOS'), findsOneWidget);
       expect(find.text('RECEBIDOS'), findsOneWidget);
@@ -82,19 +77,23 @@ void main() {
     /// the section must say so without the user having to tap anything,
     /// same disclaimer the notifications bell already shows.
     testWidgets('shows the "dates may change" disclaimer under PRÓXIMOS PAGAMENTOS', (WidgetTester tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        isLoading: false,
-        radar: const DividendRadar(upcoming: [event], history: []),
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          isLoading: false,
+          radar: const DividendRadar(upcoming: [event], history: []),
+        ),
+      );
 
       expect(find.textContaining('podem mudar até a confirmação'), findsOneWidget);
     });
 
     testWidgets('does not show the disclaimer when there are no upcoming payments', (WidgetTester tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        isLoading: false,
-        radar: const DividendRadar(upcoming: [], history: [event]),
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          isLoading: false,
+          radar: const DividendRadar(upcoming: [], history: [event]),
+        ),
+      );
 
       expect(find.textContaining('podem mudar até a confirmação'), findsNothing);
     });

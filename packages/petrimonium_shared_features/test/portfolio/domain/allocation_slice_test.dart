@@ -4,11 +4,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 void main() {
   group('AllocationSlice', () {
     test('constructs with the given fields', () {
-      const slice = AllocationSlice(
-        type: InvestmentTypeEnum.STOCKS,
-        currentValue: 1000.0,
-        portfolioPercent: 35.0,
-      );
+      const slice = AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 1000.0, portfolioPercent: 35.0);
 
       expect(slice.type, InvestmentTypeEnum.STOCKS);
       expect(slice.currentValue, 1000.0);
@@ -30,11 +26,7 @@ void main() {
 
       test('throws when type is not a known InvestmentTypeEnum name', () {
         expect(
-          () => AllocationSlice.fromJson(const {
-            'type': 'NOT_A_TYPE',
-            'currentValue': 1,
-            'portfolioPercent': 1,
-          }),
+          () => AllocationSlice.fromJson(const {'type': 'NOT_A_TYPE', 'currentValue': 1, 'portfolioPercent': 1}),
           throwsArgumentError,
         );
       });

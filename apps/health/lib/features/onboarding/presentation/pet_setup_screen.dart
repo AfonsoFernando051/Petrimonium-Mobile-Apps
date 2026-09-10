@@ -71,10 +71,7 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
                 const SizedBox(height: 32),
                 // Indicador de passo no topo e cabeçalho alinhado à esquerda,
                 // como o artboard `PetHealth` — estava em baixo, junto ao CTA.
-                ProgressDots(
-                  total: controller.onboardingTotalSteps,
-                  current: 1,
-                ),
+                ProgressDots(total: controller.onboardingTotalSteps, current: 1),
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -93,11 +90,7 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
                       const SizedBox(height: 8),
                       Text(
                         l10n.petSetupSubtitle,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: HealthColors.textSecondary,
-                          height: 1.4,
-                        ),
+                        style: const TextStyle(fontSize: 14, color: HealthColors.textSecondary, height: 1.4),
                       ),
                     ],
                   ),
@@ -118,11 +111,7 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
                             height: 96,
                             fit: BoxFit.contain,
                             errorBuilder: (context, error, stackTrace) {
-                              return const Icon(
-                                Icons.pets,
-                                size: 48,
-                                color: HealthColors.textSecondary,
-                              );
+                              return const Icon(Icons.pets, size: 48, color: HealthColors.textSecondary);
                             },
                           ),
                         ),
@@ -148,43 +137,27 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
                                 .map((species) {
                                   final selected = species == _species;
                                   return GestureDetector(
-                                    onTap: () =>
-                                        setState(() => _species = species),
+                                    onTap: () => setState(() => _species = species),
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 8,
-                                        horizontal: 2,
-                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
                                       decoration: BoxDecoration(
                                         // Não-selecionado é totalmente transparente (o
                                         // artboard usa `transparent` no contorno e no
                                         // fundo), para a grelha não virar uma grade.
                                         color: selected
-                                            ? Theme.of(context)
-                                                  .colorScheme
-                                                  .primary
-                                                  .withValues(alpha: .08)
+                                            ? Theme.of(context).colorScheme.primary.withValues(alpha: .08)
                                             : Colors.transparent,
                                         borderRadius: BorderRadius.circular(14),
                                         border: Border.all(
-                                          color: selected
-                                              ? Theme.of(
-                                                  context,
-                                                ).colorScheme.primary
-                                              : Colors.transparent,
+                                          color: selected ? Theme.of(context).colorScheme.primary : Colors.transparent,
                                           width: 1.5,
                                         ),
                                       ),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Image.asset(
-                                            species.assetPath,
-                                            height: 46,
-                                            fit: BoxFit.contain,
-                                          ),
+                                          Image.asset(species.assetPath, height: 46, fit: BoxFit.contain),
                                           const SizedBox(height: 4),
                                           Text(
                                             _speciesLabel(l10n, species),
@@ -195,9 +168,7 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
                                               // artboard a cor do rótulo é a mesma nas
                                               // sete espécies.
                                               fontSize: 10.5,
-                                              fontWeight: selected
-                                                  ? FontWeight.w700
-                                                  : FontWeight.w400,
+                                              fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
                                               color: HealthColors.textSecondary,
                                             ),
                                           ),
@@ -223,10 +194,7 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
                           controller: _nameController,
                           maxLength: 16,
                           onChanged: (_) => setState(() {}),
-                          decoration: InputDecoration(
-                            hintText: l10n.petSetupNameHint,
-                            counterText: '',
-                          ),
+                          decoration: InputDecoration(hintText: l10n.petSetupNameHint, counterText: ''),
                         ),
                         const SizedBox(height: 18),
                         Container(
@@ -239,22 +207,12 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
                           ),
                           child: Text(
                             l10n.petSetupFooterNote,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: HealthColors.textSecondary,
-                              height: 1.45,
-                            ),
+                            style: const TextStyle(fontSize: 12, color: HealthColors.textSecondary, height: 1.45),
                           ),
                         ),
                         if (_error != null) ...[
                           const SizedBox(height: 10),
-                          Text(
-                            _error!,
-                            style: const TextStyle(
-                              color: HealthColors.negative,
-                              fontSize: 12.5,
-                            ),
-                          ),
+                          Text(_error!, style: const TextStyle(color: HealthColors.negative, fontSize: 12.5)),
                         ],
                       ],
                     ),
@@ -276,14 +234,13 @@ class _PetSetupScreenState extends State<PetSetupScreen> {
     );
   }
 
-  String _speciesLabel(AppLocalizations l10n, PetSpecies species) =>
-      switch (species) {
-        PetSpecies.fox => l10n.speciesFox,
-        PetSpecies.dog => l10n.speciesDog,
-        PetSpecies.cat => l10n.speciesCat,
-        PetSpecies.owl => l10n.speciesOwl,
-        PetSpecies.wolf => l10n.speciesWolf,
-        PetSpecies.bear => l10n.speciesBear,
-        PetSpecies.lion => l10n.speciesLion,
-      };
+  String _speciesLabel(AppLocalizations l10n, PetSpecies species) => switch (species) {
+    PetSpecies.fox => l10n.speciesFox,
+    PetSpecies.dog => l10n.speciesDog,
+    PetSpecies.cat => l10n.speciesCat,
+    PetSpecies.owl => l10n.speciesOwl,
+    PetSpecies.wolf => l10n.speciesWolf,
+    PetSpecies.bear => l10n.speciesBear,
+    PetSpecies.lion => l10n.speciesLion,
+  };
 }

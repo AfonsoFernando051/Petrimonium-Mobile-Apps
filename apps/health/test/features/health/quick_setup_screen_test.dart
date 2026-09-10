@@ -12,47 +12,38 @@ import 'package:petrimonium_health/features/onboarding/presentation/quick_setup_
 import 'package:petrimonium_health/l10n/app_localizations.dart';
 
 void main() {
-  testWidgets(
-    'Portugal suggestion can be overridden and persists independently',
-    (tester) async {
-      final repository = _OnboardingRepository();
-      final controller = HealthController(
-        repository: repository,
-        localeController: LocaleController(),
-      );
+  testWidgets('Portugal suggestion can be overridden and persists independently', (tester) async {
+    final repository = _OnboardingRepository();
+    final controller = HealthController(repository: repository, localeController: LocaleController());
 
-      await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('pt', 'BR'),
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          home: HealthScope(
-            controller: controller,
-            child: const QuickSetupScreen(),
-          ),
-        ),
-      );
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('pt', 'BR'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: HealthScope(controller: controller, child: const QuickSetupScreen()),
+      ),
+    );
 
-      await tester.tap(find.text('Portugal'));
-      await tester.pump();
-      await tester.tap(find.text('BRL — Real brasileiro'));
-      await tester.ensureVisible(find.text('Português do Brasil'));
-      await tester.pump();
-      await tester.tap(find.text('Português do Brasil'));
-      await tester.tap(find.text('Começar a organizar meu mês'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
+    await tester.tap(find.text('Portugal'));
+    await tester.pump();
+    await tester.tap(find.text('BRL — Real brasileiro'));
+    await tester.ensureVisible(find.text('Português do Brasil'));
+    await tester.pump();
+    await tester.tap(find.text('Português do Brasil'));
+    await tester.tap(find.text('Começar a organizar meu mês'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
 
-      expect(repository.savedProfile?.country, CountryCode.portugal);
-      expect(repository.savedProfile?.primaryCurrency, CurrencyCode.brl);
-      expect(repository.savedProfile?.interfaceLocale, InterfaceLocale.ptBr);
-    },
-  );
+    expect(repository.savedProfile?.country, CountryCode.portugal);
+    expect(repository.savedProfile?.primaryCurrency, CurrencyCode.brl);
+    expect(repository.savedProfile?.interfaceLocale, InterfaceLocale.ptBr);
+  });
 }
 
 class _OnboardingRepository implements HealthRepository {
@@ -74,8 +65,7 @@ class _OnboardingRepository implements HealthRepository {
   Future<List<HealthRecurrence>> getRecurrences() async => const [];
 
   @override
-  Future<MonthlySummary> getSummary(DateTime month) async =>
-      MonthlySummary.empty(savedProfile!.primaryCurrency, month);
+  Future<MonthlySummary> getSummary(DateTime month) async => MonthlySummary.empty(savedProfile!.primaryCurrency, month);
 
   @override
   Future<List<HealthTransaction>> getTransactions({

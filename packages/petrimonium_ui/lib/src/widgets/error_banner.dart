@@ -10,11 +10,7 @@ import 'glass_card.dart';
 /// [message] is a parameter rather than a constant: this package carries no
 /// string catalog, so each product supplies its own copy.
 class ErrorBanner extends StatelessWidget {
-  const ErrorBanner({
-    super.key,
-    required this.message,
-    required this.onRetry,
-  });
+  const ErrorBanner({super.key, required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
@@ -34,10 +30,7 @@ class ErrorBanner extends StatelessWidget {
             Icon(Icons.satellite_alt, color: tokens.error, size: 18),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(
-                message,
-                style: TextStyle(color: tokens.textPrimary, fontSize: 12),
-              ),
+              child: Text(message, style: TextStyle(color: tokens.textPrimary, fontSize: 12)),
             ),
             IconButton(
               icon: Icon(Icons.refresh, color: tokens.error, size: 18),

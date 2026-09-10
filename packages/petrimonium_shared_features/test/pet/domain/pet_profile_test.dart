@@ -21,14 +21,8 @@ void main() {
       final profile = PetProfile();
       final after = DateTime.now();
 
-      expect(
-        profile.lastActiveAt.isAfter(before.subtract(const Duration(seconds: 1))),
-        isTrue,
-      );
-      expect(
-        profile.lastActiveAt.isBefore(after.add(const Duration(seconds: 1))),
-        isTrue,
-      );
+      expect(profile.lastActiveAt.isAfter(before.subtract(const Duration(seconds: 1))), isTrue);
+      expect(profile.lastActiveAt.isBefore(after.add(const Duration(seconds: 1))), isTrue);
     });
   });
 

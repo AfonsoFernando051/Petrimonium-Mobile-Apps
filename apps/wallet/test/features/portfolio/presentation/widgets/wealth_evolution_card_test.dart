@@ -71,7 +71,9 @@ void main() {
       expect(find.byType(LineChart), findsOneWidget);
     });
 
-    testWidgets('renders one range chip per HistoryRange, and the selected one reflects the controller', (WidgetTester tester) async {
+    testWidgets('renders one range chip per HistoryRange, and the selected one reflects the controller', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));

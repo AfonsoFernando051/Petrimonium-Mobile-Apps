@@ -26,9 +26,7 @@ class FakeMascotRepository implements MascotRepository {
   @override
   Future<void> saveNetWorth(double netWorth) async {}
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
   @override
@@ -50,8 +48,10 @@ void main() {
     );
   });
 
-  Widget wrap(Widget child) =>
-      MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    theme: AppTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   group('LabCompletionFooter', () {
     testWidgets('is disabled when canComplete is false', (tester) async {
@@ -74,9 +74,7 @@ void main() {
       expect(controller.isCompleted(LabSimulatorId.compoundInterest), isFalse);
     });
 
-    testWidgets('tapping when canComplete is true marks the simulator completed', (
-      tester,
-    ) async {
+    testWidgets('tapping when canComplete is true marks the simulator completed', (tester) async {
       await tester.pumpWidget(
         wrap(
           LabCompletionFooter(

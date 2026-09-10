@@ -34,10 +34,7 @@ class _PassiveIncomeScreenState extends State<PassiveIncomeScreen> {
   }
 
   Future<void> _refreshAll() async {
-    await Future.wait([
-      widget.controller.refresh(),
-      widget.controller.refreshDividendRadar(),
-    ]);
+    await Future.wait([widget.controller.refresh(), widget.controller.refreshDividendRadar()]);
   }
 
   @override
@@ -70,7 +67,10 @@ class _PassiveIncomeScreenState extends State<PassiveIncomeScreen> {
             const SizedBox(height: 16),
 
             if (controller.error != null) ...[
-              ErrorBanner(message: 'Não foi possível atualizar seus dados. Puxe para atualizar.', onRetry: controller.refresh),
+              ErrorBanner(
+                message: 'Não foi possível atualizar seus dados. Puxe para atualizar.',
+                onRetry: controller.refresh,
+              ),
               const SizedBox(height: 12),
             ],
 

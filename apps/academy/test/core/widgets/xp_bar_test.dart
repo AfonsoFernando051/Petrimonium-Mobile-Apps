@@ -4,7 +4,10 @@ import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/widgets/xp_bar.dart';
 
 void main() {
-  Widget wrap(Widget child) => MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    theme: AppTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   group('XpBar', () {
     testWidgets('renders without a label when none is provided', (tester) async {

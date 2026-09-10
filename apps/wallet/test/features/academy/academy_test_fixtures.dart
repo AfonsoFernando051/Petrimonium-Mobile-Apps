@@ -92,5 +92,7 @@ const testLesson3 = Lesson(
   title: 'Lesson 3',
   order: 3,
   xpReward: 20,
-  steps: [SummaryStep(title: 'Summary', takeaways: ['Takeaway'])],
+  steps: [
+    SummaryStep(title: 'Summary', takeaways: ['Takeaway']),
+  ],
 );

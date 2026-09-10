@@ -32,12 +32,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         })
         .toList(growable: false);
     final categories =
-        controller.transactions
-            .map((item) => item.category)
-            .where((item) => item.isNotEmpty)
-            .toSet()
-            .toList()
-          ..sort();
+        controller.transactions.map((item) => item.category).where((item) => item.isNotEmpty).toSet().toList()..sort();
 
     return Column(
       children: [
@@ -58,9 +53,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                     ),
                   ),
                   FilledButton.icon(
-                    onPressed: controller.accounts.isEmpty
-                        ? null
-                        : () => _editTransaction(context),
+                    onPressed: controller.accounts.isEmpty ? null : () => _editTransaction(context),
                     icon: const Icon(Icons.add, size: 18),
                     label: Text(l10n.addTransaction),
                   ),
@@ -74,18 +67,10 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       initialValue: _accountId,
                       decoration: InputDecoration(labelText: l10n.account),
                       items: [
-                        DropdownMenuItem(
-                          value: null,
-                          child: Text(l10n.allAccounts),
-                        ),
+                        DropdownMenuItem(value: null, child: Text(l10n.allAccounts)),
                         ...controller.accounts
                             .where((item) => !item.archived)
-                            .map(
-                              (item) => DropdownMenuItem(
-                                value: item.id,
-                                child: Text(item.name),
-                              ),
-                            ),
+                            .map((item) => DropdownMenuItem(value: item.id, child: Text(item.name))),
                       ],
                       onChanged: (value) => setState(() => _accountId = value),
                     ),
@@ -96,18 +81,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       initialValue: _status,
                       decoration: InputDecoration(labelText: l10n.status),
                       items: [
-                        DropdownMenuItem(
-                          value: null,
-                          child: Text(l10n.allStatuses),
-                        ),
-                        DropdownMenuItem(
-                          value: TransactionStatus.planned,
-                          child: Text(l10n.planned),
-                        ),
-                        DropdownMenuItem(
-                          value: TransactionStatus.realized,
-                          child: Text(l10n.realized),
-                        ),
+                        DropdownMenuItem(value: null, child: Text(l10n.allStatuses)),
+                        DropdownMenuItem(value: TransactionStatus.planned, child: Text(l10n.planned)),
+                        DropdownMenuItem(value: TransactionStatus.realized, child: Text(l10n.realized)),
                       ],
                       onChanged: (value) => setState(() => _status = value),
                     ),
@@ -120,9 +96,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 decoration: InputDecoration(labelText: l10n.category),
                 items: [
                   DropdownMenuItem(value: null, child: Text(l10n.category)),
-                  ...categories.map(
-                    (item) => DropdownMenuItem(value: item, child: Text(item)),
-                  ),
+                  ...categories.map((item) => DropdownMenuItem(value: item, child: Text(item))),
                 ],
                 onChanged: (value) => setState(() => _category = value),
               ),
@@ -135,21 +109,12 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                         (recurrence) => ListTile(
                           contentPadding: EdgeInsets.zero,
                           title: Text(recurrence.description),
-                          subtitle: Text(
-                            MoneyFormat.currency(recurrence.amount, locale),
-                          ),
+                          subtitle: Text(MoneyFormat.currency(recurrence.amount, locale)),
                           trailing: PopupMenuButton<String>(
-                            onSelected: (action) =>
-                                _recurrenceAction(context, recurrence, action),
+                            onSelected: (action) => _recurrenceAction(context, recurrence, action),
                             itemBuilder: (_) => [
-                              PopupMenuItem(
-                                value: 'edit',
-                                child: Text(l10n.editFutureOccurrences),
-                              ),
-                              PopupMenuItem(
-                                value: 'delete',
-                                child: Text(l10n.delete),
-                              ),
+                              PopupMenuItem(value: 'edit', child: Text(l10n.editFutureOccurrences)),
+                              PopupMenuItem(value: 'delete', child: Text(l10n.delete)),
                             ],
                           ),
                         ),
@@ -170,22 +135,13 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                     separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (context, index) {
                       final transaction = rows[index];
-                      final isIncome =
-                          transaction.type == TransactionType.income;
+                      final isIncome = transaction.type == TransactionType.income;
                       final ordinaryEntry =
-                          transaction.type == TransactionType.income ||
-                          transaction.type == TransactionType.expense;
-                      final editable =
-                          ordinaryEntry && !transaction.isSystemEntry;
+                          transaction.type == TransactionType.income || transaction.type == TransactionType.expense;
+                      final editable = ordinaryEntry && !transaction.isSystemEntry;
                       return Card(
                         child: ListTile(
-                          leading: CircleAvatar(
-                            child: Icon(
-                              isIncome
-                                  ? Icons.arrow_downward
-                                  : Icons.arrow_upward,
-                            ),
-                          ),
+                          leading: CircleAvatar(child: Icon(isIncome ? Icons.arrow_downward : Icons.arrow_upward)),
                           title: Text(transaction.description),
                           subtitle: Text(
                             '${MoneyFormat.date(transaction.date, locale)} · '
@@ -195,38 +151,19 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                MoneyFormat.currency(
-                                  transaction.amount,
-                                  locale,
-                                ),
+                                MoneyFormat.currency(transaction.amount, locale),
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  color: isIncome
-                                      ? HealthColors.positive
-                                      : HealthColors.negative,
+                                  color: isIncome ? HealthColors.positive : HealthColors.negative,
                                 ),
                               ),
                               PopupMenuButton<String>(
-                                onSelected: (action) =>
-                                    _handleAction(context, transaction, action),
+                                onSelected: (action) => _handleAction(context, transaction, action),
                                 itemBuilder: (context) => [
-                                  if (editable)
-                                    PopupMenuItem(
-                                      value: 'edit',
-                                      child: Text(l10n.edit),
-                                    ),
-                                  if (ordinaryEntry &&
-                                      transaction.status ==
-                                          TransactionStatus.planned)
-                                    PopupMenuItem(
-                                      value: 'confirm',
-                                      child: Text(l10n.confirmTransaction),
-                                    ),
-                                  if (editable)
-                                    PopupMenuItem(
-                                      value: 'delete',
-                                      child: Text(l10n.delete),
-                                    ),
+                                  if (editable) PopupMenuItem(value: 'edit', child: Text(l10n.edit)),
+                                  if (ordinaryEntry && transaction.status == TransactionStatus.planned)
+                                    PopupMenuItem(value: 'confirm', child: Text(l10n.confirmTransaction)),
+                                  if (editable) PopupMenuItem(value: 'delete', child: Text(l10n.delete)),
                                 ],
                               ),
                             ],
@@ -241,11 +178,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     );
   }
 
-  Future<void> _recurrenceAction(
-    BuildContext context,
-    HealthRecurrence recurrence,
-    String action,
-  ) async {
+  Future<void> _recurrenceAction(BuildContext context, HealthRecurrence recurrence, String action) async {
     final controller = HealthScope.of(context);
     final l10n = AppLocalizations.of(context);
     try {
@@ -258,9 +191,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       final draft = await showDialog<_TransactionDraft>(
         context: context,
         builder: (_) => _TransactionDialog(
-          accounts: controller.accounts
-              .where((item) => !item.archived)
-              .toList(),
+          accounts: controller.accounts.where((item) => !item.archived).toList(),
           currency: controller.currency,
           initial: HealthTransaction(
             id: recurrence.id,
@@ -296,9 +227,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       );
     } catch (_) {
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError)));
       }
     }
   }
@@ -309,11 +238,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   DateTime _billingDate(HealthRecurrence recurrence) {
     final start = recurrence.startDate;
     final lastDayOfMonth = DateTime(start.year, start.month + 1, 0).day;
-    return DateTime(
-      start.year,
-      start.month,
-      recurrence.dayOfMonth.clamp(1, lastDayOfMonth),
-    );
+    return DateTime(start.year, start.month, recurrence.dayOfMonth.clamp(1, lastDayOfMonth));
   }
 
   Future<bool> _confirmDelete(BuildContext context) async {
@@ -323,25 +248,15 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
           builder: (_) => AlertDialog(
             content: Text(l10n.deleteConfirmation),
             actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(l10n.cancel),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(l10n.delete),
-              ),
+              TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.cancel)),
+              FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.delete)),
             ],
           ),
         ) ??
         false;
   }
 
-  Future<void> _handleAction(
-    BuildContext context,
-    HealthTransaction transaction,
-    String action,
-  ) async {
+  Future<void> _handleAction(BuildContext context, HealthTransaction transaction, String action) async {
     final controller = HealthScope.of(context);
     final l10n = AppLocalizations.of(context);
     try {
@@ -355,14 +270,8 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
           builder: (context) => AlertDialog(
             content: Text(l10n.deleteConfirmation),
             actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(l10n.cancel),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(l10n.delete),
-              ),
+              TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.cancel)),
+              FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.delete)),
             ],
           ),
         );
@@ -372,16 +281,11 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       }
     } catch (_) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError)));
     }
   }
 
-  Future<void> _editTransaction(
-    BuildContext context, {
-    HealthTransaction? initial,
-  }) async {
+  Future<void> _editTransaction(BuildContext context, {HealthTransaction? initial}) async {
     final controller = HealthScope.of(context);
     final draft = await showDialog<_TransactionDraft>(
       context: context,
@@ -420,9 +324,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       }
     } catch (_) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).genericError)),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).genericError)));
     }
   }
 }
@@ -450,11 +352,7 @@ final class _TransactionDraft {
 }
 
 class _TransactionDialog extends StatefulWidget {
-  const _TransactionDialog({
-    required this.accounts,
-    required this.currency,
-    this.initial,
-  });
+  const _TransactionDialog({required this.accounts, required this.currency, this.initial});
 
   final List<HealthAccount> accounts;
   final CurrencyCode currency;
@@ -508,14 +406,7 @@ class _TransactionDialogState extends State<_TransactionDialog> {
             DropdownButtonFormField<int>(
               initialValue: _accountId,
               decoration: InputDecoration(labelText: l10n.account),
-              items: widget.accounts
-                  .map(
-                    (item) => DropdownMenuItem(
-                      value: item.id,
-                      child: Text(item.name),
-                    ),
-                  )
-                  .toList(),
+              items: widget.accounts.map((item) => DropdownMenuItem(value: item.id, child: Text(item.name))).toList(),
               onChanged: (value) => setState(() => _accountId = value!),
             ),
             const SizedBox(height: 10),
@@ -523,14 +414,8 @@ class _TransactionDialogState extends State<_TransactionDialog> {
               initialValue: _type,
               decoration: InputDecoration(labelText: l10n.status),
               items: [
-                DropdownMenuItem(
-                  value: TransactionType.income,
-                  child: Text(l10n.income),
-                ),
-                DropdownMenuItem(
-                  value: TransactionType.expense,
-                  child: Text(l10n.expense),
-                ),
+                DropdownMenuItem(value: TransactionType.income, child: Text(l10n.income)),
+                DropdownMenuItem(value: TransactionType.expense, child: Text(l10n.expense)),
               ],
               onChanged: (value) => setState(() => _type = value!),
             ),
@@ -539,14 +424,8 @@ class _TransactionDialogState extends State<_TransactionDialog> {
               initialValue: _status,
               decoration: InputDecoration(labelText: l10n.status),
               items: [
-                DropdownMenuItem(
-                  value: TransactionStatus.planned,
-                  child: Text(l10n.planned),
-                ),
-                DropdownMenuItem(
-                  value: TransactionStatus.realized,
-                  child: Text(l10n.realized),
-                ),
+                DropdownMenuItem(value: TransactionStatus.planned, child: Text(l10n.planned)),
+                DropdownMenuItem(value: TransactionStatus.realized, child: Text(l10n.realized)),
               ],
               onChanged: (value) => setState(() => _status = value!),
             ),
@@ -563,18 +442,14 @@ class _TransactionDialogState extends State<_TransactionDialog> {
             const SizedBox(height: 10),
             TextField(
               controller: _amount,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(labelText: l10n.amount),
             ),
             const SizedBox(height: 10),
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(l10n.date),
-              subtitle: Text(
-                MoneyFormat.date(_date, Localizations.localeOf(context)),
-              ),
+              subtitle: Text(MoneyFormat.date(_date, Localizations.localeOf(context))),
               trailing: const Icon(Icons.calendar_today_outlined),
               onTap: () async {
                 final selected = await showDatePicker(
@@ -593,19 +468,12 @@ class _TransactionDialogState extends State<_TransactionDialog> {
                 value: _recurring,
                 onChanged: (value) => setState(() => _recurring = value),
               ),
-            if (_error != null)
-              Text(
-                _error!,
-                style: const TextStyle(color: HealthColors.negative),
-              ),
+            if (_error != null) Text(_error!, style: const TextStyle(color: HealthColors.negative)),
           ],
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
-        ),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
         FilledButton(onPressed: _submit, child: Text(l10n.save)),
       ],
     );
@@ -618,10 +486,7 @@ class _TransactionDialogState extends State<_TransactionDialog> {
       currency: widget.currency,
       locale: Localizations.localeOf(context),
     );
-    if (_description.text.trim().isEmpty ||
-        _category.text.trim().isEmpty ||
-        amount == null ||
-        amount.minorUnits <= 0) {
+    if (_description.text.trim().isEmpty || _category.text.trim().isEmpty || amount == null || amount.minorUnits <= 0) {
       setState(() => _error = l10n.invalidMoney);
       return;
     }

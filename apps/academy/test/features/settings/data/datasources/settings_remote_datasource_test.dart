@@ -19,9 +19,7 @@ void main() {
 
   group('getLanguage', () {
     test('returns the language from the decoded body on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'language': 'en'}), 200),
-      );
+      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(jsonEncode({'language': 'en'}), 200));
 
       final result = await dataSource.getLanguage();
 
@@ -41,17 +39,14 @@ void main() {
 
   group('updateLanguage', () {
     test('puts the new language and returns the confirmed value on 200', () async {
-      when(() => mockApiClient.put(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'language': 'es'}), 200),
-      );
+      when(
+        () => mockApiClient.put(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'language': 'es'}), 200));
 
       final result = await dataSource.updateLanguage('es');
 
       expect(result, 'es');
-      verify(() => mockApiClient.put(
-            ApiConstants.settingsLanguageEndpoint,
-            {'language': 'es'},
-          )).called(1);
+      verify(() => mockApiClient.put(ApiConstants.settingsLanguageEndpoint, {'language': 'es'})).called(1);
     });
 
     test('throws an Exception on a non-200 response', () async {

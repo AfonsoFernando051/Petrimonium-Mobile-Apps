@@ -10,10 +10,7 @@ void main() {
       home: Scaffold(
         body: Builder(
           builder: (context) {
-            return ElevatedButton(
-              onPressed: () => onPressed(context),
-              child: const Text('trigger'),
-            );
+            return ElevatedButton(onPressed: () => onPressed(context), child: const Text('trigger'));
           },
         ),
       ),

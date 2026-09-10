@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
@@ -21,18 +22,13 @@ import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers
 /// exactly (own `Scaffold`/`AppBar`/`CosmicBackground`, same fade-route push
 /// into the **existing, unmodified** `SchoolDetailScreen`).
 class AcademyDomainDetailScreen extends StatefulWidget {
-  const AcademyDomainDetailScreen({
-    super.key,
-    required this.domain,
-    required this.mascotController,
-  });
+  const AcademyDomainDetailScreen({super.key, required this.domain, required this.mascotController});
 
   final AcademyDomain domain;
   final MascotController mascotController;
 
   @override
-  State<AcademyDomainDetailScreen> createState() =>
-      _AcademyDomainDetailScreenState();
+  State<AcademyDomainDetailScreen> createState() => _AcademyDomainDetailScreenState();
 }
 
 class _AcademyDomainDetailScreenState extends State<AcademyDomainDetailScreen> {
@@ -64,32 +60,26 @@ class _AcademyDomainDetailScreenState extends State<AcademyDomainDetailScreen> {
   Route _fadeRoute(Widget page) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-                  .animate(
-                    CurvedAnimation(parent: animation, curve: Curves.easeOut),
-                  ),
-              child: child,
-            ),
-          ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+        opacity: animation,
+        child: SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+          child: child,
+        ),
+      ),
       transitionDuration: AppMotion.pageTransition,
     );
   }
 
   Future<void> _openSchool(School school) async {
-    HapticFeedback.selectionClick();
-    await Navigator.of(context).push(
-      _fadeRoute(
-        SchoolDetailScreen(
-          school: school,
-          mascotController: widget.mascotController,
-        ),
-      ),
-    );
-    _controller.load();
+    unawaited(HapticFeedback.selectionClick());
+    await Navigator.of(
+      context,
+    ).push(_fadeRoute(SchoolDetailScreen(school: school, mascotController: widget.mascotController)));
+    unawaited(_controller.load());
   }
 
   @override
@@ -110,11 +100,7 @@ class _AcademyDomainDetailScreenState extends State<AcademyDomainDetailScreen> {
       appBar: AppBar(
         title: Text(
           widget.domain.title,
-          style: TextStyle(
-            color: tokens.textPrimary,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -146,20 +132,12 @@ class _AcademyDomainDetailScreenState extends State<AcademyDomainDetailScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Icon(
-                                    widget.domain.icon,
-                                    color: AppColors.neonCyan,
-                                    size: 24,
-                                  ),
+                                  Icon(widget.domain.icon, color: AppColors.neonCyan, size: 24),
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: Text(
                                       widget.domain.description,
-                                      style: TextStyle(
-                                        color: tokens.textSecondary,
-                                        fontSize: 13,
-                                        height: 1.4,
-                                      ),
+                                      style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4),
                                     ),
                                   ),
                                 ],
@@ -170,15 +148,9 @@ class _AcademyDomainDetailScreenState extends State<AcademyDomainDetailScreen> {
                               Text(
                                 Translator.translate(
                                   AppStrings.academyMasteryPercentLabel,
-                                  params: {
-                                    'percent':
-                                        '${(masteryPercent * 100).round()}',
-                                  },
+                                  params: {'percent': '${(masteryPercent * 100).round()}'},
                                 ),
-                                style: TextStyle(
-                                  color: tokens.textTertiary,
-                                  fontSize: 11,
-                                ),
+                                style: TextStyle(color: tokens.textTertiary, fontSize: 11),
                               ),
                             ],
                           ),
@@ -186,9 +158,7 @@ class _AcademyDomainDetailScreenState extends State<AcademyDomainDetailScreen> {
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        Translator.translate(
-                          AppStrings.academySchoolsSectionLabel,
-                        ),
+                        Translator.translate(AppStrings.academySchoolsSectionLabel),
                         style: TextStyle(
                           color: tokens.primary.withValues(alpha: 0.6),
                           fontSize: 11,

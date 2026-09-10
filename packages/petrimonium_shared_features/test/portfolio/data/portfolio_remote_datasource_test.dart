@@ -18,12 +18,14 @@ void main() {
 
   group('fetchHoldings', () {
     test('returns the decoded lot list on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(
-            jsonEncode([
-              {'id': 1, 'name': 'PETR4'},
-            ]),
-            200,
-          ));
+      when(() => mockApiClient.get(any())).thenAnswer(
+        (_) async => http.Response(
+          jsonEncode([
+            {'id': 1, 'name': 'PETR4'},
+          ]),
+          200,
+        ),
+      );
 
       final result = await dataSource.fetchHoldings();
 
@@ -43,10 +45,9 @@ void main() {
 
   group('fetchSummary', () {
     test('returns the decoded summary JSON on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(
-            jsonEncode({'investedCapital': 1000.0}),
-            200,
-          ));
+      when(
+        () => mockApiClient.get(any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'investedCapital': 1000.0}), 200));
 
       final result = await dataSource.fetchSummary();
 
@@ -66,12 +67,14 @@ void main() {
 
   group('fetchAllocation', () {
     test('returns the decoded allocation list on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(
-            jsonEncode([
-              {'type': 'STOCKS', 'percent': 60.0},
-            ]),
-            200,
-          ));
+      when(() => mockApiClient.get(any())).thenAnswer(
+        (_) async => http.Response(
+          jsonEncode([
+            {'type': 'STOCKS', 'percent': 60.0},
+          ]),
+          200,
+        ),
+      );
 
       final result = await dataSource.fetchAllocation();
 
@@ -91,12 +94,14 @@ void main() {
 
   group('fetchHistory', () {
     test('sends the given range as a query param and returns the decoded list', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(
-            jsonEncode([
-              {'date': '2024-01-01', 'value': 1000.0},
-            ]),
-            200,
-          ));
+      when(() => mockApiClient.get(any())).thenAnswer(
+        (_) async => http.Response(
+          jsonEncode([
+            {'date': '2024-01-01', 'value': 1000.0},
+          ]),
+          200,
+        ),
+      );
 
       final result = await dataSource.fetchHistory('3M');
 
@@ -116,10 +121,9 @@ void main() {
 
   group('fetchDividends', () {
     test('returns the decoded dividend radar JSON on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(
-            jsonEncode({'received': 100.0, 'expected': 50.0}),
-            200,
-          ));
+      when(
+        () => mockApiClient.get(any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'received': 100.0, 'expected': 50.0}), 200));
 
       final result = await dataSource.fetchDividends();
 

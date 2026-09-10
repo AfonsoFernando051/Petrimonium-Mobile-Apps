@@ -47,9 +47,7 @@ void main() {
     testWidgets('shows upcoming dividends under "Próximos pagamentos"', (tester) async {
       final asset = AssetDetails(
         ticker: 'PETR4',
-        recentDividends: [
-          event(status: DividendStatus.ANNOUNCED, paymentDate: DateTime(2025, 3, 10)),
-        ],
+        recentDividends: [event(status: DividendStatus.ANNOUNCED, paymentDate: DateTime(2025, 3, 10))],
       );
 
       await tester.pumpWidget(buildTestableWidget(asset));
@@ -87,9 +85,7 @@ void main() {
     testWidgets('does not show the toggle when there are 3 or fewer paid dividends', (tester) async {
       final asset = AssetDetails(
         ticker: 'PETR4',
-        recentDividends: [
-          event(status: DividendStatus.PAID, paymentDate: DateTime(2025, 1, 1)),
-        ],
+        recentDividends: [event(status: DividendStatus.PAID, paymentDate: DateTime(2025, 1, 1))],
       );
 
       await tester.pumpWidget(buildTestableWidget(asset));
@@ -100,9 +96,7 @@ void main() {
     testWidgets('renders "—" for a dividend tile without a payment date and hides amount when zero', (tester) async {
       final asset = AssetDetails(
         ticker: 'PETR4',
-        recentDividends: [
-          event(status: DividendStatus.PAID, paymentDate: null, estimatedGrossAmount: 0),
-        ],
+        recentDividends: [event(status: DividendStatus.PAID, paymentDate: null, estimatedGrossAmount: 0)],
       );
 
       await tester.pumpWidget(buildTestableWidget(asset));

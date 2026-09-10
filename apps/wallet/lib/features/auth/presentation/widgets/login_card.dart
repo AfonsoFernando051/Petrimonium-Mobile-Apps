@@ -28,16 +28,11 @@ class _LoginCardState extends State<LoginCard> {
 
   void _goToMyApp() {
     if (!mounted) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const MyApp()),
-      (route) => false,
-    );
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const MyApp()), (route) => false);
   }
 
   void _openForgotPassword() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()));
   }
 
   @override
@@ -65,12 +60,7 @@ class _LoginCardState extends State<LoginCard> {
               Text(
                 Translator.translate(AppStrings.brandTitle).toUpperCase(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: tokens.mentor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 2.5,
-                ),
+                style: TextStyle(color: tokens.mentor, fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 2.5),
               ),
               const SizedBox(height: 4),
               Text(
@@ -139,10 +129,7 @@ class _AuthModeToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: context.colors.surfaceMuted,
-        borderRadius: BorderRadius.circular(10),
-      ),
+      decoration: BoxDecoration(color: context.colors.surfaceMuted, borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
           Expanded(

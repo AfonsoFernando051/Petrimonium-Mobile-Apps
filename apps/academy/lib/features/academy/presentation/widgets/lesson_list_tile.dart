@@ -41,9 +41,7 @@ class LessonListTile extends StatelessWidget {
                     height: 34,
                     decoration: BoxDecoration(color: accent.withValues(alpha: 0.15), shape: BoxShape.circle),
                     child: Icon(
-                      isCompleted
-                          ? Icons.check
-                          : (isLocked ? Icons.lock_outline : Icons.play_arrow_rounded),
+                      isCompleted ? Icons.check : (isLocked ? Icons.lock_outline : Icons.play_arrow_rounded),
                       color: accent,
                       size: 18,
                     ),

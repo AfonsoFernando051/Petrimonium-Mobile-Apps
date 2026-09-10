@@ -6,12 +6,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 /// number) so this stays reusable outside the Financial Lab it was
 /// extracted from.
 class StatCard extends StatelessWidget {
-  const StatCard({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.accent,
-  });
+  const StatCard({super.key, required this.label, required this.value, required this.accent});
 
   final String label;
   final String value;
@@ -32,21 +27,14 @@ class StatCard extends StatelessWidget {
               label,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.caption.copyWith(
-                color: tokens.textTertiary,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyles.caption.copyWith(color: tokens.textTertiary, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 4),
             Text(
               value,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.bodyEmphasis.copyWith(
-                color: accent,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTextStyles.bodyEmphasis.copyWith(color: accent, fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ],
         ),

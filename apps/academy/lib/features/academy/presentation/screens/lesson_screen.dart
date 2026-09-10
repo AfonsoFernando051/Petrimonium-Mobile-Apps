@@ -24,12 +24,7 @@ import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers
 /// — a lesson always completes, there is no fail/restart state (see
 /// `docs/ACADEMY_ENGINE.md`, no lives/hearts).
 class LessonScreen extends StatefulWidget {
-  const LessonScreen({
-    super.key,
-    required this.lesson,
-    required this.catalog,
-    required this.mascotController,
-  });
+  const LessonScreen({super.key, required this.lesson, required this.catalog, required this.mascotController});
 
   final Lesson lesson;
 
@@ -134,9 +129,7 @@ class _LessonScreenState extends State<LessonScreen> {
                 // switches language in Settings mid-lesson.
                 child: ValueListenableBuilder<String>(
                   valueListenable: Translator.languageNotifier,
-                  builder: (context, _, _) => _controller.isComplete
-                      ? _buildComplete(context)
-                      : _buildStep(context),
+                  builder: (context, _, _) => _controller.isComplete ? _buildComplete(context) : _buildStep(context),
                 ),
               ),
             ),
@@ -188,9 +181,7 @@ class _LessonScreenState extends State<LessonScreen> {
         const SizedBox(height: 32),
         GameButton(
           label: Translator.translate(
-            _controller.isLastStep
-                ? AppStrings.academyConcludeButton
-                : AppStrings.academyContinueButton,
+            _controller.isLastStep ? AppStrings.academyConcludeButton : AppStrings.academyContinueButton,
           ),
           isLoading: _controller.isCompleting,
           onPressed: _controller.canAdvance ? _controller.advance : null,
@@ -225,30 +216,23 @@ class _LessonScreenState extends State<LessonScreen> {
       return;
     }
     Navigator.of(context).pushReplacement(
-      _fadeRoute(
-        LessonScreen(
-          lesson: next,
-          catalog: widget.catalog,
-          mascotController: widget.mascotController,
-        ),
-      ),
+      _fadeRoute(LessonScreen(lesson: next, catalog: widget.catalog, mascotController: widget.mascotController)),
     );
   }
 
   Route _fadeRoute(Widget page) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-                  .animate(
-                    CurvedAnimation(parent: animation, curve: Curves.easeOut),
-                  ),
-              child: child,
-            ),
-          ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+        opacity: animation,
+        child: SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+          child: child,
+        ),
+      ),
       transitionDuration: const Duration(milliseconds: 350),
     );
   }

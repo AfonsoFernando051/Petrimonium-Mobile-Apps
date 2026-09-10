@@ -15,9 +15,7 @@ void main() {
 
   group('PassiveIncomeEstimator.estimate — single asset class', () {
     test('a R\$10,000 fixed-income position estimates its assumed 11% annual yield', () {
-      final stats = statsFromLots([
-        lot(type: InvestmentTypeEnum.FIXED_INCOME, quantity: 1000, purchasePrice: 10),
-      ]);
+      final stats = statsFromLots([lot(type: InvestmentTypeEnum.FIXED_INCOME, quantity: 1000, purchasePrice: 10)]);
 
       final estimate = PassiveIncomeEstimator.estimate(stats);
 
@@ -27,9 +25,7 @@ void main() {
     });
 
     test('crypto (0% assumed yield) contributes nothing and is omitted from the breakdown', () {
-      final stats = statsFromLots([
-        lot(type: InvestmentTypeEnum.CRYPTO, quantity: 1, purchasePrice: 50000),
-      ]);
+      final stats = statsFromLots([lot(type: InvestmentTypeEnum.CRYPTO, quantity: 1, purchasePrice: 50000)]);
 
       final estimate = PassiveIncomeEstimator.estimate(stats);
 
@@ -42,7 +38,13 @@ void main() {
   group('PassiveIncomeEstimator.estimate — mixed portfolio', () {
     test('annual estimate is the sum of each category\'s own contribution', () {
       final stats = statsFromLots([
-        lot(id: 1, ticker: 'A', type: InvestmentTypeEnum.FIXED_INCOME, quantity: 1000, purchasePrice: 10), // 10,000 * 11%
+        lot(
+          id: 1,
+          ticker: 'A',
+          type: InvestmentTypeEnum.FIXED_INCOME,
+          quantity: 1000,
+          purchasePrice: 10,
+        ), // 10,000 * 11%
         lot(id: 2, ticker: 'B', type: InvestmentTypeEnum.STOCKS, quantity: 100, purchasePrice: 10), // 1,000 * 5%
       ]);
 

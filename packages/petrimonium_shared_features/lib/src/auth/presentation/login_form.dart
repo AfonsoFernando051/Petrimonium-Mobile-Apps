@@ -114,11 +114,7 @@ class _LoginFormState extends State<LoginForm> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CustomTextField(
-          hint: widget.emailHint,
-          icon: Icons.email_outlined,
-          controller: _emailController,
-        ),
+        CustomTextField(hint: widget.emailHint, icon: Icons.email_outlined, controller: _emailController),
         const SizedBox(height: 14),
         CustomTextField(
           hint: widget.passwordHint,
@@ -139,11 +135,7 @@ class _LoginFormState extends State<LoginForm> {
         const SizedBox(height: 16),
         OrDivider(label: widget.orDividerLabel),
         const SizedBox(height: 16),
-        GoogleSignInButton(
-          label: widget.googleButtonLabel,
-          onPressed: _handleGoogleLogin,
-          isLoading: _isGoogleLoading,
-        ),
+        GoogleSignInButton(label: widget.googleButtonLabel, onPressed: _handleGoogleLogin, isLoading: _isGoogleLoading),
         const SizedBox(height: 24),
         ForgotPasswordButton(label: widget.forgotPasswordLabel, onTap: widget.onForgotPassword),
         const SizedBox(height: 24),

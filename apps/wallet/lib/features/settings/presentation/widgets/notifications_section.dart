@@ -26,20 +26,22 @@ class NotificationsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         sectionLabel(Translator.translate(AppStrings.notificationsSectionTitle).toUpperCase()),
-        SettingsToggleCard(children: [
-          SettingsSwitchTile(
-            icon: Icons.notifications_active_outlined,
-            label: Translator.translate(AppStrings.dailyMissionReminders),
-            value: dailyMissionReminders,
-            onChanged: onDailyMissionRemindersChanged,
-          ),
-          SettingsSwitchTile(
-            icon: Icons.emoji_events_outlined,
-            label: Translator.translate(AppStrings.achievementAlerts),
-            value: achievementAlerts,
-            onChanged: onAchievementAlertsChanged,
-          ),
-        ]),
+        SettingsToggleCard(
+          children: [
+            SettingsSwitchTile(
+              icon: Icons.notifications_active_outlined,
+              label: Translator.translate(AppStrings.dailyMissionReminders),
+              value: dailyMissionReminders,
+              onChanged: onDailyMissionRemindersChanged,
+            ),
+            SettingsSwitchTile(
+              icon: Icons.emoji_events_outlined,
+              label: Translator.translate(AppStrings.achievementAlerts),
+              value: achievementAlerts,
+              onChanged: onAchievementAlertsChanged,
+            ),
+          ],
+        ),
       ],
     );
   }

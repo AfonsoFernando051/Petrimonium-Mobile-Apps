@@ -11,8 +11,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MockAcademyRemoteDataSource extends Mock
-    implements AcademyRemoteDataSource {}
+class MockAcademyRemoteDataSource extends Mock implements AcademyRemoteDataSource {}
 
 /// Minimal in-memory MascotRepository double — this test only cares that
 /// `evaluateEvolution` runs without needing real persistence.
@@ -36,9 +35,7 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveNetWorth(double netWorth) async {}
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
 
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
@@ -78,16 +75,9 @@ void main() {
   // ChoiceQuestionStep to miss, and `_completeLesson` degrades gracefully
   // when the lesson's module isn't found in the catalog) — an empty
   // snapshot is enough.
-  const emptyCatalog = AcademyCatalogSnapshot(
-    domains: [],
-    schools: [],
-    modules: [],
-    lessons: [],
-  );
+  const emptyCatalog = AcademyCatalogSnapshot(domains: [], schools: [], modules: [], lessons: []);
 
-  LessonSessionController buildController({
-    AcademyRemoteDataSource? remoteDataSource,
-  }) {
+  LessonSessionController buildController({AcademyRemoteDataSource? remoteDataSource}) {
     return LessonSessionController(
       lesson: lesson,
       catalog: emptyCatalog,
@@ -97,151 +87,31 @@ void main() {
     );
   }
 
-  test(
-    'completes the lesson locally even when no remote datasource is provided',
-    () async {
-      final controller = buildController();
+  test('completes the lesson locally even when no remote datasource is provided', () async {
+    final controller = buildController();
 
-      await controller.advance();
+    await controller.advance();
 
-      expect(controller.isComplete, isTrue);
-      final completedIds = await academyRepository.loadCompletedLessonIds();
-      expect(completedIds, contains('test_lesson'));
-    },
-  );
+    expect(controller.isComplete, isTrue);
+    final completedIds = await academyRepository.loadCompletedLessonIds();
+    expect(completedIds, contains('test_lesson'));
+  });
 
-  test(
-    'completes the lesson locally even when the remote sync fails (offline)',
-    () async {
-      when(
-        () => mockRemoteDataSource.completeLesson(
-          any(),
-          perfectFirstTry: any(named: 'perfectFirstTry'),
-        ),
-      ).thenThrow(Exception('offline'));
-      final controller = buildController(
-        remoteDataSource: mockRemoteDataSource,
-      );
-
-      await controller.advance();
-
-      expect(controller.isComplete, isTrue);
-      final completedIds = await academyRepository.loadCompletedLessonIds();
-      expect(completedIds, contains('test_lesson'));
-    },
-  );
-
-  test(
-    'syncs the completion to the backend when a remote datasource is available',
-    () async {
-      when(
-        () => mockRemoteDataSource.completeLesson(
-          any(),
-          perfectFirstTry: any(named: 'perfectFirstTry'),
-        ),
-      ).thenAnswer(
-        (_) async => const LessonCompletionResult(
-          lessonId: 'test_lesson',
-          alreadyCompleted: false,
-          xpAwarded: 20,
-          moduleCompleted: false,
-          moduleXpAwarded: 0,
-          totalXp: 20,
-          level: 1,
-          xpIntoLevel: 20,
-          xpForNextLevel: 50,
-        ),
-      );
-      final controller = buildController(
-        remoteDataSource: mockRemoteDataSource,
-      );
-
-      await controller.advance();
-
-      verify(
-        () => mockRemoteDataSource.completeLesson(
-          'test_lesson',
-          perfectFirstTry: true,
-        ),
-      ).called(1);
-      expect(controller.xpSynced, isTrue);
-    },
-  );
-
-  test(
-    'a failed sync leaves the lesson marked pending for AcademyController to retry',
-    () async {
-      when(
-        () => mockRemoteDataSource.completeLesson(
-          any(),
-          perfectFirstTry: any(named: 'perfectFirstTry'),
-        ),
-      ).thenThrow(Exception('offline'));
-      final controller = buildController(
-        remoteDataSource: mockRemoteDataSource,
-      );
-
-      await controller.advance();
-
-      expect(controller.xpSynced, isFalse);
-      expect(
-        await academyRepository.loadPendingSyncLessonIds(),
-        contains('test_lesson'),
-      );
-    },
-  );
-
-  test(
-    'a wrong answer keeps the learner on the question until they pick correctly',
-    () async {
-      const questionLesson = Lesson(
-        id: 'question_lesson',
-        moduleId: 'investor_foundations',
-        title: 'Question Lesson',
-        order: 1,
-        xpReward: 20,
-        steps: [
-          ChoiceQuestionStep(
-            framing: ChoiceStepFraming.microExercise,
-            prompt: 'What is 2+2?',
-            options: ['3', '4', '5'],
-            correctIndex: 1,
-            explanation: 'Because math.',
-          ),
-        ],
-      );
-      final controller = LessonSessionController(
-        lesson: questionLesson,
-        catalog: emptyCatalog,
-        academyRepository: academyRepository,
-        mascotController: mascotController,
-      );
-      final shuffledQuestion = controller.currentStep as ChoiceQuestionStep;
-      final incorrectIndex = shuffledQuestion.correctIndex == 0 ? 1 : 0;
-
-      controller.selectOption(incorrectIndex);
-      expect(controller.answeredCorrectly, isFalse);
-      expect(controller.canAdvance, isFalse);
-
-      await controller.advance();
-      expect(controller.isComplete, isFalse);
-
-      controller.selectOption(shuffledQuestion.correctIndex);
-      expect(controller.answeredCorrectly, isTrue);
-      expect(controller.canAdvance, isTrue);
-
-      await controller.advance();
-      expect(controller.isComplete, isTrue);
-    },
-  );
-
-  test('a successful sync clears the pending-sync marker', () async {
+  test('completes the lesson locally even when the remote sync fails (offline)', () async {
     when(
-      () => mockRemoteDataSource.completeLesson(
-        any(),
-        perfectFirstTry: any(named: 'perfectFirstTry'),
-      ),
-    ).thenAnswer(
+      () => mockRemoteDataSource.completeLesson(any(), perfectFirstTry: any(named: 'perfectFirstTry')),
+    ).thenThrow(Exception('offline'));
+    final controller = buildController(remoteDataSource: mockRemoteDataSource);
+
+    await controller.advance();
+
+    expect(controller.isComplete, isTrue);
+    final completedIds = await academyRepository.loadCompletedLessonIds();
+    expect(completedIds, contains('test_lesson'));
+  });
+
+  test('syncs the completion to the backend when a remote datasource is available', () async {
+    when(() => mockRemoteDataSource.completeLesson(any(), perfectFirstTry: any(named: 'perfectFirstTry'))).thenAnswer(
       (_) async => const LessonCompletionResult(
         lessonId: 'test_lesson',
         alreadyCompleted: false,
@@ -258,9 +128,81 @@ void main() {
 
     await controller.advance();
 
-    expect(
-      await academyRepository.loadPendingSyncLessonIds(),
-      isNot(contains('test_lesson')),
+    verify(() => mockRemoteDataSource.completeLesson('test_lesson', perfectFirstTry: true)).called(1);
+    expect(controller.xpSynced, isTrue);
+  });
+
+  test('a failed sync leaves the lesson marked pending for AcademyController to retry', () async {
+    when(
+      () => mockRemoteDataSource.completeLesson(any(), perfectFirstTry: any(named: 'perfectFirstTry')),
+    ).thenThrow(Exception('offline'));
+    final controller = buildController(remoteDataSource: mockRemoteDataSource);
+
+    await controller.advance();
+
+    expect(controller.xpSynced, isFalse);
+    expect(await academyRepository.loadPendingSyncLessonIds(), contains('test_lesson'));
+  });
+
+  test('a wrong answer keeps the learner on the question until they pick correctly', () async {
+    const questionLesson = Lesson(
+      id: 'question_lesson',
+      moduleId: 'investor_foundations',
+      title: 'Question Lesson',
+      order: 1,
+      xpReward: 20,
+      steps: [
+        ChoiceQuestionStep(
+          framing: ChoiceStepFraming.microExercise,
+          prompt: 'What is 2+2?',
+          options: ['3', '4', '5'],
+          correctIndex: 1,
+          explanation: 'Because math.',
+        ),
+      ],
     );
+    final controller = LessonSessionController(
+      lesson: questionLesson,
+      catalog: emptyCatalog,
+      academyRepository: academyRepository,
+      mascotController: mascotController,
+    );
+    final shuffledQuestion = controller.currentStep as ChoiceQuestionStep;
+    final incorrectIndex = shuffledQuestion.correctIndex == 0 ? 1 : 0;
+
+    controller.selectOption(incorrectIndex);
+    expect(controller.answeredCorrectly, isFalse);
+    expect(controller.canAdvance, isFalse);
+
+    await controller.advance();
+    expect(controller.isComplete, isFalse);
+
+    controller.selectOption(shuffledQuestion.correctIndex);
+    expect(controller.answeredCorrectly, isTrue);
+    expect(controller.canAdvance, isTrue);
+
+    await controller.advance();
+    expect(controller.isComplete, isTrue);
+  });
+
+  test('a successful sync clears the pending-sync marker', () async {
+    when(() => mockRemoteDataSource.completeLesson(any(), perfectFirstTry: any(named: 'perfectFirstTry'))).thenAnswer(
+      (_) async => const LessonCompletionResult(
+        lessonId: 'test_lesson',
+        alreadyCompleted: false,
+        xpAwarded: 20,
+        moduleCompleted: false,
+        moduleXpAwarded: 0,
+        totalXp: 20,
+        level: 1,
+        xpIntoLevel: 20,
+        xpForNextLevel: 50,
+      ),
+    );
+    final controller = buildController(remoteDataSource: mockRemoteDataSource);
+
+    await controller.advance();
+
+    expect(await academyRepository.loadPendingSyncLessonIds(), isNot(contains('test_lesson')));
   });
 }

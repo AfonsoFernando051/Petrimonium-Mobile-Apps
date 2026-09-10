@@ -93,9 +93,7 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveNetWorth(double netWorth) async {}
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
 
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
@@ -189,16 +187,13 @@ void main() {
     );
   });
 
-  test(
-    'not logged in routes to login, before touching any other state',
-    () async {
-      authRepository.loggedIn = false;
+  test('not logged in routes to login, before touching any other state', () async {
+    authRepository.loggedIn = false;
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      expect(route, StartRoute.login);
-    },
-  );
+    expect(route, StartRoute.login);
+  });
 
   test('logged in, mentor welcome not seen yet, routes to mentorWelcome', () async {
     onboardingStateRepository.mentorWelcomeSeen = false;
@@ -222,21 +217,18 @@ void main() {
     expect(route, StartRoute.home);
   });
 
-  test(
-    'a Wallet-first signup with no pet routes to petSetup, without provisioning anything itself',
-    () async {
-      petRepository.hasPet = false;
-      mascotRepository.profileToReturn = PetProfile(name: null);
+  test('a Wallet-first signup with no pet routes to petSetup, without provisioning anything itself', () async {
+    petRepository.hasPet = false;
+    mascotRepository.profileToReturn = PetProfile(name: null);
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      // PetSetupScreen — not the resolver — is responsible for calling
-      // configurePet/saveName once the user actually chooses a species/name.
-      expect(petRepository.configuredSpecies, isEmpty);
-      expect(mascotRepository.savedNames, isEmpty);
-      expect(route, StartRoute.petSetup);
-    },
-  );
+    // PetSetupScreen — not the resolver — is responsible for calling
+    // configurePet/saveName once the user actually chooses a species/name.
+    expect(petRepository.configuredSpecies, isEmpty);
+    expect(mascotRepository.savedNames, isEmpty);
+    expect(route, StartRoute.petSetup);
+  });
 
   test(
     'an existing pet with no locally-cached name (e.g. an Academy pet on a new device) gets the default name backfilled, no petSetup shown',
@@ -260,45 +252,36 @@ void main() {
     expect(mascotRepository.savedNames, isEmpty);
   });
 
-  test(
-    'a failure reading pet/onboarding state logs the user out and routes to login',
-    () async {
-      petRepository.statusError = Exception('boom');
+  test('a failure reading pet/onboarding state logs the user out and routes to login', () async {
+    petRepository.statusError = Exception('boom');
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      expect(route, StartRoute.login);
-      expect(authRepository.logoutCalled, isTrue);
-    },
-  );
+    expect(route, StartRoute.login);
+    expect(authRepository.logoutCalled, isTrue);
+  });
 
   /// DEM-102: getPetStatus's TimeoutException (ApiClient's 15s bound) is
   /// exactly what a device with no signal throws on cold start. Being
   /// offline must not cost the session — ApiClient's own token-refresh path
   /// (_performRefresh) already draws the same "network failure isn't proof
   /// the session is invalid" distinction.
-  test(
-    'a network timeout preserves the session and routes home, not login',
-    () async {
-      petRepository.statusError = TimeoutException('boom');
+  test('a network timeout preserves the session and routes home, not login', () async {
+    petRepository.statusError = TimeoutException('boom');
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      expect(route, StartRoute.home);
-      expect(authRepository.logoutCalled, isFalse);
-      expect(authRepository.loggedIn, isTrue);
-    },
-  );
+    expect(route, StartRoute.home);
+    expect(authRepository.logoutCalled, isFalse);
+    expect(authRepository.loggedIn, isTrue);
+  });
 
-  test(
-    'no connectivity (SocketException) preserves the session and routes home, not login',
-    () async {
-      petRepository.statusError = const SocketException('Failed host lookup');
+  test('no connectivity (SocketException) preserves the session and routes home, not login', () async {
+    petRepository.statusError = const SocketException('Failed host lookup');
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      expect(route, StartRoute.home);
-      expect(authRepository.logoutCalled, isFalse);
-    },
-  );
+    expect(route, StartRoute.home);
+    expect(authRepository.logoutCalled, isFalse);
+  });
 }

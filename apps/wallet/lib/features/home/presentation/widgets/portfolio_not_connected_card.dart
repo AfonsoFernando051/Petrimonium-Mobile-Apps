@@ -61,9 +61,7 @@ class PortfolioNotConnectedCard extends StatelessWidget {
               iconTrailing: true,
               height: 48,
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const InvestmentConfigurationScreen()),
-                );
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const InvestmentConfigurationScreen()));
               },
             ),
           ],

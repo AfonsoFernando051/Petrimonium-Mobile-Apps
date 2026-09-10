@@ -3,8 +3,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 import 'package:petrimonium_shared_features/testing.dart';
 
-double _metric(PortfolioHealth health, HealthMetricKind kind) =>
-    health.metrics.firstWhere((m) => m.kind == kind).score;
+double _metric(PortfolioHealth health, HealthMetricKind kind) => health.metrics.firstWhere((m) => m.kind == kind).score;
 
 void main() {
   group('PortfolioHealthCalculator.calculate — empty portfolio', () {
@@ -61,7 +60,10 @@ void main() {
       final concentratedHealth = PortfolioHealthCalculator.calculate(concentrated);
       final diversifiedHealth = PortfolioHealthCalculator.calculate(diversified);
 
-      expect(_metric(diversifiedHealth, HealthMetricKind.diversification), greaterThan(_metric(concentratedHealth, HealthMetricKind.diversification)));
+      expect(
+        _metric(diversifiedHealth, HealthMetricKind.diversification),
+        greaterThan(_metric(concentratedHealth, HealthMetricKind.diversification)),
+      );
       // 4 equal 25% slices: HHI = 4 * 0.25^2 = 0.25 -> score = (1 - 0.25) * 100 = 75.
       expect(_metric(diversifiedHealth, HealthMetricKind.diversification), closeTo(75, 0.01));
     });

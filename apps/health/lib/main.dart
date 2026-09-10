@@ -21,10 +21,8 @@ void main() {
 /// Health's own storage namespace for [SecureTokenStore], kept distinct from
 /// the shared client's defaults so an already-installed user's session
 /// survives moving onto this package rather than forcing a re-login.
-TokenStore _healthTokenStore() => SecureTokenStore(
-      accessKey: 'health_access_token',
-      refreshKey: 'health_refresh_token',
-    );
+TokenStore _healthTokenStore() =>
+    SecureTokenStore(accessKey: 'health_access_token', refreshKey: 'health_refresh_token');
 
 class PetrimoniumHealthApp extends StatefulWidget {
   const PetrimoniumHealthApp({super.key});
@@ -43,10 +41,7 @@ class _PetrimoniumHealthAppState extends State<PetrimoniumHealthApp> {
     super.initState();
     _localeController = LocaleController();
     final repository = RemoteHealthRepository(ApiClient(tokenStore: _healthTokenStore()));
-    _controller = HealthController(
-      repository: repository,
-      localeController: _localeController,
-    );
+    _controller = HealthController(repository: repository, localeController: _localeController);
     _appListenable = Listenable.merge([_controller, _localeController]);
     _bootstrap();
   }
@@ -86,10 +81,7 @@ class _PetrimoniumHealthAppState extends State<PetrimoniumHealthApp> {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          home: HealthScope(
-            controller: _controller,
-            child: const _RootRouter(),
-          ),
+          home: HealthScope(controller: _controller, child: const _RootRouter()),
         );
       },
     );
@@ -111,9 +103,7 @@ class _RootRouter extends StatelessWidget {
       case AppStage.signedOut:
         return const LoginScreen();
       case AppStage.onboarding:
-        return controller.onboardingStep == OnboardingStep.petSetup
-            ? const PetSetupScreen()
-            : const QuickSetupScreen();
+        return controller.onboardingStep == OnboardingStep.petSetup ? const PetSetupScreen() : const QuickSetupScreen();
       case AppStage.home:
         return const AppShell();
     }

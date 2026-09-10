@@ -104,8 +104,7 @@ class LessonSessionController extends ChangeNotifier {
   /// A non-question step can always advance; a question step is gated on
   /// [answeredCorrectly] — a wrong pick shows feedback but keeps the learner
   /// on the question until they get it right.
-  bool get canAdvance =>
-      currentStep is! ChoiceQuestionStep || answeredCorrectly;
+  bool get canAdvance => currentStep is! ChoiceQuestionStep || answeredCorrectly;
 
   bool get selectedAnswerIsCorrect {
     final step = currentStep;
@@ -168,16 +167,13 @@ class LessonSessionController extends ChangeNotifier {
 
     try {
       final module = catalog.moduleById(lesson.moduleId);
-      final school = module == null
-          ? null
-          : catalog.schoolById(module.schoolId);
+      final school = module == null ? null : catalog.schoolById(module.schoolId);
       final wasSchoolAlreadyComplete = school == null
           ? true
           : AcademyProgressCalculator.schoolStatus(
                   catalog: catalog,
                   school: school,
-                  completedIds: await _academyRepository
-                      .loadCompletedLessonIds(),
+                  completedIds: await _academyRepository.loadCompletedLessonIds(),
                 ) ==
                 SchoolStatus.completed;
 
@@ -187,36 +183,21 @@ class LessonSessionController extends ChangeNotifier {
       await _academyRepository.markPendingSync(lesson.id);
       if (!_hadAnyMiss) await _academyRepository.markLessonPerfect(lesson.id);
       if (module != null) await _academyRepository.resetMisses(module.schoolId);
-      _mascotController.triggerEventAnimation(
-        PetAnimationState.victory,
-        duration: const Duration(seconds: 4),
-      );
+      _mascotController.triggerEventAnimation(PetAnimationState.victory, duration: const Duration(seconds: 4));
       AppEventBus.instance.emit(LessonCompletedEvent(lesson.id));
 
-      final completedIdsAfter = await _academyRepository
-          .loadCompletedLessonIds();
-      nextLesson = AcademyProgressCalculator.nextLessonToContinue(
-        catalog: catalog,
-        completedIds: completedIdsAfter,
-      );
+      final completedIdsAfter = await _academyRepository.loadCompletedLessonIds();
+      nextLesson = AcademyProgressCalculator.nextLessonToContinue(catalog: catalog, completedIds: completedIdsAfter);
 
       if (module != null &&
-          AcademyProgressCalculator.moduleStatus(
-                catalog: catalog,
-                module: module,
-                completedIds: completedIdsAfter,
-              ) ==
+          AcademyProgressCalculator.moduleStatus(catalog: catalog, module: module, completedIds: completedIdsAfter) ==
               ModuleStatus.completed) {
         completedModuleTitle = module.title;
       }
 
       if (school != null && !wasSchoolAlreadyComplete) {
         final nowComplete =
-            AcademyProgressCalculator.schoolStatus(
-              catalog: catalog,
-              school: school,
-              completedIds: completedIdsAfter,
-            ) ==
+            AcademyProgressCalculator.schoolStatus(catalog: catalog, school: school, completedIds: completedIdsAfter) ==
             SchoolStatus.completed;
         if (nowComplete) {
           AppEventBus.instance.emit(SchoolMasteredEvent(school.title));
@@ -253,15 +234,9 @@ class LessonSessionController extends ChangeNotifier {
     final remote = _academyRemoteDataSource;
     if (remote == null) return;
     try {
-      final result = await remote.completeLesson(
-        lesson.id,
-        perfectFirstTry: !_hadAnyMiss,
-      );
+      final result = await remote.completeLesson(lesson.id, perfectFirstTry: !_hadAnyMiss);
       await _academyRepository.clearPendingSync(lesson.id);
-      await _mascotController.evaluateEvolution(
-        _mascotController.profile.netWorth,
-        result.totalXp,
-      );
+      await _mascotController.evaluateEvolution(_mascotController.profile.netWorth, result.totalXp);
       xpSynced = true;
       notifyListeners();
     } catch (_) {

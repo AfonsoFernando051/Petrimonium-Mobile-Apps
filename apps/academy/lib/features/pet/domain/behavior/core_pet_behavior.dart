@@ -14,11 +14,7 @@ class CorePetBehavior extends PetBehavior {
   const CorePetBehavior();
 
   @override
-  PetMessage? pageEnter(
-    PetContext context, {
-    required int userXp,
-    Map<String, String> data = const {},
-  }) {
+  PetMessage? pageEnter(PetContext context, {required int userXp, Map<String, String> data = const {}}) {
     if (context != PetContext.profile) return null;
     final level = LevelCalculator.fromXp(userXp);
     return PetMessage(
@@ -27,10 +23,7 @@ class CorePetBehavior extends PetBehavior {
       priority: PetMessagePriority.low,
       trigger: PetMessageTrigger.pageEnter,
       textKey: AppStrings.companionProfileSummary,
-      params: {
-        'level': '${level.level}',
-        'stage': LevelTitle.forLevel(level.level),
-      },
+      params: {'level': '${level.level}', 'stage': LevelTitle.forLevel(level.level)},
       mood: PetAnimationState.idle,
     );
   }

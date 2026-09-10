@@ -10,16 +10,16 @@ class MasteryTierPresentation {
   const MasteryTierPresentation._();
 
   static String labelKey(MasteryTier tier) => switch (tier) {
-        MasteryTier.exploring => AppStrings.masteryTierExploring,
-        MasteryTier.understanding => AppStrings.masteryTierUnderstanding,
-        MasteryTier.applying => AppStrings.masteryTierApplying,
-        MasteryTier.mastering => AppStrings.masteryTierMastering,
-      };
+    MasteryTier.exploring => AppStrings.masteryTierExploring,
+    MasteryTier.understanding => AppStrings.masteryTierUnderstanding,
+    MasteryTier.applying => AppStrings.masteryTierApplying,
+    MasteryTier.mastering => AppStrings.masteryTierMastering,
+  };
 
   static Color color(MasteryTier tier) => switch (tier) {
-        MasteryTier.exploring => AppColors.neonBlue,
-        MasteryTier.understanding => AppColors.neonCyan,
-        MasteryTier.applying => AppColors.neonViolet,
-        MasteryTier.mastering => AppColors.goldenBorder,
-      };
+    MasteryTier.exploring => AppColors.neonBlue,
+    MasteryTier.understanding => AppColors.neonCyan,
+    MasteryTier.applying => AppColors.neonViolet,
+    MasteryTier.mastering => AppColors.goldenBorder,
+  };
 }

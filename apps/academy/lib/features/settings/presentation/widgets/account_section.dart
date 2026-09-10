@@ -42,7 +42,13 @@ class AccountSection extends StatelessWidget {
                     Icon(Icons.person_outline, color: tokens.textSecondary, size: 20),
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
-                      child: Text(email!, style: AppTextStyles.bodyEmphasis.copyWith(color: tokens.textPrimary, fontWeight: FontWeight.normal)),
+                      child: Text(
+                        email!,
+                        style: AppTextStyles.bodyEmphasis.copyWith(
+                          color: tokens.textPrimary,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
                     ),
                   ],
                 ),

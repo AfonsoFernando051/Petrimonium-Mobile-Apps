@@ -1,0 +1,57 @@
+# The workspace-wide analyzer baseline. Every app and package includes this
+# file and adds only what is genuinely local to it, so a rule is turned on
+# once here rather than six times in six copies of the Flutter template.
+#
+# The rules below are the ones that would have caught the defects this
+# codebase actually had, not a maximal list: UI types leaking into the domain
+# layer is guarded by tooling/check_layering.sh (the analyzer cannot express
+# "not in this directory"), and what is left here is the everyday hygiene
+# that keeps diffs small and failures loud.
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/l10n/**"
+  errors:
+    # An unused import is usually the residue of a move that was not finished.
+    unused_import: warning
+    unused_local_variable: warning
+    # Silently swallowing a Future is how a failed write becomes a silent
+    # no-op; make it impossible to merge by accident.
+    unawaited_futures: warning
+
+linter:
+  rules:
+    # Correctness
+    - avoid_dynamic_calls
+    - avoid_slow_async_io
+    - cancel_subscriptions
+    - close_sinks
+    - collection_methods_unrelated_type
+    - no_adjacent_strings_in_list
+    - unawaited_futures
+    - unnecessary_statements
+    - test_types_in_equals
+    - throw_in_finally
+
+    # Clarity
+    - avoid_returning_null_for_void
+    - avoid_unused_constructor_parameters
+    - prefer_final_locals
+    - prefer_single_quotes
+    - unnecessary_await_in_return
+    - unnecessary_parenthesis
+    - use_string_buffers
+
+    # Public API of the shared packages
+    - always_declare_return_types
+    - avoid_void_async

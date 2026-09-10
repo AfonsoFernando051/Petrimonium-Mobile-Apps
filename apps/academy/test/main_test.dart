@@ -215,7 +215,9 @@ void main() {
       expect(find.byType(FinancialGoalScreen), findsOneWidget);
     });
 
-    testWidgets('routes to JourneyReadyScreen (tutorial) once a goal is set but the tutorial is unfinished', (tester) async {
+    testWidgets('routes to JourneyReadyScreen (tutorial) once a goal is set but the tutorial is unfinished', (
+      tester,
+    ) async {
       final authRepository = MockAuthRepository();
       when(() => authRepository.isLoggedIn()).thenAnswer((_) async => true);
       when(() => authRepository.getSavedUserName()).thenAnswer((_) async => null);
@@ -239,7 +241,9 @@ void main() {
       expect(find.byType(JourneyReadyScreen), findsOneWidget);
     });
 
-    testWidgets('routes to PortfolioChoiceScreen once tutorial is done but the portfolio step is unresolved', (tester) async {
+    testWidgets('routes to PortfolioChoiceScreen once tutorial is done but the portfolio step is unresolved', (
+      tester,
+    ) async {
       final authRepository = MockAuthRepository();
       when(() => authRepository.isLoggedIn()).thenAnswer((_) async => true);
       when(() => authRepository.getSavedUserName()).thenAnswer((_) async => null);

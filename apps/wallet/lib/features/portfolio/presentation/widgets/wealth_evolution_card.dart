@@ -53,10 +53,18 @@ class _WealthEvolutionCardState extends State<WealthEvolutionCard> {
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
-                ChartLegend(items: [
-                  ChartLegendItem(color: AppColors.neonCyan, label: Translator.translate(AppStrings.wealthLegendPatrimony)),
-                  ChartLegendItem(color: tokens.chartNeutral, label: Translator.translate(AppStrings.wealthLegendInvested)),
-                ]),
+                ChartLegend(
+                  items: [
+                    ChartLegendItem(
+                      color: AppColors.neonCyan,
+                      label: Translator.translate(AppStrings.wealthLegendPatrimony),
+                    ),
+                    ChartLegendItem(
+                      color: tokens.chartNeutral,
+                      label: Translator.translate(AppStrings.wealthLegendInvested),
+                    ),
+                  ],
+                ),
               ],
             ),
             const SizedBox(height: AppSpacing.md),
@@ -100,10 +108,7 @@ class _WealthEvolutionCardState extends State<WealthEvolutionCard> {
     return TooltipSummary(
       accentColor: AppColors.neonCyan,
       children: [
-        Text(
-          AppFormatters.date(point.date),
-          style: AppTextStyles.caption.copyWith(color: tokens.textSecondary),
-        ),
+        Text(AppFormatters.date(point.date), style: AppTextStyles.caption.copyWith(color: tokens.textSecondary)),
         Text(
           AppFormatters.currency(point.portfolioValue, showCents: false),
           style: AppTextStyles.label.copyWith(color: tokens.textPrimary, fontWeight: FontWeight.bold),

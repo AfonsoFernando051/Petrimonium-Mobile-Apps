@@ -25,7 +25,10 @@ class SettingsToggleCard extends StatelessWidget {
       // GlassCard paints its own background on the Container it wraps `child`
       // in, which would otherwise sit between these SwitchListTiles and the
       // nearest Material ancestor and hide their ink splashes.
-      child: Material(type: MaterialType.transparency, child: Column(children: children)),
+      child: Material(
+        type: MaterialType.transparency,
+        child: Column(children: children),
+      ),
     );
   }
 }
@@ -53,7 +56,10 @@ class SettingsSwitchTile extends StatelessWidget {
       activeTrackColor: tokens.primary.withValues(alpha: 0.5),
       activeThumbColor: tokens.primary,
       secondary: Icon(icon, color: tokens.textSecondary),
-      title: Text(label, style: AppTextStyles.bodyEmphasis.copyWith(color: tokens.textPrimary, fontWeight: FontWeight.normal)),
+      title: Text(
+        label,
+        style: AppTextStyles.bodyEmphasis.copyWith(color: tokens.textPrimary, fontWeight: FontWeight.normal),
+      ),
     );
   }
 }

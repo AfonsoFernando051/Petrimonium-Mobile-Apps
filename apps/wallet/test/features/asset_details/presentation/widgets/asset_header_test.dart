@@ -47,11 +47,7 @@ void main() {
     });
 
     testWidgets('renders a negative change with the down arrow', (tester) async {
-      const asset = AssetDetails(
-        ticker: 'PETR4',
-        currentPrice: 10,
-        dailyChangePercent: -1.25,
-      );
+      const asset = AssetDetails(ticker: 'PETR4', currentPrice: 10, dailyChangePercent: -1.25);
 
       await tester.pumpWidget(buildTestableWidget(asset));
 
@@ -60,12 +56,7 @@ void main() {
     });
 
     testWidgets('renders the 52-week range when both bounds are present', (tester) async {
-      const asset = AssetDetails(
-        ticker: 'PETR4',
-        currentPrice: 15,
-        fiftyTwoWeekLow: 10,
-        fiftyTwoWeekHigh: 20,
-      );
+      const asset = AssetDetails(ticker: 'PETR4', currentPrice: 15, fiftyTwoWeekLow: 10, fiftyTwoWeekHigh: 20);
 
       await tester.pumpWidget(buildTestableWidget(asset));
 
@@ -81,10 +72,7 @@ void main() {
     });
 
     testWidgets('shows "Atualizado agora" for a lastUpdated timestamp from just now', (tester) async {
-      final asset = AssetDetails(
-        ticker: 'PETR4',
-        lastUpdated: DateTime.now().toIso8601String(),
-      );
+      final asset = AssetDetails(ticker: 'PETR4', lastUpdated: DateTime.now().toIso8601String());
 
       await tester.pumpWidget(buildTestableWidget(asset));
 

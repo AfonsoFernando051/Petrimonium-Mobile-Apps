@@ -16,26 +16,28 @@ void main() {
 
   group('fetchHoldings', () {
     test('maps raw lot JSON into aggregated Holdings by ticker', () async {
-      when(() => mockDataSource.fetchHoldings()).thenAnswer((_) async => [
-            {
-              'id': 1,
-              'name': 'PETR4',
-              'type': 'STOCKS',
-              'quantity': 10,
-              'purchasePrice': 20.0,
-              'purchaseDate': '2024-01-01T00:00:00.000Z',
-              'currentPrice': 25.0,
-            },
-            {
-              'id': 2,
-              'name': 'PETR4',
-              'type': 'STOCKS',
-              'quantity': 5,
-              'purchasePrice': 22.0,
-              'purchaseDate': '2024-02-01T00:00:00.000Z',
-              'currentPrice': 25.0,
-            },
-          ]);
+      when(() => mockDataSource.fetchHoldings()).thenAnswer(
+        (_) async => [
+          {
+            'id': 1,
+            'name': 'PETR4',
+            'type': 'STOCKS',
+            'quantity': 10,
+            'purchasePrice': 20.0,
+            'purchaseDate': '2024-01-01T00:00:00.000Z',
+            'currentPrice': 25.0,
+          },
+          {
+            'id': 2,
+            'name': 'PETR4',
+            'type': 'STOCKS',
+            'quantity': 5,
+            'purchasePrice': 22.0,
+            'purchaseDate': '2024-02-01T00:00:00.000Z',
+            'currentPrice': 25.0,
+          },
+        ],
+      );
 
       final holdings = await repository.fetchHoldings();
 
@@ -53,13 +55,15 @@ void main() {
 
   group('fetchSummary', () {
     test('maps the raw JSON into a PortfolioSummary', () async {
-      when(() => mockDataSource.fetchSummary()).thenAnswer((_) async => {
-            'investedCapital': 1000.0,
-            'currentValue': 1200.0,
-            'totalGain': 200.0,
-            'totalGainPercent': 20.0,
-            'totalAssets': 3,
-          });
+      when(() => mockDataSource.fetchSummary()).thenAnswer(
+        (_) async => {
+          'investedCapital': 1000.0,
+          'currentValue': 1200.0,
+          'totalGain': 200.0,
+          'totalGainPercent': 20.0,
+          'totalAssets': 3,
+        },
+      );
 
       final summary = await repository.fetchSummary();
 

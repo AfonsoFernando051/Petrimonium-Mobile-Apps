@@ -49,8 +49,7 @@ class CompoundInterestLabScreen extends StatefulWidget {
   final PetSpeechBubbleAnchor _headerAnchor = PetSpeechBubbleAnchor();
 
   @override
-  State<CompoundInterestLabScreen> createState() =>
-      _CompoundInterestLabScreenState();
+  State<CompoundInterestLabScreen> createState() => _CompoundInterestLabScreenState();
 }
 
 class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
@@ -72,9 +71,7 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
       Translator.translate(AppStrings.labCompoundInterestOptionC),
     ],
     correctIndex: 1,
-    explanation: Translator.translate(
-      AppStrings.labCompoundInterestAnswerExplanation,
-    ),
+    explanation: Translator.translate(AppStrings.labCompoundInterestAnswerExplanation),
   );
 
   CompoundInterestResult get _result => CompoundInterestCalculator.simulate(
@@ -115,10 +112,7 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
       _explanationKey = rounded > _annualRatePercent
           ? AppStrings.labExplanationIncreaseReturn
           : AppStrings.labExplanationDecreaseReturn;
-      _explanationParams = {
-        'from': _annualRatePercent.toStringAsFixed(1),
-        'to': rounded.toStringAsFixed(1),
-      };
+      _explanationParams = {'from': _annualRatePercent.toStringAsFixed(1), 'to': rounded.toStringAsFixed(1)};
       _annualRatePercent = rounded;
     });
   }
@@ -153,20 +147,12 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
         LabStackedBarChart(
           points: [
             for (final point in result.yearlyBreakdown)
-              LabStackedBarPoint(
-                xLabel: '${point.year}',
-                base: point.contributions,
-                total: point.value,
-              ),
+              LabStackedBarPoint(xLabel: '${point.year}', base: point.contributions, total: point.value),
           ],
           baseColor: AppColors.neonCyan,
           growthColor: AppColors.goldenBorder,
-          baseLegendLabel: Translator.translate(
-            AppStrings.labTotalContributionsLabel,
-          ),
-          growthLegendLabel: Translator.translate(
-            AppStrings.labTotalGrowthLabel,
-          ),
+          baseLegendLabel: Translator.translate(AppStrings.labTotalContributionsLabel),
+          growthLegendLabel: Translator.translate(AppStrings.labTotalGrowthLabel),
         ),
         LabDataTableDisclosure(
           columnLabels: [
@@ -180,18 +166,13 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
                 label: '${point.year}',
                 values: [
                   AppFormatters.currency(point.contributions, showCents: false),
-                  AppFormatters.currency(
-                    point.value - point.contributions,
-                    showCents: false,
-                  ),
+                  AppFormatters.currency(point.value - point.contributions, showCents: false),
                 ],
               ),
           ],
         ),
         LabNarrativeCard(
-          text: Translator.translate(
-            AppStrings.labCompoundInterestInterpretation,
-          ),
+          text: Translator.translate(AppStrings.labCompoundInterestInterpretation),
           variant: LabNarrativeVariant.interpretation,
         ),
         _buildTakeaway(),
@@ -202,9 +183,7 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
         ),
         LabCompletionFooter(
           simulatorId: LabSimulatorId.compoundInterest,
-          resolvedTitle: Translator.translate(
-            AppStrings.labCompoundInterestTitle,
-          ),
+          resolvedTitle: Translator.translate(AppStrings.labCompoundInterestTitle),
           controller: widget.completionController,
           onOpenWallet: widget.onOpenWallet,
           canComplete: _canComplete,
@@ -224,10 +203,7 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
           children: [
             LabeledSlider(
               label: Translator.translate(AppStrings.labInitialAmountLabel),
-              valueLabel: AppFormatters.currency(
-                _initialAmount,
-                showCents: false,
-              ),
+              valueLabel: AppFormatters.currency(_initialAmount, showCents: false),
               value: _initialAmount,
               min: 0,
               max: 100000,
@@ -235,13 +211,8 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
               onChanged: _onInitialAmountChanged,
             ),
             LabeledSlider(
-              label: Translator.translate(
-                AppStrings.labMonthlyContributionLabel,
-              ),
-              valueLabel: AppFormatters.currency(
-                _monthlyContribution,
-                showCents: false,
-              ),
+              label: Translator.translate(AppStrings.labMonthlyContributionLabel),
+              valueLabel: AppFormatters.currency(_monthlyContribution, showCents: false),
               value: _monthlyContribution,
               min: 0,
               max: 5000,

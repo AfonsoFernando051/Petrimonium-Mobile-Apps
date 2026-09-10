@@ -15,21 +15,23 @@ void main() {
 
   group('evaluate', () {
     test('maps the raw JSON into a MissionEvaluationResult', () async {
-      when(() => mockDataSource.evaluate()).thenAnswer((_) async => {
-            'missions': [
-              {
-                'code': 'daily_login',
-                'period': 'DAILY',
-                'periodKey': '2024-05-01',
-                'progress': 1,
-                'target': 1,
-                'xpReward': 10,
-                'completed': true,
-              },
-            ],
-            'newlyCompletedCodes': ['daily_login'],
-            'missionXpTotal': 10,
-          });
+      when(() => mockDataSource.evaluate()).thenAnswer(
+        (_) async => {
+          'missions': [
+            {
+              'code': 'daily_login',
+              'period': 'DAILY',
+              'periodKey': '2024-05-01',
+              'progress': 1,
+              'target': 1,
+              'xpReward': 10,
+              'completed': true,
+            },
+          ],
+          'newlyCompletedCodes': ['daily_login'],
+          'missionXpTotal': 10,
+        },
+      );
 
       final result = await repository.evaluate();
 

@@ -25,13 +25,7 @@ void main() {
     });
 
     test('prerequisites defaults to empty and contentAvailable defaults to false', () {
-      const school = School(
-        id: 's',
-        title: 't',
-        description: 'd',
-        icon: Icons.help_outline,
-        order: 0,
-      );
+      const school = School(id: 's', title: 't', description: 'd', icon: Icons.help_outline, order: 0);
 
       expect(school.prerequisites, isEmpty);
       expect(school.contentAvailable, isFalse);

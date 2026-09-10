@@ -18,20 +18,13 @@ void main() {
     });
 
     test('lastMessagePreview is null when absent', () {
-      final summary = ConversationSummary.fromJson({
-        'id': 1,
-        'title': 'Chat',
-        'updatedAt': '2024-01-01T00:00:00.000',
-      });
+      final summary = ConversationSummary.fromJson({'id': 1, 'title': 'Chat', 'updatedAt': '2024-01-01T00:00:00.000'});
 
       expect(summary.lastMessagePreview, isNull);
     });
 
     test('title defaults to empty string when missing', () {
-      final summary = ConversationSummary.fromJson({
-        'id': 1,
-        'updatedAt': '2024-01-01T00:00:00.000',
-      });
+      final summary = ConversationSummary.fromJson({'id': 1, 'updatedAt': '2024-01-01T00:00:00.000'});
 
       expect(summary.title, '');
     });

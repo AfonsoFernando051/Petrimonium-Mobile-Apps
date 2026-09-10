@@ -20,10 +20,7 @@ void main() {
     });
 
     test('carries through every explicitly provided field', () {
-      const action = PetMessageAction(
-        labelKey: AppStrings.companionActionContinue,
-        destination: PetContext.academy,
-      );
+      const action = PetMessageAction(labelKey: AppStrings.companionActionContinue, destination: PetContext.academy);
       const message = PetMessage(
         id: 'event_xp_gained',
         context: PetContext.home,
@@ -52,10 +49,7 @@ void main() {
   });
 
   test('PetMessageAction exposes labelKey and destination', () {
-    const action = PetMessageAction(
-      labelKey: AppStrings.companionActionViewProgress,
-      destination: PetContext.profile,
-    );
+    const action = PetMessageAction(labelKey: AppStrings.companionActionViewProgress, destination: PetContext.profile);
 
     expect(action.labelKey, AppStrings.companionActionViewProgress);
     expect(action.destination, PetContext.profile);

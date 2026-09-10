@@ -56,9 +56,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   void _goToResetPassword() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ResetPasswordScreen()),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ResetPasswordScreen()));
   }
 
   @override

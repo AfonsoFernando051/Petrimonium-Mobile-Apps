@@ -9,20 +9,20 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// is pure arithmetic and is tested as such.
 extension HealthMetricDisplay on HealthMetricKind {
   String get label => switch (this) {
-        HealthMetricKind.diversification => 'Diversificação',
-        HealthMetricKind.growth => 'Crescimento',
-        HealthMetricKind.incomeStability => 'Estab. de Renda',
-        HealthMetricKind.dividendStrength => 'Força de Dividendos',
-        HealthMetricKind.volatilityControl => 'Controle de Volatilidade',
-        HealthMetricKind.longTermPotential => 'Potencial Longo Prazo',
-      };
+    HealthMetricKind.diversification => 'Diversificação',
+    HealthMetricKind.growth => 'Crescimento',
+    HealthMetricKind.incomeStability => 'Estab. de Renda',
+    HealthMetricKind.dividendStrength => 'Força de Dividendos',
+    HealthMetricKind.volatilityControl => 'Controle de Volatilidade',
+    HealthMetricKind.longTermPotential => 'Potencial Longo Prazo',
+  };
 
   IconData get icon => switch (this) {
-        HealthMetricKind.diversification => Icons.hub,
-        HealthMetricKind.growth => Icons.trending_up,
-        HealthMetricKind.incomeStability => Icons.savings,
-        HealthMetricKind.dividendStrength => Icons.paid,
-        HealthMetricKind.volatilityControl => Icons.shield,
-        HealthMetricKind.longTermPotential => Icons.rocket_launch,
-      };
+    HealthMetricKind.diversification => Icons.hub,
+    HealthMetricKind.growth => Icons.trending_up,
+    HealthMetricKind.incomeStability => Icons.savings,
+    HealthMetricKind.dividendStrength => Icons.paid,
+    HealthMetricKind.volatilityControl => Icons.shield,
+    HealthMetricKind.longTermPotential => Icons.rocket_launch,
+  };
 }

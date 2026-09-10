@@ -28,13 +28,13 @@ class PortfolioController extends ChangeNotifier {
     required MissionsRepository missionsRepository,
     MascotController? mascotController,
     AppEventBus? eventBus,
-  })  : _repository = repository,
-        _achievementsLocalRepository = achievementsLocalRepository,
-        _achievementsRepository = achievementsRepository,
-        _gamificationRepository = gamificationRepository,
-        _missionsRepository = missionsRepository,
-        _mascotController = mascotController,
-        _eventBus = eventBus ?? AppEventBus.instance;
+  }) : _repository = repository,
+       _achievementsLocalRepository = achievementsLocalRepository,
+       _achievementsRepository = achievementsRepository,
+       _gamificationRepository = gamificationRepository,
+       _missionsRepository = missionsRepository,
+       _mascotController = mascotController,
+       _eventBus = eventBus ?? AppEventBus.instance;
 
   final PortfolioRepository _repository;
   final AchievementsLocalRepository _achievementsLocalRepository;
@@ -298,15 +298,18 @@ class PortfolioController extends ChangeNotifier {
     // Not yet fetched from the backend for this range — compute locally from
     // already-loaded lots so the UI responds instantly, then fetch+replace.
     chartPoints = WealthHistoryCalculator.compute(_allLots, selectedRange);
-    _repository.fetchHistory(selectedRange).then((points) {
-      _backendHistoryCache[selectedRange] = points;
-      if (selectedAssetFilter == null) {
-        chartPoints = points;
-        notifyListeners();
-      }
-    }).catchError((_) {
-      // Keep the locally-computed series if the backend call fails.
-    });
+    _repository
+        .fetchHistory(selectedRange)
+        .then((points) {
+          _backendHistoryCache[selectedRange] = points;
+          if (selectedAssetFilter == null) {
+            chartPoints = points;
+            notifyListeners();
+          }
+        })
+        .catchError((_) {
+          // Keep the locally-computed series if the backend call fails.
+        });
   }
 
   /// The backend is the sole authority on achievement unlocks, mission
@@ -327,9 +330,9 @@ class PortfolioController extends ChangeNotifier {
       await _achievementsLocalRepository.cacheUnlocked(result.unlockedAt);
 
       if (result.newlyUnlockedCodes.isNotEmpty) {
-        newlyUnlocked = AchievementCatalog.resolve(_unlockedAchievements)
-            .where((a) => result.newlyUnlockedCodes.contains(a.id))
-            .toList();
+        newlyUnlocked = AchievementCatalog.resolve(
+          _unlockedAchievements,
+        ).where((a) => result.newlyUnlockedCodes.contains(a.id)).toList();
         // The in-screen celebration overlay (`newlyUnlocked` above) already
         // shows these; the bus emission is for other, decoupled listeners
         // (e.g. a future Character Engine reaction) rather than a second UI.
@@ -375,10 +378,7 @@ class PortfolioController extends ChangeNotifier {
     final isConcentrated = stats.largestHoldingPercent > 40;
     if (isConcentrated && !_wasHighlyConcentrated) {
       final biggest = holdings.first;
-      _eventBus.emit(HighConcentrationDetectedEvent(
-        ticker: biggest.ticker,
-        percent: biggest.portfolioPercent,
-      ));
+      _eventBus.emit(HighConcentrationDetectedEvent(ticker: biggest.ticker, percent: biggest.portfolioPercent));
     }
     _wasHighlyConcentrated = isConcentrated;
   }

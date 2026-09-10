@@ -25,10 +25,7 @@ class ExplanationStepView extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LayerChip(
-              label: Translator.translate(AppStrings.academyContentLabel),
-              color: AppColors.neonCyan,
-            ),
+            LayerChip(label: Translator.translate(AppStrings.academyContentLabel), color: AppColors.neonCyan),
             if (breadcrumb != null) ...[
               const SizedBox(width: 10),
               Expanded(
@@ -42,7 +39,10 @@ class ExplanationStepView extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        Text(step.title, style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold)),
+        Text(
+          step.title,
+          style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 12),
         Text(step.body, style: TextStyle(color: tokens.textSecondary, fontSize: 15, height: 1.5)),
       ],

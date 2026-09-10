@@ -16,10 +16,7 @@ void main() {
     });
 
     test('round-trips ids and dates cached via cacheUnlocked', () async {
-      final unlockedAt = {
-        'first_investment': DateTime.utc(2024, 1, 1),
-        'portfolio_10k': DateTime.utc(2024, 3, 15),
-      };
+      final unlockedAt = {'first_investment': DateTime.utc(2024, 1, 1), 'portfolio_10k': DateTime.utc(2024, 3, 15)};
 
       await repository.cacheUnlocked(unlockedAt);
 

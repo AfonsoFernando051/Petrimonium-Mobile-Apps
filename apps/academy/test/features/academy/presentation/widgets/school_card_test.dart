@@ -49,7 +49,9 @@ void main() {
     });
 
     testWidgets('explains the missing prerequisite when locked', (tester) async {
-      await tester.pumpWidget(buildTestable(status: SchoolStatus.locked, missingPrerequisites: ['Fundamentos de Investimento']));
+      await tester.pumpWidget(
+        buildTestable(status: SchoolStatus.locked, missingPrerequisites: ['Fundamentos de Investimento']),
+      );
       await tester.pump();
 
       expect(find.text('Conclua Fundamentos de Investimento primeiro'), findsOneWidget);

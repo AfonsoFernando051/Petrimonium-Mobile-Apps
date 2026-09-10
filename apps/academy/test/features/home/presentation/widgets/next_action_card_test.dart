@@ -33,11 +33,7 @@ void main() {
     Translator.currentLanguage = 'pt';
   });
 
-  Widget buildTestableWidget({
-    required NextAction action,
-    VoidCallback? onStartLesson,
-    VoidCallback? onOpenAcademy,
-  }) {
+  Widget buildTestableWidget({required NextAction action, VoidCallback? onStartLesson, VoidCallback? onOpenAcademy}) {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(

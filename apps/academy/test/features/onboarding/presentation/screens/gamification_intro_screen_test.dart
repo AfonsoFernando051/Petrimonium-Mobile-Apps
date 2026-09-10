@@ -11,10 +11,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const GamificationIntroScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const GamificationIntroScreen());
   }
 
   group('GamificationIntroScreen', () {
@@ -39,10 +36,7 @@ void main() {
       );
 
       expect(find.text('Sem comparação entre pessoas'), findsOneWidget);
-      expect(
-        find.text('Seu progresso é só seu. Não existe ranking de patrimônio ou retorno aqui.'),
-        findsOneWidget,
-      );
+      expect(find.text('Seu progresso é só seu. Não existe ranking de patrimônio ou retorno aqui.'), findsOneWidget);
     });
 
     testWidgets('tapping Next navigates to FinancialGoalScreen', (tester) async {

@@ -30,11 +30,9 @@ final class CurrencyLockedException implements Exception {
 }
 
 final class HealthController extends ChangeNotifier {
-  HealthController({
-    required HealthRepository repository,
-    required LocaleController localeController,
-  }) : _repository = repository,
-       _localeController = localeController;
+  HealthController({required HealthRepository repository, required LocaleController localeController})
+    : _repository = repository,
+      _localeController = localeController;
 
   final HealthRepository _repository;
   final LocaleController _localeController;
@@ -70,8 +68,7 @@ final class HealthController extends ChangeNotifier {
 
   CurrencyCode get currency => profile?.primaryCurrency ?? CurrencyCode.brl;
 
-  OnboardingStep get onboardingStep =>
-      pet == null ? OnboardingStep.petSetup : OnboardingStep.quickSetup;
+  OnboardingStep get onboardingStep => pet == null ? OnboardingStep.petSetup : OnboardingStep.quickSetup;
 
   /// Whether *this* onboarding pass started without a Pet — decided once,
   /// the moment `stage` first becomes `onboarding`, so the progress dots on
@@ -138,11 +135,7 @@ final class HealthController extends ChangeNotifier {
 
     // These resources are independent. Loading them concurrently bounds a
     // stalled/offline startup to one HTTP timeout instead of three in a row.
-    final results = await Future.wait<Object?>([
-      loadPet(),
-      loadAccount(),
-      _repository.getProfile(),
-    ]);
+    final results = await Future.wait<Object?>([loadPet(), loadAccount(), _repository.getProfile()]);
     pet = results[0] as PetIdentity?;
     account = results[1] as AccountIdentity?;
     final loadedProfile = results[2] as HealthProfile?;
@@ -160,10 +153,7 @@ final class HealthController extends ChangeNotifier {
 
   /// `POST /api/pets/configure` — shared identity endpoint, not Health-only.
   /// Advances `onboardingStep` to `quickSetup` as soon as `pet` is set.
-  Future<void> createPet({
-    required PetSpecies species,
-    required String name,
-  }) async {
+  Future<void> createPet({required PetSpecies species, required String name}) async {
     await _withBusy(() async {
       await _repository.configurePet(specie: species.apiValue, name: name);
       pet = PetIdentity(name: name, species: species.apiValue);
@@ -182,9 +172,7 @@ final class HealthController extends ChangeNotifier {
 
   Future<void> updateProfile(HealthProfile value) async {
     final existing = profile;
-    if (existing != null &&
-        existing.primaryCurrency != value.primaryCurrency &&
-        !existing.currencyChangeAllowed) {
+    if (existing != null && existing.primaryCurrency != value.primaryCurrency && !existing.currencyChangeAllowed) {
       throw const CurrencyLockedException();
     }
     await _withBusy(() async {
@@ -289,12 +277,7 @@ final class HealthController extends ChangeNotifier {
   // templates; one-off ones as planned transactions with no recurrence link.
 
   List<HealthRecurrence> get debtRecurrences => recurrences
-      .where(
-        (r) =>
-            r.active &&
-            r.type == TransactionType.expense &&
-            DebtCategory.fromApiCategory(r.category) != null,
-      )
+      .where((r) => r.active && r.type == TransactionType.expense && DebtCategory.fromApiCategory(r.category) != null)
       .toList(growable: false);
 
   /// A one-off is a commitment the user entered by hand. An occurrence the
@@ -311,12 +294,7 @@ final class HealthController extends ChangeNotifier {
       .toList(growable: false);
 
   List<HealthRecurrence> get incomeRecurrences => recurrences
-      .where(
-        (r) =>
-            r.active &&
-            r.type == TransactionType.income &&
-            IncomeCategory.fromApiCategory(r.category) != null,
-      )
+      .where((r) => r.active && r.type == TransactionType.income && IncomeCategory.fromApiCategory(r.category) != null)
       .toList(growable: false);
 
   /// See [oneOffDebts]: a generated occurrence is not a separate income.
@@ -525,18 +503,9 @@ final class HealthController extends ChangeNotifier {
     await refreshData();
   }
 
-  Future<void> createCard({
-    required String name,
-    required int closingDay,
-    required int dueDay,
-  }) async {
+  Future<void> createCard({required String name, required int closingDay, required int dueDay}) async {
     await _withBusy(
-      () => _repository.createCard(
-        name: name,
-        currency: currency,
-        closingDay: closingDay,
-        dueDay: dueDay,
-      ),
+      () => _repository.createCard(name: name, currency: currency, closingDay: closingDay, dueDay: dueDay),
     );
     await refreshData();
   }
@@ -582,11 +551,7 @@ final class HealthController extends ChangeNotifier {
     return invoices;
   }
 
-  Future<void> payInvoice({
-    required int invoiceId,
-    required int accountId,
-    required DateTime paymentDate,
-  }) async {
+  Future<void> payInvoice({required int invoiceId, required int accountId, required DateTime paymentDate}) async {
     await _withBusy(
       () => _repository.payInvoice(
         invoiceId: invoiceId,
@@ -663,9 +628,7 @@ final class HealthController extends ChangeNotifier {
   Future<void> loadMentorSuggestions() async {
     try {
       final language = _localeController.current.tag.split('-').first;
-      mentorSuggestions = await _repository.getMentorSuggestions(
-        language: language,
-      );
+      mentorSuggestions = await _repository.getMentorSuggestions(language: language);
     } catch (_) {
       mentorSuggestions = const [];
     }
@@ -692,10 +655,7 @@ final class HealthController extends ChangeNotifier {
     mentorError = null;
     notifyListeners();
     try {
-      final reply = await _repository.sendMentorMessage(
-        message: trimmed,
-        conversationId: mentorConversationId,
-      );
+      final reply = await _repository.sendMentorMessage(message: trimmed, conversationId: mentorConversationId);
       mentorConversationId = reply.conversationId;
       mentorMessages = [
         ...mentorMessages,

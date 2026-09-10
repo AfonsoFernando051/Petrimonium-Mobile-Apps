@@ -45,10 +45,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const ExperienceLevelScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const ExperienceLevelScreen());
   }
 
   group('ExperienceLevelScreen', () {

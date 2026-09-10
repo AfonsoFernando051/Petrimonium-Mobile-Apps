@@ -30,7 +30,12 @@ class RecommendedForYouSection extends StatelessWidget {
       children: [
         Text(
           Translator.translate(AppStrings.academyRecommendedSectionLabel),
-          style: TextStyle(color: tokens.primary.withValues(alpha: 0.6), fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 2),
+          style: TextStyle(
+            color: tokens.primary.withValues(alpha: 0.6),
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 2,
+          ),
         ),
         const SizedBox(height: 10),
         for (final recommendation in recommendations) ...[

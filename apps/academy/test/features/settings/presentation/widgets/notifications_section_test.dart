@@ -43,12 +43,13 @@ void main() {
       expect(switches.firstWhere((s) => s.label == 'Alertas de conquistas').value, isFalse);
     });
 
-    testWidgets('toggling the daily-mission-reminders switch calls its callback with the new value', (WidgetTester tester) async {
+    testWidgets('toggling the daily-mission-reminders switch calls its callback with the new value', (
+      WidgetTester tester,
+    ) async {
       bool? newValue;
-      await tester.pumpWidget(buildTestableWidget(
-        dailyMissionReminders: true,
-        onDailyMissionRemindersChanged: (v) => newValue = v,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(dailyMissionReminders: true, onDailyMissionRemindersChanged: (v) => newValue = v),
+      );
 
       await tester.tap(find.text('Lembretes de missões diárias'));
       await tester.pump();
@@ -56,12 +57,13 @@ void main() {
       expect(newValue, isFalse);
     });
 
-    testWidgets('toggling the achievement-alerts switch calls its callback with the new value', (WidgetTester tester) async {
+    testWidgets('toggling the achievement-alerts switch calls its callback with the new value', (
+      WidgetTester tester,
+    ) async {
       bool? newValue;
-      await tester.pumpWidget(buildTestableWidget(
-        achievementAlerts: false,
-        onAchievementAlertsChanged: (v) => newValue = v,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(achievementAlerts: false, onAchievementAlertsChanged: (v) => newValue = v),
+      );
 
       await tester.tap(find.text('Alertas de conquistas'));
       await tester.pump();

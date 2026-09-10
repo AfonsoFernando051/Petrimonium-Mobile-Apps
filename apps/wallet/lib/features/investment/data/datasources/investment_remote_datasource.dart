@@ -13,10 +13,7 @@ class InvestmentRemoteDataSource {
   /// with it `false` (the default) the server refuses a submission that would
   /// wipe out existing holdings, so a caller that hasn't shown the user their
   /// current portfolio can't silently destroy it.
-  Future<void> configureInvestments(
-    List<AssetRegistrationModel> investments, {
-    bool confirmReplace = false,
-  }) async {
+  Future<void> configureInvestments(List<AssetRegistrationModel> investments, {bool confirmReplace = false}) async {
     final response = await apiClient.post(
       '/api/investments/configure?confirmReplace=$confirmReplace',
       investments.map((e) => e.toJson()).toList(),

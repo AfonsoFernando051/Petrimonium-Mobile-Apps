@@ -15,8 +15,7 @@ import 'package:petrimonium_academy/features/simulated_wallet/presentation/contr
 class FakeSimulatedWalletRepository extends SimulatedWalletRepository {
   // Every method below is overridden, so this real data source (backed by a
   // plain default-constructed ApiClient) never actually makes a network call.
-  FakeSimulatedWalletRepository()
-      : super(remoteDataSource: SimulatedWalletRemoteDataSource(apiClient: ApiClient()));
+  FakeSimulatedWalletRepository() : super(remoteDataSource: SimulatedWalletRemoteDataSource(apiClient: ApiClient()));
 
   SimulatedPortfolioSummary portfolioToReturn = SimulatedPortfolioSummary.empty;
   Object? fetchError;
@@ -67,15 +66,15 @@ class FakeSimulatedWalletRepository extends SimulatedWalletRepository {
 }
 
 SimulatedOrder _order({SimulatedOrderSide side = SimulatedOrderSide.buy}) => SimulatedOrder(
-      id: 1,
-      ticker: 'PETR4',
-      side: side,
-      quantity: 10,
-      price: 30.5,
-      total: 305.0,
-      executedAt: DateTime(2026, 1, 1),
-      clientOrderId: 'order-1',
-    );
+  id: 1,
+  ticker: 'PETR4',
+  side: side,
+  quantity: 10,
+  price: 30.5,
+  total: 305.0,
+  executedAt: DateTime(2026, 1, 1),
+  clientOrderId: 'order-1',
+);
 
 void main() {
   late FakeSimulatedWalletRepository repository;
@@ -191,7 +190,9 @@ void main() {
     });
 
     test('trims the query before delegating to the repository', () async {
-      repository.quotesToReturn = [const AssetQuote(symbol: 'PETR4', shortName: null, regularMarketPrice: 30.5, currency: 'BRL')];
+      repository.quotesToReturn = [
+        const AssetQuote(symbol: 'PETR4', shortName: null, regularMarketPrice: 30.5, currency: 'BRL'),
+      ];
 
       final result = await controller.searchQuotes('  petr4  ');
 

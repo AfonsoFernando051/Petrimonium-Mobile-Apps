@@ -28,18 +28,10 @@ class PerformanceBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            isPositive ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-            color: color,
-            size: compact ? 14 : 18,
-          ),
+          Icon(isPositive ? Icons.arrow_drop_up : Icons.arrow_drop_down, color: color, size: compact ? 14 : 18),
           Text(
             AppFormatters.percent(percent),
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-              fontSize: compact ? 11 : 12,
-            ),
+            style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: compact ? 11 : 12),
           ),
         ],
       ),

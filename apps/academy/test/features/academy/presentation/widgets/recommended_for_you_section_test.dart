@@ -48,10 +48,7 @@ void main() {
         MaterialApp(
           theme: AppTheme.dark,
           home: Scaffold(
-            body: RecommendedForYouSection(
-              recommendations: recommendations,
-              onTapLesson: (lesson) => tapped = lesson,
-            ),
+            body: RecommendedForYouSection(recommendations: recommendations, onTapLesson: (lesson) => tapped = lesson),
           ),
         ),
       );

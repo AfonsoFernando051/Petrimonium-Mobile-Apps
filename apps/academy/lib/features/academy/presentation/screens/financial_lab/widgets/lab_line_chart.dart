@@ -9,12 +9,7 @@ import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 /// line that actually moves, matching `WealthEvolutionCard`'s dashed
 /// "invested capital" vs. solid "portfolio value" convention.
 class LabLineSeries {
-  const LabLineSeries({
-    required this.label,
-    required this.color,
-    required this.values,
-    this.dashed = false,
-  });
+  const LabLineSeries({required this.label, required this.color, required this.values, this.dashed = false});
 
   final String label;
   final Color color;
@@ -26,12 +21,7 @@ class LabLineSeries {
 /// generalized so any simulator needing a multi-series line chart (as
 /// opposed to [LabStackedBarChart]'s two-part stacked bars) can reuse it.
 class LabLineChart extends StatefulWidget {
-  const LabLineChart({
-    super.key,
-    required this.xLabels,
-    required this.series,
-    required this.tooltipValueFormatter,
-  });
+  const LabLineChart({super.key, required this.xLabels, required this.series, required this.tooltipValueFormatter});
 
   final List<String> xLabels;
   final List<LabLineSeries> series;
@@ -56,10 +46,7 @@ class _LabLineChartState extends State<LabLineChart> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ChartLegend(
-              items: [
-                for (final s in widget.series)
-                  ChartLegendItem(color: s.color, label: s.label),
-              ],
+              items: [for (final s in widget.series) ChartLegendItem(color: s.color, label: s.label)],
             ),
             const SizedBox(height: AppSpacing.lg),
             SizedBox(
@@ -72,8 +59,7 @@ class _LabLineChartState extends State<LabLineChart> {
                       curve: Curves.easeOutCubic,
                     ),
             ),
-            if (_touchedIndex != null &&
-                _touchedIndex! < widget.xLabels.length) ...[
+            if (_touchedIndex != null && _touchedIndex! < widget.xLabels.length) ...[
               const SizedBox(height: AppSpacing.md),
               _tooltip(tokens),
             ],
@@ -88,18 +74,11 @@ class _LabLineChartState extends State<LabLineChart> {
     return TooltipSummary(
       accentColor: widget.series.first.color,
       children: [
-        Text(
-          widget.xLabels[index],
-          style: TextStyle(color: tokens.textSecondary, fontSize: 11),
-        ),
+        Text(widget.xLabels[index], style: TextStyle(color: tokens.textSecondary, fontSize: 11)),
         for (final s in widget.series)
           Text(
             widget.tooltipValueFormatter(s.values[index]),
-            style: TextStyle(
-              color: s.color,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            ),
+            style: TextStyle(color: s.color, fontWeight: FontWeight.bold, fontSize: 12),
           ),
       ],
     );
@@ -116,15 +95,12 @@ class _LabLineChartState extends State<LabLineChart> {
         show: true,
         drawVerticalLine: false,
         horizontalInterval: (maxY - minY + pad * 2) / 4,
-        getDrawingHorizontalLine: (_) =>
-            FlLine(color: tokens.divider, strokeWidth: 1),
+        getDrawingHorizontalLine: (_) => FlLine(color: tokens.divider, strokeWidth: 1),
       ),
       titlesData: FlTitlesData(
         show: true,
         topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
+        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -143,10 +119,7 @@ class _LabLineChartState extends State<LabLineChart> {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 22,
-            interval: (widget.xLabels.length / 6).ceilToDouble().clamp(
-              1.0,
-              double.infinity,
-            ),
+            interval: (widget.xLabels.length / 6).ceilToDouble().clamp(1.0, double.infinity),
             getTitlesWidget: (value, meta) {
               final index = value.toInt();
               if (index < 0 || index >= widget.xLabels.length) {
@@ -154,10 +127,7 @@ class _LabLineChartState extends State<LabLineChart> {
               }
               return Padding(
                 padding: const EdgeInsets.only(top: 6),
-                child: Text(
-                  widget.xLabels[index],
-                  style: TextStyle(color: tokens.textSecondary, fontSize: 9),
-                ),
+                child: Text(widget.xLabels[index], style: TextStyle(color: tokens.textSecondary, fontSize: 9)),
               );
             },
           ),
@@ -173,26 +143,19 @@ class _LabLineChartState extends State<LabLineChart> {
               response == null ||
               response.lineBarSpots == null ||
               response.lineBarSpots!.isEmpty) {
-            if (event is FlTapUpEvent ||
-                event is FlPanEndEvent ||
-                event is FlLongPressEnd) {
+            if (event is FlTapUpEvent || event is FlPanEndEvent || event is FlLongPressEnd) {
               setState(() => _touchedIndex = null);
             }
             return;
           }
           HapticFeedback.selectionClick();
-          setState(
-            () => _touchedIndex = response.lineBarSpots!.first.x.round(),
-          );
+          setState(() => _touchedIndex = response.lineBarSpots!.first.x.round());
         },
       ),
       lineBarsData: [
         for (final s in widget.series)
           LineChartBarData(
-            spots: [
-              for (var i = 0; i < s.values.length; i++)
-                FlSpot(i.toDouble(), s.values[i]),
-            ],
+            spots: [for (var i = 0; i < s.values.length; i++) FlSpot(i.toDouble(), s.values[i])],
             isCurved: !s.dashed,
             color: s.color,
             barWidth: s.dashed ? 2 : 3,
@@ -201,12 +164,8 @@ class _LabLineChartState extends State<LabLineChart> {
             dotData: FlDotData(
               show: !s.dashed,
               checkToShowDot: (spot, _) => spot.x.round() == _touchedIndex,
-              getDotPainter: (spot, percent, bar, index) => FlDotCirclePainter(
-                radius: 4,
-                color: s.color,
-                strokeWidth: 2,
-                strokeColor: tokens.surfaceElevated,
-              ),
+              getDotPainter: (spot, percent, bar, index) =>
+                  FlDotCirclePainter(radius: 4, color: s.color, strokeWidth: 2, strokeColor: tokens.surfaceElevated),
             ),
             belowBarData: s.dashed
                 ? BarAreaData(show: false)
@@ -215,10 +174,7 @@ class _LabLineChartState extends State<LabLineChart> {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [
-                        s.color.withValues(alpha: 0.22),
-                        s.color.withValues(alpha: 0.0),
-                      ],
+                      colors: [s.color.withValues(alpha: 0.22), s.color.withValues(alpha: 0.0)],
                     ),
                   ),
           ),

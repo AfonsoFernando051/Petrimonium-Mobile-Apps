@@ -152,7 +152,9 @@ class AcademyProgressCalculator {
         ..sort((a, b) => a.order.compareTo(b.order));
       for (final school in schools) {
         for (final module in catalog.modulesForSchool(school.id)) {
-          if (moduleStatus(catalog: catalog, module: module, completedIds: completedIds) == ModuleStatus.locked) continue;
+          if (moduleStatus(catalog: catalog, module: module, completedIds: completedIds) == ModuleStatus.locked) {
+            continue;
+          }
           if (!module.contentAvailable) continue;
           for (final lesson in catalog.lessonsForModule(module.id)) {
             if (!completedIds.contains(lesson.id)) return lesson;

@@ -23,11 +23,11 @@ class DashboardTabRouter {
   /// comment on why this mirrors the real tabs + Profile rather than a
   /// generic missions/goals set that doesn't exist in this app.)
   static PetContext petContextFor(int tabIndex) => switch (tabIndex) {
-        homeTab => PetContext.home,
-        academyTab => PetContext.academy,
-        walletTab => PetContext.portfolio,
-        _ => PetContext.mentor,
-      };
+    homeTab => PetContext.home,
+    academyTab => PetContext.academy,
+    walletTab => PetContext.portfolio,
+    _ => PetContext.mentor,
+  };
 
   /// Whether [tabIndex] is the portfolio-flavored tab — used to decide
   /// whether the companion greeting needs the holdings count.

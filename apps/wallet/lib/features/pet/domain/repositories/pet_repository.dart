@@ -1,4 +1,4 @@
-import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Contract for reading and writing the user's core pet record
 /// (specie selection, activation status, raw pet payload).

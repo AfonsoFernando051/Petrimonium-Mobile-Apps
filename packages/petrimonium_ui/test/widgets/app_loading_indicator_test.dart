@@ -8,9 +8,7 @@ void main() {
     return MaterialApp(
       theme: TestTheme.dark,
       home: Scaffold(
-        body: strokeWidth == null
-            ? const AppLoadingIndicator()
-            : AppLoadingIndicator(strokeWidth: strokeWidth),
+        body: strokeWidth == null ? const AppLoadingIndicator() : AppLoadingIndicator(strokeWidth: strokeWidth),
       ),
     );
   }

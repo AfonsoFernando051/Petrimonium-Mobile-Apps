@@ -5,11 +5,7 @@ class PlayerLevel {
   final int xpIntoLevel;
   final int xpForNextLevel;
 
-  const PlayerLevel({
-    required this.level,
-    required this.xpIntoLevel,
-    required this.xpForNextLevel,
-  });
+  const PlayerLevel({required this.level, required this.xpIntoLevel, required this.xpForNextLevel});
 
   /// Progress toward the next level, 0.0-1.0.
   double get progress => xpForNextLevel == 0 ? 1.0 : (xpIntoLevel / xpForNextLevel).clamp(0.0, 1.0);

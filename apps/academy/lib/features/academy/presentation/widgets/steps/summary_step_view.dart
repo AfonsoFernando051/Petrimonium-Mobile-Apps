@@ -17,7 +17,10 @@ class SummaryStepView extends StatelessWidget {
       children: [
         const Icon(Icons.fact_check_outlined, color: AppColors.goldenBorder, size: 32),
         const SizedBox(height: 16),
-        Text(step.title, style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold)),
+        Text(
+          step.title,
+          style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 16),
         for (final takeaway in step.takeaways)
           Padding(

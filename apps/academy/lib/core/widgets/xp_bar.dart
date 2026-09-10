@@ -9,13 +9,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 /// have to re-hand-roll it. [progress] animates smoothly on change; honors
 /// reduced-motion by jumping straight to the target value.
 class XpBar extends StatelessWidget {
-  const XpBar({
-    super.key,
-    required this.progress,
-    this.label,
-    this.color = AppColors.neonCyan,
-    this.height = 8,
-  });
+  const XpBar({super.key, required this.progress, this.label, this.color = AppColors.neonCyan, this.height = 8});
 
   /// 0.0-1.0 fill fraction.
   final double progress;
@@ -36,30 +30,17 @@ class XpBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(height / 2),
           child: Stack(
             children: [
-              Container(
-                height: height,
-                width: double.infinity,
-                color: tokens.textTertiary.withValues(alpha: 0.18),
-              ),
+              Container(height: height, width: double.infinity, color: tokens.textTertiary.withValues(alpha: 0.18)),
               FractionallySizedBox(
                 alignment: Alignment.centerLeft,
                 widthFactor: clamped,
                 child: AnimatedContainer(
-                  duration: reducedMotion
-                      ? Duration.zero
-                      : const Duration(milliseconds: 700),
+                  duration: reducedMotion ? Duration.zero : const Duration(milliseconds: 700),
                   curve: Curves.easeOut,
                   height: height,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [color.withValues(alpha: 0.75), color],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: color.withValues(alpha: 0.55),
-                        blurRadius: height,
-                      ),
-                    ],
+                    gradient: LinearGradient(colors: [color.withValues(alpha: 0.75), color]),
+                    boxShadow: [BoxShadow(color: color.withValues(alpha: 0.55), blurRadius: height)],
                   ),
                 ),
               ),
@@ -68,10 +49,7 @@ class XpBar extends StatelessWidget {
         ),
         if (label != null) ...[
           const SizedBox(height: 6),
-          Text(
-            label!,
-            style: AppTextStyles.label.copyWith(color: tokens.textSecondary),
-          ),
+          Text(label!, style: AppTextStyles.label.copyWith(color: tokens.textSecondary)),
         ],
       ],
     );

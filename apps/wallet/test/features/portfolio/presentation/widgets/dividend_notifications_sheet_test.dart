@@ -53,11 +53,9 @@ void main() {
 
     testWidgets('shows an error state with retry when loading fails with no data', (WidgetTester tester) async {
       var retried = false;
-      await tester.pumpWidget(buildTestableWidget(
-        isLoading: false,
-        error: 'network error',
-        onRetry: () => retried = true,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(isLoading: false, error: 'network error', onRetry: () => retried = true),
+      );
 
       expect(find.text('Não foi possível carregar suas notificações.'), findsOneWidget);
 
@@ -69,10 +67,7 @@ void main() {
     testWidgets('shows an empty state when there is no upcoming dividend', (WidgetTester tester) async {
       await tester.pumpWidget(buildTestableWidget(isLoading: false));
 
-      expect(
-        find.text('Nenhum provento confirmado a caminho para os seus ativos no momento.'),
-        findsOneWidget,
-      );
+      expect(find.text('Nenhum provento confirmado a caminho para os seus ativos no momento.'), findsOneWidget);
     });
 
     testWidgets('renders a DividendEventTile per upcoming event', (WidgetTester tester) async {

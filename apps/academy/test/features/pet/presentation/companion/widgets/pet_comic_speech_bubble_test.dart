@@ -56,8 +56,9 @@ void main() {
       expect(find.byIcon(Icons.close), findsOneWidget);
     });
 
-    testWidgets('supports all 6 visual states (idle, guidance, success, encouragement, milestone, attention)',
-        (tester) async {
+    testWidgets('supports all 6 visual states (idle, guidance, success, encouragement, milestone, attention)', (
+      tester,
+    ) async {
       for (final state in PetSpeechBubbleState.values) {
         const message = PetMessage(
           id: 'test_state',
@@ -67,9 +68,7 @@ void main() {
           textKey: 'COMPANION',
         );
 
-        await tester.pumpWidget(
-          buildWidget(message: message, overrideState: state),
-        );
+        await tester.pumpWidget(buildWidget(message: message, overrideState: state));
         await tester.pumpAndSettle();
 
         expect(find.byType(PetComicSpeechBubble), findsOneWidget);
@@ -84,10 +83,7 @@ void main() {
         priority: PetMessagePriority.high,
         trigger: PetMessageTrigger.levelUp,
         textKey: 'COMPANION',
-        action: PetMessageAction(
-          labelKey: 'CONTINUE',
-          destination: PetContext.academy,
-        ),
+        action: PetMessageAction(labelKey: 'CONTINUE', destination: PetContext.academy),
       );
 
       await tester.pumpWidget(
@@ -117,9 +113,7 @@ void main() {
       );
 
       for (final tailPos in PetBubbleTailPosition.values) {
-        await tester.pumpWidget(
-          buildWidget(message: message, tailPosition: tailPos),
-        );
+        await tester.pumpWidget(buildWidget(message: message, tailPosition: tailPos));
         await tester.pumpAndSettle();
         expect(find.byType(PetComicSpeechBubble), findsOneWidget);
       }

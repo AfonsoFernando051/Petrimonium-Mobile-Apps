@@ -34,10 +34,7 @@ class SharedAccountNotice extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(
-              text,
-              style: TextStyle(color: tokens.textSecondary, fontSize: 12, height: 1.45),
-            ),
+            child: Text(text, style: TextStyle(color: tokens.textSecondary, fontSize: 12, height: 1.45)),
           ),
         ],
       ),

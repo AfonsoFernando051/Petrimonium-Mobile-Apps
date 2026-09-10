@@ -65,7 +65,9 @@ void main() {
       expect(find.text('O que é P/VP em fundos imobiliários?'), findsOneWidget);
     });
 
-    testWidgets('tapping a question chip shows a snackbar confirming it was sent to the mentor', (WidgetTester tester) async {
+    testWidgets('tapping a question chip shows a snackbar confirming it was sent to the mentor', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget(notOwnedStock));
 
       await tester.tap(find.text('O que é Petrobras?'));

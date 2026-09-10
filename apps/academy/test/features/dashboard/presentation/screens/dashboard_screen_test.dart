@@ -157,9 +157,9 @@ void main() {
     DI.academyRemoteDataSource = mockRemoteDataSource;
 
     final mockOnboardingRepository = MockOnboardingRepository();
-    when(() => mockOnboardingRepository.getStatus()).thenAnswer(
-      (_) async => const OnboardingStatusModel(hasAnswered: true, profile: null),
-    );
+    when(
+      () => mockOnboardingRepository.getStatus(),
+    ).thenAnswer((_) async => const OnboardingStatusModel(hasAnswered: true, profile: null));
     DI.onboardingRepository = mockOnboardingRepository;
 
     final mockPetRepository = MockPetRepository();
@@ -191,10 +191,7 @@ void main() {
   // elsewhere in the tab content itself (e.g. HomeScreen's Knowledge Map
   // reuses Icons.school for the fixture domain's icon) — every lookup below
   // is scoped to the BottomNavigationBar so it can't collide with those.
-  Finder navIcon(IconData icon) => find.descendant(
-        of: find.byType(BottomNavigationBar),
-        matching: find.byIcon(icon),
-      );
+  Finder navIcon(IconData icon) => find.descendant(of: find.byType(BottomNavigationBar), matching: find.byIcon(icon));
 
   group('DashboardScreen', () {
     testWidgets('renders the Home tab by default without crashing', (tester) async {

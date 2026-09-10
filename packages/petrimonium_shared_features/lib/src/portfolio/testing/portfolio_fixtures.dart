@@ -53,11 +53,13 @@ PortfolioStats statsFromLots(List<InvestmentLot> lots) {
     valueByType.update(holding.type, (v) => v + holding.currentValue, ifAbsent: () => holding.currentValue);
   }
   final allocation = valueByType.entries
-      .map((entry) => AllocationSlice(
-            type: entry.key,
-            currentValue: entry.value,
-            portfolioPercent: currentValue == 0 ? 0.0 : (entry.value / currentValue) * 100,
-          ))
+      .map(
+        (entry) => AllocationSlice(
+          type: entry.key,
+          currentValue: entry.value,
+          portfolioPercent: currentValue == 0 ? 0.0 : (entry.value / currentValue) * 100,
+        ),
+      )
       .toList();
 
   return PortfolioStats(summary: summary, holdings: holdings, allocation: allocation);

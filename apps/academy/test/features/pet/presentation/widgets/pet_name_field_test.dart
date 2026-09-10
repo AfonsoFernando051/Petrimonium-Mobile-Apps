@@ -68,10 +68,7 @@ void main() {
     testWidgets('tapping a suggestion chip invokes onSuggestionSelected', (tester) async {
       final controller = TextEditingController();
       String? selected;
-      await tester.pumpWidget(buildTestableWidget(
-        controller: controller,
-        onSuggestionSelected: (v) => selected = v,
-      ));
+      await tester.pumpWidget(buildTestableWidget(controller: controller, onSuggestionSelected: (v) => selected = v));
 
       await tester.tap(find.text('Bolt'));
       await tester.pump();

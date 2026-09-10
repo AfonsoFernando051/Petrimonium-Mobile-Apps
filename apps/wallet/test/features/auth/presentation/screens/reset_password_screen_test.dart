@@ -20,15 +20,11 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const ResetPasswordScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const ResetPasswordScreen());
   }
 
-  Finder fieldAt(int index) => find
-      .descendant(of: find.byType(CustomTextField), matching: find.byType(TextField))
-      .at(index);
+  Finder fieldAt(int index) =>
+      find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField)).at(index);
 
   group('ResetPasswordScreen', () {
     testWidgets('renders title, subtitle and the three fields', (tester) async {
@@ -37,10 +33,7 @@ void main() {
       // Title and submit button share the same translated copy
       // ("Redefinir senha"), so both appear.
       expect(find.text('Redefinir senha'), findsNWidgets(2));
-      expect(
-        find.text('Cole o código que enviamos por e-mail e escolha uma nova senha.'),
-        findsOneWidget,
-      );
+      expect(find.text('Cole o código que enviamos por e-mail e escolha uma nova senha.'), findsOneWidget);
       expect(find.byType(CustomTextField), findsNWidgets(3));
     });
 
@@ -94,9 +87,8 @@ void main() {
             builder: (context) => Scaffold(
               body: Center(
                 child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const ResetPasswordScreen()),
-                  ),
+                  onPressed: () =>
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ResetPasswordScreen())),
                   child: const Text('open'),
                 ),
               ),

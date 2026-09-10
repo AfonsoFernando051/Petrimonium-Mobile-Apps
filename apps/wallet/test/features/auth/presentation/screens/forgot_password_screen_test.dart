@@ -21,10 +21,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const ForgotPasswordScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const ForgotPasswordScreen());
   }
 
   group('ForgotPasswordScreen', () {
@@ -32,10 +29,7 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
 
       expect(find.text('Recuperar senha'), findsOneWidget);
-      expect(
-        find.text('Digite seu e-mail e enviaremos um link para redefinir sua senha.'),
-        findsOneWidget,
-      );
+      expect(find.text('Digite seu e-mail e enviaremos um link para redefinir sua senha.'), findsOneWidget);
       expect(find.byType(CustomTextField), findsOneWidget);
       expect(find.text('Enviar link'), findsOneWidget);
       expect(find.text('Já tenho um código de redefinição'), findsOneWidget);
@@ -62,10 +56,7 @@ void main() {
       await tester.pump(); // settle
 
       verify(() => mockAuthRepository.requestPasswordReset('user@example.com')).called(1);
-      expect(
-        find.text('Se existir uma conta com esse e-mail, você receberá instruções em instantes.'),
-        findsOneWidget,
-      );
+      expect(find.text('Se existir uma conta com esse e-mail, você receberá instruções em instantes.'), findsOneWidget);
       expect(find.byType(CustomTextField), findsNothing);
     });
 
@@ -102,9 +93,8 @@ void main() {
             builder: (context) => Scaffold(
               body: Center(
                 child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
-                  ),
+                  onPressed: () =>
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ForgotPasswordScreen())),
                   child: const Text('open'),
                 ),
               ),

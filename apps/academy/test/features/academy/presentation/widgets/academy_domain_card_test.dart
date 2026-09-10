@@ -16,12 +16,7 @@ void main() {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: AcademyDomainCard(
-          domain: testDomain,
-          status: status,
-          masteryPercent: 0.4,
-          onTap: onTap,
-        ),
+        body: AcademyDomainCard(domain: testDomain, status: status, masteryPercent: 0.4, onTap: onTap),
       ),
     );
   }

@@ -31,7 +31,9 @@ void main() {
           type: InvestmentTypeEnum.STOCKS,
         ),
       ];
-      when(() => mockDataSource.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace'))).thenAnswer((_) async {});
+      when(
+        () => mockDataSource.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace')),
+      ).thenAnswer((_) async {});
 
       await repository.configureInvestments(assets);
 
@@ -39,7 +41,9 @@ void main() {
     });
 
     test('propagates a failure', () async {
-      when(() => mockDataSource.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace'))).thenThrow(Exception('save failed'));
+      when(
+        () => mockDataSource.configureInvestments(any(), confirmReplace: any(named: 'confirmReplace')),
+      ).thenThrow(Exception('save failed'));
       expect(() => repository.configureInvestments([]), throwsException);
     });
   });
@@ -51,7 +55,9 @@ void main() {
     });
 
     test('returns the raw quote map unchanged', () async {
-      when(() => mockDataSource.fetchQuote(any())).thenAnswer((_) async => {'symbol': 'PETR4', 'regularMarketPrice': 30.5});
+      when(
+        () => mockDataSource.fetchQuote(any()),
+      ).thenAnswer((_) async => {'symbol': 'PETR4', 'regularMarketPrice': 30.5});
 
       final quote = await repository.fetchQuote('PETR4');
 
@@ -61,10 +67,12 @@ void main() {
 
   group('searchQuotes', () {
     test('forwards the query and returns the raw results list', () async {
-      when(() => mockDataSource.searchQuotes(any())).thenAnswer((_) async => [
-            {'symbol': 'PETR4'},
-            {'symbol': 'PETR3'},
-          ]);
+      when(() => mockDataSource.searchQuotes(any())).thenAnswer(
+        (_) async => [
+          {'symbol': 'PETR4'},
+          {'symbol': 'PETR3'},
+        ],
+      );
 
       final results = await repository.searchQuotes('PETR');
 

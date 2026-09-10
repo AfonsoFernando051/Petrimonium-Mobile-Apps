@@ -51,10 +51,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const SettingsScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const SettingsScreen());
   }
 
   // The Settings body is taller than the default 800x600 test viewport, so
@@ -84,7 +81,9 @@ void main() {
       expect(find.text('Rex'), findsOneWidget);
     });
 
-    testWidgets('toggling a notification switch persists the new value to SharedPreferences', (WidgetTester tester) async {
+    testWidgets('toggling a notification switch persists the new value to SharedPreferences', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -96,7 +95,9 @@ void main() {
       expect(prefs.getBool('settings_daily_mission_reminders'), isFalse);
     });
 
-    testWidgets('renaming the pet updates the shown name and persists via the mascot repository', (WidgetTester tester) async {
+    testWidgets('renaming the pet updates the shown name and persists via the mascot repository', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -172,32 +173,34 @@ void main() {
       expect(find.byType(SettingsScreen), findsOneWidget);
     });
 
-    testWidgets('confirming the delete-account dialog erases the account, clears the session and navigates to LoginScreen', (WidgetTester tester) async {
-      await tester.pumpWidget(buildTestableWidget());
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
+    testWidgets(
+      'confirming the delete-account dialog erases the account, clears the session and navigates to LoginScreen',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(buildTestableWidget());
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
 
-      await tapVisible(tester, find.text('Excluir minha conta'));
-      await tester.pump(const Duration(milliseconds: 300));
+        await tapVisible(tester, find.text('Excluir minha conta'));
+        await tester.pump(const Duration(milliseconds: 300));
 
-      // Two "Excluir minha conta" widgets now exist: the section's button and
-      // the dialog's confirm action — the dialog's is the last one added.
-      await tester.tap(find.text('Excluir minha conta').last);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.pump(const Duration(milliseconds: 500));
+        // Two "Excluir minha conta" widgets now exist: the section's button and
+        // the dialog's confirm action — the dialog's is the last one added.
+        await tester.tap(find.text('Excluir minha conta').last);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
+        await tester.pump(const Duration(milliseconds: 500));
 
-      verify(() => mockSettingsRepository.deleteAccount()).called(1);
-      // The local session has to be cleared too, otherwise the device keeps
-      // tokens for an account that no longer exists.
-      verify(() => mockAuthRepository.logout()).called(1);
-      expect(find.byType(LoginScreen), findsOneWidget);
-      expect(find.byType(SettingsScreen), findsNothing);
-    });
+        verify(() => mockSettingsRepository.deleteAccount()).called(1);
+        // The local session has to be cleared too, otherwise the device keeps
+        // tokens for an account that no longer exists.
+        verify(() => mockAuthRepository.logout()).called(1);
+        expect(find.byType(LoginScreen), findsOneWidget);
+        expect(find.byType(SettingsScreen), findsNothing);
+      },
+    );
 
     testWidgets('a failed deletion reports the error and leaves the user signed in', (WidgetTester tester) async {
-      when(() => mockSettingsRepository.deleteAccount())
-          .thenThrow(Exception('Não foi possível excluir a conta'));
+      when(() => mockSettingsRepository.deleteAccount()).thenThrow(Exception('Não foi possível excluir a conta'));
 
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
@@ -219,7 +222,9 @@ void main() {
       expect(find.byType(LoginScreen), findsNothing);
     });
 
-    testWidgets('a successful deletion still signs out locally when the remote logout fails', (WidgetTester tester) async {
+    testWidgets('a successful deletion still signs out locally when the remote logout fails', (
+      WidgetTester tester,
+    ) async {
       // Expected: /auth/logout answers 401 because the account is already gone.
       when(() => mockAuthRepository.logout()).thenThrow(Exception('401'));
 
@@ -239,6 +244,5 @@ void main() {
       expect(find.byType(LoginScreen), findsOneWidget);
       expect(find.byType(SettingsScreen), findsNothing);
     });
-
   });
 }

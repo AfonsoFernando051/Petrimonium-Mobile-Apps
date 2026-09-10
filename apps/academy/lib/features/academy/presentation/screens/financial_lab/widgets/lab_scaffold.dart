@@ -44,17 +44,12 @@ class LabScaffold extends StatelessWidget {
             PetCompanionHeader(
               controller: companionController,
               anchor: anchor,
-              onDestinationSelected: (destination) =>
-                  Navigator.of(context).pop(destination),
+              onDestinationSelected: (destination) => Navigator.of(context).pop(destination),
             ),
             const SizedBox(width: 10),
             Text(
               Translator.translate(titleKey),
-              style: TextStyle(
-                color: tokens.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -91,8 +86,7 @@ class LabScaffold extends StatelessWidget {
               child: PetSpeechBubbleOverlay(
                 controller: companionController,
                 anchor: anchor,
-                onActionSelected: (action) =>
-                    Navigator.of(context).pop(action.destination),
+                onActionSelected: (action) => Navigator.of(context).pop(action.destination),
               ),
             ),
           ],
@@ -130,11 +124,7 @@ class _SimulatedDataBadge extends StatelessWidget {
             Expanded(
               child: Text(
                 Translator.translate(AppStrings.labSimulatedDataBadge),
-                style: TextStyle(
-                  color: tokens.textPrimary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(color: tokens.textPrimary, fontSize: 11, fontWeight: FontWeight.w600),
                 overflow: TextOverflow.ellipsis,
               ),
             ),

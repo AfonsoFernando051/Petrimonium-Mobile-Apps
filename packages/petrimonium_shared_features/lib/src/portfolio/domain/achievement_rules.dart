@@ -10,11 +10,7 @@ class AchievementRule {
   final int xpReward;
   final bool Function(PortfolioStats) qualifies;
 
-  const AchievementRule({
-    required this.id,
-    required this.xpReward,
-    required this.qualifies,
-  });
+  const AchievementRule({required this.id, required this.xpReward, required this.qualifies});
 }
 
 /// The achievement rules, shared by every product that shows achievements.

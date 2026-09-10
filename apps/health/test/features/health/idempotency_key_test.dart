@@ -20,51 +20,54 @@ void main() {
   late RemoteHealthRepository repository;
 
   Map<String, dynamic> accountJson() => {
-        'id': 1,
-        'name': 'Conta à ordem',
-        'type': 'CHECKING',
-        'initialBalance': '850.00',
-        'balanceReferenceDate': '2026-09-01',
-        'currentBalance': '850.00',
-        'currency': 'EUR',
-        'archived': false,
-      };
+    'id': 1,
+    'name': 'Conta à ordem',
+    'type': 'CHECKING',
+    'initialBalance': '850.00',
+    'balanceReferenceDate': '2026-09-01',
+    'currentBalance': '850.00',
+    'currency': 'EUR',
+    'archived': false,
+  };
 
   setUp(() {
     bodies = [];
-    repository = RemoteHealthRepository(ApiClient(
-      client: MockClient((request) async {
-        bodies.add(jsonDecode(request.body) as Map<String, dynamic>);
-        return http.Response(jsonEncode(accountJson()), 201,
-            headers: {'content-type': 'application/json'});
-      }),
-      tokenStore: _NoSession(),
-      baseUrl: 'http://localhost:8081',
-    ));
+    repository = RemoteHealthRepository(
+      ApiClient(
+        client: MockClient((request) async {
+          bodies.add(jsonDecode(request.body) as Map<String, dynamic>);
+          return http.Response(jsonEncode(accountJson()), 201, headers: {'content-type': 'application/json'});
+        }),
+        tokenStore: _NoSession(),
+        baseUrl: 'http://localhost:8081',
+      ),
+    );
   });
 
   Future<void> createAccount() => repository.createAccount(
-        name: 'Conta à ordem',
-        type: AccountType.checking,
-        initialBalance: Money.fromDecimal('850.00', CurrencyCode.eur),
-        balanceReferenceDate: DateTime(2026, 9, 1),
-      );
+    name: 'Conta à ordem',
+    type: AccountType.checking,
+    initialBalance: Money.fromDecimal('850.00', CurrencyCode.eur),
+    balanceReferenceDate: DateTime(2026, 9, 1),
+  );
 
   test('creating an account sends a usable idempotency key', () async {
     await createAccount();
 
     final key = bodies.single['idempotencyKey'] as String;
     expect(key, isNotEmpty);
-    expect(key.length, lessThanOrEqualTo(64),
-        reason: 'the backend caps the key at 64 characters');
+    expect(key.length, lessThanOrEqualTo(64), reason: 'the backend caps the key at 64 characters');
   });
 
   test('two creates never reuse the same key', () async {
     await createAccount();
     await createAccount();
 
-    expect(bodies[0]['idempotencyKey'], isNot(bodies[1]['idempotencyKey']),
-        reason: 'a reused key makes the second create silently return the first');
+    expect(
+      bodies[0]['idempotencyKey'],
+      isNot(bodies[1]['idempotencyKey']),
+      reason: 'a reused key makes the second create silently return the first',
+    );
   });
 
   test('a transfer carries its own key so a retry cannot move money twice', () async {

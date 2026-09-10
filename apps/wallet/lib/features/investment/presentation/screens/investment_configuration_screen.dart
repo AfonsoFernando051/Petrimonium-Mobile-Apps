@@ -95,13 +95,15 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
       final holdings = await DI.portfolioRepository.fetchHoldings();
       final existing = holdings
           .expand((holding) => holding.lots)
-          .map((lot) => AssetRegistrationModel(
-                name: lot.ticker,
-                quantity: lot.quantity,
-                purchasePrice: lot.purchasePrice,
-                purchaseDate: _formatDate(lot.purchaseDate),
-                type: lot.type,
-              ))
+          .map(
+            (lot) => AssetRegistrationModel(
+              name: lot.ticker,
+              quantity: lot.quantity,
+              purchasePrice: lot.purchasePrice,
+              purchaseDate: _formatDate(lot.purchaseDate),
+              type: lot.type,
+            ),
+          )
           .toList();
       if (mounted) {
         setState(() {
@@ -278,10 +280,9 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
   /// still underneath) so the back button never leads back into onboarding
   /// once the user has reached Home.
   void _goHome() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const DashboardScreen()),
-      (route) => false,
-    );
+    Navigator.of(
+      context,
+    ).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const DashboardScreen()), (route) => false);
   }
 
   Future<void> _selectDate() async {
@@ -364,7 +365,8 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
             unawaited(_refreshPriceForSelectedDate());
           } else {
             setState(() {
-              _priceController.text = selection['regularMarketPrice']?.toString() ?? selection['close']?.toString() ?? '';
+              _priceController.text =
+                  selection['regularMarketPrice']?.toString() ?? selection['close']?.toString() ?? '';
             });
           }
         },
@@ -484,7 +486,10 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(Translator.translate(AppStrings.initialPortfolioTitle), style: TextStyle(color: context.colors.textPrimary)),
+        title: Text(
+          Translator.translate(AppStrings.initialPortfolioTitle),
+          style: TextStyle(color: context.colors.textPrimary),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -496,10 +501,7 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
       ),
       body: Container(
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg_nebula.png'),
-            fit: BoxFit.cover,
-          ),
+          image: DecorationImage(image: AssetImage('assets/images/bg_nebula.png'), fit: BoxFit.cover),
         ),
         child: SafeArea(
           child: LayoutBuilder(
@@ -557,7 +559,11 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
               child: Text(
                 'Cada grande investidor começou com um único investimento. Sua jornada financeira começa agora.',
                 textAlign: TextAlign.center,
-                style: AppTextStyles.bodyEmphasis.copyWith(color: context.colors.textSecondary, fontWeight: FontWeight.normal, height: 1.4),
+                style: AppTextStyles.bodyEmphasis.copyWith(
+                  color: context.colors.textSecondary,
+                  fontWeight: FontWeight.normal,
+                  height: 1.4,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -599,10 +605,7 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
               style: AppTextStyles.label.copyWith(color: context.colors.textPrimary),
             ),
           ),
-          TextButton(
-            onPressed: _seedExistingHoldings,
-            child: const Text('Tentar novamente'),
-          ),
+          TextButton(onPressed: _seedExistingHoldings, child: const Text('Tentar novamente')),
         ],
       ),
     );
@@ -621,10 +624,7 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Adicionar Ativo',
-              style: AppTextStyles.headline.copyWith(color: context.colors.textPrimary),
-            ),
+            Text('Adicionar Ativo', style: AppTextStyles.headline.copyWith(color: context.colors.textPrimary)),
             const SizedBox(height: 16),
             Expanded(
               child: SingleChildScrollView(
@@ -636,10 +636,7 @@ class _InvestmentConfigurationScreenState extends State<InvestmentConfigurationS
                       // Inside the scroll view on purpose: outside it, the
                       // banner would permanently shorten the form area rather
                       // than scroll away with the rest of the content.
-                      if (_holdingsLoadFailed) ...[
-                        _buildHoldingsLoadFailedBanner(),
-                        const SizedBox(height: 16),
-                      ],
+                      if (_holdingsLoadFailed) ...[_buildHoldingsLoadFailedBanner(), const SizedBox(height: 16)],
                       InvestmentTypeSelector(
                         selected: _selectedType,
                         onChanged: (type) => setState(() {

@@ -67,7 +67,6 @@ class FakeSimulatedWalletRemoteDataSource extends SimulatedWalletRemoteDataSourc
   Future<Map<String, dynamic>?> fetchQuote(String ticker) async => quoteToReturn;
 }
 
-
 void main() {
   late FakeSimulatedWalletRemoteDataSource remoteDataSource;
   late SimulatedWalletRepository repository;

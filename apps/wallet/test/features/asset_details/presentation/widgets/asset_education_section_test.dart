@@ -8,7 +8,9 @@ void main() {
   Widget buildTestableWidget(AssetDetails asset) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: SingleChildScrollView(child: AssetEducationSection(asset: asset))),
+      home: Scaffold(
+        body: SingleChildScrollView(child: AssetEducationSection(asset: asset)),
+      ),
     );
   }
 
@@ -18,7 +20,9 @@ void main() {
   const bdr = AssetDetails(ticker: 'AAPL34', shortName: 'Apple', assetType: 'bdr');
 
   group('AssetEducationSection', () {
-    testWidgets('collapsed by default: shows only "what is it" and a "saiba mais" expander', (WidgetTester tester) async {
+    testWidgets('collapsed by default: shows only "what is it" and a "saiba mais" expander', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget(stock));
 
       expect(find.text('GUIA EDUCACIONAL'), findsOneWidget);

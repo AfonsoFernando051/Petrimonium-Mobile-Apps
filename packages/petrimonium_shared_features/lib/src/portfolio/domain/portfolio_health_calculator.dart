@@ -21,7 +21,8 @@ class PortfolioHealthCalculator {
     final volatilityControl = _volatilityControl(stats);
     final longTermPotential = (growth + diversification + dividendStrength) / 3;
 
-    final overall = diversification * 0.20 +
+    final overall =
+        diversification * 0.20 +
         growth * 0.20 +
         incomeStability * 0.15 +
         dividendStrength * 0.15 +

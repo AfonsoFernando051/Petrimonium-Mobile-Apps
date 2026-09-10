@@ -5,9 +5,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 void main() {
   group('DiversificationCalculator.evaluate', () {
     test('100% in one category maxes out concentration', () {
-      final result = DiversificationCalculator.evaluate({
-        InvestmentTypeEnum.STOCKS: 100,
-      });
+      final result = DiversificationCalculator.evaluate({InvestmentTypeEnum.STOCKS: 100});
 
       expect(result.isValid, isTrue);
       expect(result.hhi, closeTo(1, 0.0001));
@@ -18,9 +16,7 @@ void main() {
 
     test('an equal 6-way split gives an effective count of 6', () {
       final weight = 100 / 6;
-      final result = DiversificationCalculator.evaluate({
-        for (final type in InvestmentTypeEnum.values) type: weight,
-      });
+      final result = DiversificationCalculator.evaluate({for (final type in InvestmentTypeEnum.values) type: weight});
 
       expect(result.isValid, isTrue);
       expect(result.effectiveNumberOfAssets, closeTo(6, 0.001));
@@ -48,10 +44,7 @@ void main() {
     });
 
     test('never silently normalizes an invalid allocation', () {
-      final input = {
-        InvestmentTypeEnum.STOCKS: 60.0,
-        InvestmentTypeEnum.FIXED_INCOME: 30.0,
-      };
+      final input = {InvestmentTypeEnum.STOCKS: 60.0, InvestmentTypeEnum.FIXED_INCOME: 30.0};
       final before = Map.of(input);
 
       DiversificationCalculator.evaluate(input);

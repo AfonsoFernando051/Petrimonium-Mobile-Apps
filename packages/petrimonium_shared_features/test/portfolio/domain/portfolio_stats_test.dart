@@ -43,11 +43,7 @@ void main() {
     });
 
     test('hasHoldings is true when holdings list is non-empty', () {
-      final stats = PortfolioStats(
-        summary: PortfolioSummary.empty,
-        holdings: [_holding()],
-        allocation: const [],
-      );
+      final stats = PortfolioStats(summary: PortfolioSummary.empty, holdings: [_holding()], allocation: const []);
 
       expect(stats.hasHoldings, isTrue);
     });
@@ -75,16 +71,9 @@ void main() {
     });
 
     test('firstPurchaseDate returns earliest across all holdings', () {
-      final holdingsWithLots = Holding.fromLots([
-        _lotAt('A', DateTime(2021, 5, 1)),
-        _lotAt('B', DateTime(2020, 1, 1)),
-      ]);
+      final holdingsWithLots = Holding.fromLots([_lotAt('A', DateTime(2021, 5, 1)), _lotAt('B', DateTime(2020, 1, 1))]);
 
-      final stats = PortfolioStats(
-        summary: PortfolioSummary.empty,
-        holdings: holdingsWithLots,
-        allocation: const [],
-      );
+      final stats = PortfolioStats(summary: PortfolioSummary.empty, holdings: holdingsWithLots, allocation: const []);
 
       expect(stats.firstPurchaseDate, DateTime(2020, 1, 1));
     });
@@ -115,9 +104,7 @@ void main() {
         totalGainPercent: 20,
         totalAssets: 2,
       );
-      const allocation = [
-        AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 1200, portfolioPercent: 100),
-      ];
+      const allocation = [AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 1200, portfolioPercent: 100)];
 
       final stats = PortfolioStats(summary: summary, holdings: const [], allocation: allocation);
 

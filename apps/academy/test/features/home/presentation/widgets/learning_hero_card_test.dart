@@ -48,9 +48,7 @@ void main() {
   Widget buildTestableWidget() {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(
-        body: LearningHeroCard(mascotController: controller),
-      ),
+      home: Scaffold(body: LearningHeroCard(mascotController: controller)),
     );
   }
 
@@ -108,10 +106,7 @@ void main() {
       await controller.loadProfile();
 
       await tester.pumpWidget(
-        MediaQuery(
-          data: const MediaQueryData(disableAnimations: true),
-          child: buildTestableWidget(),
-        ),
+        MediaQuery(data: const MediaQueryData(disableAnimations: true), child: buildTestableWidget()),
       );
       await tester.pump();
       await tester.pump(const Duration(seconds: 3));

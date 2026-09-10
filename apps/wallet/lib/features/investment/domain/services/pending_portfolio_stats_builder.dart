@@ -19,9 +19,7 @@ class PendingPortfolioStatsBuilder {
   static PortfolioStats build(List<AssetRegistrationModel> assets) {
     if (assets.isEmpty) return PortfolioStats.empty;
 
-    final lots = <InvestmentLot>[
-      for (var i = 0; i < assets.length; i++) _toLot(i, assets[i]),
-    ];
+    final lots = <InvestmentLot>[for (var i = 0; i < assets.length; i++) _toLot(i, assets[i])];
 
     final holdings = Holding.fromLots(lots);
     final totalValue = holdings.fold<double>(0, (sum, h) => sum + h.currentValue);
@@ -31,11 +29,13 @@ class PendingPortfolioStatsBuilder {
       byType[holding.type] = (byType[holding.type] ?? 0) + holding.currentValue;
     }
     final allocation = byType.entries
-        .map((entry) => AllocationSlice(
-              type: entry.key,
-              currentValue: entry.value,
-              portfolioPercent: totalValue == 0 ? 0 : (entry.value / totalValue) * 100,
-            ))
+        .map(
+          (entry) => AllocationSlice(
+            type: entry.key,
+            currentValue: entry.value,
+            portfolioPercent: totalValue == 0 ? 0 : (entry.value / totalValue) * 100,
+          ),
+        )
         .toList();
 
     final summary = PortfolioSummary(

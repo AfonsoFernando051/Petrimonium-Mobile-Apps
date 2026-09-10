@@ -16,11 +16,7 @@ import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio
 /// state (XP/level/evolution) that's shared regardless of app;
 /// `AcademyPetBehavior` and `PortfolioPetBehavior` are this app's two
 /// isolated, independently swappable scripts (see their own doc comments).
-const List<PetBehavior> _kPetBehaviors = [
-  CorePetBehavior(),
-  AcademyPetBehavior(),
-  PortfolioPetBehavior(),
-];
+const List<PetBehavior> _kPetBehaviors = [CorePetBehavior(), AcademyPetBehavior(), PortfolioPetBehavior()];
 
 /// How long a [PetMessageTrigger.pageEnter] nudge stays cooled down after
 /// being shown, so returning to the same tab a minute later doesn't repeat
@@ -44,8 +40,7 @@ class PetCompanionController extends ChangeNotifier {
     PetCompanionPreferencesRepository? preferencesRepository,
     AppEventBus? eventBus,
   }) : _mascotController = mascotController,
-       _preferences =
-           preferencesRepository ?? PetCompanionPreferencesRepository(),
+       _preferences = preferencesRepository ?? PetCompanionPreferencesRepository(),
        _eventBus = eventBus ?? AppEventBus.instance {
     _eventSubscription = _eventBus.stream.listen(_onAppEvent);
     _loadHistory();
@@ -86,20 +81,11 @@ class PetCompanionController extends ChangeNotifier {
   /// call so it can't "claim" the message slot with filler before
   /// `HomeScreen`'s later, data-informed call gets a chance to offer
   /// something real.
-  void enterContext(
-    PetContext context, {
-    Map<String, String> data = const {},
-    bool allowAmbientFallback = false,
-  }) {
+  void enterContext(PetContext context, {Map<String, String> data = const {}, bool allowAmbientFallback = false}) {
     var message = _firstNonNull(
-      (behavior) => behavior.pageEnter(
-        context,
-        userXp: _mascotController.profile.xp,
-        data: data,
-      ),
+      (behavior) => behavior.pageEnter(context, userXp: _mascotController.profile.xp, data: data),
     );
-    if (allowAmbientFallback &&
-        (message == null || _isCoolingDown(message.id))) {
+    if (allowAmbientFallback && (message == null || _isCoolingDown(message.id))) {
       message = _firstNonNull((behavior) => behavior.ambientFallback());
     }
     if (message == null) return;
@@ -116,8 +102,7 @@ class PetCompanionController extends ChangeNotifier {
 
   bool _isCoolingDown(String messageId) {
     final lastShown = _lastShown[messageId];
-    return lastShown != null &&
-        DateTime.now().difference(lastShown) < kPetMessageCooldown;
+    return lastShown != null && DateTime.now().difference(lastShown) < kPetMessageCooldown;
   }
 
   void _onAppEvent(AppEvent event) {
@@ -146,8 +131,7 @@ class PetCompanionController extends ChangeNotifier {
           ? Duration.zero
           : DateTime.now().difference(_currentMessageShownAt!);
       final graceWindowActive =
-          _currentMessage!.priority == PetMessagePriority.high &&
-          elapsedSinceShown < const Duration(seconds: 3);
+          _currentMessage!.priority == PetMessagePriority.high && elapsedSinceShown < const Duration(seconds: 3);
       if (incomingPriority < currentPriority || graceWindowActive) return;
     }
 
@@ -174,12 +158,11 @@ class PetCompanionController extends ChangeNotifier {
     });
   }
 
-  Duration _autoHideDurationFor(PetMessagePriority priority) =>
-      switch (priority) {
-        PetMessagePriority.low => const Duration(seconds: 5),
-        PetMessagePriority.normal => const Duration(seconds: 7),
-        PetMessagePriority.high => const Duration(seconds: 9),
-      };
+  Duration _autoHideDurationFor(PetMessagePriority priority) => switch (priority) {
+    PetMessagePriority.low => const Duration(seconds: 5),
+    PetMessagePriority.normal => const Duration(seconds: 7),
+    PetMessagePriority.high => const Duration(seconds: 9),
+  };
 
   /// Hides the current speech bubble. Does not permanently suppress the
   /// message — it can be offered again once `kPetMessageCooldown` elapses,

@@ -72,17 +72,14 @@ class DividendNotificationsSheet extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     final tokens = context.colors;
     if (isLoading && upcoming.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 24),
-        child: AppLoadingIndicator(strokeWidth: 2),
-      );
+      return const Padding(padding: EdgeInsets.symmetric(vertical: 24), child: AppLoadingIndicator(strokeWidth: 2));
     }
 
     if (error != null && upcoming.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: ErrorStateView(
-            retryLabel: Translator.translate(AppStrings.retryButtonLabel),
+          retryLabel: Translator.translate(AppStrings.retryButtonLabel),
           message: 'Não foi possível carregar suas notificações.',
           onRetry: () async => onRetry(),
           style: ErrorStateStyle.compact,
@@ -107,8 +104,6 @@ class DividendNotificationsSheet extends StatelessWidget {
       );
     }
 
-    return Column(
-      children: [for (final event in upcoming) DividendEventTile(event: event)],
-    );
+    return Column(children: [for (final event in upcoming) DividendEventTile(event: event)]);
   }
 }

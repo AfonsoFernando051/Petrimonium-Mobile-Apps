@@ -17,11 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../academy_test_fixtures.dart';
 
-class MockAcademyCatalogRepository extends Mock
-    implements AcademyCatalogRepository {}
+class MockAcademyCatalogRepository extends Mock implements AcademyCatalogRepository {}
 
-class MockAcademyRemoteDataSource extends Mock
-    implements AcademyRemoteDataSource {}
+class MockAcademyRemoteDataSource extends Mock implements AcademyRemoteDataSource {}
 
 /// Minimal in-memory MascotRepository double — mirrors the one in
 /// `mascot_controller_test.dart`; these tests only need a working
@@ -46,9 +44,7 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveNetWorth(double netWorth) async {}
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
 
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
@@ -69,18 +65,12 @@ void main() {
     DI.academyProgressRepository = AcademyProgressLocalRepository();
 
     mockCatalogRepository = MockAcademyCatalogRepository();
-    when(
-      () => mockCatalogRepository.loadCached(any()),
-    ).thenAnswer((_) async => buildAcademyCatalogSnapshot());
-    when(
-      () => mockCatalogRepository.fetchAndCache(any()),
-    ).thenAnswer((_) async => buildAcademyCatalogSnapshot());
+    when(() => mockCatalogRepository.loadCached(any())).thenAnswer((_) async => buildAcademyCatalogSnapshot());
+    when(() => mockCatalogRepository.fetchAndCache(any())).thenAnswer((_) async => buildAcademyCatalogSnapshot());
     DI.academyCatalogRepository = mockCatalogRepository;
 
     mockRemoteDataSource = MockAcademyRemoteDataSource();
-    when(
-      () => mockRemoteDataSource.getCompletedLessonIds(),
-    ).thenAnswer((_) async => {});
+    when(() => mockRemoteDataSource.getCompletedLessonIds()).thenAnswer((_) async => {});
     DI.academyRemoteDataSource = mockRemoteDataSource;
 
     mascotController = MascotController(repository: FakeMascotRepository());
@@ -89,10 +79,7 @@ void main() {
   Widget buildTestable() {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: SchoolDetailScreen(
-        school: testSchool,
-        mascotController: mascotController,
-      ),
+      home: SchoolDetailScreen(school: testSchool, mascotController: mascotController),
     );
   }
 
@@ -106,18 +93,14 @@ void main() {
   }
 
   group('SchoolDetailScreen', () {
-    testWidgets('renders progress/mastery and the school modules once loaded', (
-      tester,
-    ) async {
+    testWidgets('renders progress/mastery and the school modules once loaded', (tester) async {
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
 
       expect(find.text(testModule.title), findsOneWidget);
     });
 
-    testWidgets('navigates to ModuleDetailScreen when a module is tapped', (
-      tester,
-    ) async {
+    testWidgets('navigates to ModuleDetailScreen when a module is tapped', (tester) async {
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
 
@@ -127,27 +110,24 @@ void main() {
       expect(find.byType(ModuleDetailScreen), findsOneWidget);
     });
 
-    testWidgets(
-      'updates the school progress after a lesson completes on a child route',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        await pumpUntilLoaded(tester);
+    testWidgets('updates the school progress after a lesson completes on a child route', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await pumpUntilLoaded(tester);
 
-        expect(find.text('0% concluído'), findsOneWidget);
-        expect(find.text('0 / 3 lições'), findsOneWidget);
+      expect(find.text('0% concluído'), findsOneWidget);
+      expect(find.text('0 / 3 lições'), findsOneWidget);
 
-        // A SchoolDetailScreen remains mounted underneath its Module/Lesson
-        // routes. LessonSessionController persists this state and emits the
-        // event before the user returns, so the visible school must redraw
-        // with the new values rather than relying on a particular pop path.
-        await DI.academyProgressRepository.markLessonCompleted(testLesson1.id);
-        await DI.academyProgressRepository.markLessonPerfect(testLesson1.id);
-        AppEventBus.instance.emit(LessonCompletedEvent(testLesson1.id));
-        await pumpUntilLoaded(tester);
+      // A SchoolDetailScreen remains mounted underneath its Module/Lesson
+      // routes. LessonSessionController persists this state and emits the
+      // event before the user returns, so the visible school must redraw
+      // with the new values rather than relying on a particular pop path.
+      await DI.academyProgressRepository.markLessonCompleted(testLesson1.id);
+      await DI.academyProgressRepository.markLessonPerfect(testLesson1.id);
+      AppEventBus.instance.emit(LessonCompletedEvent(testLesson1.id));
+      await pumpUntilLoaded(tester);
 
-        expect(find.text('33% concluído'), findsOneWidget);
-        expect(find.text('1 / 3 lições'), findsOneWidget);
-      },
-    );
+      expect(find.text('33% concluído'), findsOneWidget);
+      expect(find.text('1 / 3 lições'), findsOneWidget);
+    });
   });
 }

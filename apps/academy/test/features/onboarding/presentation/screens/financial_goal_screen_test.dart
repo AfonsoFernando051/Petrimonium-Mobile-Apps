@@ -17,20 +17,14 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const FinancialGoalScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const FinancialGoalScreen());
   }
 
   /// The selected goal row is the only one carrying a `check_circle` icon
   /// (conditionally built, not just faded) — so "is this goal selected" is
   /// asserted by whether that icon is present inside its row.
   bool isGoalSelected(WidgetTester tester, PetGoalEnum goal) {
-    final rowFinder = find.ancestor(
-      of: find.text(goal.label),
-      matching: find.byType(InkWell),
-    );
+    final rowFinder = find.ancestor(of: find.text(goal.label), matching: find.byType(InkWell));
     return find.descendant(of: rowFinder, matching: find.byIcon(Icons.check_circle)).evaluate().isNotEmpty;
   }
 

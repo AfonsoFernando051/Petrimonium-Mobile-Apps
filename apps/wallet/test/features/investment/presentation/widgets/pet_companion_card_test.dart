@@ -69,10 +69,7 @@ void main() {
 
     testWidgets('honors disableAnimations — still renders, no crash', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MediaQuery(
-          data: const MediaQueryData(disableAnimations: true),
-          child: buildTestableWidget(0),
-        ),
+        MediaQuery(data: const MediaQueryData(disableAnimations: true), child: buildTestableWidget(0)),
       );
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
@@ -81,7 +78,9 @@ void main() {
       expect(find.text('🙂'), findsOneWidget);
     });
 
-    testWidgets('falls back to the default fox illustration when the pet repository call fails', (WidgetTester tester) async {
+    testWidgets('falls back to the default fox illustration when the pet repository call fails', (
+      WidgetTester tester,
+    ) async {
       when(() => mockPetRepository.getMyPet()).thenThrow(Exception('offline'));
 
       await tester.pumpWidget(buildTestableWidget(0));

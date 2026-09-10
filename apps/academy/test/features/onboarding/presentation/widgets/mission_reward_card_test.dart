@@ -9,21 +9,11 @@ void main() {
     Translator.currentLanguage = 'pt';
   });
 
-  Widget buildTestableWidget({
-    required String title,
-    required int xp,
-    bool completed = true,
-    String? eyebrow,
-  }) {
+  Widget buildTestableWidget({required String title, required int xp, bool completed = true, String? eyebrow}) {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: MissionRewardCard(
-          title: title,
-          xp: xp,
-          completed: completed,
-          eyebrow: eyebrow,
-        ),
+        body: MissionRewardCard(title: title, xp: xp, completed: completed, eyebrow: eyebrow),
       ),
     );
   }
@@ -51,12 +41,9 @@ void main() {
     });
 
     testWidgets('overrides the eyebrow text when one is supplied', (tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        title: 'Upcoming mission',
-        xp: 20,
-        completed: false,
-        eyebrow: 'Sua primeira missão',
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(title: 'Upcoming mission', xp: 20, completed: false, eyebrow: 'Sua primeira missão'),
+      );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 950));
 

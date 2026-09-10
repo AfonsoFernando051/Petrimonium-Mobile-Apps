@@ -68,10 +68,7 @@ void main() {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: PetCompanionHeader(
-          controller: companionController,
-          onDestinationSelected: onDestinationSelected,
-        ),
+        body: PetCompanionHeader(controller: companionController, onDestinationSelected: onDestinationSelected),
       ),
     );
   }

@@ -106,8 +106,6 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
   /// directly, e.g. `context.brand.accent.withValues(alpha: ...)`).
   final Color shadow;
 
-
-
   @override
   AppColorTokens copyWith({
     Color? backgroundPrimary,
@@ -202,7 +200,6 @@ extension AppThemeContextX on BuildContext {
 
   /// The product's theme-invariant brand accents. See
   /// [PetrimoniumBrandAccents].
-  PetrimoniumBrandAccents get brand =>
-      Theme.of(this).extension<PetrimoniumBrandAccents>()!;
+  PetrimoniumBrandAccents get brand => Theme.of(this).extension<PetrimoniumBrandAccents>()!;
   bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
 }

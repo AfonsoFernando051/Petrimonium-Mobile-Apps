@@ -90,7 +90,13 @@ class GlassCard extends StatelessWidget {
         return _CardLook(
           background: tokens.surfaceElevated,
           border: tokens.borderStrong,
-          shadow: [BoxShadow(color: tokens.shadow.withValues(alpha: tokens.shadow.a * 1.6), blurRadius: 28, offset: const Offset(0, 10))],
+          shadow: [
+            BoxShadow(
+              color: tokens.shadow.withValues(alpha: tokens.shadow.a * 1.6),
+              blurRadius: 28,
+              offset: const Offset(0, 10),
+            ),
+          ],
         );
       case CardSurface.active:
         // "This is the current step" — a brand-purple tint, not just a
@@ -99,7 +105,9 @@ class GlassCard extends StatelessWidget {
         return _CardLook(
           background: Color.alphaBlend(brand.mentorGlow.withValues(alpha: 0.05), tokens.surfaceElevated),
           border: brand.mentorGlow.withValues(alpha: 0.4),
-          shadow: [BoxShadow(color: brand.mentorGlow.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 6))],
+          shadow: [
+            BoxShadow(color: brand.mentorGlow.withValues(alpha: 0.1), blurRadius: 16, offset: const Offset(0, 6)),
+          ],
         );
       case CardSurface.reward:
         // Completed/celebratory — a golden tint instead of purple, echoing
@@ -107,7 +115,9 @@ class GlassCard extends StatelessWidget {
         return _CardLook(
           background: Color.alphaBlend(brand.highlight.withValues(alpha: 0.06), tokens.surfaceElevated),
           border: brand.highlight.withValues(alpha: 0.45),
-          shadow: [BoxShadow(color: brand.highlight.withValues(alpha: 0.12), blurRadius: 16, offset: const Offset(0, 6))],
+          shadow: [
+            BoxShadow(color: brand.highlight.withValues(alpha: 0.12), blurRadius: 16, offset: const Offset(0, 6)),
+          ],
         );
       case CardSurface.disabled:
         // Recedes below `standard` — muted surface, no shadow, so locked

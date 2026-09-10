@@ -33,9 +33,7 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveNetWorth(double netWorth) async {}
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
 
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
@@ -53,9 +51,7 @@ void main() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     mascotController = MascotController(repository: FakeMascotRepository());
-    companionController = PetCompanionController(
-      mascotController: mascotController,
-    );
+    companionController = PetCompanionController(mascotController: mascotController);
     // No `remoteDataSource` — these tests exercise the local-first UI only,
     // never a real network call.
     completionController = LabCompletionController(
@@ -77,39 +73,30 @@ void main() {
   }
 
   group('CompoundInterestLabScreen', () {
-    testWidgets(
-      'renders sliders, summary stats and the chart with default inputs',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        // CosmicBackground has repeating AnimationControllers — never
-        // pumpAndSettle here.
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 400));
+    testWidgets('renders sliders, summary stats and the chart with default inputs', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      // CosmicBackground has repeating AnimationControllers — never
+      // pumpAndSettle here.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
 
-        expect(find.byType(Slider), findsNWidgets(4));
-        expect(
-          find.text('10'),
-          findsWidgets,
-        ); // default years (also appears as a chart axis label)
-        expect(find.text('8.0%'), findsOneWidget); // default annual return
-      },
-    );
+      expect(find.byType(Slider), findsNWidgets(4));
+      expect(find.text('10'), findsWidgets); // default years (also appears as a chart axis label)
+      expect(find.text('8.0%'), findsOneWidget); // default annual return
+    });
 
-    testWidgets(
-      'changing the years slider updates the displayed value and explanation',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 400));
+    testWidgets('changing the years slider updates the displayed value and explanation', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
 
-        final yearsSlider = find.byType(Slider).last;
-        // Drag far to the right to push years to its max (40).
-        await tester.drag(yearsSlider, const Offset(400, 0));
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 400));
+      final yearsSlider = find.byType(Slider).last;
+      // Drag far to the right to push years to its max (40).
+      await tester.drag(yearsSlider, const Offset(400, 0));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
 
-        expect(find.text('40'), findsWidgets);
-      },
-    );
+      expect(find.text('40'), findsWidgets);
+    });
   });
 }

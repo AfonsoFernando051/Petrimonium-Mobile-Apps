@@ -22,10 +22,10 @@ class DashboardTabRouter {
   /// destination for the pet's "learn more" action (see
   /// `DashboardScreen._handleCompanionDestination`), just not a tab.
   static PetContext petContextFor(int tabIndex) => switch (tabIndex) {
-        homeTab => PetContext.home,
-        passiveIncomeTab => PetContext.portfolio,
-        _ => PetContext.mentor,
-      };
+    homeTab => PetContext.home,
+    passiveIncomeTab => PetContext.portfolio,
+    _ => PetContext.mentor,
+  };
 
   /// Whether [tabIndex] is one of the two portfolio-flavored tabs — used to
   /// decide whether the companion greeting needs the holdings count. Início

@@ -54,10 +54,10 @@ class GameButton extends StatefulWidget {
     this.height,
     this.borderRadius = AppRadii.xl,
     this.expand = true,
-  })  : label = null,
-        icon = null,
-        iconTrailing = false,
-        isLoading = false;
+  }) : label = null,
+       icon = null,
+       iconTrailing = false,
+       isLoading = false;
 
   final String? label;
   final Widget? child;
@@ -94,8 +94,7 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
     vsync: this,
     duration: const Duration(milliseconds: 1800),
   );
-  late final Animation<double> _pulseAnimation =
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut);
+  late final Animation<double> _pulseAnimation = CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut);
 
   late final AnimationController _pressController = AnimationController(
     vsync: this,
@@ -105,9 +104,10 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
   // [0, 1] range; the Tween maps that directly to the visual scale, so the
   // button is never briefly scaled to 0 (which would make it un-hit-testable
   // — `Transform.scale(scale: 0)` is a singular, non-invertible matrix).
-  late final Animation<double> _pressScale = Tween<double>(begin: 1.0, end: 0.97).animate(
-    CurvedAnimation(parent: _pressController, curve: Curves.easeOut),
-  );
+  late final Animation<double> _pressScale = Tween<double>(
+    begin: 1.0,
+    end: 0.97,
+  ).animate(CurvedAnimation(parent: _pressController, curve: Curves.easeOut));
 
   @override
   void initState() {
@@ -157,9 +157,7 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
     // Each product's `primary` token is AA-safe against its own background,
     // not necessarily against white text — pick whichever of black/white
     // actually contrasts with the fill in hand rather than assuming white.
-    final onFill = (gradientColors == null && fillColor.computeLuminance() > 0.55)
-        ? Colors.black
-        : Colors.white;
+    final onFill = (gradientColors == null && fillColor.computeLuminance() > 0.55) ? Colors.black : Colors.white;
 
     return AnimatedBuilder(
       animation: Listenable.merge([_pulseController, _pressController]),
@@ -179,11 +177,7 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
                 color: gradientColors == null ? fillColor : null,
                 gradient: gradientColors == null
                     ? null
-                    : LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: gradientColors,
-                      ),
+                    : LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: gradientColors),
                 borderRadius: BorderRadius.circular(widget.borderRadius),
                 boxShadow: gradientColors == null
                     ? null
@@ -224,7 +218,8 @@ class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
           child: Padding(
             padding: widget.child != null ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 20),
             child: Center(
-              child: widget.child ??
+              child:
+                  widget.child ??
                   (widget.isLoading
                       ? SizedBox(
                           width: 22,

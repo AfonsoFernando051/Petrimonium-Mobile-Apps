@@ -9,13 +9,7 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 /// first mission the user is about to start) — showing the exact same
 /// lesson/XP number in both places instead of two invented figures.
 class MissionRewardCard extends StatelessWidget {
-  const MissionRewardCard({
-    super.key,
-    required this.title,
-    required this.xp,
-    this.completed = true,
-    this.eyebrow,
-  });
+  const MissionRewardCard({super.key, required this.title, required this.xp, this.completed = true, this.eyebrow});
 
   final String title;
   final int xp;
@@ -42,9 +36,7 @@ class MissionRewardCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(
-              completed
-                  ? Icons.emoji_events_rounded
-                  : Icons.track_changes_rounded,
+              completed ? Icons.emoji_events_rounded : Icons.track_changes_rounded,
               color: AppColors.goldenBorder,
               size: 22,
             ),
@@ -55,8 +47,7 @@ class MissionRewardCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  eyebrow ??
-                      Translator.translate(AppStrings.missionCompleteLabel),
+                  eyebrow ?? Translator.translate(AppStrings.missionCompleteLabel),
                   style: TextStyle(
                     color: tokens.textTertiary,
                     fontSize: 11,
@@ -67,11 +58,7 @@ class MissionRewardCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   title,
-                  style: TextStyle(
-                    color: tokens.textPrimary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(color: tokens.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -102,24 +89,15 @@ class _XpPillState extends State<_XpPill> {
       decoration: BoxDecoration(
         color: AppColors.goldenBorder.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(
-          color: AppColors.goldenBorder.withValues(alpha: 0.5),
-        ),
+        border: Border.all(color: AppColors.goldenBorder.withValues(alpha: 0.5)),
       ),
       child: TweenAnimationBuilder<int>(
         tween: IntTween(begin: reducedMotion ? widget.xp : 0, end: widget.xp),
         duration: const Duration(milliseconds: 900),
         curve: Curves.easeOutCubic,
         builder: (context, value, child) => Text(
-          Translator.translate(
-            AppStrings.academyXpPill,
-            params: {'xp': '$value'},
-          ),
-          style: const TextStyle(
-            color: AppColors.goldenBorder,
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
-          ),
+          Translator.translate(AppStrings.academyXpPill, params: {'xp': '$value'}),
+          style: const TextStyle(color: AppColors.goldenBorder, fontWeight: FontWeight.bold, fontSize: 13),
         ),
       ),
     );

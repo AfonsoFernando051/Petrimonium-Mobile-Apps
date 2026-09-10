@@ -32,13 +32,13 @@ class _AddDebtScreenState extends State<AddDebtScreen> {
   }
 
   String _typeLabel(AppLocalizations l10n, DebtCategory type) => switch (type) {
-        DebtCategory.creditCard => l10n.debtTypeCreditCard,
-        DebtCategory.personalLoan => l10n.debtTypePersonalLoan,
-        DebtCategory.carFinancing => l10n.debtTypeCarFinancing,
-        DebtCategory.homeFinancing => l10n.debtTypeHomeFinancing,
-        DebtCategory.payrollLoan => l10n.debtTypePayrollLoan,
-        DebtCategory.other => l10n.debtTypeOther,
-      };
+    DebtCategory.creditCard => l10n.debtTypeCreditCard,
+    DebtCategory.personalLoan => l10n.debtTypePersonalLoan,
+    DebtCategory.carFinancing => l10n.debtTypeCarFinancing,
+    DebtCategory.homeFinancing => l10n.debtTypeHomeFinancing,
+    DebtCategory.payrollLoan => l10n.debtTypePayrollLoan,
+    DebtCategory.other => l10n.debtTypeOther,
+  };
 
   Future<void> _submit(HealthController controller) async {
     final l10n = AppLocalizations.of(context);
@@ -85,7 +85,14 @@ class _AddDebtScreenState extends State<AddDebtScreen> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Text(l10n.addDebtTitle, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: HealthColors.textPrimary)),
+                    child: Text(
+                      l10n.addDebtTitle,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: HealthColors.textPrimary,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -96,7 +103,14 @@ class _AddDebtScreenState extends State<AddDebtScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l10n.debtTypeLabel, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: HealthColors.textSecondary)),
+                    Text(
+                      l10n.debtTypeLabel,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: HealthColors.textSecondary,
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     GridView.count(
                       shrinkWrap: true,
@@ -105,47 +119,69 @@ class _AddDebtScreenState extends State<AddDebtScreen> {
                       mainAxisSpacing: 8,
                       crossAxisSpacing: 8,
                       childAspectRatio: 2.6,
-                      children: DebtCategory.values.map((type) {
-                        final selected = type == _type;
-                        return GestureDetector(
-                          onTap: () => setState(() => _type = type),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: selected ? Theme.of(context).colorScheme.primary.withValues(alpha: .08) : HealthColors.inputFill,
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: selected ? Theme.of(context).colorScheme.primary : HealthColors.border, width: 1.5),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(type.icon, style: const TextStyle(fontSize: 16)),
-                                const SizedBox(width: 8),
-                                Flexible(
-                                  child: Text(
-                                    _typeLabel(l10n, type),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                                      color: selected ? HealthColors.textPrimary : HealthColors.textSecondary,
-                                    ),
+                      children: DebtCategory.values
+                          .map((type) {
+                            final selected = type == _type;
+                            return GestureDetector(
+                              onTap: () => setState(() => _type = type),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: selected
+                                      ? Theme.of(context).colorScheme.primary.withValues(alpha: .08)
+                                      : HealthColors.inputFill,
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                    color: selected ? Theme.of(context).colorScheme.primary : HealthColors.border,
+                                    width: 1.5,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(growable: false),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(type.icon, style: const TextStyle(fontSize: 16)),
+                                    const SizedBox(width: 8),
+                                    Flexible(
+                                      child: Text(
+                                        _typeLabel(l10n, type),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                                          color: selected ? HealthColors.textPrimary : HealthColors.textSecondary,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          })
+                          .toList(growable: false),
                     ),
                     const SizedBox(height: 18),
-                    Text(l10n.debtRecurringLabel, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: HealthColors.textSecondary)),
+                    Text(
+                      l10n.debtRecurringLabel,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: HealthColors.textSecondary,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        HealthChip(label: l10n.yesMonthly, selected: _recurring, onTap: () => setState(() => _recurring = true)),
+                        HealthChip(
+                          label: l10n.yesMonthly,
+                          selected: _recurring,
+                          onTap: () => setState(() => _recurring = true),
+                        ),
                         const SizedBox(width: 8),
-                        HealthChip(label: l10n.noOneTime, selected: !_recurring, onTap: () => setState(() => _recurring = false)),
+                        HealthChip(
+                          label: l10n.noOneTime,
+                          selected: !_recurring,
+                          onTap: () => setState(() => _recurring = false),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -159,10 +195,15 @@ class _AddDebtScreenState extends State<AddDebtScreen> {
                       controller: _valueController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       onChanged: (_) => setState(() {}),
-                      decoration: InputDecoration(hintText: _recurring ? l10n.debtValueHintRecurring : l10n.debtValueHintOnce),
+                      decoration: InputDecoration(
+                        hintText: _recurring ? l10n.debtValueHintRecurring : l10n.debtValueHintOnce,
+                      ),
                     ),
                     const SizedBox(height: 14),
-                    Text(l10n.debtFootnote, style: const TextStyle(fontSize: 11.5, color: HealthColors.textMuted, height: 1.4)),
+                    Text(
+                      l10n.debtFootnote,
+                      style: const TextStyle(fontSize: 11.5, color: HealthColors.textMuted, height: 1.4),
+                    ),
                     if (_error != null) ...[
                       const SizedBox(height: 10),
                       Text(_error!, style: const TextStyle(color: HealthColors.negative, fontSize: 12.5)),

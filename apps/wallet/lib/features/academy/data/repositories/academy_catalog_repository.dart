@@ -10,9 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// decoding the full curriculum (hundreds of lessons/steps) on the UI isolate
 /// would jank/freeze the app while the Academy screen opens.
 AcademyCatalogSnapshot _parseAcademyCatalog(String rawJson) {
-  return AcademyCatalogSnapshot.fromJson(
-    jsonDecode(rawJson) as Map<String, dynamic>,
-  );
+  return AcademyCatalogSnapshot.fromJson(jsonDecode(rawJson) as Map<String, dynamic>);
 }
 
 /// Fetches the Academy catalog from the backend and caches it locally, one
@@ -23,8 +21,7 @@ AcademyCatalogSnapshot _parseAcademyCatalog(String rawJson) {
 /// re-serialized model), so a cache round-trip is byte-identical to what
 /// the backend actually sent.
 class AcademyCatalogRepository {
-  AcademyCatalogRepository({required ApiClient apiClient})
-    : _apiClient = apiClient;
+  AcademyCatalogRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
   final ApiClient _apiClient;
 
@@ -59,16 +56,10 @@ class AcademyCatalogRepository {
   /// with a stale-but-present cache vs. no cache at all (see
   /// `AcademyController.load`).
   Future<AcademyCatalogSnapshot> fetchAndCache(String lang) async {
-    final response = await _apiClient.get(
-      '${ApiConstants.academyCatalogEndpoint}?lang=$lang',
-    );
+    final response = await _apiClient.get('${ApiConstants.academyCatalogEndpoint}?lang=$lang');
     if (response.statusCode != 200) {
       throw Exception(
-        extractErrorDetail(
-          response,
-          fallback:
-              'Failed to load academy catalog. Status Code: ${response.statusCode}',
-        ),
+        extractErrorDetail(response, fallback: 'Failed to load academy catalog. Status Code: ${response.statusCode}'),
       );
     }
 
@@ -97,12 +88,8 @@ class AcademyCatalogRepository {
   static bool _isEmptyCatalog(AcademyCatalogSnapshot snapshot) {
     if (snapshot.domains.isEmpty) return true;
 
-    final hasAvailableModule = snapshot.modules.any(
-      (module) => module.contentAvailable,
-    );
-    final hasAvailableSchool = snapshot.schools.any(
-      (school) => school.contentAvailable,
-    );
+    final hasAvailableModule = snapshot.modules.any((module) => module.contentAvailable);
+    final hasAvailableSchool = snapshot.schools.any((school) => school.contentAvailable);
     return hasAvailableModule && !hasAvailableSchool;
   }
 }

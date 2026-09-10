@@ -11,19 +11,13 @@ class PetAccessory {
   AccessoryType get type => id.slot;
 
   PetAccessory copyWith({PetAccessoryId? id, bool? unlocked}) {
-    return PetAccessory(
-      id: id ?? this.id,
-      unlocked: unlocked ?? this.unlocked,
-    );
+    return PetAccessory(id: id ?? this.id, unlocked: unlocked ?? this.unlocked);
   }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PetAccessory &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          unlocked == other.unlocked;
+      other is PetAccessory && runtimeType == other.runtimeType && id == other.id && unlocked == other.unlocked;
 
   @override
   int get hashCode => Object.hash(id, unlocked);

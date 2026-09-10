@@ -28,10 +28,7 @@ void main() {
       );
 
       for (var i = 1; i < result.yearlyBreakdown.length; i++) {
-        expect(
-          result.yearlyBreakdown[i].realValue,
-          lessThan(result.yearlyBreakdown[i - 1].realValue),
-        );
+        expect(result.yearlyBreakdown[i].realValue, lessThan(result.yearlyBreakdown[i - 1].realValue));
       }
       expect(result.totalPurchasingPowerLostPercent, greaterThan(0));
     });

@@ -17,11 +17,7 @@ import 'package:petrimonium_wallet/features/mentor/domain/services/wallet_mentor
 /// surface showing a reply needs this, so there is exactly one implementation
 /// of it to reach for.
 class MentorReplyLayersView extends StatelessWidget {
-  const MentorReplyLayersView({
-    super.key,
-    required this.layers,
-    required this.timestamp,
-  });
+  const MentorReplyLayersView({super.key, required this.layers, required this.timestamp});
 
   final WalletMentorReplyLayers layers;
 
@@ -81,19 +77,13 @@ class MentorReplyLayersView extends StatelessWidget {
         ],
         if (layers.calculation != null) ...[
           if (layers.data != null) const SizedBox(height: 14),
-          LayerChip(
-            layer: DataLayer.calculation,
-            label: Translator.translate(AppStrings.homeChangeCalcChipLabel),
-          ),
+          LayerChip(layer: DataLayer.calculation, label: Translator.translate(AppStrings.homeChangeCalcChipLabel)),
           const SizedBox(height: 8),
           markdown(context, layers.calculation!),
         ],
         if (layers.interpretation != null) ...[
           if (layers.data != null || layers.calculation != null) const SizedBox(height: 14),
-          LayerChip(
-            layer: DataLayer.mentor,
-            label: Translator.translate(AppStrings.mentorInterpretationLabel),
-          ),
+          LayerChip(layer: DataLayer.mentor, label: Translator.translate(AppStrings.mentorInterpretationLabel)),
           const SizedBox(height: 8),
           DefaultTextStyle.merge(
             style: TextStyle(color: tokens.textSecondary, fontStyle: FontStyle.italic),

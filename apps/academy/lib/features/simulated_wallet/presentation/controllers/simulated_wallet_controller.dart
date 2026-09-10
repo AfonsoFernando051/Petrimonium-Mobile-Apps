@@ -13,8 +13,7 @@ import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/si
 /// never touches `PortfolioRepository`/`InvestmentRepository` or any
 /// real_portfolio endpoint.
 class SimulatedWalletController extends ChangeNotifier {
-  SimulatedWalletController({required SimulatedWalletRepository repository})
-      : _repository = repository;
+  SimulatedWalletController({required SimulatedWalletRepository repository}) : _repository = repository;
 
   final SimulatedWalletRepository _repository;
 

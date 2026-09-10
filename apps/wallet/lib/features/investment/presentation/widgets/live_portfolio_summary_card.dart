@@ -41,12 +41,22 @@ class LivePortfolioSummaryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(Translator.translate(AppStrings.portfolioCardTitle), style: TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.bold, fontSize: 15)),
+            Text(
+              Translator.translate(AppStrings.portfolioCardTitle),
+              style: TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.bold, fontSize: 15),
+            ),
             const SizedBox(height: 14),
             Row(
               children: [
                 Expanded(child: _stat(context, 'Ativos', '${stats.summary.totalAssets}', AppColors.neonCyan)),
-                Expanded(child: _stat(context, 'Valor', AppFormatters.compactCurrency(stats.summary.currentValue), AppColors.neonCyan)),
+                Expanded(
+                  child: _stat(
+                    context,
+                    'Valor',
+                    AppFormatters.compactCurrency(stats.summary.currentValue),
+                    AppColors.neonCyan,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 14),
@@ -108,7 +118,10 @@ class LivePortfolioSummaryCard extends StatelessWidget {
       children: [
         Text(label, style: TextStyle(color: context.colors.textSecondary, fontSize: 11)),
         const SizedBox(height: 2),
-        Text(value, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 16)),
+        Text(
+          value,
+          style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 16),
+        ),
       ],
     );
   }

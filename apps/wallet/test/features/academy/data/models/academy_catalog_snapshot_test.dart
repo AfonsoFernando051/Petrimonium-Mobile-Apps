@@ -4,76 +4,76 @@ import 'package:petrimonium_wallet/features/academy/data/models/academy_catalog_
 import 'package:petrimonium_wallet/features/academy/domain/entities/lesson_step.dart';
 
 Map<String, dynamic> _fixtureJson() => {
-      'domains': [
+  'domains': [
+    {
+      'id': 'financial_education',
+      'title': 'Educação Financeira',
+      'description': 'desc',
+      'iconKey': 'savings_outlined',
+      'order': 1,
+      'schoolIds': ['financial_life'],
+    },
+  ],
+  'schools': [
+    {
+      'id': 'financial_life',
+      'domainId': 'financial_education',
+      'title': 'Vida Financeira',
+      'description': 'desc',
+      'iconKey': 'account_balance_wallet_outlined',
+      'order': 1,
+      'prerequisites': <String>[],
+      'contentAvailable': true,
+    },
+  ],
+  'modules': [
+    {
+      'id': 'money_fundamentals',
+      'schoolId': 'financial_life',
+      'title': 'Fundamentos do Dinheiro',
+      'description': 'desc',
+      'iconKey': 'payments_outlined',
+      'order': 1,
+      'lessonIds': ['money_fundamentals_what_is_money'],
+      'prerequisites': <String>[],
+      'contentAvailable': true,
+    },
+  ],
+  'lessons': [
+    {
+      'id': 'money_fundamentals_what_is_money',
+      'moduleId': 'money_fundamentals',
+      'title': 'O que é Dinheiro?',
+      'order': 1,
+      'xpReward': 20,
+      'steps': [
+        {'type': 'explanation', 'title': 'Título', 'body': 'Corpo'},
+        {'type': 'example', 'title': 'Exemplo', 'body': 'Corpo do exemplo'},
         {
-          'id': 'financial_education',
-          'title': 'Educação Financeira',
-          'description': 'desc',
-          'iconKey': 'savings_outlined',
-          'order': 1,
-          'schoolIds': ['financial_life'],
+          'type': 'choice_question',
+          'framing': 'micro_exercise',
+          'prompt': 'Pergunta?',
+          'options': ['A', 'B', 'C'],
+          'correctIndex': 1,
+          'explanation': 'Porque sim.',
+        },
+        {
+          'type': 'choice_question',
+          'framing': 'apply',
+          'prompt': 'Aplique isso',
+          'options': ['X', 'Y'],
+          'correctIndex': 0,
+          'explanation': 'Explicação.',
+        },
+        {
+          'type': 'summary',
+          'title': 'Resumo',
+          'takeaways': ['Ponto 1', 'Ponto 2'],
         },
       ],
-      'schools': [
-        {
-          'id': 'financial_life',
-          'domainId': 'financial_education',
-          'title': 'Vida Financeira',
-          'description': 'desc',
-          'iconKey': 'account_balance_wallet_outlined',
-          'order': 1,
-          'prerequisites': <String>[],
-          'contentAvailable': true,
-        },
-      ],
-      'modules': [
-        {
-          'id': 'money_fundamentals',
-          'schoolId': 'financial_life',
-          'title': 'Fundamentos do Dinheiro',
-          'description': 'desc',
-          'iconKey': 'payments_outlined',
-          'order': 1,
-          'lessonIds': ['money_fundamentals_what_is_money'],
-          'prerequisites': <String>[],
-          'contentAvailable': true,
-        },
-      ],
-      'lessons': [
-        {
-          'id': 'money_fundamentals_what_is_money',
-          'moduleId': 'money_fundamentals',
-          'title': 'O que é Dinheiro?',
-          'order': 1,
-          'xpReward': 20,
-          'steps': [
-            {'type': 'explanation', 'title': 'Título', 'body': 'Corpo'},
-            {'type': 'example', 'title': 'Exemplo', 'body': 'Corpo do exemplo'},
-            {
-              'type': 'choice_question',
-              'framing': 'micro_exercise',
-              'prompt': 'Pergunta?',
-              'options': ['A', 'B', 'C'],
-              'correctIndex': 1,
-              'explanation': 'Porque sim.',
-            },
-            {
-              'type': 'choice_question',
-              'framing': 'apply',
-              'prompt': 'Aplique isso',
-              'options': ['X', 'Y'],
-              'correctIndex': 0,
-              'explanation': 'Explicação.',
-            },
-            {
-              'type': 'summary',
-              'title': 'Resumo',
-              'takeaways': ['Ponto 1', 'Ponto 2'],
-            },
-          ],
-        },
-      ],
-    };
+    },
+  ],
+};
 
 void main() {
   group('AcademyCatalogSnapshot.fromJson', () {
@@ -92,7 +92,7 @@ void main() {
 
     test('falls back to a default icon for an unknown iconKey', () {
       final json = _fixtureJson();
-      (json['domains'] as List)[0]['iconKey'] = 'totally_unknown_icon';
+      ((json['domains'] as List)[0] as Map<String, dynamic>)['iconKey'] = 'totally_unknown_icon';
 
       final result = AcademyCatalogSnapshot.fromJson(json);
 
@@ -137,8 +137,10 @@ void main() {
 
       expect(roundTripped.domains.first.id, snapshot.domains.first.id);
       expect(roundTripped.lessons.first.steps.length, snapshot.lessons.first.steps.length);
-      expect((roundTripped.lessons.first.steps[2] as ChoiceQuestionStep).options,
-          (snapshot.lessons.first.steps[2] as ChoiceQuestionStep).options);
+      expect(
+        (roundTripped.lessons.first.steps[2] as ChoiceQuestionStep).options,
+        (snapshot.lessons.first.steps[2] as ChoiceQuestionStep).options,
+      );
     });
 
     test('a lesson with no portfolioConcepts field (old cache / most lessons) defaults to empty', () {
@@ -150,7 +152,7 @@ void main() {
 
     test('portfolioConcepts round-trips through toJson/fromJson when present', () {
       final json = _fixtureJson();
-      (json['lessons'] as List)[0]['portfolioConcepts'] = ['pe', 'pvp'];
+      ((json['lessons'] as List)[0] as Map<String, dynamic>)['portfolioConcepts'] = ['pe', 'pvp'];
 
       final withConcepts = AcademyCatalogSnapshot.fromJson(json);
       expect(withConcepts.lessons.single.portfolioConcepts, ['pe', 'pvp']);

@@ -65,11 +65,7 @@ class ChoiceQuestionStepView extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         for (var i = 0; i < step.options.length; i++) ...[
-          _OptionTile(
-            label: step.options[i],
-            state: _stateFor(i),
-            onTap: answeredCorrectly ? null : () => onSelect(i),
-          ),
+          _OptionTile(label: step.options[i], state: _stateFor(i), onTap: answeredCorrectly ? null : () => onSelect(i)),
           const SizedBox(height: 8),
         ],
         if (hasAnswered) ...[
@@ -106,17 +102,9 @@ class _OptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = context.colors;
     final (Color borderColor, Color bgColor, IconData? trailingIcon) = switch (state) {
-      _OptionState.neutral => (
-          tokens.border,
-          tokens.surface.withValues(alpha: context.isDarkMode ? 0.4 : 0.94),
-          null,
-        ),
+      _OptionState.neutral => (tokens.border, tokens.surface.withValues(alpha: context.isDarkMode ? 0.4 : 0.94), null),
       _OptionState.correct => (tokens.success, tokens.success.withValues(alpha: 0.14), Icons.check_circle),
-      _OptionState.incorrect => (
-          AppColors.neonPink,
-          AppColors.neonPink.withValues(alpha: 0.12),
-          Icons.cancel_outlined,
-        ),
+      _OptionState.incorrect => (AppColors.neonPink, AppColors.neonPink.withValues(alpha: 0.12), Icons.cancel_outlined),
       _OptionState.dimmed => (tokens.border, tokens.surface.withValues(alpha: 0.2), null),
     };
 
@@ -188,22 +176,14 @@ class _FeedbackCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipOval(
-            child: PetRiveCompanion(
-              controller: mascotController,
-              size: 28,
-              interactive: false,
-            ),
-          ),
+          ClipOval(child: PetRiveCompanion(controller: mascotController, size: 28, interactive: false)),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  Translator.translate(
-                    AcademyPetBehavior.questionFeedbackTitle(correct: isCorrect, seed: stepIndex),
-                  ),
+                  Translator.translate(AcademyPetBehavior.questionFeedbackTitle(correct: isCorrect, seed: stepIndex)),
                   style: TextStyle(color: accent, fontWeight: FontWeight.bold, fontSize: 13),
                 ),
                 const SizedBox(height: 4),

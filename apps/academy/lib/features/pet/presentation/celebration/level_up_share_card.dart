@@ -65,15 +65,9 @@ class LevelUpShareCard extends StatelessWidget {
                 const SizedBox(height: 20),
                 _PetPortrait(imagePath: petImagePath),
                 const SizedBox(height: 20),
-                if (isLevelUp) ...[
-                  _LevelUpBadge(),
-                  const SizedBox(height: 8),
-                ],
+                if (isLevelUp) ...[_LevelUpBadge(), const SizedBox(height: 8)],
                 Text(
-                  Translator.translate(
-                    AppStrings.shareProgressLevelLabel,
-                    params: {'level': '${playerLevel.level}'},
-                  ),
+                  Translator.translate(AppStrings.shareProgressLevelLabel, params: {'level': '${playerLevel.level}'}),
                   style: AppTextStyles.display.copyWith(color: Colors.white, fontSize: 32),
                 ),
                 const SizedBox(height: 10),
@@ -82,10 +76,7 @@ class LevelUpShareCard extends StatelessWidget {
                 Text(
                   Translator.translate(
                     AppStrings.shareProgressXpToNextLabel,
-                    params: {
-                      'current': '${playerLevel.xpIntoLevel}',
-                      'total': '${playerLevel.xpForNextLevel}',
-                    },
+                    params: {'current': '${playerLevel.xpIntoLevel}', 'total': '${playerLevel.xpForNextLevel}'},
                   ),
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption.copyWith(color: AppColors.subtleText),
@@ -116,10 +107,7 @@ class _Header extends StatelessWidget {
       children: [
         const Icon(Icons.rocket_launch, color: AppColors.neonCyan, size: 22),
         const SizedBox(width: 8),
-        Text(
-          'Invest Game',
-          style: AppTextStyles.title.copyWith(color: Colors.white, letterSpacing: 0.5),
-        ),
+        Text('Invest Game', style: AppTextStyles.title.copyWith(color: Colors.white, letterSpacing: 0.5)),
       ],
     );
   }

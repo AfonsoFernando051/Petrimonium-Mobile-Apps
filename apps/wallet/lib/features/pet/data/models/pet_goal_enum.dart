@@ -17,39 +17,36 @@ enum PetGoalEnum {
 
 extension PetGoalEnumDisplay on PetGoalEnum {
   String get label => switch (this) {
-        PetGoalEnum.buildWealth => 'Construir Patrimônio',
-        PetGoalEnum.generatePassiveIncome => 'Gerar Renda Passiva',
-        PetGoalEnum.retireEarly => 'Aposentar Cedo',
-        PetGoalEnum.learnAboutInvesting => 'Aprender a Investir',
-        PetGoalEnum.buyFirstHome => 'Comprar Minha Casa',
-        PetGoalEnum.travel => 'Viajar',
-        PetGoalEnum.financialFreedom => 'Liberdade Financeira',
-      };
+    PetGoalEnum.buildWealth => 'Construir Patrimônio',
+    PetGoalEnum.generatePassiveIncome => 'Gerar Renda Passiva',
+    PetGoalEnum.retireEarly => 'Aposentar Cedo',
+    PetGoalEnum.learnAboutInvesting => 'Aprender a Investir',
+    PetGoalEnum.buyFirstHome => 'Comprar Minha Casa',
+    PetGoalEnum.travel => 'Viajar',
+    PetGoalEnum.financialFreedom => 'Liberdade Financeira',
+  };
 
   String get description => switch (this) {
-        PetGoalEnum.buildWealth => 'Crescer meu patrimônio de forma consistente ao longo do tempo.',
-        PetGoalEnum.generatePassiveIncome => 'Focar em ativos que geram renda recorrente.',
-        PetGoalEnum.retireEarly => 'Construir independência financeira para parar de trabalhar mais cedo.',
-        PetGoalEnum.learnAboutInvesting => 'Explorar o app e entender o básico antes de se comprometer.',
-        PetGoalEnum.buyFirstHome => 'Juntar para dar entrada no meu primeiro imóvel.',
-        PetGoalEnum.travel => 'Guardar dinheiro para viagens e novas experiências.',
-        PetGoalEnum.financialFreedom => 'Ter liberdade para escolher como viver, sem depender de um salário.',
-      };
+    PetGoalEnum.buildWealth => 'Crescer meu patrimônio de forma consistente ao longo do tempo.',
+    PetGoalEnum.generatePassiveIncome => 'Focar em ativos que geram renda recorrente.',
+    PetGoalEnum.retireEarly => 'Construir independência financeira para parar de trabalhar mais cedo.',
+    PetGoalEnum.learnAboutInvesting => 'Explorar o app e entender o básico antes de se comprometer.',
+    PetGoalEnum.buyFirstHome => 'Juntar para dar entrada no meu primeiro imóvel.',
+    PetGoalEnum.travel => 'Guardar dinheiro para viagens e novas experiências.',
+    PetGoalEnum.financialFreedom => 'Ter liberdade para escolher como viver, sem depender de um salário.',
+  };
 
   IconData get icon => switch (this) {
-        PetGoalEnum.buildWealth => Icons.trending_up,
-        PetGoalEnum.generatePassiveIncome => Icons.paid_outlined,
-        PetGoalEnum.retireEarly => Icons.beach_access_outlined,
-        PetGoalEnum.learnAboutInvesting => Icons.school_outlined,
-        PetGoalEnum.buyFirstHome => Icons.home_outlined,
-        PetGoalEnum.travel => Icons.flight_takeoff,
-        PetGoalEnum.financialFreedom => Icons.rocket_launch,
-      };
+    PetGoalEnum.buildWealth => Icons.trending_up,
+    PetGoalEnum.generatePassiveIncome => Icons.paid_outlined,
+    PetGoalEnum.retireEarly => Icons.beach_access_outlined,
+    PetGoalEnum.learnAboutInvesting => Icons.school_outlined,
+    PetGoalEnum.buyFirstHome => Icons.home_outlined,
+    PetGoalEnum.travel => Icons.flight_takeoff,
+    PetGoalEnum.financialFreedom => Icons.rocket_launch,
+  };
 
   static PetGoalEnum fromName(String? name) {
-    return PetGoalEnum.values.firstWhere(
-      (g) => g.name == name,
-      orElse: () => PetGoalEnum.buildWealth,
-    );
+    return PetGoalEnum.values.firstWhere((g) => g.name == name, orElse: () => PetGoalEnum.buildWealth);
   }
 }

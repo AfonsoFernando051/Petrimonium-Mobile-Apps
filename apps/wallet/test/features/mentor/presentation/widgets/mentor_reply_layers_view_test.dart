@@ -13,16 +13,14 @@ void main() {
   });
 
   Widget wrap(Widget child) => MaterialApp(
-        theme: AppTheme.dark,
-        home: Scaffold(body: SingleChildScrollView(child: child)),
-      );
+    theme: AppTheme.dark,
+    home: Scaffold(body: SingleChildScrollView(child: child)),
+  );
 
   /// Collects the rendered markdown source, which is where the reply body ends
   /// up — a leaked `[[DATA]]` marker would show up here.
-  List<String> renderedMarkdown(WidgetTester tester) => tester
-      .widgetList<MarkdownBody>(find.byType(MarkdownBody))
-      .map((w) => w.data)
-      .toList();
+  List<String> renderedMarkdown(WidgetTester tester) =>
+      tester.widgetList<MarkdownBody>(find.byType(MarkdownBody)).map((w) => w.data).toList();
 
   group('MentorReplyLayersView', () {
     testWidgets('renders each layer behind its own chip, without the raw markers', (tester) async {
@@ -33,9 +31,7 @@ void main() {
       );
       expect(layers, isNotNull);
 
-      await tester.pumpWidget(wrap(
-        MentorReplyLayersView(layers: layers!, timestamp: DateTime(2026, 3, 9, 14, 5)),
-      ));
+      await tester.pumpWidget(wrap(MentorReplyLayersView(layers: layers!, timestamp: DateTime(2026, 3, 9, 14, 5))));
 
       expect(find.byType(LayerChip), findsNWidgets(3));
 
@@ -55,9 +51,7 @@ void main() {
     testWidgets('stamps the DADO chip with the reply timestamp', (tester) async {
       final layers = WalletMentorReplyLayers.tryParse('[[DATA]] Saldo estável.')!;
 
-      await tester.pumpWidget(wrap(
-        MentorReplyLayersView(layers: layers, timestamp: DateTime(2026, 3, 9, 14, 5)),
-      ));
+      await tester.pumpWidget(wrap(MentorReplyLayersView(layers: layers, timestamp: DateTime(2026, 3, 9, 14, 5))));
 
       expect(find.textContaining('09/03 14:05'), findsOneWidget);
     });
@@ -65,9 +59,7 @@ void main() {
     testWidgets('renders only the layers that are present', (tester) async {
       final layers = WalletMentorReplyLayers.tryParse('[[INTERPRETATION]] Só uma leitura.')!;
 
-      await tester.pumpWidget(wrap(
-        MentorReplyLayersView(layers: layers, timestamp: DateTime(2026, 3, 9)),
-      ));
+      await tester.pumpWidget(wrap(MentorReplyLayersView(layers: layers, timestamp: DateTime(2026, 3, 9))));
 
       expect(find.byType(LayerChip), findsOneWidget);
       expect(renderedMarkdown(tester), ['Só uma leitura.']);

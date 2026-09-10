@@ -14,15 +14,9 @@ import 'package:petrimonium_wallet/core/theme/app_palette.dart';
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get light => PetrimoniumTheme.build(
-        brightness: Brightness.light,
-        colors: AppPalette.light,
-        accents: AppPalette.accents,
-      );
+  static ThemeData get light =>
+      PetrimoniumTheme.build(brightness: Brightness.light, colors: AppPalette.light, accents: AppPalette.accents);
 
-  static ThemeData get dark => PetrimoniumTheme.build(
-        brightness: Brightness.dark,
-        colors: AppPalette.dark,
-        accents: AppPalette.accents,
-      );
+  static ThemeData get dark =>
+      PetrimoniumTheme.build(brightness: Brightness.dark, colors: AppPalette.dark, accents: AppPalette.accents);
 }

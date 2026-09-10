@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
@@ -23,8 +24,8 @@ class MentorWelcomeScreen extends StatelessWidget {
   Future<void> _goNext(BuildContext context) async {
     await DI.onboardingStateRepository.markMentorWelcomeSeen();
     if (context.mounted) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => QuickSetupScreen(totalSteps: totalSteps)),
+      unawaited(
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => QuickSetupScreen(totalSteps: totalSteps))),
       );
     }
   }
@@ -87,12 +88,7 @@ class _MentorCard extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             Translator.translate(AppStrings.mentorWelcomeHeadline),
-            style: TextStyle(
-              color: tokens.textPrimary,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              height: 1.25,
-            ),
+            style: TextStyle(color: tokens.textPrimary, fontSize: 22, fontWeight: FontWeight.bold, height: 1.25),
           ),
           const SizedBox(height: 16),
           _paragraph(context, AppStrings.mentorWelcomeParagraph1),

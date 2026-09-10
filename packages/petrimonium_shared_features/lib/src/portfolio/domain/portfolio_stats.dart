@@ -11,17 +11,9 @@ class PortfolioStats {
   final List<Holding> holdings;
   final List<AllocationSlice> allocation;
 
-  const PortfolioStats({
-    required this.summary,
-    required this.holdings,
-    required this.allocation,
-  });
+  const PortfolioStats({required this.summary, required this.holdings, required this.allocation});
 
-  static const empty = PortfolioStats(
-    summary: PortfolioSummary.empty,
-    holdings: [],
-    allocation: [],
-  );
+  static const empty = PortfolioStats(summary: PortfolioSummary.empty, holdings: [], allocation: []);
 
   bool get hasHoldings => holdings.isNotEmpty;
 

@@ -7,7 +7,9 @@ void main() {
   Widget buildTestableWidget({required String label, required VoidCallback onTap}) {
     return MaterialApp(
       theme: TestTheme.dark,
-      home: Scaffold(body: SuggestedPromptChip(label: label, onTap: onTap)),
+      home: Scaffold(
+        body: SuggestedPromptChip(label: label, onTap: onTap),
+      ),
     );
   }
 

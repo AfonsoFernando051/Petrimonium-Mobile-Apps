@@ -40,9 +40,7 @@ class MentorChatRepository {
   }
 
   Future<List<String>> loadSuggestedPrompts() {
-    return _remoteDataSource.getSuggestedPrompts(
-      language: Translator.currentLanguage,
-    );
+    return _remoteDataSource.getSuggestedPrompts(language: Translator.currentLanguage);
   }
 
   Future<void> renameConversation(int conversationId, String title) {
@@ -53,11 +51,7 @@ class MentorChatRepository {
     return _remoteDataSource.deleteConversation(conversationId);
   }
 
-  Future<MentorChatResult> sendMessage({
-    required String message,
-    int? conversationId,
-    String? currentScreen,
-  }) async {
+  Future<MentorChatResult> sendMessage({required String message, int? conversationId, String? currentScreen}) async {
     final goal = await _petPreferencesRepository.loadGoal();
     final horizon = await _petPreferencesRepository.loadHorizon();
 

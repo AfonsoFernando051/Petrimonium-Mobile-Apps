@@ -4,10 +4,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   group('PortfolioScenarioCalculator.evaluate', () {
-    final weights = {
-      InvestmentTypeEnum.STOCKS: 60.0,
-      InvestmentTypeEnum.FIXED_INCOME: 40.0,
-    };
+    final weights = {InvestmentTypeEnum.STOCKS: 60.0, InvestmentTypeEnum.FIXED_INCOME: 40.0};
 
     test('totalAmount: 0 produces all-zero deltas, never NaN', () {
       final result = PortfolioScenarioCalculator.evaluate(
@@ -31,7 +28,10 @@ void main() {
         scenario: LabScenario.equitiesDown15,
       );
 
-      expect(result.categoryImpacts.single.categoryValue + result.categoryImpacts.single.contribution, closeTo(8500, 0.001));
+      expect(
+        result.categoryImpacts.single.categoryValue + result.categoryImpacts.single.contribution,
+        closeTo(8500, 0.001),
+      );
       expect(result.newValue, greaterThanOrEqualTo(0));
     });
 
@@ -42,10 +42,7 @@ void main() {
         scenario: LabScenario.broadMarketDown10,
       );
 
-      final summedContributions = result.categoryImpacts.fold<double>(
-        0,
-        (sum, impact) => sum + impact.contribution,
-      );
+      final summedContributions = result.categoryImpacts.fold<double>(0, (sum, impact) => sum + impact.contribution);
       expect(summedContributions, closeTo(result.deltaAbsolute, 0.0001));
     });
 
@@ -73,19 +70,12 @@ void main() {
     test('largestPositionDown20 targets whichever category has the biggest weight', () {
       final result = PortfolioScenarioCalculator.evaluate(
         totalAmount: 10000,
-        weightsPercent: {
-          InvestmentTypeEnum.STOCKS: 30,
-          InvestmentTypeEnum.FIXED_INCOME: 70,
-        },
+        weightsPercent: {InvestmentTypeEnum.STOCKS: 30, InvestmentTypeEnum.FIXED_INCOME: 70},
         scenario: LabScenario.largestPositionDown20,
       );
 
-      final fixedIncomeImpact = result.categoryImpacts.firstWhere(
-        (i) => i.type == InvestmentTypeEnum.FIXED_INCOME,
-      );
-      final stocksImpact = result.categoryImpacts.firstWhere(
-        (i) => i.type == InvestmentTypeEnum.STOCKS,
-      );
+      final fixedIncomeImpact = result.categoryImpacts.firstWhere((i) => i.type == InvestmentTypeEnum.FIXED_INCOME);
+      final stocksImpact = result.categoryImpacts.firstWhere((i) => i.type == InvestmentTypeEnum.STOCKS);
       expect(fixedIncomeImpact.shockPercent, closeTo(-20, 0.0001));
       expect(stocksImpact.shockPercent, closeTo(0, 0.0001));
     });

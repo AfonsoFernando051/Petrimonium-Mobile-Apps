@@ -13,15 +13,7 @@
 /// and is bound to each app's own string catalog — see each app's
 /// `PetSpecieDisplay` extension. Same split as `LevelTier` (ecosystem
 /// boundaries shared, product wording local).
-enum PetSpecieEnum {
-  DOG,
-  CAT,
-  WOLF,
-  FOX,
-  BEAR,
-  LION,
-  OWL
-}
+enum PetSpecieEnum { DOG, CAT, WOLF, FOX, BEAR, LION, OWL }
 
 extension PetSpecieEnumExtension on PetSpecieEnum {
   String get name => toString().split('.').last;

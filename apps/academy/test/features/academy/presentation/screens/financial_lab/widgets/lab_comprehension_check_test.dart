@@ -21,9 +21,7 @@ class FakeMascotRepository implements MascotRepository {
   @override
   Future<void> saveNetWorth(double netWorth) async {}
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
   @override
@@ -43,58 +41,50 @@ void main() {
     explanation: 'Explicação de teste.',
   );
 
-  Widget wrap(Widget child) =>
-      MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    theme: AppTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   group('LabComprehensionCheck', () {
-    testWidgets(
-      'picking the wrong option shows feedback but does not fire onAnsweredCorrectly',
-      (tester) async {
-        var fired = false;
-        await tester.pumpWidget(
-          wrap(
-            LabComprehensionCheck(
-              step: step,
-              mascotController: MascotController(
-                repository: FakeMascotRepository(),
-              ),
-              onAnsweredCorrectly: () => fired = true,
-            ),
+    testWidgets('picking the wrong option shows feedback but does not fire onAnsweredCorrectly', (tester) async {
+      var fired = false;
+      await tester.pumpWidget(
+        wrap(
+          LabComprehensionCheck(
+            step: step,
+            mascotController: MascotController(repository: FakeMascotRepository()),
+            onAnsweredCorrectly: () => fired = true,
           ),
-        );
+        ),
+      );
 
-        await tester.tap(find.text('Errada'));
-        await tester.pump();
+      await tester.tap(find.text('Errada'));
+      await tester.pump();
 
-        expect(find.text('Explicação de teste.'), findsOneWidget);
-        expect(fired, isFalse);
-        // Options stay tappable after a wrong answer (no-punishment retry).
-        expect(find.text('Certa'), findsOneWidget);
-      },
-    );
+      expect(find.text('Explicação de teste.'), findsOneWidget);
+      expect(fired, isFalse);
+      // Options stay tappable after a wrong answer (no-punishment retry).
+      expect(find.text('Certa'), findsOneWidget);
+    });
 
-    testWidgets(
-      'picking the correct option fires onAnsweredCorrectly exactly once',
-      (tester) async {
-        var fireCount = 0;
-        await tester.pumpWidget(
-          wrap(
-            LabComprehensionCheck(
-              step: step,
-              mascotController: MascotController(
-                repository: FakeMascotRepository(),
-              ),
-              onAnsweredCorrectly: () => fireCount++,
-            ),
+    testWidgets('picking the correct option fires onAnsweredCorrectly exactly once', (tester) async {
+      var fireCount = 0;
+      await tester.pumpWidget(
+        wrap(
+          LabComprehensionCheck(
+            step: step,
+            mascotController: MascotController(repository: FakeMascotRepository()),
+            onAnsweredCorrectly: () => fireCount++,
           ),
-        );
+        ),
+      );
 
-        await tester.tap(find.text('Certa'));
-        await tester.pump();
+      await tester.tap(find.text('Certa'));
+      await tester.pump();
 
-        expect(fireCount, 1);
-        expect(find.text('Explicação de teste.'), findsOneWidget);
-      },
-    );
+      expect(fireCount, 1);
+      expect(find.text('Explicação de teste.'), findsOneWidget);
+    });
   });
 }

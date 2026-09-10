@@ -4,11 +4,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 void main() {
   group('HistoryPoint', () {
     test('constructs with the given fields', () {
-      final point = HistoryPoint(
-        date: DateTime(2026, 1, 1),
-        investedCapital: 1000.0,
-        portfolioValue: 1200.0,
-      );
+      final point = HistoryPoint(date: DateTime(2026, 1, 1), investedCapital: 1000.0, portfolioValue: 1200.0);
 
       expect(point.date, DateTime(2026, 1, 1));
       expect(point.investedCapital, 1000.0);
@@ -17,20 +13,12 @@ void main() {
 
     group('profit', () {
       test('is portfolioValue minus investedCapital', () {
-        final point = HistoryPoint(
-          date: DateTime(2026, 1, 1),
-          investedCapital: 1000.0,
-          portfolioValue: 1200.0,
-        );
+        final point = HistoryPoint(date: DateTime(2026, 1, 1), investedCapital: 1000.0, portfolioValue: 1200.0);
         expect(point.profit, 200.0);
       });
 
       test('can be negative when the portfolio is underwater', () {
-        final point = HistoryPoint(
-          date: DateTime(2026, 1, 1),
-          investedCapital: 1000.0,
-          portfolioValue: 800.0,
-        );
+        final point = HistoryPoint(date: DateTime(2026, 1, 1), investedCapital: 1000.0, portfolioValue: 800.0);
         expect(point.profit, -200.0);
       });
     });

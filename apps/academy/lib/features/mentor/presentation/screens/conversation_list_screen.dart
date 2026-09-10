@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
@@ -67,11 +68,17 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(Translator.translate(AppStrings.cancelButton), style: const TextStyle(color: AppColors.neonCyan)),
+            child: Text(
+              Translator.translate(AppStrings.cancelButton),
+              style: const TextStyle(color: AppColors.neonCyan),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, controller.text.trim()),
-            child: Text(Translator.translate(AppStrings.mentorRenameConversationSave), style: const TextStyle(color: AppColors.neonCyan)),
+            child: Text(
+              Translator.translate(AppStrings.mentorRenameConversationSave),
+              style: const TextStyle(color: AppColors.neonCyan),
+            ),
           ),
         ],
       ),
@@ -103,18 +110,24 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(Translator.translate(AppStrings.cancelButton), style: const TextStyle(color: AppColors.neonCyan)),
+            child: Text(
+              Translator.translate(AppStrings.cancelButton),
+              style: const TextStyle(color: AppColors.neonCyan),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(Translator.translate(AppStrings.mentorDeleteConversationButton), style: TextStyle(color: tokens.error)),
+            child: Text(
+              Translator.translate(AppStrings.mentorDeleteConversationButton),
+              style: TextStyle(color: tokens.error),
+            ),
           ),
         ],
       ),
     );
 
     if (confirmed == true) {
-      HapticFeedback.mediumImpact();
+      unawaited(HapticFeedback.mediumImpact());
       final success = await _controller.delete(conversation.id);
       if (!success && mounted) {
         GameSnack.show(context, Translator.translate(AppStrings.mentorDeleteConversationFailed), isError: true);
@@ -148,9 +161,7 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
         icon: const Icon(Icons.add_comment_outlined, color: Colors.white),
         label: Text(Translator.translate(AppStrings.mentorNewChatTooltip), style: const TextStyle(color: Colors.white)),
       ),
-      body: CosmicBackground(
-        child: SafeArea(child: _buildBody()),
-      ),
+      body: CosmicBackground(child: SafeArea(child: _buildBody())),
     );
   }
 
@@ -161,7 +172,10 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
 
     if (_controller.error != null) {
       return ErrorStateView(
-            retryLabel: Translator.translate(AppStrings.retryButtonLabel),message: _controller.error!, onRetry: _controller.load);
+        retryLabel: Translator.translate(AppStrings.retryButtonLabel),
+        message: _controller.error!,
+        onRetry: _controller.load,
+      );
     }
 
     if (_controller.conversations.isEmpty) {

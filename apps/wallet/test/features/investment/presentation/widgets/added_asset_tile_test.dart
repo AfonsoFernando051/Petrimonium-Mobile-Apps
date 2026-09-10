@@ -27,7 +27,9 @@ void main() {
   }
 
   group('AddedAssetTile', () {
-    testWidgets('renders the uppercased ticker and formatted quantity/price for a whole-unit asset', (WidgetTester tester) async {
+    testWidgets('renders the uppercased ticker and formatted quantity/price for a whole-unit asset', (
+      WidgetTester tester,
+    ) async {
       final asset = AssetRegistrationModel(
         name: 'petr4',
         quantity: 10,
@@ -69,11 +71,7 @@ void main() {
         type: InvestmentTypeEnum.STOCKS,
       );
 
-      await tester.pumpWidget(buildTestableWidget(
-        asset,
-        onEdit: () => edited = true,
-        onRemove: () => removed = true,
-      ));
+      await tester.pumpWidget(buildTestableWidget(asset, onEdit: () => edited = true, onRemove: () => removed = true));
       await tester.pump();
 
       await tester.tap(find.byIcon(Icons.edit_outlined));

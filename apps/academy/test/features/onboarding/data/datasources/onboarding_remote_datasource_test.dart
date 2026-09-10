@@ -21,18 +21,20 @@ void main() {
 
   group('getQuestions', () {
     test('requests with the current language and parses the question list on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(
-            jsonEncode([
-              {
-                'id': 'q1',
-                'text': 'What is your goal?',
-                'options': [
-                  {'id': 'o1', 'text': 'Grow wealth'},
-                ],
-              },
-            ]),
-            200,
-          ));
+      when(() => mockApiClient.get(any())).thenAnswer(
+        (_) async => http.Response(
+          jsonEncode([
+            {
+              'id': 'q1',
+              'text': 'What is your goal?',
+              'options': [
+                {'id': 'o1', 'text': 'Grow wealth'},
+              ],
+            },
+          ]),
+          200,
+        ),
+      );
 
       final result = await dataSource.getQuestions();
 
@@ -53,10 +55,9 @@ void main() {
 
   group('getStatus', () {
     test('parses hasAnswered/profile on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(
-            jsonEncode({'hasAnswered': true, 'profile': 'moderate'}),
-            200,
-          ));
+      when(
+        () => mockApiClient.get(any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'hasAnswered': true, 'profile': 'moderate'}), 200));
 
       final result = await dataSource.getStatus();
 
@@ -77,18 +78,18 @@ void main() {
 
   group('submitAssessment', () {
     test('posts the selected option ids and returns the resulting profile on 200', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response(
-            jsonEncode({'profile': 'aggressive'}),
-            200,
-          ));
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'profile': 'aggressive'}), 200));
 
       final result = await dataSource.submitAssessment(['o1', 'o2']);
 
       expect(result, 'aggressive');
-      verify(() => mockApiClient.post(
-            ApiConstants.onboardingSubmitEndpoint,
-            {'selectedOptionIds': ['o1', 'o2']},
-          )).called(1);
+      verify(
+        () => mockApiClient.post(ApiConstants.onboardingSubmitEndpoint, {
+          'selectedOptionIds': ['o1', 'o2'],
+        }),
+      ).called(1);
     });
 
     test('throws an Exception on a non-200 response', () async {

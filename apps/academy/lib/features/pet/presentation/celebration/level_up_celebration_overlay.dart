@@ -72,23 +72,20 @@ class _LevelUpCelebrationOverlayState extends State<LevelUpCelebrationOverlay> w
   Future<void> _share() async {
     if (_sharing) return;
     setState(() => _sharing = true);
-    HapticFeedback.selectionClick();
+    unawaited(HapticFeedback.selectionClick());
     try {
       final file = await WidgetImageCapture.captureToFile(
         _cardKey,
         fileName: 'invest_game_level_${widget.newLevel}.png',
       );
       await SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(file.path)],
-          text: Translator.translate(AppStrings.shareProgressTagline),
-        ),
+        ShareParams(files: [XFile(file.path)], text: Translator.translate(AppStrings.shareProgressTagline)),
       );
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(Translator.translate(AppStrings.shareProgressErrorMessage))),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(Translator.translate(AppStrings.shareProgressErrorMessage))));
       }
     } finally {
       if (mounted) setState(() => _sharing = false);

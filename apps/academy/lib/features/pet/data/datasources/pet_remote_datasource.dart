@@ -8,11 +8,8 @@ class PetRemoteDataSource {
   PetRemoteDataSource({required this.apiClient});
 
   Future<void> configurePet(PetSpecieEnum specie, {String? name}) async {
-    final response = await apiClient.post(
-      '/api/pets/configure',
-      {'specie': specie.name, 'name': ?name},
-    );
-    
+    final response = await apiClient.post('/api/pets/configure', {'specie': specie.name, 'name': ?name});
+
     if (response.statusCode != 200) {
       throw Exception('Failed to configure pet');
     }
@@ -31,7 +28,7 @@ class PetRemoteDataSource {
       // straight to pet setup instead of back to login — see `MyApp._getStartRoute`.
       throw Exception('Failed to load pet status (${response.statusCode})');
     }
-    final data = jsonDecode(response.body);
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
     return data['hasPet'] as bool;
   }
 

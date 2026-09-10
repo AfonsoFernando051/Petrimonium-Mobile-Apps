@@ -56,8 +56,22 @@ void main() {
 
   group('WealthHistoryCalculator.compute — HistoryRange.all', () {
     test('window starts at the earliest purchase date across all lots', () {
-      final oldLot = lot(id: 1, ticker: 'OLD', purchaseDate: _daysAgo(40), quantity: 1, purchasePrice: 10, currentPrice: 10);
-      final newLot = lot(id: 2, ticker: 'NEW', purchaseDate: _daysAgo(5), quantity: 1, purchasePrice: 10, currentPrice: 10);
+      final oldLot = lot(
+        id: 1,
+        ticker: 'OLD',
+        purchaseDate: _daysAgo(40),
+        quantity: 1,
+        purchasePrice: 10,
+        currentPrice: 10,
+      );
+      final newLot = lot(
+        id: 2,
+        ticker: 'NEW',
+        purchaseDate: _daysAgo(5),
+        quantity: 1,
+        purchasePrice: 10,
+        currentPrice: 10,
+      );
 
       final points = WealthHistoryCalculator.compute([oldLot, newLot], HistoryRange.all);
 
@@ -67,7 +81,14 @@ void main() {
 
   group('WealthHistoryCalculator.compute — multiple lots on the same day', () {
     test('today\'s sample sums every lot\'s current value', () {
-      final lotA = lot(id: 1, ticker: 'A', purchaseDate: _daysAgo(2), quantity: 10, purchasePrice: 10, currentPrice: 10);
+      final lotA = lot(
+        id: 1,
+        ticker: 'A',
+        purchaseDate: _daysAgo(2),
+        quantity: 10,
+        purchasePrice: 10,
+        currentPrice: 10,
+      );
       final lotB = lot(id: 2, ticker: 'B', purchaseDate: _daysAgo(2), quantity: 5, purchasePrice: 20, currentPrice: 20);
 
       final points = WealthHistoryCalculator.compute([lotA, lotB], HistoryRange.d7);

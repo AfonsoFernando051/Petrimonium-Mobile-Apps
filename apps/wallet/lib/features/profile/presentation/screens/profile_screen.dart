@@ -105,21 +105,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 24),
                   _ProfileMenuRow(
                     label: Translator.translate(AppStrings.profileMentorPreferencesLabel),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const MentorPreferencesScreen()),
-                    ),
+                    onTap: () =>
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MentorPreferencesScreen())),
                   ),
                   _ProfileMenuRow(
                     label: Translator.translate(AppStrings.profilePrivacyMemoryLabel),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const PrivacyAndMemoryScreen()),
-                    ),
+                    onTap: () =>
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PrivacyAndMemoryScreen())),
                   ),
                   _ProfileMenuRow(
                     label: Translator.translate(AppStrings.profileCurrencyMarketLabel),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const QuickSetupScreen(isSettingsMode: true)),
-                    ),
+                    onTap: () => Navigator.of(
+                      context,
+                    ).push(MaterialPageRoute(builder: (_) => const QuickSetupScreen(isSettingsMode: true))),
                   ),
                 ],
               ),

@@ -78,10 +78,7 @@ class _DashedRoundedRectPainter extends CustomPainter {
       var distance = 0.0;
       while (distance < metric.length) {
         final next = distance + dashLength;
-        canvas.drawPath(
-          metric.extractPath(distance, next.clamp(0.0, metric.length)),
-          paint,
-        );
+        canvas.drawPath(metric.extractPath(distance, next.clamp(0.0, metric.length)), paint);
         distance = next + gapLength;
       }
     }

@@ -6,8 +6,7 @@ import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.dart';
 
-const String _fallbackErrorReply =
-    'Hmm, algo deu errado ao pensar na resposta 🐾 Vamos tentar de novo daqui a pouco?';
+const String _fallbackErrorReply = 'Hmm, algo deu errado ao pensar na resposta 🐾 Vamos tentar de novo daqui a pouco?';
 
 /// Drives the Mentor chat: which conversation is open, its message list,
 /// sending state, and a client-side typewriter reveal that simulates
@@ -16,8 +15,7 @@ const String _fallbackErrorReply =
 /// docs/AI_MENTOR.md). `conversationId` is `null` for a fresh/unsaved chat —
 /// the backend creates the conversation lazily on the first sent message.
 class MentorChatController extends ChangeNotifier {
-  MentorChatController({required MentorChatRepository repository})
-    : _repository = repository;
+  MentorChatController({required MentorChatRepository repository}) : _repository = repository;
 
   final MentorChatRepository _repository;
 
@@ -69,14 +67,7 @@ class MentorChatController extends ChangeNotifier {
     final trimmed = text.trim();
     if (trimmed.isEmpty || _isSending) return;
 
-    _messages.add(
-      ChatMessage(
-        id: _newId(),
-        role: ChatRole.user,
-        text: trimmed,
-        timestamp: DateTime.now(),
-      ),
-    );
+    _messages.add(ChatMessage(id: _newId(), role: ChatRole.user, text: trimmed, timestamp: DateTime.now()));
     _isSending = true;
     notifyListeners();
 
@@ -139,9 +130,7 @@ class MentorChatController extends ChangeNotifier {
       charIndex = min(charIndex + chunkSize, fullText.length);
       final index = _messages.indexWhere((m) => m.id == messageId);
       if (index != -1) {
-        _messages[index] = _messages[index].copyWith(
-          text: fullText.substring(0, charIndex),
-        );
+        _messages[index] = _messages[index].copyWith(text: fullText.substring(0, charIndex));
         notifyListeners();
       }
       if (charIndex >= fullText.length) {
@@ -165,8 +154,7 @@ class MentorChatController extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _newId() =>
-      '${DateTime.now().microsecondsSinceEpoch}-${_messages.length}';
+  String _newId() => '${DateTime.now().microsecondsSinceEpoch}-${_messages.length}';
 
   @override
   void dispose() {

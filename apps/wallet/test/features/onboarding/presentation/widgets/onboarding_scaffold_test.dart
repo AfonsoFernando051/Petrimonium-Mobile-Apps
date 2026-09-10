@@ -20,10 +20,7 @@ void main() {
         totalSteps: 5,
         title: 'Título de teste',
         subtitle: subtitle,
-        body: const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [Text('Conteúdo do corpo')],
-        ),
+        body: const Column(mainAxisSize: MainAxisSize.min, children: [Text('Conteúdo do corpo')]),
         ctaLabel: 'Continuar',
         onCta: onCta,
         isCtaLoading: isCtaLoading,

@@ -47,8 +47,7 @@ class DiversificationLabScreen extends StatefulWidget {
   final PetSpeechBubbleAnchor _headerAnchor = PetSpeechBubbleAnchor();
 
   @override
-  State<DiversificationLabScreen> createState() =>
-      _DiversificationLabScreenState();
+  State<DiversificationLabScreen> createState() => _DiversificationLabScreenState();
 }
 
 class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
@@ -64,8 +63,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
   bool _canComplete = false;
   int _touchedIndex = -1;
 
-  DiversificationResult get _result =>
-      DiversificationCalculator.evaluate(_weights);
+  DiversificationResult get _result => DiversificationCalculator.evaluate(_weights);
 
   void _onWeightChanged(InvestmentTypeEnum type, double value) {
     setState(() => _weights = {..._weights, type: value});
@@ -80,9 +78,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
       Translator.translate(AppStrings.labDiversificationOptionC),
     ],
     correctIndex: 0,
-    explanation: Translator.translate(
-      AppStrings.labDiversificationAnswerExplanation,
-    ),
+    explanation: Translator.translate(AppStrings.labDiversificationAnswerExplanation),
   );
 
   @override
@@ -112,8 +108,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
               params: {
                 'category': result.largestCategory?.labLabel ?? '',
                 'largestWeight': result.largestWeightPercent.round().toString(),
-                'effectiveAssets': result.effectiveNumberOfAssets
-                    .toStringAsFixed(1),
+                'effectiveAssets': result.effectiveNumberOfAssets.toStringAsFixed(1),
               },
             ),
             variant: LabNarrativeVariant.interpretation,
@@ -121,9 +116,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
           _buildShockButtons(),
           if (_activeShock != _Shock.none) _buildShockResult(result),
           LabNarrativeCard(
-            text: Translator.translate(
-              AppStrings.labDiversificationSafetyDisclaimer,
-            ),
+            text: Translator.translate(AppStrings.labDiversificationSafetyDisclaimer),
             variant: LabNarrativeVariant.disclaimer,
           ),
           LabComprehensionCheck(
@@ -133,9 +126,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
           ),
           LabCompletionFooter(
             simulatorId: LabSimulatorId.diversification,
-            resolvedTitle: Translator.translate(
-              AppStrings.labDiversificationTitle,
-            ),
+            resolvedTitle: Translator.translate(AppStrings.labDiversificationTitle),
             controller: widget.completionController,
             onOpenWallet: widget.onOpenWallet,
             canComplete: _canComplete && result.isValid,
@@ -164,17 +155,12 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
                   centerSpaceRadius: 36,
                   pieTouchData: PieTouchData(
                     touchCallback: (event, response) {
-                      if (!event.isInterestedForInteractions ||
-                          response == null ||
-                          response.touchedSection == null) {
+                      if (!event.isInterestedForInteractions || response == null || response.touchedSection == null) {
                         setState(() => _touchedIndex = -1);
                         return;
                       }
                       HapticFeedback.selectionClick();
-                      setState(
-                        () => _touchedIndex =
-                            response.touchedSection!.touchedSectionIndex,
-                      );
+                      setState(() => _touchedIndex = response.touchedSection!.touchedSectionIndex);
                     },
                   ),
                   sections: [
@@ -191,11 +177,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
               ),
               Text(
                 '${result.diversificationScore.round()}',
-                style: TextStyle(
-                  color: tokens.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
+                style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ],
           ),
@@ -207,16 +189,12 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
             spacing: AppSpacing.sm,
             children: [
               StatCard(
-                label: Translator.translate(
-                  AppStrings.labDiversificationEffectiveAssetsLabel,
-                ),
+                label: Translator.translate(AppStrings.labDiversificationEffectiveAssetsLabel),
                 value: result.effectiveNumberOfAssets.toStringAsFixed(1),
                 accent: AppColors.neonCyan,
               ),
               StatCard(
-                label: Translator.translate(
-                  AppStrings.labDiversificationConcentrationLabel,
-                ),
+                label: Translator.translate(AppStrings.labDiversificationConcentrationLabel),
                 value:
                     '${result.largestCategory?.labLabel ?? ''} '
                     '${result.largestWeightPercent.round()}%',
@@ -240,21 +218,16 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
       children: [
         Expanded(
           child: GameButton(
-            label: Translator.translate(
-              AppStrings.labDiversificationConcentrationShockButton,
-            ),
+            label: Translator.translate(AppStrings.labDiversificationConcentrationShockButton),
             height: 44,
             color: AppColors.neonPink,
-            onPressed: () =>
-                setState(() => _activeShock = _Shock.concentration),
+            onPressed: () => setState(() => _activeShock = _Shock.concentration),
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: GameButton(
-            label: Translator.translate(
-              AppStrings.labDiversificationMarketShockButton,
-            ),
+            label: Translator.translate(AppStrings.labDiversificationMarketShockButton),
             height: 44,
             color: AppColors.neonCyan,
             onPressed: () => setState(() => _activeShock = _Shock.market),
@@ -270,9 +243,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
             AppStrings.labDiversificationConcentrationShockResult,
             params: {
               'category': result.largestCategory?.labLabel ?? '',
-              'impact': result.concentrationShockImpactPercent.toStringAsFixed(
-                1,
-              ),
+              'impact': result.concentrationShockImpactPercent.toStringAsFixed(1),
             },
           )
         : Translator.translate(AppStrings.labDiversificationMarketShockResult);
@@ -282,14 +253,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
       borderRadius: AppRadii.lg,
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.md),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: context.colors.textSecondary,
-            fontSize: 12,
-            height: 1.4,
-          ),
-        ),
+        child: Text(text, style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.4)),
       ),
     );
   }

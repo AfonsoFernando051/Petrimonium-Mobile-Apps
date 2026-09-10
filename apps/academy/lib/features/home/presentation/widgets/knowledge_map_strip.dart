@@ -40,7 +40,12 @@ class KnowledgeMapStrip extends StatelessWidget {
           children: [
             Text(
               Translator.translate(AppStrings.homeKnowledgeMapLabel),
-              style: TextStyle(color: tokens.primary.withValues(alpha: 0.6), fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 2),
+              style: TextStyle(
+                color: tokens.primary.withValues(alpha: 0.6),
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 2,
+              ),
             ),
             GestureDetector(
               onTap: onViewAll,
@@ -68,12 +73,7 @@ class KnowledgeMapStrip extends StatelessWidget {
 }
 
 class _ModuleRow extends StatelessWidget {
-  const _ModuleRow({
-    required this.module,
-    required this.status,
-    required this.completedLessons,
-    required this.onTap,
-  });
+  const _ModuleRow({required this.module, required this.status, required this.completedLessons, required this.onTap});
 
   final AcademyModule module;
   final ModuleStatus status;

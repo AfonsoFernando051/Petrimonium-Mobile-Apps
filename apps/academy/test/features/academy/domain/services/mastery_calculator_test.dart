@@ -38,8 +38,11 @@ void main() {
     });
 
     test('all lessons completed perfectly scores 100%', () {
-      final allLessonIds =
-          catalog.modulesForSchool(school.id).where((m) => m.contentAvailable).expand((m) => m.lessonIds).toSet();
+      final allLessonIds = catalog
+          .modulesForSchool(school.id)
+          .where((m) => m.contentAvailable)
+          .expand((m) => m.lessonIds)
+          .toSet();
       final percent = MasteryCalculator.percentForSchool(
         catalog: catalog,
         schoolId: school.id,
@@ -70,8 +73,11 @@ void main() {
       // Completing every lesson without ever answering perfectly should read
       // as 100% complete but well below 100% mastery — the exact scenario
       // the brief (and DECISION-020) call out explicitly.
-      final allLessonIds =
-          catalog.modulesForSchool(school.id).where((m) => m.contentAvailable).expand((m) => m.lessonIds).toSet();
+      final allLessonIds = catalog
+          .modulesForSchool(school.id)
+          .where((m) => m.contentAvailable)
+          .expand((m) => m.lessonIds)
+          .toSet();
       final mastery = MasteryCalculator.percentForSchool(
         catalog: catalog,
         schoolId: school.id,

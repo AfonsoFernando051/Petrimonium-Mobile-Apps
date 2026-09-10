@@ -18,17 +18,19 @@ void main() {
 
   group('GamificationRemoteDataSource.fetchSummary', () {
     test('returns the decoded summary JSON on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(
-            jsonEncode({
-              'totalXp': 40,
-              'level': 1,
-              'xpIntoLevel': 40,
-              'xpForNextLevel': 50,
-              'currentStreak': 2,
-              'longestStreak': 4,
-            }),
-            200,
-          ));
+      when(() => mockApiClient.get(any())).thenAnswer(
+        (_) async => http.Response(
+          jsonEncode({
+            'totalXp': 40,
+            'level': 1,
+            'xpIntoLevel': 40,
+            'xpForNextLevel': 50,
+            'currentStreak': 2,
+            'longestStreak': 4,
+          }),
+          200,
+        ),
+      );
 
       final result = await dataSource.fetchSummary();
 
@@ -38,9 +40,9 @@ void main() {
     });
 
     test('throws with the backend detail on a non-200 response', () async {
-      when(() => mockApiClient.get(any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'User not found'}), 404),
-      );
+      when(
+        () => mockApiClient.get(any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'User not found'}), 404));
 
       await expectLater(
         () => dataSource.fetchSummary(),

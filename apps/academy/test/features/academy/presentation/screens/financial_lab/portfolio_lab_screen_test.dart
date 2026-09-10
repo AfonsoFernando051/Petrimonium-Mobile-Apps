@@ -24,9 +24,7 @@ class FakeMascotRepository implements MascotRepository {
   @override
   Future<void> saveNetWorth(double netWorth) async {}
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
   @override
@@ -42,9 +40,7 @@ void main() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     mascotController = MascotController(repository: FakeMascotRepository());
-    companionController = PetCompanionController(
-      mascotController: mascotController,
-    );
+    companionController = PetCompanionController(mascotController: mascotController);
     completionController = LabCompletionController(
       repository: AcademyProgressLocalRepository(),
       mascotController: mascotController,
@@ -69,32 +65,22 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(
-        find.text(Translator.translate('labPortfolioSandboxDisclaimer')),
-        findsOneWidget,
-      );
+      expect(find.text(Translator.translate('labPortfolioSandboxDisclaimer')), findsOneWidget);
     });
 
-    testWidgets('selecting a scenario reveals its result and the forecast disclaimer', (
-      tester,
-    ) async {
+    testWidgets('selecting a scenario reveals its result and the forecast disclaimer', (tester) async {
       await tester.pumpWidget(buildTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      final scenarioChip = find.text(
-        Translator.translate('labPortfolioScenarioBroadMarketDown10'),
-      );
+      final scenarioChip = find.text(Translator.translate('labPortfolioScenarioBroadMarketDown10'));
       await tester.ensureVisible(scenarioChip);
       await tester.pump();
       await tester.tap(scenarioChip);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(
-        find.text(Translator.translate('labPortfolioForecastDisclaimer')),
-        findsOneWidget,
-      );
+      expect(find.text(Translator.translate('labPortfolioForecastDisclaimer')), findsOneWidget);
       // Everything falls 10% -> deltaPercent is exactly -10.0.
       expect(find.textContaining('-10.0'), findsWidgets);
     });

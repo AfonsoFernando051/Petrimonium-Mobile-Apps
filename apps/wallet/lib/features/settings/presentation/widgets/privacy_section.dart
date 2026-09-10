@@ -22,14 +22,16 @@ class PrivacySection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         sectionLabel(Translator.translate(AppStrings.privacySectionTitle).toUpperCase()),
-        SettingsToggleCard(children: [
-          SettingsSwitchTile(
-            icon: Icons.leaderboard_outlined,
-            label: Translator.translate(AppStrings.showOnRankings),
-            value: showOnRankings,
-            onChanged: onShowOnRankingsChanged,
-          ),
-        ]),
+        SettingsToggleCard(
+          children: [
+            SettingsSwitchTile(
+              icon: Icons.leaderboard_outlined,
+              label: Translator.translate(AppStrings.showOnRankings),
+              value: showOnRankings,
+              onChanged: onShowOnRankingsChanged,
+            ),
+          ],
+        ),
       ],
     );
   }

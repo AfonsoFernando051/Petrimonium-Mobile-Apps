@@ -85,18 +85,11 @@ class _TopBar extends StatelessWidget {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.primary.withValues(alpha: .08),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: .08),
                   shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.all(3),
-                child: ClipOval(
-                  child: Image.asset(
-                    'assets/pets/fox.png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                child: ClipOval(child: Image.asset('assets/pets/fox.png', fit: BoxFit.contain)),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -120,11 +113,7 @@ class _TopBar extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      const Icon(
-                        Icons.notifications_none_rounded,
-                        size: 20,
-                        color: HealthColors.textSecondary,
-                      ),
+                      const Icon(Icons.notifications_none_rounded, size: 20, color: HealthColors.textSecondary),
                       if (hasUpcoming)
                         Positioned(
                           top: 5,
@@ -135,12 +124,7 @@ class _TopBar extends StatelessWidget {
                             decoration: const BoxDecoration(
                               color: HealthColors.negative,
                               shape: BoxShape.circle,
-                              border: Border.fromBorderSide(
-                                BorderSide(
-                                  color: HealthColors.surface,
-                                  width: 1.5,
-                                ),
-                              ),
+                              border: Border.fromBorderSide(BorderSide(color: HealthColors.surface, width: 1.5)),
                             ),
                           ),
                         ),
@@ -154,11 +138,7 @@ class _TopBar extends StatelessWidget {
                 child: const SizedBox(
                   width: 32,
                   height: 32,
-                  child: Icon(
-                    Icons.settings_outlined,
-                    size: 18,
-                    color: HealthColors.textSecondary,
-                  ),
+                  child: Icon(Icons.settings_outlined, size: 18, color: HealthColors.textSecondary),
                 ),
               ),
             ],
@@ -194,13 +174,7 @@ class _NotificationsPanel extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: HealthColors.border),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x2E3C3228),
-              blurRadius: 30,
-              offset: Offset(0, 12),
-            ),
-          ],
+          boxShadow: const [BoxShadow(color: Color(0x2E3C3228), blurRadius: 30, offset: Offset(0, 12))],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,13 +190,7 @@ class _NotificationsPanel extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             if (upcoming.isEmpty)
-              Text(
-                l10n.noUpcoming,
-                style: const TextStyle(
-                  fontSize: 12.5,
-                  color: HealthColors.textMuted,
-                ),
-              )
+              Text(l10n.noUpcoming, style: const TextStyle(fontSize: 12.5, color: HealthColors.textMuted))
             else
               ...upcoming.map(
                 (u) => Padding(
@@ -244,26 +212,15 @@ class _NotificationsPanel extends StatelessWidget {
                             ),
                             const SizedBox(height: 1),
                             Text(
-                              l10n.dueOn(
-                                MaterialLocalizations.of(
-                                  context,
-                                ).formatShortDate(u.date),
-                              ),
-                              style: const TextStyle(
-                                fontSize: 10.5,
-                                color: HealthColors.textMuted,
-                              ),
+                              l10n.dueOn(MaterialLocalizations.of(context).formatShortDate(u.date)),
+                              style: const TextStyle(fontSize: 10.5, color: HealthColors.textMuted),
                             ),
                           ],
                         ),
                       ),
                       Text(
                         MoneyFormat.currency(u.amount, locale),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: HealthColors.negative,
-                        ),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: HealthColors.negative),
                       ),
                     ],
                   ),
@@ -361,11 +318,7 @@ class _NavItem extends StatelessWidget {
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 9.5,
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                ),
+                style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w600, color: color),
               ),
             ],
           ),

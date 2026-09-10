@@ -67,10 +67,7 @@ void main() {
       // Fisher-Yates consumes two values for each three-option question.
       // These values keep the first answer in position 1, then move the
       // second to 2 and the third to 0: no authored index becomes a pattern.
-      final shuffled = LessonQuestionShuffler.shuffle(
-        lesson,
-        random: _SequenceRandom([2, 1, 1, 1, 0, 0]),
-      );
+      final shuffled = LessonQuestionShuffler.shuffle(lesson, random: _SequenceRandom([2, 1, 1, 1, 0, 0]));
       final questions = shuffled.steps.whereType<ChoiceQuestionStep>().toList();
 
       expect(shuffled.id, lesson.id);
@@ -80,10 +77,7 @@ void main() {
       expect(shuffled.steps.last, same(lesson.steps.last));
 
       expect(questions.map((question) => question.correctIndex), [1, 2, 0]);
-      expect(
-        questions.map((question) => question.options[question.correctIndex]),
-        ['B1', 'B2', 'B3'],
-      );
+      expect(questions.map((question) => question.options[question.correctIndex]), ['B1', 'B2', 'B3']);
       expect(questions[1].options, ['A2', 'C2', 'B2']);
 
       // The cached/source lesson itself is never mutated.
@@ -95,50 +89,37 @@ void main() {
     test('reproduces the same presentation when given the same seed', () {
       final first = LessonQuestionShuffler.shuffle(lesson, random: Random(42));
       final second = LessonQuestionShuffler.shuffle(lesson, random: Random(42));
-      final firstQuestions = first.steps
-          .whereType<ChoiceQuestionStep>()
-          .toList();
-      final secondQuestions = second.steps
-          .whereType<ChoiceQuestionStep>()
-          .toList();
+      final firstQuestions = first.steps.whereType<ChoiceQuestionStep>().toList();
+      final secondQuestions = second.steps.whereType<ChoiceQuestionStep>().toList();
 
-      expect(
-        firstQuestions.map((question) => question.options),
-        secondQuestions.map((question) => question.options),
-      );
+      expect(firstQuestions.map((question) => question.options), secondQuestions.map((question) => question.options));
       expect(
         firstQuestions.map((question) => question.correctIndex),
         secondQuestions.map((question) => question.correctIndex),
       );
     });
 
-    test(
-      'leaves an invalid question untouched instead of remapping its answer',
-      () {
-        const invalidLesson = Lesson(
-          id: 'invalid',
-          moduleId: 'module',
-          title: 'Invalid question',
-          order: 1,
-          xpReward: 0,
-          steps: [
-            ChoiceQuestionStep(
-              framing: ChoiceStepFraming.microExercise,
-              prompt: 'Question',
-              options: ['A', 'B'],
-              correctIndex: 2,
-              explanation: 'Explanation',
-            ),
-          ],
-        );
+    test('leaves an invalid question untouched instead of remapping its answer', () {
+      const invalidLesson = Lesson(
+        id: 'invalid',
+        moduleId: 'module',
+        title: 'Invalid question',
+        order: 1,
+        xpReward: 0,
+        steps: [
+          ChoiceQuestionStep(
+            framing: ChoiceStepFraming.microExercise,
+            prompt: 'Question',
+            options: ['A', 'B'],
+            correctIndex: 2,
+            explanation: 'Explanation',
+          ),
+        ],
+      );
 
-        final shuffled = LessonQuestionShuffler.shuffle(
-          invalidLesson,
-          random: _SequenceRandom([]),
-        );
+      final shuffled = LessonQuestionShuffler.shuffle(invalidLesson, random: _SequenceRandom([]));
 
-        expect(shuffled.steps.single, same(invalidLesson.steps.single));
-      },
-    );
+      expect(shuffled.steps.single, same(invalidLesson.steps.single));
+    });
   });
 }

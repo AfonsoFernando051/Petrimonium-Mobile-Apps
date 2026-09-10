@@ -7,7 +7,9 @@ void main() {
   Widget buildTestableWidget(int assetCount, {int target = 3}) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: PortfolioProgressBar(assetCount: assetCount, target: target)),
+      home: Scaffold(
+        body: PortfolioProgressBar(assetCount: assetCount, target: target),
+      ),
     );
   }
 

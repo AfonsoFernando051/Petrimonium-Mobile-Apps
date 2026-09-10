@@ -73,12 +73,16 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
     // in didChangeDependencies, once MediaQuery is reliably available to
     // check disableAnimations — see that override.
     _breatheController = AnimationController(vsync: this, duration: const Duration(milliseconds: 2500));
-    _breatheAnimation = Tween<double>(begin: 0.96, end: 1.04)
-        .animate(CurvedAnimation(parent: _breatheController, curve: Curves.easeInOutSine));
+    _breatheAnimation = Tween<double>(
+      begin: 0.96,
+      end: 1.04,
+    ).animate(CurvedAnimation(parent: _breatheController, curve: Curves.easeInOutSine));
 
     _floatController = AnimationController(vsync: this, duration: const Duration(milliseconds: 3000));
-    _floatAnimation =
-        Tween<double>(begin: -6.0, end: 8.0).animate(CurvedAnimation(parent: _floatController, curve: Curves.easeInOut));
+    _floatAnimation = Tween<double>(
+      begin: -6.0,
+      end: 8.0,
+    ).animate(CurvedAnimation(parent: _floatController, curve: Curves.easeInOut));
 
     // Deliberately subtle and slow: this ambient aura sits behind the
     // Level-2 companion, one card below Home's primary CTA
@@ -89,13 +93,21 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
     // `_celebrationController` for the one moment this aura is allowed to
     // get louder than ambient.
     _glowController = AnimationController(vsync: this, duration: const Duration(milliseconds: 2200));
-    _glowAnimation =
-        Tween<double>(begin: 0.05, end: 0.14).animate(CurvedAnimation(parent: _glowController, curve: Curves.easeInOut));
+    _glowAnimation = Tween<double>(
+      begin: 0.05,
+      end: 0.14,
+    ).animate(CurvedAnimation(parent: _glowController, curve: Curves.easeInOut));
 
     _bounceController = AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
     _bounceAnimation = TweenSequence([
-      TweenSequenceItem(tween: Tween<double>(begin: 0, end: -30).chain(CurveTween(curve: Curves.easeOutCubic)), weight: 50),
-      TweenSequenceItem(tween: Tween<double>(begin: -30, end: 0).chain(CurveTween(curve: Curves.bounceOut)), weight: 50),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 0, end: -30).chain(CurveTween(curve: Curves.easeOutCubic)),
+        weight: 50,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: -30, end: 0).chain(CurveTween(curve: Curves.bounceOut)),
+        weight: 50,
+      ),
     ]).animate(_bounceController);
 
     // One-shot, not looping: fires only on a real level-up/evolution (see
@@ -103,7 +115,10 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
     // genuinely different pet states rather than the same loop throughout.
     _celebrationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1400));
     _celebrationAnimation = TweenSequence([
-      TweenSequenceItem(tween: Tween<double>(begin: 0, end: 1).chain(CurveTween(curve: Curves.easeOutCubic)), weight: 20),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 0, end: 1).chain(CurveTween(curve: Curves.easeOutCubic)),
+        weight: 20,
+      ),
       TweenSequenceItem(tween: Tween<double>(begin: 1, end: 0).chain(CurveTween(curve: Curves.easeIn)), weight: 80),
     ]).animate(_celebrationController);
   }
@@ -151,18 +166,14 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
   // `MissingPluginException` surfaces as an *unhandled* async error no
   // surrounding try/catch can intercept — the only reliable fix is to never
   // call `accelerometerEventStream()` on a platform that can't answer it.
-  bool get _accelerometerSupported =>
-      kIsWeb || Platform.isAndroid || Platform.isIOS;
+  bool get _accelerometerSupported => kIsWeb || Platform.isAndroid || Platform.isIOS;
 
   void _initAccelerometer() {
     if (!_accelerometerSupported) return;
     try {
       _accelerometerSubscription = accelerometerEventStream().listen(
         (event) {
-          _parallax.value = Offset(
-            (event.x * -3.0).clamp(-20.0, 20.0),
-            (event.y * 3.0).clamp(-20.0, 20.0),
-          );
+          _parallax.value = Offset((event.x * -3.0).clamp(-20.0, 20.0), (event.y * 3.0).clamp(-20.0, 20.0));
         },
         onError: (Object error) {
           debugPrint('Accelerometer not available: $error');
@@ -204,13 +215,7 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _buildCardAndPet(),
-        const SizedBox(height: 22),
-      ],
-    );
+    return Column(mainAxisSize: MainAxisSize.min, children: [_buildCardAndPet(), const SizedBox(height: 22)]);
   }
 
   Widget _buildCardAndPet() {
@@ -223,7 +228,9 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
       orElse: () => PetEvolutionRule.defaultRules.last,
     );
     final hasNextEvolution = nextRule.stage != profile.stage;
-    final evolutionProgress = hasNextEvolution && nextRule.minXp > 0 ? (profile.xp / nextRule.minXp).clamp(0.0, 1.0) : 1.0;
+    final evolutionProgress = hasNextEvolution && nextRule.minXp > 0
+        ? (profile.xp / nextRule.minXp).clamp(0.0, 1.0)
+        : 1.0;
 
     return Stack(
       clipBehavior: Clip.none,
@@ -242,7 +249,14 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
                 const SizedBox(height: 20),
                 _buildBackdrop(auraColor),
                 const SizedBox(height: 12),
-                _buildEvolutionBar(context, hasNextEvolution: hasNextEvolution, progress: evolutionProgress, nextRule: nextRule, profileXp: profile.xp, auraColor: auraColor),
+                _buildEvolutionBar(
+                  context,
+                  hasNextEvolution: hasNextEvolution,
+                  progress: evolutionProgress,
+                  nextRule: nextRule,
+                  profileXp: profile.xp,
+                  auraColor: auraColor,
+                ),
               ],
             ),
           ),
@@ -259,62 +273,66 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
           right: 0,
           child: GestureDetector(
             onTap: _triggerBounce,
-            child: _wrapWithAnchor(SizedBox(
-              height: 280,
-              child: Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  Positioned(
-                    bottom: 32,
-                    child: Container(
-                      width: 260,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: AppColors.spaceDark,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [BoxShadow(color: auraColor.withValues(alpha: 0.3), blurRadius: 15, spreadRadius: 2)],
-                        border: Border.all(color: auraColor.withValues(alpha: 0.5)),
+            child: _wrapWithAnchor(
+              SizedBox(
+                height: 280,
+                child: Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned(
+                      bottom: 32,
+                      child: Container(
+                        width: 260,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: AppColors.spaceDark,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(color: auraColor.withValues(alpha: 0.3), blurRadius: 15, spreadRadius: 2),
+                          ],
+                          border: Border.all(color: auraColor.withValues(alpha: 0.5)),
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 47,
-                    child: AnimatedBuilder(
-                      animation: Listenable.merge([
-                        _breatheController,
-                        _floatController,
-                        _bounceController,
-                        _celebrationController,
-                        _parallax,
-                      ]),
-                      builder: (context, child) {
-                        // A real level-up/evolution adds a brief extra scale
-                        // bump on top of the ambient breathe — see
-                        // _initCelebrationListener.
-                        final celebrationScale = 1.0 + (_celebrationAnimation.value * 0.12);
-                        return Transform.translate(
-                          offset: Offset(
-                            _parallax.value.dx,
-                            _parallax.value.dy + _floatAnimation.value + _bounceAnimation.value,
-                          ),
-                          child: Transform.scale(
-                            scaleY: _breatheAnimation.value * celebrationScale,
-                            scaleX: (1.0 + (1.0 - _breatheAnimation.value)) * celebrationScale,
-                            child: Image.asset(
-                              PetAssets.imageFor(widget.mascotController.profile.specie.name),
-                              height: 220,
-                              fit: BoxFit.contain,
-                              errorBuilder: (_, _, _) => const Icon(Icons.pets, size: 100, color: Colors.white70),
+                    Positioned(
+                      bottom: 47,
+                      child: AnimatedBuilder(
+                        animation: Listenable.merge([
+                          _breatheController,
+                          _floatController,
+                          _bounceController,
+                          _celebrationController,
+                          _parallax,
+                        ]),
+                        builder: (context, child) {
+                          // A real level-up/evolution adds a brief extra scale
+                          // bump on top of the ambient breathe — see
+                          // _initCelebrationListener.
+                          final celebrationScale = 1.0 + (_celebrationAnimation.value * 0.12);
+                          return Transform.translate(
+                            offset: Offset(
+                              _parallax.value.dx,
+                              _parallax.value.dy + _floatAnimation.value + _bounceAnimation.value,
                             ),
-                          ),
-                        );
-                      },
+                            child: Transform.scale(
+                              scaleY: _breatheAnimation.value * celebrationScale,
+                              scaleX: (1.0 + (1.0 - _breatheAnimation.value)) * celebrationScale,
+                              child: Image.asset(
+                                PetAssets.imageFor(widget.mascotController.profile.specie.name),
+                                height: 220,
+                                fit: BoxFit.contain,
+                                errorBuilder: (_, _, _) => const Icon(Icons.pets, size: 100, color: Colors.white70),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            )),
+            ),
           ),
         ),
       ],
@@ -409,7 +427,10 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
               duration: const Duration(milliseconds: 600),
               curve: Curves.easeOut,
               height: 6,
-              decoration: BoxDecoration(color: color, boxShadow: [BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 4)]),
+              decoration: BoxDecoration(
+                color: color,
+                boxShadow: [BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 4)],
+              ),
             ),
           ),
         ],

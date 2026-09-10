@@ -38,10 +38,9 @@ class PetrimoniumTheme {
   }) {
     final base = brightness == Brightness.dark ? ThemeData.dark() : ThemeData.light();
     final onPrimary = brightness == Brightness.dark ? Colors.black : Colors.white;
-    final textTheme = GoogleFonts.outfitTextTheme(base.textTheme).apply(
-      bodyColor: colors.textPrimary,
-      displayColor: colors.textPrimary,
-    );
+    final textTheme = GoogleFonts.outfitTextTheme(
+      base.textTheme,
+    ).apply(bodyColor: colors.textPrimary, displayColor: colors.textPrimary);
     final fieldRadius = BorderRadius.circular(AppRadii.md);
 
     return base.copyWith(
@@ -70,13 +69,22 @@ class PetrimoniumTheme {
         filled: true,
         fillColor: colors.surfaceMuted,
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-        border: OutlineInputBorder(borderRadius: fieldRadius, borderSide: BorderSide(color: colors.border)),
-        enabledBorder: OutlineInputBorder(borderRadius: fieldRadius, borderSide: BorderSide(color: colors.border)),
+        border: OutlineInputBorder(
+          borderRadius: fieldRadius,
+          borderSide: BorderSide(color: colors.border),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: fieldRadius,
+          borderSide: BorderSide(color: colors.border),
+        ),
         focusedBorder: OutlineInputBorder(
           borderRadius: fieldRadius,
           borderSide: BorderSide(color: colors.primary, width: 1.4),
         ),
-        errorBorder: OutlineInputBorder(borderRadius: fieldRadius, borderSide: BorderSide(color: colors.error)),
+        errorBorder: OutlineInputBorder(
+          borderRadius: fieldRadius,
+          borderSide: BorderSide(color: colors.error),
+        ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: fieldRadius,
           borderSide: BorderSide(color: colors.error, width: 1.4),

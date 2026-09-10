@@ -7,11 +7,7 @@ class AllocationSlice {
   final double currentValue;
   final double portfolioPercent;
 
-  const AllocationSlice({
-    required this.type,
-    required this.currentValue,
-    required this.portfolioPercent,
-  });
+  const AllocationSlice({required this.type, required this.currentValue, required this.portfolioPercent});
 
   factory AllocationSlice.fromJson(Map<String, dynamic> json) {
     return AllocationSlice(

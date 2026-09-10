@@ -5,11 +5,7 @@ import 'package:http/http.dart' as http;
 /// the backend's `GlobalExceptionHandler` put in its RFC 7807 `ProblemDetail`
 /// body instead of just the HTTP status code.
 final class ApiException implements Exception {
-  const ApiException({
-    required this.statusCode,
-    required this.message,
-    this.code,
-  });
+  const ApiException({required this.statusCode, required this.message, this.code});
 
   final int statusCode;
   final String message;

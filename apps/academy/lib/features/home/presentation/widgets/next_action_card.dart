@@ -16,12 +16,7 @@ import 'package:petrimonium_academy/features/portfolio/presentation/models/missi
 /// it should always read as "the one thing to do here", regardless of which
 /// branch is showing.
 class NextActionCard extends StatelessWidget {
-  const NextActionCard({
-    super.key,
-    required this.action,
-    required this.onStartLesson,
-    required this.onOpenAcademy,
-  });
+  const NextActionCard({super.key, required this.action, required this.onStartLesson, required this.onOpenAcademy});
 
   final NextAction action;
   final VoidCallback onStartLesson;
@@ -45,8 +40,11 @@ class NextActionCard extends StatelessWidget {
           goalLabel: goalLabel,
           onStartLesson: onStartLesson,
         ),
-      CompleteMissionAction(:final mission) =>
-        _CompleteMissionContent(mission: mission, onStartLesson: onStartLesson, onOpenAcademy: onOpenAcademy),
+      CompleteMissionAction(:final mission) => _CompleteMissionContent(
+        mission: mission,
+        onStartLesson: onStartLesson,
+        onOpenAcademy: onOpenAcademy,
+      ),
       AllLessonsCompleteAction() => _AllLessonsCompleteContent(onOpenAcademy: onOpenAcademy),
     };
   }
@@ -63,9 +61,7 @@ class _Shell extends StatelessWidget {
       borderColor: AppColors.goldenBorder.withValues(alpha: 0.55),
       borderWidth: 1.5,
       borderRadius: 20,
-      boxShadow: [
-        BoxShadow(color: AppColors.goldenBorder.withValues(alpha: 0.16), blurRadius: 24, spreadRadius: 1),
-      ],
+      boxShadow: [BoxShadow(color: AppColors.goldenBorder.withValues(alpha: 0.16), blurRadius: 24, spreadRadius: 1)],
       child: Padding(padding: const EdgeInsets.all(18), child: child),
     );
   }
@@ -127,9 +123,7 @@ class _ContinueLessonContent extends StatelessWidget {
               _Eyebrow(icon: Icons.flag_circle, label: Translator.translate(AppStrings.homeContinueLearningEyebrow)),
               if (moduleLessonCount != null)
                 Text(
-                  '$moduleLessonCount ${Translator.translate(
-                    moduleLessonCount == 1 ? AppStrings.academyIntroLessonSingular : AppStrings.academyIntroLessonPlural,
-                  )}',
+                  '$moduleLessonCount ${Translator.translate(moduleLessonCount == 1 ? AppStrings.academyIntroLessonSingular : AppStrings.academyIntroLessonPlural)}',
                   style: TextStyle(color: tokens.textTertiary, fontSize: 11),
                 ),
             ],
@@ -192,7 +186,10 @@ class _CompleteMissionContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _Eyebrow(icon: Icons.local_fire_department, label: Translator.translate(AppStrings.homeMissionAlmostDoneEyebrow)),
+          _Eyebrow(
+            icon: Icons.local_fire_department,
+            label: Translator.translate(AppStrings.homeMissionAlmostDoneEyebrow),
+          ),
           const SizedBox(height: 10),
           Text(
             info.title,

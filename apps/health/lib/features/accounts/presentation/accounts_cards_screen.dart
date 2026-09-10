@@ -32,11 +32,7 @@ class AccountsCardsScreen extends StatelessWidget {
               Expanded(
                 child: Text(
                   l10n.accountsTab,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: HealthColors.textPrimary,
-                  ),
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: HealthColors.textPrimary),
                 ),
               ),
               FilledButton.icon(
@@ -48,25 +44,16 @@ class AccountsCardsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           if (controller.accounts.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text(l10n.noAccounts),
-            )
+            Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Text(l10n.noAccounts))
           else
-            ...controller.accounts.map(
-              (account) => _AccountTile(account: account),
-            ),
+            ...controller.accounts.map((account) => _AccountTile(account: account)),
           const SizedBox(height: 24),
           Row(
             children: [
               Expanded(
                 child: Text(
                   l10n.cardsTab,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: HealthColors.textPrimary,
-                  ),
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: HealthColors.textPrimary),
                 ),
               ),
               FilledButton.icon(
@@ -78,10 +65,7 @@ class AccountsCardsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           if (controller.cards.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text(l10n.noCards),
-            )
+            Padding(padding: const EdgeInsets.symmetric(vertical: 16), child: Text(l10n.noCards))
           else
             ...controller.cards.map((card) => _CardTile(card: card)),
         ],
@@ -96,11 +80,11 @@ class _AccountTile extends StatelessWidget {
   final HealthAccount account;
 
   String _typeLabel(AppLocalizations l10n) => switch (account.type) {
-        AccountType.checking => l10n.accountChecking,
-        AccountType.savings => l10n.accountSavings,
-        AccountType.cash => l10n.accountCash,
-        AccountType.other => l10n.accountOther,
-      };
+    AccountType.checking => l10n.accountChecking,
+    AccountType.savings => l10n.accountSavings,
+    AccountType.cash => l10n.accountCash,
+    AccountType.other => l10n.accountOther,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -110,9 +94,7 @@ class _AccountTile extends StatelessWidget {
       child: ListTile(
         leading: const CircleAvatar(child: Icon(Icons.account_balance_outlined)),
         title: Text(account.name),
-        subtitle: Text(
-          '${_typeLabel(l10n)} · ${account.archived ? l10n.archived : l10n.active}',
-        ),
+        subtitle: Text('${_typeLabel(l10n)} · ${account.archived ? l10n.archived : l10n.active}'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -124,8 +106,7 @@ class _AccountTile extends StatelessWidget {
               onSelected: (action) => _handle(context, action),
               itemBuilder: (context) => [
                 PopupMenuItem(value: 'edit', child: Text(l10n.edit)),
-                if (!account.archived)
-                  PopupMenuItem(value: 'archive', child: Text(l10n.archive)),
+                if (!account.archived) PopupMenuItem(value: 'archive', child: Text(l10n.archive)),
               ],
             ),
           ],
@@ -146,14 +127,8 @@ class _AccountTile extends StatelessWidget {
           builder: (context) => AlertDialog(
             content: Text(l10n.archiveConfirmation),
             actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(l10n.cancel),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(l10n.archive),
-              ),
+              TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.cancel)),
+              FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.archive)),
             ],
           ),
         );
@@ -161,9 +136,7 @@ class _AccountTile extends StatelessWidget {
       }
     } catch (_) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError)));
     }
   }
 }
@@ -190,8 +163,7 @@ class _CardTile extends StatelessWidget {
             PopupMenuItem(value: 'edit', child: Text(l10n.edit)),
             PopupMenuItem(value: 'purchase', child: Text(l10n.newPurchase)),
             PopupMenuItem(value: 'invoices', child: Text(l10n.viewInvoices)),
-            if (!card.archived)
-              PopupMenuItem(value: 'archive', child: Text(l10n.archive)),
+            if (!card.archived) PopupMenuItem(value: 'archive', child: Text(l10n.archive)),
           ],
         ),
         onTap: () => _showInvoices(context),
@@ -216,14 +188,8 @@ class _CardTile extends StatelessWidget {
             builder: (context) => AlertDialog(
               content: Text(l10n.archiveConfirmation),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text(l10n.cancel),
-                ),
-                FilledButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text(l10n.archive),
-                ),
+                TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.cancel)),
+                FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.archive)),
               ],
             ),
           );
@@ -231,9 +197,7 @@ class _CardTile extends StatelessWidget {
       }
     } catch (_) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError)));
     }
   }
 
@@ -256,9 +220,7 @@ class _CardTile extends StatelessWidget {
       );
     } catch (_) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError)));
     }
   }
 
@@ -302,23 +264,14 @@ class _InvoicesSheetState extends State<_InvoicesSheet> {
           future: _future,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const SizedBox(
-                height: 120,
-                child: Center(child: CircularProgressIndicator()),
-              );
+              return const SizedBox(height: 120, child: Center(child: CircularProgressIndicator()));
             }
             final invoices = snapshot.data!;
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.card.name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                Text(widget.card.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
                 Text(l10n.invoice, style: const TextStyle(color: HealthColors.textMuted)),
                 const SizedBox(height: 12),
@@ -335,10 +288,7 @@ class _InvoicesSheetState extends State<_InvoicesSheet> {
                       ),
                       trailing: invoice.paid
                           ? null
-                          : TextButton(
-                              onPressed: () => _pay(invoice),
-                              child: Text(l10n.payInvoice),
-                            ),
+                          : TextButton(onPressed: () => _pay(invoice), child: Text(l10n.payInvoice)),
                     ),
                   ),
               ],
@@ -350,9 +300,7 @@ class _InvoicesSheetState extends State<_InvoicesSheet> {
   }
 
   Future<void> _pay(CardInvoice invoice) async {
-    final accounts = widget.controller.accounts
-        .where((account) => !account.archived)
-        .toList(growable: false);
+    final accounts = widget.controller.accounts.where((account) => !account.archived).toList(growable: false);
     if (accounts.isEmpty) return;
     final accountId = accounts.length == 1
         ? accounts.first.id
@@ -372,18 +320,12 @@ class _InvoicesSheetState extends State<_InvoicesSheet> {
           );
     if (accountId == null || !mounted) return;
     try {
-      await widget.controller.payInvoice(
-        invoiceId: invoice.id,
-        accountId: accountId,
-        paymentDate: DateTime.now(),
-      );
+      await widget.controller.payInvoice(invoiceId: invoice.id, accountId: accountId, paymentDate: DateTime.now());
       if (!mounted) return;
       setState(() => _future = widget.controller.getInvoices(widget.card.id));
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).genericError)),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).genericError)));
     }
   }
 }
@@ -419,9 +361,7 @@ Future<void> _editAccount(BuildContext context, {HealthAccount? initial}) async 
     }
   } catch (_) {
     if (!context.mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError)));
   }
 }
 
@@ -435,11 +375,7 @@ Future<void> _editCard(BuildContext context, {HealthCard? initial}) async {
   final l10n = AppLocalizations.of(context);
   try {
     if (initial == null) {
-      await controller.createCard(
-        name: draft.name,
-        closingDay: draft.closingDay,
-        dueDay: draft.dueDay,
-      );
+      await controller.createCard(name: draft.name, closingDay: draft.closingDay, dueDay: draft.dueDay);
     } else {
       await controller.updateCard(
         HealthCard(
@@ -454,9 +390,7 @@ Future<void> _editCard(BuildContext context, {HealthCard? initial}) async {
     }
   } catch (_) {
     if (!context.mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError)));
   }
 }
 
@@ -496,9 +430,7 @@ class _AccountDialogState extends State<_AccountDialog> {
     super.initState();
     final initial = widget.initial;
     _name = TextEditingController(text: initial?.name);
-    _balance = TextEditingController(
-      text: initial?.initialBalance.toDecimalString(),
-    );
+    _balance = TextEditingController(text: initial?.initialBalance.toDecimalString());
     _type = initial?.type ?? AccountType.checking;
     _referenceDate = initial?.balanceReferenceDate ?? DateTime.now();
   }
@@ -528,26 +460,12 @@ class _AccountDialogState extends State<_AccountDialog> {
               initialValue: _type,
               decoration: InputDecoration(labelText: l10n.account),
               items: [
-                DropdownMenuItem(
-                  value: AccountType.checking,
-                  child: Text(l10n.accountChecking),
-                ),
-                DropdownMenuItem(
-                  value: AccountType.savings,
-                  child: Text(l10n.accountSavings),
-                ),
-                DropdownMenuItem(
-                  value: AccountType.cash,
-                  child: Text(l10n.accountCash),
-                ),
-                DropdownMenuItem(
-                  value: AccountType.other,
-                  child: Text(l10n.accountOther),
-                ),
+                DropdownMenuItem(value: AccountType.checking, child: Text(l10n.accountChecking)),
+                DropdownMenuItem(value: AccountType.savings, child: Text(l10n.accountSavings)),
+                DropdownMenuItem(value: AccountType.cash, child: Text(l10n.accountCash)),
+                DropdownMenuItem(value: AccountType.other, child: Text(l10n.accountOther)),
               ],
-              onChanged: widget.initial == null
-                  ? (value) => setState(() => _type = value!)
-                  : null,
+              onChanged: widget.initial == null ? (value) => setState(() => _type = value!) : null,
             ),
             const SizedBox(height: 10),
             TextField(
@@ -560,9 +478,7 @@ class _AccountDialogState extends State<_AccountDialog> {
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(l10n.balanceReferenceDate),
-              subtitle: Text(
-                MoneyFormat.date(_referenceDate, Localizations.localeOf(context)),
-              ),
+              subtitle: Text(MoneyFormat.date(_referenceDate, Localizations.localeOf(context))),
               trailing: const Icon(Icons.calendar_today_outlined),
               onTap: widget.initial != null
                   ? null
@@ -578,16 +494,12 @@ class _AccountDialogState extends State<_AccountDialog> {
                       }
                     },
             ),
-            if (_error != null)
-              Text(_error!, style: const TextStyle(color: HealthColors.negative)),
+            if (_error != null) Text(_error!, style: const TextStyle(color: HealthColors.negative)),
           ],
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
-        ),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
         FilledButton(onPressed: _submit, child: Text(l10n.save)),
       ],
     );
@@ -606,22 +518,13 @@ class _AccountDialogState extends State<_AccountDialog> {
     }
     Navigator.pop(
       context,
-      _AccountDraft(
-        name: _name.text.trim(),
-        type: _type,
-        initialBalance: balance,
-        referenceDate: _referenceDate,
-      ),
+      _AccountDraft(name: _name.text.trim(), type: _type, initialBalance: balance, referenceDate: _referenceDate),
     );
   }
 }
 
 final class _CardDraft {
-  const _CardDraft({
-    required this.name,
-    required this.closingDay,
-    required this.dueDay,
-  });
+  const _CardDraft({required this.name, required this.closingDay, required this.dueDay});
 
   final String name;
   final int closingDay;
@@ -685,16 +588,12 @@ class _CardDialogState extends State<_CardDialog> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(labelText: l10n.dueDay),
             ),
-            if (_error != null)
-              Text(_error!, style: const TextStyle(color: HealthColors.negative)),
+            if (_error != null) Text(_error!, style: const TextStyle(color: HealthColors.negative)),
           ],
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
-        ),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
         FilledButton(onPressed: _submit, child: Text(l10n.save)),
       ],
     );
@@ -714,10 +613,7 @@ class _CardDialogState extends State<_CardDialog> {
       setState(() => _error = l10n.requiredField);
       return;
     }
-    Navigator.pop(
-      context,
-      _CardDraft(name: _name.text.trim(), closingDay: closingDay, dueDay: dueDay),
-    );
+    Navigator.pop(context, _CardDraft(name: _name.text.trim(), closingDay: closingDay, dueDay: dueDay));
   }
 }
 
@@ -809,16 +705,12 @@ class _PurchaseDialogState extends State<_PurchaseDialog> {
                 if (selected != null) setState(() => _date = selected);
               },
             ),
-            if (_error != null)
-              Text(_error!, style: const TextStyle(color: HealthColors.negative)),
+            if (_error != null) Text(_error!, style: const TextStyle(color: HealthColors.negative)),
           ],
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
-        ),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
         FilledButton(onPressed: _submit, child: Text(l10n.save)),
       ],
     );

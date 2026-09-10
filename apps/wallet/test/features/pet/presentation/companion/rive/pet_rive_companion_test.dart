@@ -24,9 +24,7 @@ class FakeMascotRepository implements MascotRepository {
   @override
   Future<void> saveNetWorth(double netWorth) async {}
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
   @override
@@ -53,43 +51,29 @@ Future<MascotController> _catController(FakeMascotRepository repository) async {
 }
 
 void main() {
-  testWidgets(
-    'falls back to PetMascotWidget when no .riv asset exists for the species',
-    (tester) async {
-      final controller = await _catController(FakeMascotRepository());
+  testWidgets('falls back to PetMascotWidget when no .riv asset exists for the species', (tester) async {
+    final controller = await _catController(FakeMascotRepository());
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: PetRiveCompanion(controller: controller, size: 48),
-        ),
-      );
-      // Let the failed RiveFile.asset() future resolve — PetMascotWidget's
-      // own looping breathe animation means pumpAndSettle would never
-      // return, so a bounded pump is used instead.
-      await tester.pump();
-      await tester.pump();
+    await tester.pumpWidget(MaterialApp(home: PetRiveCompanion(controller: controller, size: 48)));
+    // Let the failed RiveFile.asset() future resolve — PetMascotWidget's
+    // own looping breathe animation means pumpAndSettle would never
+    // return, so a bounded pump is used instead.
+    await tester.pump();
+    await tester.pump();
 
-      expect(find.byType(PetMascotWidget), findsOneWidget);
-      expect(find.byType(RiveAnimation), findsNothing);
-    },
-  );
+    expect(find.byType(PetMascotWidget), findsOneWidget);
+    expect(find.byType(RiveAnimation), findsNothing);
+  });
 
-  testWidgets(
-    'does not throw when the widget is disposed while the asset load is in flight',
-    (tester) async {
-      final controller = await _catController(FakeMascotRepository());
+  testWidgets('does not throw when the widget is disposed while the asset load is in flight', (tester) async {
+    final controller = await _catController(FakeMascotRepository());
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: PetRiveCompanion(controller: controller, size: 48),
-        ),
-      );
-      // Unmount immediately, before the async load future resolves.
-      await tester.pumpWidget(const MaterialApp(home: SizedBox()));
-      await tester.pump();
-      await tester.pump();
+    await tester.pumpWidget(MaterialApp(home: PetRiveCompanion(controller: controller, size: 48)));
+    // Unmount immediately, before the async load future resolves.
+    await tester.pumpWidget(const MaterialApp(home: SizedBox()));
+    await tester.pump();
+    await tester.pump();
 
-      expect(tester.takeException(), isNull);
-    },
-  );
+    expect(tester.takeException(), isNull);
+  });
 }

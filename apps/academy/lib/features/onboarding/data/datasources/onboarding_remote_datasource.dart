@@ -29,10 +29,9 @@ class OnboardingRemoteDataSource {
   }
 
   Future<String> submitAssessment(List<String> selectedOptionIds) async {
-    final response = await apiClient.post(
-      ApiConstants.onboardingSubmitEndpoint,
-      {'selectedOptionIds': selectedOptionIds},
-    );
+    final response = await apiClient.post(ApiConstants.onboardingSubmitEndpoint, {
+      'selectedOptionIds': selectedOptionIds,
+    });
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -48,9 +47,6 @@ class OnboardingRemoteDataSource {
     }
 
     final data = jsonDecode(response.body) as List<dynamic>;
-    return data
-        .map((q) => QuestionModel.fromJson(q as Map<String, dynamic>))
-        .toList();
+    return data.map((q) => QuestionModel.fromJson(q as Map<String, dynamic>)).toList();
   }
 }
-

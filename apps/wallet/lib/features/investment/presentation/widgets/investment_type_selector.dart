@@ -99,10 +99,7 @@ class InvestmentTypeSelector extends StatelessWidget {
                 color: selected!.color.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Text(
-                _tips[selected]!,
-                style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
-              ),
+              child: Text(_tips[selected]!, style: TextStyle(color: context.colors.textSecondary, fontSize: 12)),
             ),
           ),
         ],

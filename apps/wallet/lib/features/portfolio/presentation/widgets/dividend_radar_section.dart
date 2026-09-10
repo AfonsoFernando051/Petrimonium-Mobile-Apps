@@ -57,10 +57,7 @@ class DividendRadarSection extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     final tokens = context.colors;
     if (isLoading && radar.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 24),
-        child: AppLoadingIndicator(strokeWidth: 2),
-      );
+      return const Padding(padding: EdgeInsets.symmetric(vertical: 24), child: AppLoadingIndicator(strokeWidth: 2));
     }
 
     if (error != null && radar.isEmpty) {
@@ -107,7 +104,12 @@ class DividendRadarSection extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 4),
       child: Text(
         label,
-        style: TextStyle(color: color.withValues(alpha: 0.8), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1.2),
+        style: TextStyle(
+          color: color.withValues(alpha: 0.8),
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1.2,
+        ),
       ),
     );
   }

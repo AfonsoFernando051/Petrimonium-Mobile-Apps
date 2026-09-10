@@ -48,7 +48,10 @@ class AssetValuationChartCard extends StatelessWidget {
                   lineTouchData: const LineTouchData(enabled: false),
                   lineBarsData: [
                     LineChartBarData(
-                      spots: [for (var i = 0; i < chartPoints.length; i++) FlSpot(i.toDouble(), chartPoints[i].portfolioValue)],
+                      spots: [
+                        for (var i = 0; i < chartPoints.length; i++)
+                          FlSpot(i.toDouble(), chartPoints[i].portfolioValue),
+                      ],
                       isCurved: true,
                       color: holding.type.color,
                       barWidth: 3,

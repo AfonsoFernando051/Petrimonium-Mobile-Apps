@@ -49,10 +49,7 @@ class AppearanceOptionCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
             color: selected ? tokens.primary.withValues(alpha: 0.10) : tokens.surface,
-            border: Border.all(
-              color: selected ? tokens.primary : tokens.border,
-              width: selected ? 1.6 : 1,
-            ),
+            border: Border.all(color: selected ? tokens.primary : tokens.border, width: selected ? 1.6 : 1),
           ),
           child: Row(
             children: [
@@ -61,17 +58,9 @@ class AppearanceOptionCard extends StatelessWidget {
                 height: 46,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: swatchColors,
-                  ),
+                  gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: swatchColors),
                   boxShadow: [
-                    BoxShadow(
-                      color: swatchColors.last.withValues(alpha: 0.35),
-                      blurRadius: 12,
-                      spreadRadius: 0.5,
-                    ),
+                    BoxShadow(color: swatchColors.last.withValues(alpha: 0.35), blurRadius: 12, spreadRadius: 0.5),
                   ],
                 ),
                 child: Icon(icon, color: Colors.white, size: 22),
@@ -83,17 +72,10 @@ class AppearanceOptionCard extends StatelessWidget {
                   children: [
                     Text(
                       label,
-                      style: TextStyle(
-                        color: tokens.textPrimary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(color: tokens.textPrimary, fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 2),
-                    Text(
-                      description,
-                      style: TextStyle(color: tokens.textSecondary, fontSize: 12.5),
-                    ),
+                    Text(description, style: TextStyle(color: tokens.textSecondary, fontSize: 12.5)),
                   ],
                 ),
               ),

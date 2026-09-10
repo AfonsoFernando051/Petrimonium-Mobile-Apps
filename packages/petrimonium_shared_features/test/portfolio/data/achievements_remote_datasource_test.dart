@@ -18,14 +18,16 @@ void main() {
 
   group('AchievementsRemoteDataSource.evaluate', () {
     test('returns the decoded evaluation JSON on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(
-            jsonEncode({
-              'unlockedAt': {'first_investment': '2024-01-01T00:00:00.000Z'},
-              'newlyUnlockedCodes': ['first_investment'],
-              'achievementXpTotal': 50,
-            }),
-            200,
-          ));
+      when(() => mockApiClient.get(any())).thenAnswer(
+        (_) async => http.Response(
+          jsonEncode({
+            'unlockedAt': {'first_investment': '2024-01-01T00:00:00.000Z'},
+            'newlyUnlockedCodes': ['first_investment'],
+            'achievementXpTotal': 50,
+          }),
+          200,
+        ),
+      );
 
       final result = await dataSource.evaluate();
 
@@ -34,9 +36,9 @@ void main() {
     });
 
     test('throws with the backend detail on a non-200 response', () async {
-      when(() => mockApiClient.get(any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'Unauthorized'}), 401),
-      );
+      when(
+        () => mockApiClient.get(any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'Unauthorized'}), 401));
 
       await expectLater(
         () => dataSource.evaluate(),
