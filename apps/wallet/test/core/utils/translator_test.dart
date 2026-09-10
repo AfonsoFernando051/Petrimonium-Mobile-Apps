@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 
@@ -71,6 +72,31 @@ void main() {
         }
       }
       expect(offenders, isEmpty, reason: 'these entries were never actually translated: $offenders');
+    });
+  });
+
+  // The shared catalogue only pays off while the two halves stay disjoint.
+  // Nothing stops someone pasting a string into this app's own map that the
+  // shared one already words identically — at which point the duplication is
+  // quietly back, and a later fix to the shared copy stops reaching this app.
+  group('Translator — shared/product split', () {
+    test('the product catalogue never repeats a value sharedCopy already has', () {
+      final offenders = <String>[];
+      Translator.debugProductCopy.forEach((language, entries) {
+        entries.forEach((key, value) {
+          if (sharedCopy[language]?[key] == value) offenders.add('$language.$key');
+        });
+      });
+      expect(offenders, isEmpty, reason: 'these belong in sharedCopy, not in this app: $offenders');
+    });
+
+    test('every product override for a shared key is a deliberate wording change', () {
+      // Overriding a key the ecosystem shares is allowed — that is this
+      // product's voice — but it must actually say something different.
+      final shadowed = Translator.debugProductCopy['pt']!.keys.where(sharedCopy['pt']!.containsKey);
+      for (final key in shadowed) {
+        expect(Translator.debugProductCopy['pt']![key], isNot(sharedCopy['pt']![key]), reason: key);
+      }
     });
   });
 }

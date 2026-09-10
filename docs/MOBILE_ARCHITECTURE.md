@@ -165,7 +165,7 @@ because one package cannot import another package's `test/` directory.
 
 ### The rules/copy split, and why it keeps recurring
 
-Three extractions here took the same shape, and it is the shape to reach for
+Six extractions here took the same shape, and it is the shape to reach for
 first when something "cannot be shared because it has copy in it":
 
 | Shared (ecosystem rule) | Per app (product copy) |
@@ -175,32 +175,63 @@ first when something "cannot be shared because it has copy in it":
 | `PetSpecieEnum` — wire format, display order | `PetSpecieDisplay.displayLabel` |
 | `AchievementRules` — ids, XP, conditions | `AchievementCatalog` — title, description, icon |
 | `HealthMetricKind` + the scoring | `HealthMetricDisplay` — label, icon |
+| `sharedCopy` — wording both products already agreed on | each app's `_productCopy` — its own voice |
 
 The test is whether the two products *must* agree. They must agree about what
 a level is worth and what an asset class yields; they need not agree about
-what to call it. `AppColors.neonCyan` is the clearest illustration: cyan in
-Academy, emerald in Wallet, same field name — which is why anything reading it
-is product-branded no matter how identical the source looks.
+what to call it.
+
+The last row adds a third layer the first five did not need. Copy is normally
+the product's half — but two products can also simply *agree* on a string, and
+1324 of theirs did. So the split is base/override rather than shared/not: the
+ecosystem wording is the base, an app declares only what it says differently,
+and the override wins. `TranslatorEngine` does the merge; a test in each app
+fails if a product override ever repeats a value the base already has, which
+is what stops the duplication creeping back one paste at a time.
+
+`AppColors.neonCyan` is the clearest illustration of the other direction: cyan
+in Academy, emerald in Wallet, same field name — which is why anything reading
+it is product-branded no matter how identical the source looks.
 
 ## What is deliberately still duplicated
 
 Academy and Wallet still hold 39 clone files in `lib/` (~4200 lines) and 40
 in `test/` (~3800). That is down from 80 and 93, and every one that is left
-is behind a product decision or is duplicated on purpose — the mechanical
-extractions are done.
+is behind a decision or is duplicated on purpose — the mechanical extractions
+are done. The counts have not moved because these files were always
+byte-identical; what changed is that the largest blocker is no longer a
+product decision, only a design one.
 
-**1. The localization mechanism (24 of the 39).** Settings, the Mentor
-screens, the auth screens and the Pet's speech all bind to `Translator` and
-`AppStrings`, and **the two catalogs have already diverged by roughly 650
-lines**. Health is a third system entirely, using ARB files and `gen_l10n`.
-Sharing that UI requires first deciding which product's wording wins — a
-decision that silently changes one product's copy, which a refactor is not
-allowed to do.
+**1. Reaching the translator from a package (24 of the 39).** Settings, the
+Mentor screens, the auth screens and the Pet's speech all bind to `Translator`
+and `AppStrings`. What blocks them now is *only* that those two are app-local
+classes: a widget in a package has no way to call them.
 
-Worth naming plainly: **Health already uses the mechanism the other two
-should converge on.** `gen_l10n` is the Flutter standard, and the hand-rolled
-`Translator` in Academy and Wallet is a 2200-line map each. The convergence
-has an obvious destination; it is not a tie to be broken.
+The copy itself is no longer in the way. Measured rather than assumed, the two
+catalogs held 1377 (language, key) pairs in common and **1324 of them were
+already identical** — the real divergence is 18 keys, which is brand voice
+(`brandTagline`, `meetPetIntro`, the Academy intro) and nothing else. Those
+1324 now live once in `sharedCopy`; each app keeps its 18 overrides plus the
+strings for screens the sibling does not have. All 24 files are byte-identical
+between the apps, so every key they touch is by construction in the shared
+452 — none of them needs a wording decision to move.
+
+What is left is a design choice about the seam, not about copy: a package-level
+widget needs some way to resolve a key. Passing an engine through 24 files is
+plumbing; a configured singleton matches the static-DI style `Translator`
+already uses but adds a "must be initialized first" failure mode. Three of the
+24 sit in the data layer (`settings_repository`, `onboarding_remote_datasource`,
+`mentor_chat_repository`), which rules out an `InheritedWidget`.
+
+An earlier version of this section claimed the catalogs had "already diverged
+by roughly 650 lines" and that converging on `gen_l10n` was the obvious
+destination. Both were wrong. The divergence was 18 keys, and `gen_l10n` is
+reachable only from a `BuildContext` — while Academy and Wallet translate from
+domain and data code (`level_title`, `friendly_error_message`, three
+repositories/datasources) where no context exists. Migrating would mean either
+pushing `BuildContext` into the domain, which the layering guard now forbids,
+or restructuring those callers to return keys. That is an architecture change,
+not the mechanical migration the old text implied.
 
 **2. Whether `AppEvent` becomes an ecosystem type.** The Pet companion UI
 (`pet_rive_companion`, `pet_mascot_widget`, `mascot_controller`,
