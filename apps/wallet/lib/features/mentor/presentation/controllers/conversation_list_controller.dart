@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
-import 'package:petrimonium_wallet/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Drives the Mentor conversation history screen: load, rename, delete.
 class ConversationListController extends ChangeNotifier {

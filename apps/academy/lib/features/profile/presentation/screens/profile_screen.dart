@@ -8,7 +8,7 @@ import 'package:petrimonium_academy/core/widgets/cosmic_background.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_companion_header.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/settings/presentation/screens/settings_screen.dart';
 
 /// The "Perfil" experience — previously its own bottom-nav tab, now reached

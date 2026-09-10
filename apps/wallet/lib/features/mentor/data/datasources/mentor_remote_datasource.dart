@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:petrimonium_wallet/core/constants/api_constants.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.dart';
-import 'package:petrimonium_wallet/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Result of a `POST /api/mentor/chat` call — besides the reply text, the
 /// backend now also returns which conversation it was persisted to (created

@@ -15,12 +15,6 @@ import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboard
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/pet_setup_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/quick_setup_screen.dart';
-import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_wallet/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 import 'package:petrimonium_wallet/features/portfolio/data/repositories/portfolio_repository.dart';
 import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';

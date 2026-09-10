@@ -13,10 +13,7 @@ import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/game/domain/services/level_title.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_evolution_rule.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 
 /// Home's "where am I, and how is my companion doing" hero
 /// (`docs/PRODUCT_VISION.md` §8 #2 and #3): level + XP progress toward the

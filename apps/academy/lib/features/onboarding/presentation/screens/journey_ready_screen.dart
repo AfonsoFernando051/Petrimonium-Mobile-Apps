@@ -10,7 +10,6 @@ import 'package:petrimonium_academy/features/onboarding/presentation/onboarding_
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/mission_reward_card.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
 
 /// Onboarding's closing beat — a summary of the choices just made plus the
 /// actual first mission, so the flow ends on an action rather than more

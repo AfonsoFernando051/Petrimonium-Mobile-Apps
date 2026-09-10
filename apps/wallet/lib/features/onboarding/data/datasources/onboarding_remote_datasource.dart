@@ -4,8 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/core/constants/api_constants.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/onboarding/data/models/onboarding_status_model.dart';
-import 'package:petrimonium_wallet/features/onboarding/data/models/question_model.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 class OnboardingRemoteDataSource {
   final ApiClient apiClient;

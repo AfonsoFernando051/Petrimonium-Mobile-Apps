@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/mentor/data/datasources/mentor_remote_datasource.dart';
 import 'package:petrimonium_academy/features/mentor/domain/entities/chat_message.dart';
-import 'package:petrimonium_academy/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/data/models/investment_horizon_enum.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
 import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferences_repository.dart';

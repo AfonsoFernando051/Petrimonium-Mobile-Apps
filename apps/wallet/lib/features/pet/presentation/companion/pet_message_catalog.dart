@@ -2,9 +2,6 @@ import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/game/domain/services/level_title.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart'
     show kSleepAfterInactiveDays;
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';

@@ -3,7 +3,7 @@ import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_compa
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_comic_speech_bubble.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Floats [PetCompanionController]'s current message next to wherever the
 /// Pet actually renders on screen — anchored via [anchor], not a hardcoded

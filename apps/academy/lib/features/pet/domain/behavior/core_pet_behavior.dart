@@ -3,9 +3,6 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/game/domain/services/level_title.dart';
 import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
 
 /// Reactions to the Pet's own identity/gamification state — XP, level,

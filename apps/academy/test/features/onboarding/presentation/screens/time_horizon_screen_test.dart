@@ -5,15 +5,10 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/pet/data/models/investment_horizon_enum.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
 import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferences_repository.dart';
 import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_state_repository.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/experience_level_screen.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/time_horizon_screen.dart';
 
 /// Minimal in-memory MascotRepository double, mirrors the one used in

@@ -14,9 +14,7 @@ import 'package:petrimonium_wallet/features/pet/data/datasources/pet_remote_data
 import 'package:petrimonium_wallet/features/pet/data/repositories/pet_repository_impl.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 import 'package:petrimonium_wallet/features/pet/data/repositories/mascot_repository_impl.dart';
-import 'package:petrimonium_wallet/features/pet/data/repositories/pet_companion_preferences_repository.dart';
 import 'package:petrimonium_wallet/features/pet/data/repositories/pet_preferences_repository.dart';
-import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_wallet/features/investment/data/datasources/investment_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/investment/data/repositories/investment_repository.dart';
 import 'package:petrimonium_wallet/features/mentor/data/datasources/mentor_remote_datasource.dart';

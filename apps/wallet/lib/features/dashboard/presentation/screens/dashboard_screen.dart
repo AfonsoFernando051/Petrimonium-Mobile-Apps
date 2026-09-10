@@ -16,10 +16,9 @@ import '../../../portfolio/presentation/screens/passive_income_screen.dart';
 import '../../../portfolio/presentation/widgets/dividend_notifications_sheet.dart';
 import '../../../mentor/presentation/screens/mentor_screen.dart';
 import '../../../pet/presentation/companion/pet_companion_controller.dart';
-import '../../../pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import '../../../pet/presentation/companion/widgets/pet_companion_header.dart';
 import '../../../pet/presentation/companion/widgets/pet_speech_bubble.dart';
-import '../../../pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 import '../../../profile/presentation/screens/profile_screen.dart';
 import '../services/dashboard_tab_router.dart';
 

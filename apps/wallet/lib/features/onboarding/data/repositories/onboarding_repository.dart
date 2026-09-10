@@ -1,6 +1,5 @@
 import 'package:petrimonium_wallet/features/onboarding/data/datasources/onboarding_remote_datasource.dart';
-import 'package:petrimonium_wallet/features/onboarding/data/models/onboarding_status_model.dart';
-import 'package:petrimonium_wallet/features/onboarding/data/models/question_model.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 class OnboardingRepository {
   final OnboardingRemoteDataSource remoteDataSource;

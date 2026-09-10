@@ -9,8 +9,7 @@ import 'package:petrimonium_academy/features/academy/presentation/controllers/la
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/lab_simulator_catalog.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Entry point for the Financial Lab (`docs/ACADEMY_ENGINE.md` §3d/§3g) —

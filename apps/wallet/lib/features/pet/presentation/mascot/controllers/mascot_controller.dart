@@ -4,14 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/events/app_event_bus.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/pet/domain/entities/pet_accessory.dart';
-import 'package:petrimonium_wallet/features/pet/domain/entities/pet_evolution_rule.dart';
-import 'package:petrimonium_wallet/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
 
 /// After this many days without a session, the mascot rests in [sleep]
 /// instead of its usual idle loop.

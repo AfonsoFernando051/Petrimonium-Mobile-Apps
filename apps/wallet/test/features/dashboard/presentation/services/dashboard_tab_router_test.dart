@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/features/dashboard/presentation/services/dashboard_tab_router.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   group('DashboardTabRouter.petContextFor', () {

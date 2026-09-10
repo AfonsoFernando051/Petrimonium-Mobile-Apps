@@ -15,9 +15,7 @@ import 'package:petrimonium_academy/features/pet/data/datasources/pet_remote_dat
 import 'package:petrimonium_academy/features/pet/data/repositories/pet_repository_impl.dart';
 import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
 import 'package:petrimonium_academy/features/pet/data/repositories/mascot_repository_impl.dart';
-import 'package:petrimonium_academy/features/pet/data/repositories/pet_companion_preferences_repository.dart';
 import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferences_repository.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/mentor/data/datasources/mentor_remote_datasource.dart';
 import 'package:petrimonium_academy/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';

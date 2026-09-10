@@ -1,4 +1,4 @@
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Pure tab-index → behavior mappings for [DashboardScreen]'s 3 bottom-nav
 /// tabs (Início/Proventos/Mentor). Início absorbs what used to be a separate

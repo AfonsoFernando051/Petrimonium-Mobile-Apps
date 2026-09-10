@@ -24,15 +24,8 @@ import 'package:petrimonium_academy/features/dashboard/presentation/screens/dash
 import 'package:petrimonium_academy/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/screens/mentor_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/portfolio_choice_screen.dart';
-import 'package:petrimonium_academy/features/onboarding/data/models/onboarding_status_model.dart';
-import 'package:petrimonium_academy/features/onboarding/data/models/question_model.dart';
 import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_state_repository.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/data/repositories/pet_companion_preferences_repository.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
 import 'package:petrimonium_academy/features/pet/presentation/celebration/module_completion_share_overlay.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
