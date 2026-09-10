@@ -64,6 +64,17 @@ class _LoginScreenState extends State<LoginScreen> {
     final l10n = AppLocalizations.of(context);
     final isSignup = controller.authMode == AuthMode.signup;
     final busy = controller.busy;
+    // A new visual for Health's own login CTA — the gradient/glow/pulse
+    // chrome Academy/Wallet's login button has always had, given the same
+    // treatment here even though Health never had it before. Derived from
+    // the current accent (terracotta/rust/ochre — the user's choice) rather
+    // than a fixed color, so it matches whichever one is selected.
+    final accent = Theme.of(context).colorScheme.primary;
+    final accentHsl = HSLColor.fromColor(accent);
+    final ctaGradient = [
+      accent,
+      accentHsl.withLightness((accentHsl.lightness - 0.12).clamp(0.0, 1.0)).toColor(),
+    ];
 
     return Scaffold(
       backgroundColor: HealthColors.background,
@@ -141,6 +152,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         label: isSignup ? l10n.loginCtaSignup : l10n.login,
                         busy: busy,
                         onPressed: () => _submit(controller),
+                        gradientColors: ctaGradient,
+                        pulse: true,
                       ),
                       const SizedBox(height: 16),
                       Row(
@@ -297,9 +310,11 @@ class _SharedAccountNote extends StatelessWidget {
   }
 }
 
-/// Alternativa ao e-mail/palavra-passe, não a acção principal: fundo do
-/// cartão com contorno, em vez do terracota cheio do [HealthPrimaryButton].
-/// O glifo é o mesmo `Icons.g_mobiledata` que a Wallet e a Academy usam — a
+/// Alternativa ao e-mail/palavra-passe, não a acção principal: gradiente
+/// cinza neutro (em vez do accent do [HealthPrimaryButton]) com o mesmo
+/// glow — a mesma linguagem que a Wallet e a Academy usam no botão do
+/// Google, sem pulso (reservado para o único CTA principal do ecrã). O
+/// glifo é o mesmo `Icons.g_mobiledata` que os outros dois apps usam — a
 /// marca de quatro cores do Google exigiria um asset, que este repo não tem.
 class _GoogleButton extends StatelessWidget {
   const _GoogleButton({required this.label, required this.busy, required this.onPressed});
@@ -310,22 +325,12 @@ class _GoogleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 52,
-      child: OutlinedButton.icon(
-        onPressed: busy ? null : onPressed,
-        icon: const Icon(Icons.g_mobiledata, size: 28, color: HealthColors.textPrimary),
-        label: Text(
-          label,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: HealthColors.textPrimary),
-        ),
-        style: OutlinedButton.styleFrom(
-          backgroundColor: HealthColors.card,
-          side: const BorderSide(color: HealthColors.border),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      ),
+    return HealthPrimaryButton(
+      label: label,
+      icon: Icons.g_mobiledata,
+      busy: busy,
+      onPressed: onPressed,
+      gradientColors: [Colors.blueGrey.shade600, Colors.blueGrey.shade800],
     );
   }
 }

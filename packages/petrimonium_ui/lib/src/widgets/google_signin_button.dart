@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'game_button.dart';
 
-/// Secondary CTA for "Sign in with Google" — same [GameButton] chrome as the
-/// primary email/password buttons, but a neutral gray fill (instead of the
-/// brand accent) so it reads as an alternative, not the main action. [label]
-/// is supplied by the caller so this widget carries no string catalog of
-/// its own.
+/// Secondary CTA for "Sign in with Google" — same [GameButton] gradient/glow
+/// chrome as the primary login/signup CTA, but a neutral gray gradient
+/// (instead of the brand accent) so it reads as an alternative, not the main
+/// action. No pulse — that's reserved for the single primary CTA on the
+/// screen. [label] is supplied by the caller so this widget carries no
+/// string catalog of its own.
 class GoogleSignInButton extends StatelessWidget {
   const GoogleSignInButton({
     super.key,
@@ -25,7 +26,7 @@ class GoogleSignInButton extends StatelessWidget {
       icon: Icons.g_mobiledata,
       onPressed: onPressed,
       isLoading: isLoading,
-      color: Colors.blueGrey.shade700,
+      gradientColors: [Colors.blueGrey.shade600, Colors.blueGrey.shade800],
     );
   }
 }

@@ -5,12 +5,19 @@ import '../tokens/app_radii.dart';
 import '../tokens/app_text_styles.dart';
 
 /// The shared primary CTA: a flat, solid-fill button with a brief tap-down
-/// scale for tactile feedback — no gradient, no glow, no elevation.
+/// scale for tactile feedback — no gradient, no glow, no elevation by
+/// default.
 ///
 /// Reused across the app instead of one-off `ElevatedButton`s so every
 /// primary CTA (login, quick actions, empty-state "invest now") shares the
 /// same flat, Health-derived visual language while still resolving to each
 /// product's own accent color.
+///
+/// [gradientColors]/[pulse] opt back into the old "premium game" chrome
+/// (gradient fill, ambient glow, optional idle pulse) — reserved for the
+/// login/signup CTA and the Google button, the one place across the app
+/// where that treatment is still wanted; every other call site leaves both
+/// null/false and stays flat.
 class GameButton extends StatefulWidget {
   const GameButton({
     super.key,
@@ -18,6 +25,8 @@ class GameButton extends StatefulWidget {
     required this.onPressed,
     this.icon,
     this.color,
+    this.gradientColors,
+    this.pulse = false,
     this.isLoading = false,
     this.height = 56,
     this.borderRadius = AppRadii.xl,
@@ -40,6 +49,8 @@ class GameButton extends StatefulWidget {
     required Widget this.child,
     required this.onPressed,
     this.color,
+    this.gradientColors,
+    this.pulse = false,
     this.height,
     this.borderRadius = AppRadii.xl,
     this.expand = true,
@@ -56,8 +67,18 @@ class GameButton extends StatefulWidget {
 
   /// Solid fill. Defaults to the product's own accent (`context.colors.primary`)
   /// when omitted, so a plain `GameButton` renders in each product's own
-  /// color with no call-site change.
+  /// color with no call-site change. Ignored when [gradientColors] is set.
   final Color? color;
+
+  /// Gradient fill — set to opt into the old glow chrome (see class doc).
+  /// `null` (the default) keeps the flat [color] fill with no glow.
+  final List<Color>? gradientColors;
+
+  /// Idle pulse animating the glow's blur/spread. Only visible when
+  /// [gradientColors] is set — reserve for the single most important CTA on
+  /// a screen (per-screen restraint — pulsing every button at once reads as
+  /// noisy, not premium).
+  final bool pulse;
 
   final bool isLoading;
   final double? height;
@@ -68,7 +89,14 @@ class GameButton extends StatefulWidget {
   State<GameButton> createState() => _GameButtonState();
 }
 
-class _GameButtonState extends State<GameButton> with SingleTickerProviderStateMixin {
+class _GameButtonState extends State<GameButton> with TickerProviderStateMixin {
+  late final AnimationController _pulseController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1800),
+  );
+  late final Animation<double> _pulseAnimation =
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut);
+
   late final AnimationController _pressController = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 120),
@@ -82,7 +110,25 @@ class _GameButtonState extends State<GameButton> with SingleTickerProviderStateM
   );
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.pulse) _pulseController.repeat(reverse: true);
+  }
+
+  @override
+  void didUpdateWidget(covariant GameButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.pulse && !oldWidget.pulse) {
+      _pulseController.repeat(reverse: true);
+    } else if (!widget.pulse && oldWidget.pulse) {
+      _pulseController.stop();
+      _pulseController.value = 0;
+    }
+  }
+
+  @override
   void dispose() {
+    _pulseController.dispose();
     _pressController.dispose();
     super.dispose();
   }
@@ -106,25 +152,54 @@ class _GameButtonState extends State<GameButton> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
+    final gradientColors = widget.gradientColors;
     final fillColor = widget.color ?? tokens.primary;
     // Each product's `primary` token is AA-safe against its own background,
     // not necessarily against white text — pick whichever of black/white
     // actually contrasts with the fill in hand rather than assuming white.
-    final onFill = fillColor.computeLuminance() > 0.55 ? Colors.black : Colors.white;
+    final onFill = (gradientColors == null && fillColor.computeLuminance() > 0.55)
+        ? Colors.black
+        : Colors.white;
 
     return AnimatedBuilder(
-      animation: _pressController,
+      animation: Listenable.merge([_pulseController, _pressController]),
       builder: (context, child) {
+        final scale = _pressScale.value;
+        final pulseGlow = 14 + (_pulseAnimation.value * 10);
+        final pulseSpread = 1 + (_pulseAnimation.value * 2);
+
         return Transform.scale(
-          scale: _pressScale.value,
+          scale: scale,
           child: Opacity(
             opacity: _enabled ? 1.0 : 0.5,
             child: Container(
               height: widget.height,
               width: widget.expand ? double.infinity : null,
               decoration: BoxDecoration(
-                color: fillColor,
+                color: gradientColors == null ? fillColor : null,
+                gradient: gradientColors == null
+                    ? null
+                    : LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: gradientColors,
+                      ),
                 borderRadius: BorderRadius.circular(widget.borderRadius),
+                boxShadow: gradientColors == null
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: gradientColors.last.withValues(alpha: 0.55),
+                          blurRadius: pulseGlow,
+                          spreadRadius: pulseSpread,
+                          offset: const Offset(0, 4),
+                        ),
+                        BoxShadow(
+                          color: Colors.white.withValues(alpha: 0.12),
+                          blurRadius: 1,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
               ),
               child: child,
             ),

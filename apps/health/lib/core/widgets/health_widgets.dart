@@ -33,55 +33,161 @@ class HealthContent extends StatelessWidget {
   }
 }
 
-class HealthPrimaryButton extends StatelessWidget {
+class HealthPrimaryButton extends StatefulWidget {
   const HealthPrimaryButton({
     super.key,
     required this.label,
     required this.onPressed,
     this.busy = false,
+    this.icon,
+    this.gradientColors,
+    this.pulse = false,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final bool busy;
+  final IconData? icon;
+
+  /// Opt-in gradient+glow chrome, reserved for the login/signup CTA — every
+  /// other screen that uses this button (pet setup, quick setup, add
+  /// debt/income) leaves this null and keeps the flat fill.
+  final List<Color>? gradientColors;
+
+  /// Idle pulse animating the glow's blur/spread. Only visible alongside
+  /// [gradientColors] — reserve for the single most important CTA on a
+  /// screen.
+  final bool pulse;
+
+  @override
+  State<HealthPrimaryButton> createState() => _HealthPrimaryButtonState();
+}
+
+class _HealthPrimaryButtonState extends State<HealthPrimaryButton>
+    with SingleTickerProviderStateMixin {
+  // Created eagerly in initState (not via a `late final` field initializer)
+  // so the flat path — which never builds an AnimatedBuilder and so never
+  // touches this controller — doesn't defer its first access to dispose(),
+  // where `vsync: this` looks up an already-deactivated element and throws.
+  late final AnimationController _pulseController;
+  late final Animation<double> _pulseAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    );
+    _pulseAnimation = CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut);
+    if (widget.pulse) _pulseController.repeat(reverse: true);
+  }
+
+  @override
+  void didUpdateWidget(covariant HealthPrimaryButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.pulse && !oldWidget.pulse) {
+      _pulseController.repeat(reverse: true);
+    } else if (!widget.pulse && oldWidget.pulse) {
+      _pulseController.stop();
+      _pulseController.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final enabled = onPressed != null && !busy;
+    final enabled = widget.onPressed != null && !widget.busy;
     final accent = Theme.of(context).colorScheme.primary;
-    return Opacity(
-      opacity: enabled ? 1 : 0.55,
-      child: SizedBox(
-        width: double.infinity,
-        height: 56,
-        child: ElevatedButton(
-          onPressed: enabled ? onPressed : null,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: accent,
-            disabledBackgroundColor: HealthColors.textPrimary.withValues(
-              alpha: .12,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-          child: busy
-              ? const SizedBox(
-                  width: 22,
-                  height: 22,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.4,
-                    color: Colors.white,
-                  ),
-                )
-              : Text(
-                  label,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                  ),
+    final gradientColors = widget.gradientColors;
+
+    final content = widget.busy
+        ? const SizedBox(
+            width: 22,
+            height: 22,
+            child: CircularProgressIndicator(strokeWidth: 2.4, color: Colors.white),
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (widget.icon != null) ...[
+                Icon(widget.icon, color: Colors.white, size: 22),
+                const SizedBox(width: 8),
+              ],
+              Flexible(
+                child: Text(
+                  widget.label,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15),
                 ),
+              ),
+            ],
+          );
+
+    if (gradientColors == null) {
+      return Opacity(
+        opacity: enabled ? 1 : 0.55,
+        child: SizedBox(
+          width: double.infinity,
+          height: 56,
+          child: ElevatedButton(
+            onPressed: enabled ? widget.onPressed : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: accent,
+              disabledBackgroundColor: HealthColors.textPrimary.withValues(
+                alpha: .12,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: content,
+          ),
+        ),
+      );
+    }
+
+    return AnimatedBuilder(
+      animation: _pulseController,
+      builder: (context, child) {
+        final glowBlur = 14 + (_pulseAnimation.value * 10);
+        final glowSpread = 1 + (_pulseAnimation.value * 2);
+        return Opacity(
+          opacity: enabled ? 1 : 0.55,
+          child: Container(
+            width: double.infinity,
+            height: 56,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: gradientColors,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: gradientColors.last.withValues(alpha: 0.55),
+                  blurRadius: glowBlur,
+                  spreadRadius: glowSpread,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: child,
+          ),
+        );
+      },
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: enabled ? widget.onPressed : null,
+          child: Center(child: content),
         ),
       ),
     );

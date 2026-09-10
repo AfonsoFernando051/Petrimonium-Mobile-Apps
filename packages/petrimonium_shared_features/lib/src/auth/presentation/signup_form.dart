@@ -25,7 +25,7 @@ class SignupForm extends StatefulWidget {
     required this.passwordHint,
     required this.confirmPasswordHint,
     required this.signupButtonLabel,
-    this.signupButtonColor,
+    this.signupButtonGradient,
     required this.googleButtonLabel,
     required this.orDividerLabel,
     required this.sharedAccountNoticeText,
@@ -42,8 +42,9 @@ class SignupForm extends StatefulWidget {
   final String confirmPasswordHint;
   final String signupButtonLabel;
 
-  /// `null` keeps [GameButton]'s default fill (`context.colors.primary`).
-  final Color? signupButtonColor;
+  /// Gradient for the signup CTA's glow chrome. `null` keeps [GameButton]'s
+  /// flat default fill instead.
+  final List<Color>? signupButtonGradient;
   final String googleButtonLabel;
   final String orDividerLabel;
   final String sharedAccountNoticeText;
@@ -208,7 +209,8 @@ class _SignupFormState extends State<SignupForm> {
         const SizedBox(height: 20),
         GameButton(
           label: widget.signupButtonLabel,
-          color: widget.signupButtonColor,
+          gradientColors: widget.signupButtonGradient,
+          pulse: true,
           borderRadius: 16,
           onPressed: _handleRegister,
           isLoading: _isLoading,

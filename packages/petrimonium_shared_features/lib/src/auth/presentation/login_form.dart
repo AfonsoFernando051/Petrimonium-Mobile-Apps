@@ -21,7 +21,7 @@ class LoginForm extends StatefulWidget {
     required this.emailHint,
     required this.passwordHint,
     required this.loginButtonLabel,
-    this.loginButtonColor,
+    this.loginButtonGradient,
     required this.googleButtonLabel,
     required this.orDividerLabel,
     required this.forgotPasswordLabel,
@@ -37,8 +37,10 @@ class LoginForm extends StatefulWidget {
   final String passwordHint;
   final String loginButtonLabel;
 
-  /// `null` keeps [GameButton]'s default fill (`context.colors.primary`).
-  final Color? loginButtonColor;
+  /// Gradient for the login CTA's glow chrome — each product's own brand
+  /// gradient (e.g. `context.brand.gradient`). `null` keeps [GameButton]'s
+  /// flat default fill instead.
+  final List<Color>? loginButtonGradient;
   final String googleButtonLabel;
   final String orDividerLabel;
   final String forgotPasswordLabel;
@@ -129,7 +131,8 @@ class _LoginFormState extends State<LoginForm> {
           label: widget.loginButtonLabel,
           icon: Icons.arrow_forward,
           iconTrailing: true,
-          color: widget.loginButtonColor,
+          gradientColors: widget.loginButtonGradient,
+          pulse: true,
           onPressed: _handleLogin,
           isLoading: _isLoading,
         ),
