@@ -214,11 +214,18 @@ honestly, this blocker is nearly spent. The nine break down as:
 | The product-copy half | `pet_specie_enum` | by design — the rules half is already shared |
 | The app-level resolver | `settings_screen` | by design — it is the thing that owns `Translator` |
 | Blocked by `AppEvent`, not by copy | `pet_interaction_sheet`, `pet_companion_header` | both reach `PetCompanionController`, which listens on `AppEventBus` — see 2 |
-| Actually ready to move | `pet_comic_speech_bubble` | one copy key, no `AppEvent`; brings three siblings (`pet_message`, `pet_speech_bubble_state`, `pet_speech_bubble_style`) with it |
+| Done | `pet_comic_speech_bubble` + three siblings | moved; see below |
 
-So only one file is still held up by the translator seam alone. Two more are
-really blocker 2 wearing a different hat, and the other six are the pattern
-working rather than debt.
+Nothing is now held up by the translator seam alone. Two files are really
+blocker 2 wearing a different hat, and the other six are the pattern working
+rather than debt.
+
+The speech bubble needed one thing none of the others did. `PetMessage`
+carries copy *keys* chosen at runtime, so the widget cannot take plain
+strings — it takes `translate` itself, a `String Function(String, {Map params})`
+the app satisfies with `Translator.translate`. That is still an explicit
+parameter, not a global, and key-safety was never this widget's to hold: the
+keys arrive in its data.
 
 Settings was the first slice through this and shows the shape the rest should
 take: the seven section widgets take their copy as constructor parameters, the

@@ -5,7 +5,6 @@ import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';

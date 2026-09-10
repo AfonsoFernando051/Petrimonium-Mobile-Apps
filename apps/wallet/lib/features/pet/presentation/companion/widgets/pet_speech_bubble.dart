@@ -1,8 +1,8 @@
+import 'package:petrimonium_wallet/core/utils/translator.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_comic_speech_bubble.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Floats [PetCompanionController]'s current message next to wherever the
@@ -154,6 +154,8 @@ class _AnchoredBubble extends StatelessWidget {
 
   Widget _bubble(PetBubbleTailPosition tail, double maxWidth) => PetComicSpeechBubble(
     message: message,
+    translate: Translator.translate,
+    dismissTooltip: Translator.translate(AppStrings.companionDismissTooltip),
     tailPosition: tail,
     maxWidth: maxWidth,
     onDismiss: controller.dismiss,

@@ -2,7 +2,6 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
 
 /// The real-portfolio Pet reaction script — holdings, dividends,
 /// concentration risk, missions/achievements, and the Mentor chat nudge.

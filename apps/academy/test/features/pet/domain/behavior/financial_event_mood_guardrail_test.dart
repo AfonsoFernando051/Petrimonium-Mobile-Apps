@@ -4,7 +4,6 @@ import 'package:petrimonium_academy/features/academy/domain/services/academy_pet
 import 'package:petrimonium_academy/features/pet/domain/behavior/core_pet_behavior.dart';
 import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
 import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio_pet_behavior.dart';
 
 /// PRD guardrail (§10.3, §12.2, FR-MEN-002): the Pet's celebratory moods are

@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';
 
 void main() {
   group('PetMessage', () {
@@ -11,7 +9,7 @@ void main() {
         context: PetContext.home,
         priority: PetMessagePriority.normal,
         trigger: PetMessageTrigger.pageEnter,
-        textKey: AppStrings.companionMentorNudge,
+        textKey: SharedStrings.companionMentorNudge,
       );
 
       expect(message.mood, PetAnimationState.idle);
@@ -20,13 +18,13 @@ void main() {
     });
 
     test('carries through every explicitly provided field', () {
-      const action = PetMessageAction(labelKey: AppStrings.companionActionContinue, destination: PetContext.academy);
+      const action = PetMessageAction(labelKey: SharedStrings.companionActionContinue, destination: PetContext.academy);
       const message = PetMessage(
         id: 'event_xp_gained',
         context: PetContext.home,
         priority: PetMessagePriority.high,
         trigger: PetMessageTrigger.xpGained,
-        textKey: AppStrings.companionEventXpGained,
+        textKey: SharedStrings.companionEventXpGained,
         params: {'xp': '10'},
         mood: PetAnimationState.celebrate,
         action: action,
@@ -36,7 +34,7 @@ void main() {
       expect(message.context, PetContext.home);
       expect(message.priority, PetMessagePriority.high);
       expect(message.trigger, PetMessageTrigger.xpGained);
-      expect(message.textKey, AppStrings.companionEventXpGained);
+      expect(message.textKey, SharedStrings.companionEventXpGained);
       expect(message.params, {'xp': '10'});
       expect(message.mood, PetAnimationState.celebrate);
       expect(message.action, same(action));
@@ -49,9 +47,12 @@ void main() {
   });
 
   test('PetMessageAction exposes labelKey and destination', () {
-    const action = PetMessageAction(labelKey: AppStrings.companionActionViewProgress, destination: PetContext.profile);
+    const action = PetMessageAction(
+      labelKey: SharedStrings.companionActionViewProgress,
+      destination: PetContext.profile,
+    );
 
-    expect(action.labelKey, AppStrings.companionActionViewProgress);
+    expect(action.labelKey, SharedStrings.companionActionViewProgress);
     expect(action.destination, PetContext.profile);
   });
 }

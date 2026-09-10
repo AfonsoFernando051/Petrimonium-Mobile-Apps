@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/events/app_event_bus.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message_catalog.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 

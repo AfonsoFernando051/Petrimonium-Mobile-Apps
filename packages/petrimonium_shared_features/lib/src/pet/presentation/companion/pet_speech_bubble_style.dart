@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/enums/pet_speech_bubble_state.dart';
+import 'pet_speech_bubble_state.dart';
 
 /// Design tokens and visual styling parameters for each [PetSpeechBubbleState].
 class PetSpeechBubbleStateStyle {
@@ -31,7 +30,7 @@ class PetSpeechBubbleStateStyle {
     switch (state) {
       case PetSpeechBubbleState.idle:
         return PetSpeechBubbleStateStyle(
-          primaryAccent: AppColors.neonCyan,
+          primaryAccent: context.brand.accent,
           secondaryAccent: const Color(0xFF00B4D8),
           surfaceGradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -40,8 +39,8 @@ class PetSpeechBubbleStateStyle {
                 ? [tokens.surfaceElevated.withValues(alpha: 0.92), const Color(0xFF0D1F2D).withValues(alpha: 0.94)]
                 : [tokens.surfaceElevated, const Color(0xFFE0F7FA)],
           ),
-          borderColor: AppColors.neonCyan.withValues(alpha: isDark ? 0.65 : 0.8),
-          glowColor: AppColors.neonCyan.withValues(alpha: isDark ? 0.22 : 0.15),
+          borderColor: context.brand.accent.withValues(alpha: isDark ? 0.65 : 0.8),
+          glowColor: context.brand.accent.withValues(alpha: isDark ? 0.22 : 0.15),
           badgeIcon: Icons.chat_bubble_outline_rounded,
           badgeTitleKey: 'COMPANION',
         );

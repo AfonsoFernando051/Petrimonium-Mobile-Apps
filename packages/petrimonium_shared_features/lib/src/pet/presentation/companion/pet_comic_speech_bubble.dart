@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/enums/pet_speech_bubble_state.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/theme/pet_speech_bubble_style.dart';
+import 'pet_speech_bubble_state.dart';
+import 'pet_message.dart';
+import 'pet_speech_bubble_style.dart';
 
 /// Premium comic-style speech bubble widget for the Pet Companion.
 ///
@@ -20,6 +18,8 @@ class PetComicSpeechBubble extends StatefulWidget {
   const PetComicSpeechBubble({
     super.key,
     required this.message,
+    required this.translate,
+    required this.dismissTooltip,
     required this.onDismiss,
     this.onAction,
     this.tailPosition = PetBubbleTailPosition.bottomLeft,
@@ -30,6 +30,15 @@ class PetComicSpeechBubble extends StatefulWidget {
   });
 
   final PetMessage message;
+
+  /// Resolves a copy key to text. Unlike the other screens in this package,
+  /// this widget cannot take its copy as plain strings: [PetMessage] carries
+  /// *keys* chosen at runtime (`textKey`, `action.labelKey`), so what it needs
+  /// is the product's resolver, not fixed wording.
+  final String Function(String key, {Map<String, String>? params}) translate;
+
+  /// The one static string here, which is copy like anywhere else.
+  final String dismissTooltip;
   final VoidCallback onDismiss;
   final VoidCallback? onAction;
   final PetBubbleTailPosition tailPosition;
@@ -64,7 +73,7 @@ class _PetComicSpeechBubbleState extends State<PetComicSpeechBubble> {
 
   void _startOrSkipTypewriter() {
     _typewriterTimer?.cancel();
-    _fullText = Translator.translate(widget.message.textKey, params: widget.message.params);
+    _fullText = widget.translate(widget.message.textKey, params: widget.message.params);
 
     // If typewriter is disabled, in test environment, or animations disabled, reveal immediately
     final isTestEnvironment = WidgetsBinding.instance.runtimeType.toString().contains('Test');
@@ -215,10 +224,10 @@ class _PetComicSpeechBubbleState extends State<PetComicSpeechBubble> {
                       // Close / Dismiss Button
                       Semantics(
                         button: true,
-                        label: Translator.translate(AppStrings.companionDismissTooltip),
+                        label: widget.dismissTooltip,
                         child: IconButton(
                           icon: Icon(Icons.close, size: 16, color: tokens.textTertiary),
-                          tooltip: Translator.translate(AppStrings.companionDismissTooltip),
+                          tooltip: widget.dismissTooltip,
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
                           onPressed: () {
@@ -264,7 +273,7 @@ class _PetComicSpeechBubbleState extends State<PetComicSpeechBubble> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              Translator.translate(widget.message.action!.labelKey),
+                              widget.translate(widget.message.action!.labelKey),
                               style: TextStyle(color: style.primaryAccent, fontSize: 12.5, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(width: 4),

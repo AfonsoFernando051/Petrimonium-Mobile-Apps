@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement.dart';
 import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio_pet_behavior.dart';
 
