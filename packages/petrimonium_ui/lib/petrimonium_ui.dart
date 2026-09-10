@@ -35,6 +35,7 @@ export 'src/widgets/game_button.dart';
 export 'src/widgets/game_snack.dart';
 export 'src/widgets/glass_card.dart';
 export 'src/widgets/google_signin_button.dart';
+export 'src/widgets/mentor_input_bar.dart';
 export 'src/widgets/option_pill.dart';
 export 'src/widgets/option_row.dart';
 export 'src/widgets/or_divider.dart';

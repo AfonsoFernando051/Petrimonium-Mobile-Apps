@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/core/theme/app_theme.dart';
-import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_input_bar.dart';
+import '../test_theme.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   Widget buildTestableWidget({
@@ -10,9 +10,14 @@ void main() {
     required bool isSending,
   }) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
-        body: MentorInputBar(controller: controller, onSend: onSend, isSending: isSending),
+        body: MentorInputBar(
+          controller: controller,
+          onSend: onSend,
+          isSending: isSending,
+          hintText: 'Pergunte algo ao seu mentor...',
+        ),
       ),
     );
   }

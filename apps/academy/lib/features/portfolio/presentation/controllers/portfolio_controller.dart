@@ -4,7 +4,6 @@ import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement_catalog.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/models/mission_display_catalog.dart';

@@ -8,7 +8,6 @@ import 'package:petrimonium_academy/features/mentor/data/datasources/mentor_remo
 import 'package:petrimonium_academy/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/screens/mentor_screen.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/widgets/chat_bubble.dart';
-import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_input_bar.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
 

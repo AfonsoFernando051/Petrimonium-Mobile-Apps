@@ -3,8 +3,6 @@ import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/dividend_event.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
 import 'package:petrimonium_shared_features/testing.dart';

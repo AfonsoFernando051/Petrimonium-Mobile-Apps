@@ -16,8 +16,6 @@ import 'package:petrimonium_wallet/features/onboarding/presentation/screens/ment
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/pet_setup_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/quick_setup_screen.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/academy/academy_test_fixtures.dart';

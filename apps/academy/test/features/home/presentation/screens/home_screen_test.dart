@@ -15,8 +15,6 @@ import 'package:petrimonium_academy/features/home/presentation/screens/home_scre
 import 'package:petrimonium_academy/features/home/presentation/widgets/next_action_card.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/dividend_event.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
 import '../../../academy/academy_test_fixtures.dart';

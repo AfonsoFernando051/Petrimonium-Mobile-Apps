@@ -1,22 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_wallet/core/constants/app_colors.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
+import '../tokens/app_color_tokens.dart';
+import 'game_button.dart';
+import 'glass_card.dart';
 
 /// Bottom input bar: text field + send `GameButton`. Voice/attachment
 /// buttons from the product spec are future work (see docs/AI_MENTOR.md) —
 /// no placeholder icons for capabilities that don't exist yet.
 class MentorInputBar extends StatelessWidget {
-  const MentorInputBar({super.key, required this.controller, required this.onSend, required this.isSending});
+  const MentorInputBar({
+    super.key,
+    required this.controller,
+    required this.onSend,
+    required this.isSending,
+    required this.hintText,
+  });
 
   final TextEditingController controller;
   final VoidCallback onSend;
   final bool isSending;
 
+  /// Placeholder copy. A parameter, not a constant: this package carries no
+  /// string catalog.
+  final String hintText;
+
   @override
   Widget build(BuildContext context) {
     return GlassCard(
       borderRadius: 24,
-      borderColor: AppColors.neonCyan.withValues(alpha: 0.3),
+      borderColor: context.brand.accent.withValues(alpha: 0.3),
       padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -31,7 +42,7 @@ class MentorInputBar extends StatelessWidget {
               onSubmitted: (_) => onSend(),
               style: TextStyle(color: context.colors.textPrimary, fontSize: 14),
               decoration: InputDecoration(
-                hintText: 'Pergunte algo ao seu mentor...',
+                hintText: hintText,
                 hintStyle: TextStyle(color: context.colors.textTertiary, fontSize: 14),
                 border: InputBorder.none,
                 isDense: true,

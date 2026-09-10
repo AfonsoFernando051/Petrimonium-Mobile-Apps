@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/proventos_evolution_bar_card.dart';
 
 void main() {

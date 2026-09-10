@@ -3,7 +3,7 @@ import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/dividend_event_tile.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 

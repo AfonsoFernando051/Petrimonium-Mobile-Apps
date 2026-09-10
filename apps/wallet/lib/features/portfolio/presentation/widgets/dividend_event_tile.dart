@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/models/dividend_type_display.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 

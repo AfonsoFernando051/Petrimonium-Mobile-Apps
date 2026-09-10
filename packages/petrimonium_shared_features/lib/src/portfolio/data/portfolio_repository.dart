@@ -1,5 +1,11 @@
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import '../domain/allocation_slice.dart';
+import '../domain/dividend_event.dart';
+import '../domain/history_point.dart';
+import '../domain/history_range.dart';
+import '../domain/holding.dart';
+import '../domain/investment_lot.dart';
+import '../domain/portfolio_summary.dart';
+import 'portfolio_remote_datasource.dart';
 
 class PortfolioRepository {
   final PortfolioRemoteDataSource remoteDataSource;

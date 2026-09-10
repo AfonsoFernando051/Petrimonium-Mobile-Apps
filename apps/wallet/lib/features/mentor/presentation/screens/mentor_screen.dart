@@ -10,7 +10,6 @@ import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.
 import 'package:petrimonium_wallet/features/mentor/presentation/controllers/mentor_chat_controller.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/screens/conversation_list_screen.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/widgets/chat_bubble.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/widgets/mentor_input_bar.dart';
 
 /// The "Mentor" tab — a full-screen chat with the user's pet acting as their
 /// personal investment mentor. Owns its own controller/state (mirrors how
@@ -146,7 +145,12 @@ class _MentorScreenState extends State<MentorScreen> {
           const SizedBox(height: 12),
           Expanded(child: _buildBody()),
           const SizedBox(height: 8),
-          MentorInputBar(controller: _textController, onSend: _send, isSending: _controller.isSending),
+          MentorInputBar(
+            controller: _textController,
+            onSend: _send,
+            isSending: _controller.isSending,
+            hintText: 'Pergunte algo ao seu mentor...',
+          ),
           const SizedBox(height: 8),
         ],
       ),

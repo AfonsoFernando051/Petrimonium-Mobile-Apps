@@ -18,10 +18,8 @@ import 'package:petrimonium_academy/features/pet/data/repositories/mascot_reposi
 import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferences_repository.dart';
 import 'package:petrimonium_academy/features/mentor/data/datasources/mentor_remote_datasource.dart';
 import 'package:petrimonium_academy/features/mentor/data/repositories/mentor_chat_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/data/datasources/simulated_wallet_remote_datasource.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
-import 'package:petrimonium_academy/features/settings/data/datasources/settings_remote_datasource.dart';
 import 'package:petrimonium_academy/features/settings/data/repositories/settings_repository.dart';
 
 class DI {

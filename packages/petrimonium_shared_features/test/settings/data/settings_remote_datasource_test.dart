@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium_academy/core/constants/api_constants.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium_academy/features/settings/data/datasources/settings_remote_datasource.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 
@@ -24,7 +23,7 @@ void main() {
       final result = await dataSource.getLanguage();
 
       expect(result, 'en');
-      verify(() => mockApiClient.get(ApiConstants.settingsLanguageEndpoint)).called(1);
+      verify(() => mockApiClient.get(SettingsRemoteDataSource.languageEndpoint)).called(1);
     });
 
     test('throws an Exception on a non-200 response', () async {
@@ -46,7 +45,7 @@ void main() {
       final result = await dataSource.updateLanguage('es');
 
       expect(result, 'es');
-      verify(() => mockApiClient.put(ApiConstants.settingsLanguageEndpoint, {'language': 'es'})).called(1);
+      verify(() => mockApiClient.put(SettingsRemoteDataSource.languageEndpoint, {'language': 'es'})).called(1);
     });
 
     test('throws an Exception on a non-200 response', () async {

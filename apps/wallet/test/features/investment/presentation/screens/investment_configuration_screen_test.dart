@@ -14,7 +14,6 @@ import 'package:petrimonium_wallet/features/investment/presentation/widgets/port
 import 'package:petrimonium_wallet/features/investment/presentation/widgets/unlockable_rewards_card.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/repositories/portfolio_repository.dart';
 
 class MockInvestmentRepository extends Mock implements InvestmentRepository {}
 

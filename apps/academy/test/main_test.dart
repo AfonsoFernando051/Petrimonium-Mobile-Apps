@@ -18,8 +18,6 @@ import 'package:petrimonium_academy/features/onboarding/presentation/screens/jou
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/welcome_screen.dart';
 import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/financial_goal_screen.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/dividend_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/academy/academy_test_fixtures.dart';

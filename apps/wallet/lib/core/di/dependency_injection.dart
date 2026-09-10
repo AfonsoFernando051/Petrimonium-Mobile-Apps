@@ -19,8 +19,6 @@ import 'package:petrimonium_wallet/features/investment/data/datasources/investme
 import 'package:petrimonium_wallet/features/investment/data/repositories/investment_repository.dart';
 import 'package:petrimonium_wallet/features/mentor/data/datasources/mentor_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_wallet/features/settings/data/datasources/settings_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/settings/data/repositories/settings_repository.dart';
 import 'package:petrimonium_wallet/features/asset_details/data/datasources/asset_details_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/asset_details/data/repositories/asset_details_repository.dart';
