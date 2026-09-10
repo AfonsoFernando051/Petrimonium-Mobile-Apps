@@ -7,7 +7,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import '../../../../core/utils/friendly_error_message.dart';
 import '../../../../core/utils/translator.dart';
 import '../../../../main.dart';
-import '../screens/forgot_password_screen.dart';
+import '../password_recovery_routes.dart';
 
 /// Flat, edge-to-edge layout (no glass card/floating badge) — mascot + brand
 /// title sit directly on [LoginBackground]. Toggles inline between Entrar
@@ -29,7 +29,7 @@ class _LoginCardState extends State<LoginCard> {
   }
 
   void _openForgotPassword() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => buildForgotPasswordScreen(context)));
   }
 
   @override

@@ -195,8 +195,8 @@ it is product-branded no matter how identical the source looks.
 
 ## What is deliberately still duplicated
 
-Academy and Wallet still hold 29 clone files in `lib/` (~3400 lines) and 31
-in `test/` (~3000), down from 80 and 93. Every one that is left is behind a
+Academy and Wallet still hold 28 clone files in `lib/` (~3100 lines) and 30
+in `test/` (~2800), down from 80 and 93. Every one that is left is behind a
 decision or is duplicated on purpose.
 
 Read the line count, not the group count. Extracting a screen leaves a thin
@@ -205,10 +205,11 @@ per-app resolver behind — `conversation_list_route`, `level_title`,
 their very nature, so they register as clones forever. That is the shape
 working, not duplication left behind.
 
-**1. Reaching the translator from a package (10 of the 29).** The auth
-screens and the Pet's speech still bind to `Translator` and `AppStrings`. What
-blocks them is *only* that those two are app-local classes: a widget in a
-package has no way to call them.
+**1. Reaching the translator from a package (9 of the 28).** The Pet
+companion widgets still bind to `Translator` and `AppStrings`. What blocks
+them is *only* that those two are app-local classes: a widget in a package has
+no way to call them. Four of the nine are now thin per-app resolvers, which
+stay by design.
 
 Settings was the first slice through this and shows the shape the rest should
 take: the seven section widgets take their copy as constructor parameters, the
@@ -232,6 +233,18 @@ which would have dragged the remote datasource, `ChatMessage`,
 `PetPreferencesRepository` and two label-bearing enums into the package with
 it. Its backdrop is a parameter too: each app's `CosmicBackground` genuinely
 differs, unlike the sections' chrome.
+
+The two password-recovery screens followed the same recipe, and confirmed that
+the seam is now routine: a copy record, the product's `LoginBackground` as a
+parameter, and the repository reduced to the two calls each screen makes
+(`onRequestReset`, `onResetPassword`) — passed as functions, which is what
+`LoginForm` had been doing with `onLogin` since the auth extraction.
+
+A rule fell out of these three: a screen extracted this way needs a wiring
+test left behind in each app, because nothing else covers the route factory
+that resolves its keys. `password_recovery_routes` had no coverage at all for
+a moment; `settings_screen_test` had coverage that would have passed with
+every key wrong.
 
 The copy itself is no longer in the way. Measured rather than assumed, the two
 catalogs held 1377 (language, key) pairs in common and **1324 of them were

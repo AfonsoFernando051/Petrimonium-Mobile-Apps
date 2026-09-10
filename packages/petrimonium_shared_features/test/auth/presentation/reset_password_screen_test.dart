@@ -1,26 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
-import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium_wallet/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
-class MockAuthRepository extends Mock implements AuthRepository {}
+import '../../test_theme.dart';
+
+/// The two calls these screens make. Mocking a narrow interface rather than
+/// each product's `AuthRepository` keeps the `verify(...)` assertions below
+/// exactly as they were while dropping the dependency on an app.
+abstract class _AuthApi {
+  Future<void> requestPasswordReset(String email);
+  Future<void> resetPassword(String token, String newPassword);
+}
+
+class MockAuthRepository extends Mock implements _AuthApi {}
 
 void main() {
   late MockAuthRepository mockAuthRepository;
 
   setUp(() {
-    Translator.currentLanguage = 'pt';
     mockAuthRepository = MockAuthRepository();
-    DI.authRepository = mockAuthRepository;
   });
 
+  ResetPasswordScreen screen() => ResetPasswordScreen(
+    background: const SizedBox.shrink(),
+    onResetPassword: mockAuthRepository.resetPassword,
+    errorMessageBuilder: (e) => e.toString().replaceFirst('Exception: ', ''),
+    copy: (
+      title: 'Redefinir senha',
+      subtitle: 'Cole o código que enviamos por e-mail e escolha uma nova senha.',
+      tokenHint: 'Código de redefinição',
+      newPasswordHint: 'Nova senha',
+      confirmPasswordHint: 'Confirmar Senha',
+      submitLabel: 'Redefinir senha',
+      successMessage: 'Senha redefinida com sucesso! Faça login com sua nova senha.',
+      mismatchError: 'As senhas não coincidem.',
+      fieldsRequiredError: 'Preencha todos os campos.',
+    ),
+  );
+
   Widget buildTestableWidget() {
-    return MaterialApp(theme: AppTheme.dark, home: const ResetPasswordScreen());
+    return MaterialApp(theme: TestTheme.dark, home: screen());
   }
 
   Finder fieldAt(int index) =>
@@ -82,13 +103,12 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          theme: AppTheme.dark,
+          theme: TestTheme.dark,
           home: Builder(
             builder: (context) => Scaffold(
               body: Center(
                 child: ElevatedButton(
-                  onPressed: () =>
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ResetPasswordScreen())),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen())),
                   child: const Text('open'),
                 ),
               ),

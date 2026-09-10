@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_academy/core/constants/app_colors.dart';
-import 'package:petrimonium_academy/core/constants/app_strings.dart';
-import 'package:petrimonium_academy/core/di/dependency_injection.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/auth/presentation/widgets/login_background.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
+
+/// Every string this screen shows, supplied by the product.
+///
+/// Note what is *not* here: the password-strength messages. Those come from
+/// [PasswordPolicy], which returns hard-coded Portuguese in every language —
+/// a pre-existing gap, left alone rather than changed under a refactor.
+typedef ResetPasswordCopy = ({
+  String title,
+  String subtitle,
+  String tokenHint,
+  String newPasswordHint,
+  String confirmPasswordHint,
+  String submitLabel,
+  String successMessage,
+  String mismatchError,
+  String fieldsRequiredError,
+});
 
 /// Second half of the forgot-password flow. The user pastes the reset code
 /// emailed to them (see [ForgotPasswordScreen]) alongside a new password —
@@ -14,7 +25,25 @@ import 'package:petrimonium_academy/features/auth/presentation/widgets/login_bac
 /// entered manually rather than opened via a link (see the class doc on
 /// `ForgotPasswordScreen`).
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({super.key});
+  const ResetPasswordScreen({
+    super.key,
+    required this.copy,
+    required this.background,
+    required this.onResetPassword,
+    required this.errorMessageBuilder,
+  });
+
+  final ResetPasswordCopy copy;
+
+  /// The product's own backdrop — see [ForgotPasswordScreen.background].
+  final Widget background;
+
+  /// Performs the reset (e.g. `DI.authRepository.resetPassword`). Letting it
+  /// throw is how a failure reaches [errorMessageBuilder].
+  final Future<void> Function(String token, String newPassword) onResetPassword;
+
+  /// Each product's own `friendlyErrorMessage`.
+  final String Function(Object error) errorMessageBuilder;
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -40,12 +69,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final confirmPassword = _confirmPasswordController.text;
 
     if (token.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
-      GameSnack.show(context, Translator.translate(AppStrings.resetPasswordFieldsRequiredError), isError: true);
+      GameSnack.show(context, widget.copy.fieldsRequiredError, isError: true);
       return;
     }
 
     if (newPassword != confirmPassword) {
-      GameSnack.show(context, Translator.translate(AppStrings.resetPasswordMismatchError), isError: true);
+      GameSnack.show(context, widget.copy.mismatchError, isError: true);
       return;
     }
 
@@ -57,16 +86,16 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
     setState(() => _isLoading = true);
     try {
-      await DI.authRepository.resetPassword(token, newPassword);
+      await widget.onResetPassword(token, newPassword);
       if (mounted) {
-        GameSnack.show(context, Translator.translate(AppStrings.resetPasswordSuccessMessage), isSuccess: true);
+        GameSnack.show(context, widget.copy.successMessage, isSuccess: true);
         // Returns to LoginScreen — the Navigator's first route whenever the
         // user reached this flow unauthenticated (see MyApp._getStartRoute).
         Navigator.of(context).popUntil((route) => route.isFirst);
       }
     } catch (e) {
       if (mounted) {
-        GameSnack.show(context, friendlyErrorMessage(e), isError: true);
+        GameSnack.show(context, widget.errorMessageBuilder(e), isError: true);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -80,7 +109,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          const LoginBackground(),
+          widget.background,
           SafeArea(
             child: Column(
               children: [
@@ -97,31 +126,31 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             Icon(Icons.password, size: 56, color: tokens.textPrimary),
                             const SizedBox(height: 16),
                             Text(
-                              Translator.translate(AppStrings.resetPasswordTitle),
+                              widget.copy.title,
                               style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              Translator.translate(AppStrings.resetPasswordSubtitle),
+                              widget.copy.subtitle,
                               textAlign: TextAlign.center,
                               style: TextStyle(color: tokens.textSecondary),
                             ),
                             const SizedBox(height: 24),
                             CustomTextField(
-                              hint: Translator.translate(AppStrings.resetPasswordTokenHint),
+                              hint: widget.copy.tokenHint,
                               icon: Icons.vpn_key,
                               controller: _tokenController,
                             ),
                             const SizedBox(height: 16),
                             CustomTextField(
-                              hint: Translator.translate(AppStrings.resetPasswordNewPasswordHint),
+                              hint: widget.copy.newPasswordHint,
                               icon: Icons.lock,
                               obscure: true,
                               controller: _newPasswordController,
                             ),
                             const SizedBox(height: 16),
                             CustomTextField(
-                              hint: Translator.translate(AppStrings.confirmPasswordHint),
+                              hint: widget.copy.confirmPasswordHint,
                               icon: Icons.lock_outline,
                               obscure: true,
                               controller: _confirmPasswordController,
@@ -132,7 +161,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               child: ElevatedButton(
                                 onPressed: _isLoading ? null : _handleSubmit,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.neonCyan,
+                                  backgroundColor: context.brand.accent,
                                   foregroundColor: Colors.black,
                                   padding: const EdgeInsets.symmetric(vertical: 14),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -144,7 +173,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                         child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
                                       )
                                     : Text(
-                                        Translator.translate(AppStrings.resetPasswordSubmitButton),
+                                        widget.copy.submitLabel,
                                         style: const TextStyle(fontWeight: FontWeight.bold),
                                       ),
                               ),

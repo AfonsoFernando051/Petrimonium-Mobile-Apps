@@ -1,27 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:petrimonium_academy/core/di/dependency_injection.dart';
-import 'package:petrimonium_academy/core/theme/app_theme.dart';
-import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium_academy/features/auth/presentation/screens/forgot_password_screen.dart';
-import 'package:petrimonium_academy/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
-class MockAuthRepository extends Mock implements AuthRepository {}
+import '../../test_theme.dart';
+
+/// The two calls these screens make. Mocking a narrow interface rather than
+/// each product's `AuthRepository` keeps the `verify(...)` assertions below
+/// exactly as they were while dropping the dependency on an app.
+abstract class _AuthApi {
+  Future<void> requestPasswordReset(String email);
+  Future<void> resetPassword(String token, String newPassword);
+}
+
+class MockAuthRepository extends Mock implements _AuthApi {}
 
 void main() {
   late MockAuthRepository mockAuthRepository;
 
   setUp(() {
-    Translator.currentLanguage = 'pt';
     mockAuthRepository = MockAuthRepository();
-    DI.authRepository = mockAuthRepository;
   });
 
+  ResetPasswordScreen resetScreen() => ResetPasswordScreen(
+    background: const SizedBox.shrink(),
+    onResetPassword: mockAuthRepository.resetPassword,
+    errorMessageBuilder: (e) => e.toString(),
+    copy: (
+      title: 'Redefinir senha',
+      subtitle: 'Cole o código que enviamos por e-mail e escolha uma nova senha.',
+      tokenHint: 'Código de redefinição',
+      newPasswordHint: 'Nova senha',
+      confirmPasswordHint: 'Confirmar Senha',
+      submitLabel: 'Redefinir senha',
+      successMessage: 'Senha redefinida com sucesso! Faça login com sua nova senha.',
+      mismatchError: 'As senhas não coincidem.',
+      fieldsRequiredError: 'Preencha todos os campos.',
+    ),
+  );
+
+  // The backdrop is each product's own `LoginBackground`; an empty box keeps
+  // the widget tree the assertions care about unchanged — and, unlike the
+  // real one, ends the frame, so these no longer need the never-settle dance.
+  ForgotPasswordScreen screen(BuildContext context) => ForgotPasswordScreen(
+    background: const SizedBox.shrink(),
+    onRequestReset: mockAuthRepository.requestPasswordReset,
+    errorMessageBuilder: (e) => e.toString().replaceFirst('Exception: ', ''),
+    onGoToReset: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => resetScreen())),
+    copy: (
+      title: 'Recuperar senha',
+      subtitle: 'Digite seu e-mail e enviaremos um link para redefinir sua senha.',
+      emailHint: 'Seu e-mail',
+      sendLabel: 'Enviar link',
+      confirmationMessage: 'Se existir uma conta com esse e-mail, você receberá instruções em instantes.',
+      haveCodeLabel: 'Já tenho um código de redefinição',
+    ),
+  );
+
   Widget buildTestableWidget() {
-    return MaterialApp(theme: AppTheme.dark, home: const ForgotPasswordScreen());
+    return MaterialApp(
+      theme: TestTheme.dark,
+      home: Builder(builder: screen),
+    );
   }
 
   group('ForgotPasswordScreen', () {
@@ -88,13 +129,12 @@ void main() {
     testWidgets('back button pops the screen', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          theme: AppTheme.dark,
+          theme: TestTheme.dark,
           home: Builder(
             builder: (context) => Scaffold(
               body: Center(
                 child: ElevatedButton(
-                  onPressed: () =>
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ForgotPasswordScreen())),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen(context))),
                   child: const Text('open'),
                 ),
               ),

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_wallet/core/constants/app_colors.dart';
-import 'package:petrimonium_wallet/core/constants/app_strings.dart';
-import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/auth/presentation/screens/reset_password_screen.dart';
-import 'package:petrimonium_wallet/features/auth/presentation/widgets/login_background.dart';
+
+/// Every string this screen shows, supplied by the product.
+typedef ForgotPasswordCopy = ({
+  String title,
+  String subtitle,
+  String emailHint,
+  String sendLabel,
+  String confirmationMessage,
+  String haveCodeLabel,
+});
 
 /// First half of the forgot-password flow: collects an email and asks the
 /// backend to send a reset link. The backend always answers 200 (to avoid
@@ -15,11 +18,34 @@ import 'package:petrimonium_wallet/features/auth/presentation/widgets/login_back
 ///
 /// **Design tradeoff**: this app has no deep-linking infrastructure, and
 /// building one is out of scope for this pass, so the emailed reset code is
-/// entered manually on [ResetPasswordScreen] rather than opened via a link —
+/// entered manually on the reset screen rather than opened via a link —
 /// a smaller, still fully real and testable flow. Deep linking can be a
 /// follow-up.
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+  const ForgotPasswordScreen({
+    super.key,
+    required this.copy,
+    required this.background,
+    required this.onRequestReset,
+    required this.onGoToReset,
+    required this.errorMessageBuilder,
+  });
+
+  final ForgotPasswordCopy copy;
+
+  /// The product's own backdrop — each app's `LoginBackground` paints its own
+  /// colours and is not shared.
+  final Widget background;
+
+  /// Performs the request (e.g. `DI.authRepository.requestPasswordReset`).
+  /// Letting it throw is how a failure reaches [errorMessageBuilder].
+  final Future<void> Function(String email) onRequestReset;
+
+  /// Opens the product's wired reset screen.
+  final VoidCallback onGoToReset;
+
+  /// Each product's own `friendlyErrorMessage`.
+  final String Function(Object error) errorMessageBuilder;
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -42,21 +68,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     setState(() => _isLoading = true);
     try {
-      await DI.authRepository.requestPasswordReset(email);
+      await widget.onRequestReset(email);
       if (mounted) {
         setState(() => _submitted = true);
       }
     } catch (e) {
       if (mounted) {
-        GameSnack.show(context, friendlyErrorMessage(e), isError: true);
+        GameSnack.show(context, widget.errorMessageBuilder(e), isError: true);
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
-  }
-
-  void _goToResetPassword() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ResetPasswordScreen()));
   }
 
   @override
@@ -66,7 +88,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          const LoginBackground(),
+          widget.background,
           SafeArea(
             child: Column(
               children: [
@@ -89,12 +111,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             Icon(Icons.lock_reset, size: 56, color: tokens.textPrimary),
                             const SizedBox(height: 16),
                             Text(
-                              Translator.translate(AppStrings.forgotPasswordTitle),
+                              widget.copy.title,
                               style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              Translator.translate(AppStrings.forgotPasswordSubtitle),
+                              widget.copy.subtitle,
                               textAlign: TextAlign.center,
                               style: TextStyle(color: tokens.textSecondary),
                             ),
@@ -113,7 +135,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
-                                        Translator.translate(AppStrings.forgotPasswordConfirmationMessage),
+                                        widget.copy.confirmationMessage,
                                         style: TextStyle(color: tokens.textPrimary),
                                       ),
                                     ),
@@ -122,7 +144,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               ),
                             ] else ...[
                               CustomTextField(
-                                hint: Translator.translate(AppStrings.forgotPasswordEmailHint),
+                                hint: widget.copy.emailHint,
                                 icon: Icons.email,
                                 controller: _emailController,
                               ),
@@ -132,7 +154,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 child: ElevatedButton(
                                   onPressed: _isLoading ? null : _handleSubmit,
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.neonCyan,
+                                    backgroundColor: context.brand.accent,
                                     foregroundColor: Colors.black,
                                     padding: const EdgeInsets.symmetric(vertical: 14),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -144,7 +166,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
                                         )
                                       : Text(
-                                          Translator.translate(AppStrings.forgotPasswordSendButton),
+                                          widget.copy.sendLabel,
                                           style: const TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                 ),
@@ -152,11 +174,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ],
                             const SizedBox(height: 16),
                             TextButton(
-                              onPressed: _goToResetPassword,
-                              child: Text(
-                                Translator.translate(AppStrings.forgotPasswordHaveCodeLink),
-                                style: TextStyle(color: tokens.textSecondary),
-                              ),
+                              onPressed: widget.onGoToReset,
+                              child: Text(widget.copy.haveCodeLabel, style: TextStyle(color: tokens.textSecondary)),
                             ),
                           ],
                         ),
