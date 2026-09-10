@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/di/dependency_injection.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
+import '../../../../core/utils/friendly_error_message.dart';
 import '../../../../core/utils/translator.dart';
-import 'login_form.dart';
-import 'signup_form.dart';
+import '../../../../main.dart';
+import '../screens/forgot_password_screen.dart';
 
 /// Flat, edge-to-edge layout (no glass card/floating badge) — matches the
 /// Wallet design system's "menos decorativo" direction: the mascot + brand
@@ -21,6 +25,20 @@ class LoginCard extends StatefulWidget {
 
 class _LoginCardState extends State<LoginCard> {
   bool _isSignup = false;
+
+  void _goToMyApp() {
+    if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const MyApp()),
+      (route) => false,
+    );
+  }
+
+  void _openForgotPassword() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +86,39 @@ class _LoginCardState extends State<LoginCard> {
                 },
               ),
               const SizedBox(height: 20),
-              if (_isSignup) const SignupForm() else const LoginForm(),
+              if (_isSignup)
+                SignupForm(
+                  nameHint: Translator.translate(AppStrings.nameHint),
+                  emailHint: Translator.translate(AppStrings.emailOrUserHint),
+                  passwordHint: Translator.translate(AppStrings.passwordHint),
+                  confirmPasswordHint: Translator.translate(AppStrings.confirmPasswordHint),
+                  signupButtonLabel: Translator.translate(AppStrings.signupButton),
+                  signupButtonGradient: AppColors.brandGradient,
+                  googleButtonLabel: Translator.translate(AppStrings.continueWithGoogle),
+                  orDividerLabel: Translator.translate(AppStrings.orDivider),
+                  sharedAccountNoticeText: Translator.translate(AppStrings.signupSharedAccountNotice),
+                  onRegister: DI.authRepository.register,
+                  onLoginAfterRegister: DI.authRepository.login,
+                  onGoogleSignup: DI.authRepository.loginWithGoogle,
+                  onSuccess: _goToMyApp,
+                  errorMessageBuilder: friendlyErrorMessage,
+                )
+              else
+                LoginForm(
+                  emailHint: Translator.translate(AppStrings.emailOrUserHint),
+                  passwordHint: Translator.translate(AppStrings.passwordHint),
+                  loginButtonLabel: Translator.translate(AppStrings.loginButton),
+                  loginButtonGradient: context.brand.gradient,
+                  googleButtonLabel: Translator.translate(AppStrings.continueWithGoogle),
+                  orDividerLabel: Translator.translate(AppStrings.orDivider),
+                  forgotPasswordLabel: Translator.translate(AppStrings.forgotPassword),
+                  onForgotPassword: _openForgotPassword,
+                  sharedAccountNoticeText: Translator.translate(AppStrings.sharedAccountNotice),
+                  onLogin: DI.authRepository.login,
+                  onGoogleLogin: DI.authRepository.loginWithGoogle,
+                  onSuccess: _goToMyApp,
+                  errorMessageBuilder: friendlyErrorMessage,
+                ),
             ],
           ),
         ),

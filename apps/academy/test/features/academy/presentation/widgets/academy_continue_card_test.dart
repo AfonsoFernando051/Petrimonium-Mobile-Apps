@@ -22,8 +22,7 @@ void main() {
   group('AcademyContinueCard', () {
     testWidgets('renders lesson title and xp reward', (tester) async {
       await tester.pumpWidget(buildTestable(() {}));
-      // GameButton uses pulse:true (repeating AnimationController) — never
-      // call pumpAndSettle here, a single pump is enough to lay out.
+      // A single pump is enough to lay out the flat GameButton.
       await tester.pump();
 
       expect(find.text(testLesson1.title), findsOneWidget);

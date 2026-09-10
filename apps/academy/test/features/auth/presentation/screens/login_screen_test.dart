@@ -11,7 +11,6 @@ import 'package:petrimonium_academy/features/onboarding/data/repositories/onboar
 import 'package:petrimonium_academy/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/features/auth/presentation/widgets/login_background.dart';
-import 'package:petrimonium_academy/features/auth/presentation/widgets/login_button.dart';
 import 'package:petrimonium_academy/features/auth/presentation/widgets/login_card.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -55,7 +54,8 @@ void main() {
       expect(find.byType(LoginCard), findsOneWidget);
       expect(find.byType(LoginBackground), findsOneWidget);
       expect(find.byType(CustomTextField), findsNWidgets(2));
-      expect(find.byType(LoginButton), findsOneWidget);
+      // Two GameButtons render here: the primary CTA and Google sign-in.
+      expect(find.byType(GameButton), findsNWidgets(2));
 
       expect(find.text('PETRIMONIUM'), findsOneWidget);
       expect(find.text('E-mail ou Usuário'), findsOneWidget);
@@ -96,7 +96,7 @@ void main() {
       expect(find.text('test@example.com'), findsOneWidget);
       expect(find.text('password123'), findsOneWidget);
 
-      final loginBtn = find.byType(LoginButton);
+      final loginBtn = find.widgetWithText(GameButton, 'Entrar');
       await tester.tap(loginBtn);
       await tester.pump(); // Start loading
       await tester.pump(); // Finish loading

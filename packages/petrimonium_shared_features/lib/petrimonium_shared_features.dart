@@ -10,9 +10,15 @@
 /// What stays out: anything whose authoritative rules live in the backend
 /// domain (financial calculations, Academy progression, Health scoring), and
 /// anything that only looks shared because Academy and Wallet were forked
-/// from the same codebase.
+/// from the same codebase — coincidental similarity, not one thing. Auth UI
+/// clears that bar too, but for the opposite reason gamification does:
+/// verified byte-for-byte identical (or a single cosmetic line apart) before
+/// extraction, with every difference between products being copy, an accent
+/// color or a callback — see `docs/MOBILE_ARCHITECTURE.md`.
 library;
 
+export 'src/auth/presentation/login_form.dart';
+export 'src/auth/presentation/signup_form.dart';
 export 'src/gamification/data/gamification_remote_datasource.dart';
 export 'src/gamification/data/gamification_repository.dart';
 export 'src/gamification/domain/gamification_summary.dart';

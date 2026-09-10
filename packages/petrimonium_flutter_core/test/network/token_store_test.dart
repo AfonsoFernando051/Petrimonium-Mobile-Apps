@@ -4,37 +4,44 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
-/// Health's own wiring of the shared [SecureTokenStore]/[ApiClient]: its
-/// storage keys (`health_access_token`/`health_refresh_token`, kept distinct
-/// from the shared defaults so moving onto this package didn't force a
-/// re-login) and the keyring-hang resilience that lives in the package now.
-/// The generic mechanism itself has its own tests in
-/// `petrimonium_flutter_core`.
 void main() {
   test('a keyring that answers is read normally', () async {
     final store = SecureTokenStore(
-      storage: _StubStorage({'health_access_token': 'abc'}),
-      accessKey: 'health_access_token',
-      refreshKey: 'health_refresh_token',
+      storage: _StubStorage({SecureTokenStore.defaultAccessKey: 'abc'}),
     );
 
     expect(await store.readAccessToken(), 'abc');
     expect(await store.readRefreshToken(), isNull);
   });
 
+  test('accessKey/refreshKey let a product keep its own storage namespace', () async {
+    final store = SecureTokenStore(
+      storage: _StubStorage({'health_access_token': 'abc', 'health_refresh_token': 'def'}),
+      accessKey: 'health_access_token',
+      refreshKey: 'health_refresh_token',
+    );
+
+    expect(await store.readAccessToken(), 'abc');
+    expect(await store.readRefreshToken(), 'def');
+  });
+
   test('ApiClient reports no session when the keyring hangs', () async {
     final api = ApiClient(
-      tokenStore: SecureTokenStore(
-        storage: _HangingStorage(),
-        accessKey: 'health_access_token',
-        refreshKey: 'health_refresh_token',
-      ),
+      tokenStore: SecureTokenStore(storage: _HangingStorage()),
       sessionCheckTimeout: const Duration(milliseconds: 50),
     );
 
-    // Must resolve rather than hang: this is the call the splash screen is
+    // Must resolve rather than hang: this is the call a splash screen is
     // waiting on before it can route to the login screen.
     expect(await api.hasSession(), isFalse);
+  });
+
+  test('ApiClient reports a session when an access token is stored', () async {
+    final api = ApiClient(
+      tokenStore: SecureTokenStore(storage: _StubStorage({SecureTokenStore.defaultAccessKey: 'abc'})),
+    );
+
+    expect(await api.hasSession(), isTrue);
   });
 }
 

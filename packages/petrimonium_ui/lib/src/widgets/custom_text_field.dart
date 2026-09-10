@@ -34,44 +34,30 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     final tokens = context.colors;
     final hasError = widget.errorText != null;
-    final accentColor = hasError ? tokens.error : context.brand.accent;
-    return Container(
-      decoration: BoxDecoration(
-        color: tokens.surface.withValues(alpha: context.isDarkMode ? 0.05 : 0.9),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: accentColor.withValues(alpha: hasError ? 0.8 : 0.4), width: 1.0),
-        boxShadow: [
-          BoxShadow(
-            color: accentColor.withValues(alpha: 0.1),
-            blurRadius: 8,
-            spreadRadius: 1,
-          ),
-        ],
-      ),
-      child: TextField(
-        controller: widget.controller,
-        obscureText: widget.obscure && _obscureText,
-        style: TextStyle(color: tokens.textPrimary),
-        decoration: InputDecoration(
-          prefixIcon: Icon(widget.icon, color: accentColor),
-          suffixIcon: widget.obscure
-              ? IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                    color: tokens.textTertiary,
-                  ),
-                  tooltip: _obscureText ? 'Mostrar senha' : 'Ocultar senha',
-                  onPressed: () => setState(() => _obscureText = !_obscureText),
-                )
-              : null,
-          hintText: widget.hint,
-          hintStyle: TextStyle(color: tokens.textTertiary),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          errorText: widget.errorText,
-          errorStyle: TextStyle(color: tokens.error, fontSize: 12),
-          errorMaxLines: 2,
-        ),
+
+    // No bespoke Container/border/shadow here on purpose: the flat fill,
+    // radius and focus/error border colors all come from the shared
+    // `inputDecorationTheme` in `PetrimoniumTheme.build`, so this field reads
+    // exactly like a plain `TextField` styled by the ambient theme.
+    return TextField(
+      controller: widget.controller,
+      obscureText: widget.obscure && _obscureText,
+      style: TextStyle(color: tokens.textPrimary),
+      decoration: InputDecoration(
+        prefixIcon: Icon(widget.icon, color: hasError ? tokens.error : tokens.textSecondary),
+        suffixIcon: widget.obscure
+            ? IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                  color: tokens.textTertiary,
+                ),
+                tooltip: _obscureText ? 'Mostrar senha' : 'Ocultar senha',
+                onPressed: () => setState(() => _obscureText = !_obscureText),
+              )
+            : null,
+        hintText: widget.hint,
+        errorText: widget.errorText,
+        errorMaxLines: 2,
       ),
     );
   }

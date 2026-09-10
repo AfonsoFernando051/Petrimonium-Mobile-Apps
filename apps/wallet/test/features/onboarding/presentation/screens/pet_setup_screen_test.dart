@@ -89,14 +89,16 @@ void main() {
   }
 
   group('PetSetupScreen', () {
-    testWidgets('renders title, subtitle, species grid and a disabled CTA until a name is typed', (tester) async {
+    testWidgets('renders title, the locked-species portrait and a disabled CTA until a name is typed', (tester) async {
       await tester.pumpWidget(buildThemedTestableWidget());
       await tester.pump();
 
       expect(find.text('Crie seu Pet'), findsOneWidget);
-      expect(find.text('Escolha uma espécie'), findsOneWidget);
-      expect(find.text('Raposa'), findsOneWidget);
-      expect(find.text('Cachorro'), findsOneWidget);
+      // Picker escondido enquanto o custo de rigging no Rive prende cada app
+      // a uma mascote fixa (Wallet = DOG) — ver _kSpeciesPickerVisible.
+      expect(find.text('Escolha uma espécie'), findsNothing);
+      expect(find.byType(GridView), findsNothing);
+      expect(find.byType(Image), findsOneWidget);
       expect(find.text('Criar meu Pet e continuar'), findsOneWidget);
 
       final button = tester.widget<GameButton>(find.byType(GameButton));
@@ -104,12 +106,11 @@ void main() {
     });
 
     testWidgets(
-      'selecting a species and typing a name enables the CTA; submitting configures the pet, saves the name and moves on to MentorWelcomeScreen',
+      'typing a name enables the CTA; submitting configures the default species, saves the name and moves on to MentorWelcomeScreen',
       (tester) async {
         await tester.pumpWidget(buildThemedTestableWidget());
         await tester.pump();
 
-        await tester.tap(find.text('Cachorro'));
         await tester.enterText(find.byType(TextField), 'Toby');
         await tester.pump();
 

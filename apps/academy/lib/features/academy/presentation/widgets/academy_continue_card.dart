@@ -44,8 +44,7 @@ class AcademyContinueCard extends StatelessWidget {
             GameButton(
               label: Translator.translate(AppStrings.academyStartLessonButton),
               icon: Icons.play_arrow_rounded,
-              colors: const [AppColors.neonViolet, AppColors.neonPink],
-              pulse: true,
+              color: AppColors.neonViolet,
               onPressed: onStart,
             ),
           ],

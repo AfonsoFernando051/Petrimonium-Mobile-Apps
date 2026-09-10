@@ -14,6 +14,8 @@ library;
 export 'src/config/petrimonium_environment.dart';
 export 'src/network/api_client.dart';
 export 'src/network/api_error_parser.dart';
+export 'src/network/api_exception.dart';
+export 'src/network/token_store.dart';
 export 'src/util/formatters.dart';
 export 'src/util/password_policy.dart';
 export 'src/util/user_scoped_prefs.dart';

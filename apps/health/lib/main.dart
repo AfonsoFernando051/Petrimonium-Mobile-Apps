@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 import 'core/app/app_shell.dart';
 import 'core/app/health_scope.dart';
-import 'core/config/api_config.dart';
 import 'core/i18n/locale_controller.dart';
-import 'core/network/api_client.dart';
 import 'core/theme/health_theme.dart';
 import 'features/auth/presentation/login_screen.dart';
 import 'features/health/data/remote_health_repository.dart';
@@ -15,9 +14,17 @@ import 'features/onboarding/presentation/quick_setup_screen.dart';
 import 'l10n/app_localizations.dart';
 
 void main() {
-  ApiConfig.assertConfiguredForRelease();
+  PetrimoniumEnvironment.assertConfiguredForRelease();
   runApp(const PetrimoniumHealthApp());
 }
+
+/// Health's own storage namespace for [SecureTokenStore], kept distinct from
+/// the shared client's defaults so an already-installed user's session
+/// survives moving onto this package rather than forcing a re-login.
+TokenStore _healthTokenStore() => SecureTokenStore(
+      accessKey: 'health_access_token',
+      refreshKey: 'health_refresh_token',
+    );
 
 class PetrimoniumHealthApp extends StatefulWidget {
   const PetrimoniumHealthApp({super.key});
@@ -35,7 +42,7 @@ class _PetrimoniumHealthAppState extends State<PetrimoniumHealthApp> {
   void initState() {
     super.initState();
     _localeController = LocaleController();
-    final repository = RemoteHealthRepository(ApiClient());
+    final repository = RemoteHealthRepository(ApiClient(tokenStore: _healthTokenStore()));
     _controller = HealthController(
       repository: repository,
       localeController: _localeController,

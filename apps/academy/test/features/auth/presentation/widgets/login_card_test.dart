@@ -6,8 +6,7 @@ import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_academy/features/auth/presentation/widgets/login_card.dart';
-import 'package:petrimonium_academy/features/auth/presentation/widgets/login_form.dart';
-import 'package:petrimonium_academy/features/auth/presentation/widgets/signup_form.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}

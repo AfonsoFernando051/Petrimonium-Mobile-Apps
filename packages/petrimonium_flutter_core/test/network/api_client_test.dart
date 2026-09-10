@@ -218,4 +218,63 @@ void main() {
       expect(sessionExpiredCount, 1);
     });
   });
+
+  group('ApiClient.unauthenticatedPost', () {
+    test('sends no Authorization header and does not read the stored token', () async {
+      await apiClient.unauthenticatedPost('/auth/login', {'email': 'a@b.com'});
+
+      final captured = verify(() => httpClient.post(
+            captureAny(),
+            headers: captureAny(named: 'headers'),
+            body: captureAny(named: 'body'),
+          )).captured;
+
+      expect((captured[0] as Uri).toString(), '${PetrimoniumEnvironment.baseUrl}/auth/login');
+      expect((captured[1] as Map<String, String>).containsKey('Authorization'), isFalse);
+      expect(captured[2], '{"email":"a@b.com"}');
+      verifyNever(() => secureStorage.read(key: any(named: 'key')));
+    });
+
+    test('does not retry on a 401 the way the authenticated methods do', () async {
+      when(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')))
+          .thenAnswer((_) async => http.Response('{}', 401));
+
+      final response = await apiClient.unauthenticatedPost('/auth/login', {});
+
+      expect(response.statusCode, 401);
+      verify(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body'))).called(1);
+    });
+  });
+
+  group('ApiClient.hasSession', () {
+    test('is true when an access token is stored', () async {
+      when(() => secureStorage.read(key: ApiClient.authTokenKey)).thenAnswer((_) async => 'abc123');
+
+      expect(await apiClient.hasSession(), isTrue);
+    });
+
+    test('is false when no access token is stored', () async {
+      when(() => secureStorage.read(key: ApiClient.authTokenKey)).thenAnswer((_) async => null);
+
+      expect(await apiClient.hasSession(), isFalse);
+    });
+  });
+
+  group('ApiClient.tokenStore', () {
+    test('exposes the pair-save/read/clear surface for repositories bypassing the auth flow', () async {
+      when(() => secureStorage.write(key: any(named: 'key'), value: any(named: 'value'))).thenAnswer((_) async {});
+      when(() => secureStorage.read(key: ApiClient.refreshTokenKey)).thenAnswer((_) async => 'refresh-abc');
+      when(() => secureStorage.delete(key: any(named: 'key'))).thenAnswer((_) async {});
+
+      await apiClient.tokenStore.saveTokens('access-abc', 'refresh-abc');
+      verify(() => secureStorage.write(key: ApiClient.authTokenKey, value: 'access-abc')).called(1);
+      verify(() => secureStorage.write(key: ApiClient.refreshTokenKey, value: 'refresh-abc')).called(1);
+
+      expect(await apiClient.tokenStore.readRefreshToken(), 'refresh-abc');
+
+      await apiClient.tokenStore.clear();
+      verify(() => secureStorage.delete(key: ApiClient.authTokenKey)).called(1);
+      verify(() => secureStorage.delete(key: ApiClient.refreshTokenKey)).called(1);
+    });
+  });
 }

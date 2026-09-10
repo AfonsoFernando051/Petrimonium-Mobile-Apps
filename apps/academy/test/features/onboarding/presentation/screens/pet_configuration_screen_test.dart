@@ -10,6 +10,7 @@ import 'package:petrimonium_academy/features/onboarding/presentation/screens/aca
 import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
 import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
+import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_species_selector.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/pet_configuration_screen.dart';
 
 class MockPetRepository extends Mock implements PetRepository {}
@@ -40,7 +41,7 @@ void main() {
   }
 
   group('PetConfigurationScreen', () {
-    testWidgets('renders the title, subtitle, species selector and name field', (tester) async {
+    testWidgets('renders the title, subtitle, locked-species portrait and name field', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       // Hosts CosmicBackground and a pulsing GameButton — both repeating
       // AnimationControllers, so never call pumpAndSettle.
@@ -53,15 +54,10 @@ void main() {
       );
       expect(find.text('Mas antes... eu preciso de um nome!'), findsOneWidget);
       expect(find.text('Como você gostaria de chamar seu companheiro?'), findsOneWidget);
-      // One species entry per PetSpecieEnum value — the screen's body is a
-      // vertically scrollable column, so later entries need scrolling into
-      // view first.
-      for (final specie in PetSpecieEnum.values) {
-        final finder = find.text(specie.displayLabel);
-        await tester.ensureVisible(finder);
-        await tester.pump();
-        expect(finder, findsOneWidget, reason: specie.name);
-      }
+      // Picker escondido enquanto o custo de rigging no Rive prende cada app
+      // a uma mascote fixa (Academy = WOLF) — ver _kSpeciesPickerVisible.
+      expect(find.byType(PetSpeciesSelector), findsNothing);
+      expect(find.byType(Image), findsOneWidget);
     });
 
     testWidgets('shows a required-name error when continuing without typing a name', (tester) async {
@@ -115,30 +111,6 @@ void main() {
       expect(find.byType(AcademyIntroScreen), findsOneWidget);
     });
 
-    testWidgets('selecting a different species passes it to configurePet on continue', (tester) async {
-      when(() => mockPetRepository.configurePet(any(), name: any(named: 'name'))).thenAnswer((_) async {});
-      when(() => mockMascotRepository.saveName(any())).thenAnswer((_) async {});
-
-      await tester.pumpWidget(buildTestableWidget());
-      await tester.pump();
-
-      final catEntry = find.text(PetSpecieEnum.CAT.displayLabel);
-      await tester.ensureVisible(catEntry);
-      await tester.pump();
-      await tester.tap(catEntry, warnIfMissed: false);
-      await tester.pump();
-
-      await tester.enterText(find.byType(TextField), 'Nino');
-      await tester.pump();
-
-      await tester.tap(find.text('Vamos começar!'), warnIfMissed: false);
-      await tester.pump();
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 350));
-
-      verify(() => mockPetRepository.configurePet(PetSpecieEnum.CAT, name: 'Nino')).called(1);
-    });
-
     testWidgets('shows a friendly error snackbar when configurePet fails', (tester) async {
       when(() => mockPetRepository.configurePet(any(), name: any(named: 'name'))).thenThrow(Exception('boom'));
 
@@ -154,28 +126,25 @@ void main() {
 
       expect(find.textContaining('Falha ao salvar o pet'), findsOneWidget);
     });
-    testWidgets('lays the step out as the canvas does: one flat column, species then name', (tester) async {
+    testWidgets('lays the step out as the canvas does: one flat column, portrait then name', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
       // O artboard `PetAcademy` não tem o painel lateral nem a cápsula
-      // circular do mascote — leva do rótulo da espécie direto para a grelha
-      // e daí para o nome.
+      // circular do mascote — leva do retrato estático direto para o nome
+      // (a grelha de espécies está escondida, ver _kSpeciesPickerVisible).
       expect(find.byType(PetPreviewPanel), findsNothing);
       expect(find.byType(PetHeroCapsule), findsNothing);
 
-      final speciesLabel = find.text('Escolha a espécie do seu companheiro');
+      final portrait = find.byType(Image);
       final nameLabel = find.text('Mas antes... eu preciso de um nome!');
-      expect(speciesLabel, findsOneWidget);
+      expect(portrait, findsOneWidget);
       expect(nameLabel, findsOneWidget);
       expect(
         tester.getTopLeft(nameLabel).dy,
-        greaterThan(tester.getTopLeft(speciesLabel).dy),
-        reason: 'o nome vem depois da espécie, como no canvas',
+        greaterThan(tester.getTopLeft(portrait).dy),
+        reason: 'o nome vem depois do retrato, como no canvas',
       );
-
-      // Rótulos alinhados à esquerda, na mesma margem da grelha.
-      expect(tester.getTopLeft(speciesLabel).dx, tester.getTopLeft(nameLabel).dx);
     });
 
   });

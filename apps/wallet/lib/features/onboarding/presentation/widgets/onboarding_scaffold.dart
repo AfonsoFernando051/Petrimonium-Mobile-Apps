@@ -163,7 +163,6 @@ class OnboardingScaffold extends StatelessWidget {
                         label: ctaLabel,
                         icon: Icons.arrow_forward,
                         iconTrailing: true,
-                        pulse: true,
                         isLoading: isCtaLoading,
                         onPressed: onCta,
                       ),

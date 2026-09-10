@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 import '../../../core/config/api_config.dart';
 import '../../../core/money/money.dart';
-import '../../../core/network/api_client.dart';
 import '../../../core/profile/health_profile.dart';
 import '../domain/health_models.dart';
 import '../domain/mentor_models.dart';

@@ -110,10 +110,7 @@ class _PortfolioChoiceScreenState extends State<PortfolioChoiceScreen> {
                           AppStrings.portfolioGuidanceContinueButton,
                         ),
                         icon: Icons.school_outlined,
-                        colors: const [
-                          AppColors.neonViolet,
-                          AppColors.neonPink,
-                        ],
+                        color: AppColors.neonViolet,
                         onPressed: _startLearning,
                       ),
                       if (_petName != null && _petName!.isNotEmpty) ...[

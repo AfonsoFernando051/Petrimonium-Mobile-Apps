@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../tokens/app_color_tokens.dart';
+import '../tokens/app_radii.dart';
 import '../tokens/brand_accents.dart';
 
 /// Builds a `ThemeData` from a product's own tokens.
@@ -36,10 +37,12 @@ class PetrimoniumTheme {
     required PetrimoniumBrandAccents accents,
   }) {
     final base = brightness == Brightness.dark ? ThemeData.dark() : ThemeData.light();
+    final onPrimary = brightness == Brightness.dark ? Colors.black : Colors.white;
     final textTheme = GoogleFonts.outfitTextTheme(base.textTheme).apply(
       bodyColor: colors.textPrimary,
       displayColor: colors.textPrimary,
     );
+    final fieldRadius = BorderRadius.circular(AppRadii.md);
 
     return base.copyWith(
       brightness: brightness,
@@ -48,7 +51,7 @@ class PetrimoniumTheme {
       colorScheme: ColorScheme(
         brightness: brightness,
         primary: colors.primary,
-        onPrimary: brightness == Brightness.dark ? Colors.black : Colors.white,
+        onPrimary: onPrimary,
         secondary: colors.secondary,
         onSecondary: Colors.white,
         error: colors.error,
@@ -60,6 +63,36 @@ class PetrimoniumTheme {
       iconTheme: IconThemeData(color: colors.textSecondary),
       splashColor: colors.primary.withValues(alpha: 0.12),
       highlightColor: colors.primary.withValues(alpha: 0.06),
+      // Flat, no-elevation chrome for inputs and CTAs — the structural half
+      // of the shared visual language (spacing/radius/weight), independent
+      // of each product's own colors. See `docs/MOBILE_ARCHITECTURE.md`.
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: colors.surfaceMuted,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        border: OutlineInputBorder(borderRadius: fieldRadius, borderSide: BorderSide(color: colors.border)),
+        enabledBorder: OutlineInputBorder(borderRadius: fieldRadius, borderSide: BorderSide(color: colors.border)),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: fieldRadius,
+          borderSide: BorderSide(color: colors.primary, width: 1.4),
+        ),
+        errorBorder: OutlineInputBorder(borderRadius: fieldRadius, borderSide: BorderSide(color: colors.error)),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: fieldRadius,
+          borderSide: BorderSide(color: colors.error, width: 1.4),
+        ),
+        hintStyle: GoogleFonts.outfit(color: colors.textTertiary),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colors.primary,
+          foregroundColor: onPrimary,
+          minimumSize: const Size.fromHeight(56),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.xl)),
+          textStyle: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.w700),
+          elevation: 0,
+        ),
+      ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

@@ -13,9 +13,7 @@ import 'package:petrimonium_wallet/features/academy/data/repositories/academy_ca
 import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_wallet/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/features/auth/presentation/widgets/login_button.dart';
-import 'package:petrimonium_wallet/features/auth/presentation/widgets/signup_action_button.dart';
-import 'package:petrimonium_wallet/features/auth/presentation/widgets/signup_form.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/screens/mentor_screen.dart';
@@ -275,11 +273,11 @@ void main() {
     await tester.pump();
 
     // LoginScreen also has a GoogleSignInButton, which is GameButton-based
-    // too — target LoginButton specifically so the tap isn't ambiguous.
-    await tester.tap(find.byType(LoginButton));
-    // Not pumpAndSettle() anywhere in this test: both LoginScreen (its
-    // GameButton has pulse:true) and DashboardScreen (its CosmicBackground)
-    // contain indefinitely-repeating animations. Pump bounded steps instead:
+    // too — target the CTA by its label so the tap isn't ambiguous.
+    await tester.tap(find.widgetWithText(GameButton, 'Entrar'));
+    // Not pumpAndSettle() anywhere in this test: both LoginScreen and
+    // DashboardScreen mount a CosmicBackground with an indefinitely
+    // repeating animation. Pump bounded steps instead:
     // one to resolve login()'s future and start the loading state, one for
     // pushAndRemoveUntil's page transition, then several zero-duration
     // pumps to drain the chained async calls MyApp's re-resolve and
@@ -328,7 +326,7 @@ void main() {
       await tester.enterText(fields.at(3), 'Str0ngPass1');
       await tester.pump();
 
-      final signupAction = find.byType(SignupActionButton);
+      final signupAction = find.widgetWithText(GameButton, 'Cadastrar');
       await tester.ensureVisible(signupAction);
       await tester.tap(signupAction);
       await tester.pump();
@@ -369,7 +367,7 @@ void main() {
     );
     await tester.enterText(fields.first, 'investor@test.com');
     await tester.enterText(fields.last, 'Str0ngPass1');
-    await tester.tap(find.byType(LoginButton));
+    await tester.tap(find.widgetWithText(GameButton, 'Entrar'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
     for (var i = 0; i < 6; i++) {
