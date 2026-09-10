@@ -27,7 +27,6 @@ import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_academy/features/portfolio/domain/services/mission_display_catalog.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/controllers/portfolio_controller.dart';
-import 'package:petrimonium_academy/features/portfolio/presentation/widgets/shared/error_banner.dart';
 
 /// Home — the app's learning-first orchestration layer
 /// (`docs/PRODUCT_VISION.md` §8): where the user is in their learning
@@ -331,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // fetch failure that still has cached content to show.
             if (_academyController.catalogError != null &&
                 _academyController.snapshot == null) ...[
-              ErrorBanner(onRetry: _academyController.load),
+              ErrorBanner(message: 'Não foi possível atualizar seus dados. Puxe para atualizar.', onRetry: _academyController.load),
               const SizedBox(height: 12),
             ],
 

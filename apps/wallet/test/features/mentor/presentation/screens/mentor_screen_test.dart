@@ -9,7 +9,7 @@ import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat
 import 'package:petrimonium_wallet/features/mentor/presentation/screens/mentor_screen.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/widgets/chat_bubble.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/widgets/mentor_input_bar.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/widgets/suggested_prompt_chip.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 
 class MockMentorChatRepository extends Mock implements MentorChatRepository {}

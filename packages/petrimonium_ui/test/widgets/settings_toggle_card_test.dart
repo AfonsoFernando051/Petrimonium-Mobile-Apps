@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/features/settings/presentation/widgets/settings_toggle_card.dart';
+import '../test_theme.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   group('SettingsToggleCard', () {
     testWidgets('renders all children passed to it', (tester) async {
       await tester.pumpWidget(MaterialApp(
-        theme: AppTheme.dark,
+        theme: TestTheme.dark,
         home: Scaffold(
           body: SettingsToggleCard(children: const [
             Text('Row One'),
@@ -22,7 +22,7 @@ void main() {
 
     testWidgets('renders empty when no children are passed', (tester) async {
       await tester.pumpWidget(MaterialApp(
-        theme: AppTheme.dark,
+        theme: TestTheme.dark,
         home: const Scaffold(
           body: SettingsToggleCard(children: []),
         ),
@@ -36,7 +36,7 @@ void main() {
   group('SettingsSwitchTile', () {
     Widget buildTile({required bool value, required ValueChanged<bool> onChanged}) {
       return MaterialApp(
-        theme: AppTheme.dark,
+        theme: TestTheme.dark,
         home: Scaffold(
           body: SettingsSwitchTile(
             icon: Icons.notifications_active_outlined,

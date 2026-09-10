@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium_academy/core/constants/app_colors.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
+import '../tokens/app_color_tokens.dart';
 
 /// A tappable suggested-question chip shown when the conversation is empty,
 /// so a new user isn't staring at a blank input field.
@@ -28,7 +27,7 @@ class SuggestedPromptChip extends StatelessWidget {
           decoration: BoxDecoration(
             color: context.colors.surface.withValues(alpha: context.isDarkMode ? 0.5 : 0.9),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.neonCyan.withValues(alpha: 0.35)),
+            border: Border.all(color: context.brand.accent.withValues(alpha: 0.35)),
           ),
           child: Text(
             label,

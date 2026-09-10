@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_wallet/core/constants/app_colors.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
+import '../tokens/app_color_tokens.dart';
+import 'glass_card.dart';
 
 /// Three-dot pulse shown in a mentor-style bubble while a reply is pending —
 /// the "thinking" beat between sending and the typewriter reveal starting.
@@ -43,7 +43,7 @@ class _TypingIndicatorState extends State<TypingIndicator> with SingleTickerProv
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 6),
         child: GlassCard(
-          borderColor: AppColors.neonCyan.withValues(alpha: 0.35),
+          borderColor: context.brand.accent.withValues(alpha: 0.35),
           borderRadius: 18,
           borderWidth: 1,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -62,9 +62,9 @@ class _TypingIndicatorState extends State<TypingIndicator> with SingleTickerProv
                       child: Container(
                         width: 7,
                         height: 7,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: AppColors.neonCyan,
+                          color: context.brand.accent,
                         ),
                       ),
                     ),

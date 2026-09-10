@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_wallet/core/constants/app_colors.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
+import '../tokens/app_color_tokens.dart';
+import '../tokens/app_radii.dart';
+import '../tokens/app_spacing.dart';
+import '../tokens/app_text_styles.dart';
+import 'glass_card.dart';
 
 /// The card chrome wrapping a group of [SettingsSwitchTile]s — shared by
 /// Settings' Notifications and Privacy sections (previously each screen
@@ -15,7 +18,7 @@ class SettingsToggleCard extends StatelessWidget {
     final tokens = context.colors;
     return GlassCard(
       backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
-      borderColor: AppColors.neonCyan.withValues(alpha: 0.3),
+      borderColor: context.brand.accent.withValues(alpha: 0.3),
       borderRadius: AppRadii.xl,
       borderWidth: 1,
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),

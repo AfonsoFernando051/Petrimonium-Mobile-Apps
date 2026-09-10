@@ -10,7 +10,6 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/p
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/dividend_radar_section.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/passive_income_card.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/proventos_evolution_bar_card.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/error_banner.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 
 /// The "Proventos" (Passive Income) tab — its own dedicated home, no longer
@@ -71,7 +70,7 @@ class _PassiveIncomeScreenState extends State<PassiveIncomeScreen> {
             const SizedBox(height: 16),
 
             if (controller.error != null) ...[
-              ErrorBanner(onRetry: controller.refresh),
+              ErrorBanner(message: 'Não foi possível atualizar seus dados. Puxe para atualizar.', onRetry: controller.refresh),
               const SizedBox(height: 12),
             ],
 

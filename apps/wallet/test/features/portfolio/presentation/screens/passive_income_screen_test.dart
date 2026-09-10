@@ -8,7 +8,6 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/screens/passi
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/dividend_radar_section.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/passive_income_card.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/proventos_evolution_bar_card.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/error_banner.dart';
 
 import '../controllers/portfolio_controller_test.dart';
 import '../../domain/services/portfolio_test_fixtures.dart';

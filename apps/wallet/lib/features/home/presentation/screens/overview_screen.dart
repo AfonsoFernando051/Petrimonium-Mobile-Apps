@@ -15,7 +15,6 @@ import 'package:petrimonium_wallet/features/portfolio/domain/entities/wealth_cha
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/allocation_donut_card.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/holdings_section.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/error_banner.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealth_evolution_card.dart';
 
 /// Wallet's "Início" — the unified patrimônio + Mentor screen, absorbing
@@ -87,7 +86,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
             MentorInsightCard(onOpenMentor: widget.onOpenMentor),
 
             if (controller.error != null) ...[
-              ErrorBanner(onRetry: controller.refresh),
+              ErrorBanner(message: 'Não foi possível atualizar seus dados. Puxe para atualizar.', onRetry: controller.refresh),
               const SizedBox(height: 16),
             ],
 

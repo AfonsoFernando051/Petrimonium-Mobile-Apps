@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/appearance_option_card.dart';
 
 /// Settings → Appearance: lets the user pick Light / Dark / System. Wraps
 /// its own `ValueListenableBuilder` on [ThemeController.themeModeNotifier]

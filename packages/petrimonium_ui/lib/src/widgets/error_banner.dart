@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
+
+import '../tokens/app_color_tokens.dart';
+import 'glass_card.dart';
 
 /// Small non-blocking banner shown above a tab's content when a refresh
-/// fails but cached data is still being displayed — used by Home, Proventos
-/// and Missões so a transient network hiccup doesn't replace the whole
-/// screen with an error state.
+/// fails but cached data is still being displayed — so a transient network
+/// hiccup doesn't replace the whole screen with an error state.
+///
+/// [message] is a parameter rather than a constant: this package carries no
+/// string catalog, so each product supplies its own copy.
 class ErrorBanner extends StatelessWidget {
-  const ErrorBanner({super.key, required this.onRetry});
+  const ErrorBanner({
+    super.key,
+    required this.message,
+    required this.onRetry,
+  });
 
+  final String message;
   final VoidCallback onRetry;
 
   @override
@@ -26,7 +35,7 @@ class ErrorBanner extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Não foi possível atualizar seus dados. Puxe para atualizar.',
+                message,
                 style: TextStyle(color: tokens.textPrimary, fontSize: 12),
               ),
             ),

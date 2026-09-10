@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
+import '../tokens/app_color_tokens.dart';
 
 /// One selectable row in the Appearance section: an icon "preview" swatch
 /// previewing the option's own mood (not the app's current theme), a

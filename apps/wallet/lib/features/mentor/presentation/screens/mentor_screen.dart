@@ -11,8 +11,6 @@ import 'package:petrimonium_wallet/features/mentor/presentation/controllers/ment
 import 'package:petrimonium_wallet/features/mentor/presentation/screens/conversation_list_screen.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/widgets/chat_bubble.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/widgets/mentor_input_bar.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/widgets/suggested_prompt_chip.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/widgets/typing_indicator.dart';
 
 /// The "Mentor" tab — a full-screen chat with the user's pet acting as their
 /// personal investment mentor. Owns its own controller/state (mirrors how

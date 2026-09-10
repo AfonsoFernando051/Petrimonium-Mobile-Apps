@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/settings_toggle_card.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 /// Settings → Notifications: daily-mission and achievement-alert toggles.
 class NotificationsSection extends StatelessWidget {

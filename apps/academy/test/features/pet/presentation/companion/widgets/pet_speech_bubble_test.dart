@@ -12,7 +12,7 @@ import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repo
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/comic_bubble_painter.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';

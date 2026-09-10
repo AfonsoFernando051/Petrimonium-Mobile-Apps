@@ -7,7 +7,6 @@ import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/enums/pet_speech_bubble_state.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/theme/pet_speech_bubble_style.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/comic_bubble_painter.dart';
 
 /// Premium comic-style speech bubble widget for the Pet Companion.
 ///

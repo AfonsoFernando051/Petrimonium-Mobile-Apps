@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/widgets/typing_indicator.dart';
+import '../test_theme.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   Widget buildTestableWidget() {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: const Scaffold(body: TypingIndicator()),
     );
   }

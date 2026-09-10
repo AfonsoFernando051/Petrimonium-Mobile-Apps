@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/settings/presentation/widgets/privacy_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/settings_toggle_card.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
   setUp(() {
