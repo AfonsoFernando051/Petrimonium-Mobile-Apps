@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/core/theme/app_theme.dart';
-import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/account_section.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+
+import '../../test_theme.dart';
 
 void main() {
-  setUp(() {
-    Translator.currentLanguage = 'pt';
-  });
-
   Widget buildTestableWidget({String? email, VoidCallback? onLogout, VoidCallback? onDeleteAccount}) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
         body: AccountSection(
           sectionLabel: (label) => Text(label),
+          sectionTitle: 'Conta',
+          logoutLabel: 'Sair',
+          deleteAccountLabel: 'Excluir minha conta',
           email: email,
           onLogout: onLogout ?? () {},
           onDeleteAccount: onDeleteAccount ?? () {},

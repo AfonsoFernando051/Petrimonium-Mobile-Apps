@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
 
 /// Settings → Account: signed-in email + logout.
+///
+/// Copy arrives as parameters — see [PrivacySection] for why.
 class AccountSection extends StatelessWidget {
   const AccountSection({
     super.key,
     required this.sectionLabel,
+    required this.sectionTitle,
+    required this.logoutLabel,
+    required this.deleteAccountLabel,
     required this.email,
     required this.onLogout,
     required this.onDeleteAccount,
   });
 
   final Widget Function(String label) sectionLabel;
+  final String sectionTitle;
+  final String logoutLabel;
+  final String deleteAccountLabel;
   final String? email;
   final VoidCallback onLogout;
   final VoidCallback onDeleteAccount;
@@ -24,7 +30,7 @@ class AccountSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        sectionLabel(Translator.translate(AppStrings.accountSectionTitle).toUpperCase()),
+        sectionLabel(sectionTitle.toUpperCase()),
         GlassCard(
           backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
           // Contorno neutro: o artboard `SettingsWallet` usa a mesma linha
@@ -63,7 +69,7 @@ class AccountSection extends StatelessWidget {
                   onPressed: onLogout,
                   icon: Icon(Icons.logout, color: tokens.error, size: 17),
                   label: Text(
-                    Translator.translate(AppStrings.logoutButton),
+                    logoutLabel,
                     style: TextStyle(color: tokens.error, fontSize: 14, fontWeight: FontWeight.w700),
                   ),
                   style: OutlinedButton.styleFrom(
@@ -87,7 +93,7 @@ class AccountSection extends StatelessWidget {
                       onPressed: onDeleteAccount,
                       icon: Icon(Icons.delete_outline, color: tokens.error, size: 17),
                       label: Text(
-                        Translator.translate(AppStrings.deleteAccountButton),
+                        deleteAccountLabel,
                         style: TextStyle(color: tokens.error, fontSize: 14, fontWeight: FontWeight.w700),
                       ),
                       style: TextButton.styleFrom(

@@ -1,3 +1,4 @@
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -11,7 +12,6 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/navigation/start_route_resolver.dart';
-import 'package:petrimonium_academy/core/preferences/country_preference.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_academy/features/dashboard/presentation/screens/dashboard_screen.dart';

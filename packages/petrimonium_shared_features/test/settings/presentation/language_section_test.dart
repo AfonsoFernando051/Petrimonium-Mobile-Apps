@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/settings/presentation/widgets/language_section.dart';
+
+import '../../test_theme.dart';
 
 void main() {
-  setUp(() {
-    Translator.currentLanguage = 'pt';
-  });
-
-  Widget buildTestableWidget({ValueChanged<String>? onLanguageSelected}) {
+  Widget buildTestableWidget({ValueChanged<String>? onLanguageSelected, String selectedLanguage = 'pt'}) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
-        body: LanguageSection(sectionLabel: (label) => Text(label), onLanguageSelected: onLanguageSelected ?? (_) {}),
+        body: LanguageSection(
+          sectionLabel: (label) => Text(label),
+          sectionTitle: 'Idioma',
+          portugueseLabel: 'Português (Brasil)',
+          europeanPortugueseLabel: 'Português (Portugal)',
+          englishLabel: 'English',
+          spanishLabel: 'Español',
+          selectedLanguage: selectedLanguage,
+          onLanguageSelected: onLanguageSelected ?? (_) {},
+        ),
       ),
     );
   }
@@ -39,9 +44,8 @@ void main() {
       expect(tester.widgetList<OptionRow>(find.byType(OptionRow)).where((r) => r.selected).length, 1);
     });
 
-    testWidgets('shows the check next to English when currentLanguage is en', (tester) async {
-      Translator.currentLanguage = 'en';
-      await tester.pumpWidget(buildTestableWidget());
+    testWidgets('shows the check next to English when the selected language is en', (tester) async {
+      await tester.pumpWidget(buildTestableWidget(selectedLanguage: 'en'));
 
       final englishRow = find.ancestor(of: find.text('English'), matching: find.byType(InkWell));
       expect(find.descendant(of: englishRow, matching: find.byIcon(Icons.check)), findsOneWidget);

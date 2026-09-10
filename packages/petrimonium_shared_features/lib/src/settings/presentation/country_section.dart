@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_academy/core/constants/app_strings.dart';
-import 'package:petrimonium_academy/core/preferences/country_preference.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/core/utils/translator.dart';
 
 /// Settings → País: BR/PT. Mesma anatomia da [LanguageSection]; a diferença é
 /// que nenhuma opção vem seleccionada enquanto a conta não escolher.
+///
+/// Copy arrives as parameters — see [PrivacySection] for why. The selection
+/// still comes straight from [CountryPreference], so this section keeps
+/// rebuilding itself on a country change exactly as before.
 class CountrySection extends StatelessWidget {
-  const CountrySection({super.key, required this.sectionLabel, required this.onCountrySelected});
+  const CountrySection({
+    super.key,
+    required this.sectionLabel,
+    required this.sectionTitle,
+    required this.brazilLabel,
+    required this.portugalLabel,
+    required this.onCountrySelected,
+  });
 
   final Widget Function(String label) sectionLabel;
+  final String sectionTitle;
+  final String brazilLabel;
+  final String portugalLabel;
   final ValueChanged<String> onCountrySelected;
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
     final countries = [
-      (code: 'BR', label: Translator.translate(AppStrings.countryBrazil), flag: '🇧🇷'),
-      (code: 'PT', label: Translator.translate(AppStrings.countryPortugal), flag: '🇵🇹'),
+      (code: 'BR', label: brazilLabel, flag: '🇧🇷'),
+      (code: 'PT', label: portugalLabel, flag: '🇵🇹'),
     ];
 
     return ValueListenableBuilder<String?>(
@@ -26,7 +38,7 @@ class CountrySection extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            sectionLabel(Translator.translate(AppStrings.countrySectionTitle).toUpperCase()),
+            sectionLabel(sectionTitle.toUpperCase()),
             GlassCard(
               backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
               // Contorno neutro e raio 18, como no artboard `SettingsWallet`.

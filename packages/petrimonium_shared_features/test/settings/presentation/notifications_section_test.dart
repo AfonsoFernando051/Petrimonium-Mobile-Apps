@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/settings/presentation/widgets/notifications_section.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
-void main() {
-  setUp(() {
-    Translator.currentLanguage = 'pt';
-  });
+import '../../test_theme.dart';
 
+void main() {
   Widget buildTestableWidget({
     bool dailyMissionReminders = true,
     bool achievementAlerts = true,
@@ -17,10 +13,13 @@ void main() {
     ValueChanged<bool>? onAchievementAlertsChanged,
   }) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
         body: NotificationsSection(
           sectionLabel: (label) => Text(label),
+          sectionTitle: 'Notificações',
+          dailyMissionRemindersLabel: 'Lembretes de missões diárias',
+          achievementAlertsLabel: 'Alertas de conquistas',
           dailyMissionReminders: dailyMissionReminders,
           achievementAlerts: achievementAlerts,
           onDailyMissionRemindersChanged: onDailyMissionRemindersChanged ?? (_) {},

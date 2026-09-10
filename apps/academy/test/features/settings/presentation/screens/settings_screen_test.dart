@@ -10,12 +10,6 @@ import 'package:petrimonium_academy/features/auth/presentation/screens/login_scr
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/settings/data/repositories/settings_repository.dart';
 import 'package:petrimonium_academy/features/settings/presentation/screens/settings_screen.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/account_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/appearance_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/companion_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/language_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/notifications_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/privacy_section.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -79,6 +73,27 @@ void main() {
       expect(find.byType(AccountSection), findsOneWidget);
       expect(find.text('user@example.com'), findsOneWidget);
       expect(find.text('Rex'), findsOneWidget);
+    });
+
+    // The sections live in `petrimonium_shared_features` and are handed their
+    // copy, so a section rendering at all no longer proves this screen passed
+    // it the right strings — findsOneWidget above would still pass with every
+    // key mis-wired. These assert the wiring itself.
+    testWidgets('hands each section the copy it is supposed to show', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      for (final title in ['COMPANHEIRO', 'IDIOMA', 'PAÍS', 'APARÊNCIA', 'NOTIFICAÇÕES', 'PRIVACIDADE', 'CONTA']) {
+        expect(find.text(title), findsOneWidget, reason: title);
+      }
+      expect(find.text('Nome do companheiro'), findsOneWidget);
+      expect(find.text('Português (Brasil)'), findsOneWidget);
+      expect(find.text('Brasil'), findsOneWidget);
+      expect(find.text('Claro'), findsOneWidget);
+      expect(find.text('Lembretes de missões diárias'), findsOneWidget);
+      expect(find.text('Aparecer nos rankings'), findsOneWidget);
+      expect(find.text('Sair'), findsOneWidget);
     });
 
     testWidgets('toggling a notification switch persists the new value to SharedPreferences', (

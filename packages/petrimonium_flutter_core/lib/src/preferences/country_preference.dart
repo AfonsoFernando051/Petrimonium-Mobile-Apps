@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../i18n/translator_engine.dart';
+
 /// País da conta, guardado localmente e sincronizado com
-/// `/api/settings/country`. Segue a forma do [Translator] — notifier para os
-/// widgets reagirem sem pacote de estado — mas o valor arranca a null de
+/// `/api/settings/country`. Segue a forma do [TranslatorEngine] — notifier para
+/// os widgets reagirem sem pacote de estado — mas o valor arranca a null de
 /// propósito: null é "ainda não escolheu", e o país nunca se infere do
 /// dispositivo (decisão de produto: país, moeda e idioma são escolhas
 /// independentes e explícitas).

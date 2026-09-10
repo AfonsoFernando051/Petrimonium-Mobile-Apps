@@ -195,33 +195,41 @@ it is product-branded no matter how identical the source looks.
 
 ## What is deliberately still duplicated
 
-Academy and Wallet still hold 39 clone files in `lib/` (~4200 lines) and 40
-in `test/` (~3800). That is down from 80 and 93, and every one that is left
-is behind a decision or is duplicated on purpose — the mechanical extractions
-are done. The counts have not moved because these files were always
-byte-identical; what changed is that the largest blocker is no longer a
-product decision, only a design one.
+Academy and Wallet still hold 31 clone files in `lib/` (~3700 lines) and 34
+in `test/` (~3500), down from 80 and 93. Every one that is left is behind a
+decision or is duplicated on purpose.
 
-**1. Reaching the translator from a package (24 of the 39).** Settings, the
-Mentor screens, the auth screens and the Pet's speech all bind to `Translator`
-and `AppStrings`. What blocks them now is *only* that those two are app-local
-classes: a widget in a package has no way to call them.
+**1. Reaching the translator from a package (12 of the 31).** The Mentor
+screens, the auth screens and the Pet's speech still bind to `Translator` and
+`AppStrings`. What blocks them is *only* that those two are app-local classes:
+a widget in a package has no way to call them.
+
+Settings was the first slice through this and shows the shape the rest should
+take: the seven section widgets take their copy as constructor parameters, the
+way `LoginForm` already did, and the screen — which does have a `Translator` —
+resolves the keys and passes them in. No new mechanism, no global to
+initialise, and a wrong key is a compile error rather than a key rendered raw
+on screen. `CompanionSection` is the reason the colour goes the same way:
+`AppColors.neonPink` is hot pink in Academy and emerald in Wallet, so it takes
+an `accentColor` too.
+
+The cost is that "the section rendered" no longer proves the screen passed it
+the right strings, so each app's `settings_screen_test` now asserts the copy
+itself. Budget one such test per screen that gets this treatment.
 
 The copy itself is no longer in the way. Measured rather than assumed, the two
 catalogs held 1377 (language, key) pairs in common and **1324 of them were
 already identical** — the real divergence is 18 keys, which is brand voice
 (`brandTagline`, `meetPetIntro`, the Academy intro) and nothing else. Those
 1324 now live once in `sharedCopy`; each app keeps its 18 overrides plus the
-strings for screens the sibling does not have. All 24 files are byte-identical
+strings for screens the sibling does not have. All of these files are byte-identical
 between the apps, so every key they touch is by construction in the shared
 452 — none of them needs a wording decision to move.
 
-What is left is a design choice about the seam, not about copy: a package-level
-widget needs some way to resolve a key. Passing an engine through 24 files is
-plumbing; a configured singleton matches the static-DI style `Translator`
-already uses but adds a "must be initialized first" failure mode. Three of the
-24 sit in the data layer (`settings_repository`, `onboarding_remote_datasource`,
-`mentor_chat_repository`), which rules out an `InheritedWidget`.
+Two more files only ever wanted the language *code*
+(`onboarding_remote_datasource`, `mentor_chat_repository` — `?lang=` and a
+`language:` argument). Those take a `String`, not a translator, and are not
+part of this blocker at all.
 
 An earlier version of this section claimed the catalogs had "already diverged
 by roughly 650 lines" and that converging on `gen_l10n` was the obvious
@@ -231,7 +239,9 @@ domain and data code (`level_title`, `friendly_error_message`, three
 repositories/datasources) where no context exists. Migrating would mean either
 pushing `BuildContext` into the domain, which the layering guard now forbids,
 or restructuring those callers to return keys. That is an architecture change,
-not the mechanical migration the old text implied.
+not the mechanical migration the old text implied. `friendlyErrorCopy` and
+`levelTierKey` show the way out where it is worth taking: the rule returns a
+key, and the product resolves it.
 
 **2. Whether `AppEvent` becomes an ecosystem type.** The Pet companion UI
 (`pet_rive_companion`, `pet_mascot_widget`, `mascot_controller`,

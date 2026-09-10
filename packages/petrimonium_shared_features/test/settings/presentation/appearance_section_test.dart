@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/core/theme/app_theme.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/settings/presentation/widgets/appearance_section.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../test_theme.dart';
 
 void main() {
   setUp(() {
-    Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     ThemeController.themeModeNotifier.value = ThemeMode.system;
   });
 
   Widget buildTestableWidget() {
     return MaterialApp(
-      theme: AppTheme.dark,
-      home: Scaffold(body: AppearanceSection(sectionLabel: (label) => Text(label))),
+      theme: TestTheme.dark,
+      home: Scaffold(
+        body: AppearanceSection(
+          sectionLabel: (label) => Text(label),
+          sectionTitle: 'Aparência',
+          lightLabel: 'Claro',
+          lightDescription: 'Brilhante, limpo e acolhedor',
+          darkLabel: 'Escuro',
+          darkDescription: 'Premium, imersivo e futurista',
+          systemLabel: 'Sistema',
+          systemDescription: 'Segue as configurações do aparelho',
+        ),
+      ),
     );
   }
 

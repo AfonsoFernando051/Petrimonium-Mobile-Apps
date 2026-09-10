@@ -13,6 +13,7 @@ library;
 
 export 'src/config/petrimonium_environment.dart';
 export 'src/i18n/translator_engine.dart';
+export 'src/preferences/country_preference.dart';
 export 'src/network/api_client.dart';
 export 'src/network/api_error_parser.dart';
 export 'src/network/api_exception.dart';

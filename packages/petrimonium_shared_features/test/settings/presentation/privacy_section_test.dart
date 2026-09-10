@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/core/theme/app_theme.dart';
-import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/privacy_section.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
-void main() {
-  setUp(() {
-    Translator.currentLanguage = 'pt';
-  });
+import '../../test_theme.dart';
 
+void main() {
   Widget buildTestableWidget({bool showOnRankings = true, ValueChanged<bool>? onChanged}) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
         body: PrivacySection(
           sectionLabel: (label) => Text(label),
+          sectionTitle: 'Privacidade',
+          showOnRankingsLabel: 'Aparecer nos rankings',
           showOnRankings: showOnRankings,
           onShowOnRankingsChanged: onChanged ?? (_) {},
         ),

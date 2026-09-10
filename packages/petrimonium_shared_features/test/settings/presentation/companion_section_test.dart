@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/settings/presentation/widgets/companion_section.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+
+import '../../test_theme.dart';
 
 void main() {
-  setUp(() {
-    Translator.currentLanguage = 'pt';
-  });
-
-  Widget buildTestableWidget({String? petName, VoidCallback? onRename}) {
+  Widget buildTestableWidget({String? petName, VoidCallback? onRename, Color accentColor = const Color(0xFFFF2A85)}) {
     return MaterialApp(
-      theme: AppTheme.dark,
+      theme: TestTheme.dark,
       home: Scaffold(
-        body: CompanionSection(sectionLabel: (label) => Text(label), petName: petName, onRename: onRename ?? () {}),
+        body: CompanionSection(
+          sectionLabel: (label) => Text(label),
+          sectionTitle: 'Companheiro',
+          renamePetLabel: 'Nome do companheiro',
+          renamePetButtonLabel: 'Renomear',
+          accentColor: accentColor,
+          petName: petName,
+          onRename: onRename ?? () {},
+        ),
       ),
     );
   }
@@ -48,6 +52,18 @@ void main() {
       await tester.pump();
 
       expect(tapped, isTrue);
+    });
+
+    testWidgets('paints the icon and the rename button in the accent it is given', (tester) async {
+      // This section used to read `AppColors.neonPink`, which is hot pink in
+      // Academy and emerald in Wallet. Hard-coding either would silently
+      // re-skin the other product, so the colour has to come from the caller.
+      const accent = Color(0xFF3FE0B0);
+      await tester.pumpWidget(buildTestableWidget(petName: 'Rex', accentColor: accent));
+
+      expect(tester.widget<Icon>(find.byIcon(Icons.pets)).color, accent);
+      final label = tester.widget<Text>(find.text('Renomear'));
+      expect(label.style?.color, accent);
     });
   });
 }
