@@ -6,9 +6,11 @@ import 'package:petrimonium_wallet/core/utils/display_name.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/widgets/layer_chip.dart';
+import 'package:petrimonium_wallet/features/home/presentation/widgets/home_pet_hero.dart';
 import 'package:petrimonium_wallet/features/home/presentation/widgets/mentor_insight_card.dart';
 import 'package:petrimonium_wallet/features/home/presentation/widgets/portfolio_not_connected_card.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_wallet/features/portfolio/domain/entities/wealth_change_breakdown.dart';
@@ -29,7 +31,13 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealt
 /// No own `Scaffold`/`AppBar`/background — embedded directly in
 /// `DashboardScreen`'s shared chrome.
 class OverviewScreen extends StatefulWidget {
-  const OverviewScreen({super.key, required this.controller, required this.onOpenMentor});
+  const OverviewScreen({
+    super.key,
+    required this.controller,
+    required this.onOpenMentor,
+    required this.mascotController,
+    this.heroAnchor,
+  });
 
   final PortfolioController controller;
 
@@ -37,6 +45,18 @@ class OverviewScreen extends StatefulWidget {
   /// (Home's Mentor card's "Por que estou vendo isto?") — `null` opens a
   /// blank chat.
   final ValueChanged<int?> onOpenMentor;
+
+  /// Drives the big [HomePetHero] treatment — shown large in the
+  /// empty-portfolio state and smaller alongside the greeting once a
+  /// portfolio exists (`DashboardScreen` owns the one instance for the
+  /// whole session, same as the AppBar's small companion avatar).
+  final MascotController mascotController;
+
+  /// Registers wherever [HomePetHero] actually renders on Home as the Pet's
+  /// on-screen position, so `PetSpeechBubbleOverlay` can glue a contextual
+  /// message to it instead of it going nowhere
+  /// (`DashboardScreen._heroAnchor`).
+  final PetSpeechBubbleAnchor? heroAnchor;
 
   @override
   State<OverviewScreen> createState() => _OverviewScreenState();
@@ -80,7 +100,25 @@ class _OverviewScreenState extends State<OverviewScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _Greeting(displayName: _displayName),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(child: _Greeting(displayName: _displayName)),
+                // Only alongside the greeting once a portfolio exists — the
+                // empty state already leads with the big hero treatment
+                // inside PortfolioNotConnectedCard, so this avoids showing
+                // the Pet twice on Home at once.
+                if (hasPortfolio) ...[
+                  const SizedBox(width: 12),
+                  HomePetHero(
+                    mascotController: widget.mascotController,
+                    anchor: widget.heroAnchor,
+                    size: 56,
+                    showGlow: false,
+                  ),
+                ],
+              ],
+            ),
             const SizedBox(height: 16),
 
             MentorInsightCard(onOpenMentor: widget.onOpenMentor),
@@ -94,7 +132,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
             ],
 
             if (!hasPortfolio)
-              const PortfolioNotConnectedCard()
+              PortfolioNotConnectedCard(mascotController: widget.mascotController, anchor: widget.heroAnchor)
             else ...[
               _WealthHeroCard(controller: controller),
               const SizedBox(height: 16),

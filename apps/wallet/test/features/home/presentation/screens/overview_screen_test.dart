@@ -7,6 +7,7 @@ import 'package:petrimonium_wallet/features/home/presentation/screens/overview_s
 import 'package:petrimonium_wallet/features/home/presentation/widgets/portfolio_not_connected_card.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/allocation_donut_card.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/holdings_section.dart';
@@ -15,9 +16,43 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealt
 import '../../../portfolio/presentation/controllers/portfolio_controller_test.dart';
 import 'package:petrimonium_shared_features/testing.dart';
 
+/// Minimal in-memory MascotRepository double — mirrors the one in
+/// `profile_screen_test.dart`/`mascot_controller_test.dart`; this screen
+/// only needs a working `MascotController` for its `HomePetHero`, not real
+/// persistence.
+class FakeMascotRepository implements MascotRepository {
+  @override
+  Future<PetProfile> loadProfile() async => PetProfile(specie: PetSpecieEnum.CAT);
+
+  @override
+  Future<void> saveName(String name) async {}
+
+  @override
+  Future<void> saveStage(PetEvolutionStage stage) async {}
+
+  @override
+  Future<void> saveXp(int xp) async {}
+
+  @override
+  Future<void> saveSpecie(PetSpecieEnum specie) async {}
+
+  @override
+  Future<void> saveNetWorth(double netWorth) async {}
+
+  @override
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
+
+  @override
+  Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
+
+  @override
+  Future<void> saveLastActiveAt(DateTime lastActiveAt) async {}
+}
+
 void main() {
   late FakePortfolioRepository repository;
   late PortfolioController controller;
+  late MascotController mascotController;
 
   setUp(() {
     Translator.currentLanguage = 'pt';
@@ -30,15 +65,19 @@ void main() {
       gamificationRepository: FakeGamificationRepository(),
       missionsRepository: FakeMissionsRepository(),
     );
+    mascotController = MascotController(repository: FakeMascotRepository());
   });
 
-  tearDown(() => controller.dispose());
+  tearDown(() {
+    controller.dispose();
+    mascotController.dispose();
+  });
 
   Widget buildTestableWidget() {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: OverviewScreen(controller: controller, onOpenMentor: (_) {}),
+        body: OverviewScreen(controller: controller, onOpenMentor: (_) {}, mascotController: mascotController),
       ),
     );
   }

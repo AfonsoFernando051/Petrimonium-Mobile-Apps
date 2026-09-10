@@ -78,6 +78,14 @@ class AppStrings {
   static const String homeHoldingsSectionTitle = 'homeHoldingsSectionTitle';
   static const String homeAddAssetLabel = 'homeAddAssetLabel';
 
+  // Home — empty-portfolio state: the Pet's speech-bubble caption above its
+  // big hero treatment, and the two ways to bring assets in (manual entry
+  // works today, B3 sync doesn't exist yet).
+  static const String portfolioNotConnectedPetCaption = 'portfolioNotConnectedPetCaption';
+  static const String connectAssetsManualCta = 'connectAssetsManualCta';
+  static const String connectAssetsB3Cta = 'connectAssetsB3Cta';
+  static const String connectAssetsB3Badge = 'connectAssetsB3Badge';
+
   // AddAssetScreen — Wallet's own single-asset "add asset" screen, distinct
   // from InvestmentConfigurationScreen's Academy-style onboarding wizard.
   static const String addAssetTitle = 'addAssetTitle';
