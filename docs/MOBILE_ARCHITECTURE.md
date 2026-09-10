@@ -205,11 +205,20 @@ per-app resolver behind — `conversation_list_route`, `level_title`,
 their very nature, so they register as clones forever. That is the shape
 working, not duplication left behind.
 
-**1. Reaching the translator from a package (9 of the 28).** The Pet
-companion widgets still bind to `Translator` and `AppStrings`. What blocks
-them is *only* that those two are app-local classes: a widget in a package has
-no way to call them. Four of the nine are now thin per-app resolvers, which
-stay by design.
+**1. Reaching the translator from a package (9 of the 28).** Counted
+honestly, this blocker is nearly spent. The nine break down as:
+
+| | files | status |
+| --- | --- | --- |
+| Thin per-app resolvers | `level_title`, `friendly_error_message`, `conversation_list_route`, `password_recovery_routes` | by design — these exist *because* the extraction worked |
+| The product-copy half | `pet_specie_enum` | by design — the rules half is already shared |
+| The app-level resolver | `settings_screen` | by design — it is the thing that owns `Translator` |
+| Blocked by `AppEvent`, not by copy | `pet_interaction_sheet`, `pet_companion_header` | both reach `PetCompanionController`, which listens on `AppEventBus` — see 2 |
+| Actually ready to move | `pet_comic_speech_bubble` | one copy key, no `AppEvent`; brings three siblings (`pet_message`, `pet_speech_bubble_state`, `pet_speech_bubble_style`) with it |
+
+So only one file is still held up by the translator seam alone. Two more are
+really blocker 2 wearing a different hat, and the other six are the pattern
+working rather than debt.
 
 Settings was the first slice through this and shows the shape the rest should
 take: the seven section widgets take their copy as constructor parameters, the
