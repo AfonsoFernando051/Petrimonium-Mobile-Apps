@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:petrimonium_academy/core/constants/api_constants.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
+import 'academy_catalog_snapshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Top-level (not a method) so [compute] can run it on a background isolate —
@@ -21,6 +20,12 @@ AcademyCatalogSnapshot _parseAcademyCatalog(String rawJson) {
 /// re-serialized model), so a cache round-trip is byte-identical to what
 /// the backend actually sent.
 class AcademyCatalogRepository {
+  /// The curriculum-catalog route. It lives here rather than in each app's
+  /// ApiConstants because it is this shared feature's own contract with the
+  /// backend — both apps already pointed at exactly this path, and a single
+  /// definition is what stops them from drifting apart.
+  static const String catalogEndpoint = '/api/v1/academy/catalog';
+
   AcademyCatalogRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
   final ApiClient _apiClient;
@@ -56,7 +61,7 @@ class AcademyCatalogRepository {
   /// with a stale-but-present cache vs. no cache at all (see
   /// `AcademyController.load`).
   Future<AcademyCatalogSnapshot> fetchAndCache(String lang) async {
-    final response = await _apiClient.get('${ApiConstants.academyCatalogEndpoint}?lang=$lang');
+    final response = await _apiClient.get('$catalogEndpoint?lang=$lang');
     if (response.statusCode != 200) {
       throw Exception(
         extractErrorDetail(response, fallback: 'Failed to load academy catalog. Status Code: ${response.statusCode}'),

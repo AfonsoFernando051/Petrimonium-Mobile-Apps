@@ -1,5 +1,4 @@
-import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/mastery_tier.dart';
 
 /// Derives **Mastery** — a performance-based signal, deliberately distinct

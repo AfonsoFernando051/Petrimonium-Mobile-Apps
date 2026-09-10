@@ -1,7 +1,6 @@
 import 'dart:math';
 
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Creates a session-specific presentation of a lesson's choice questions.
 ///

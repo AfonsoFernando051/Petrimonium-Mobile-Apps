@@ -8,8 +8,6 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/all_modules_screen.dart';
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/home/presentation/screens/home_screen.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/next_action_card.dart';

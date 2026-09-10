@@ -5,8 +5,7 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/academy_domain_detail_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/financial_lab_home_screen.dart';
@@ -18,7 +17,6 @@ import 'package:petrimonium_academy/features/academy/presentation/widgets/academ
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_mastery_section.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_review_card.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/financial_lab_entry_card.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 

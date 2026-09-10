@@ -5,9 +5,8 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/all_modules_screen.dart';
@@ -23,7 +22,6 @@ import 'package:petrimonium_academy/features/home/presentation/widgets/next_acti
 import 'package:petrimonium_academy/features/home/presentation/widgets/learning_hero_card.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/models/mission_display_catalog.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/controllers/portfolio_controller.dart';

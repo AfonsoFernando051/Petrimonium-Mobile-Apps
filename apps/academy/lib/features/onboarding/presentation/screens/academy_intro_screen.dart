@@ -5,7 +5,7 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/gamification_intro_screen.dart';

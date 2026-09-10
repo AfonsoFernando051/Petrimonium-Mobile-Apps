@@ -1,4 +1,3 @@
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Home's single, ranked answer to "what should I do now" — see

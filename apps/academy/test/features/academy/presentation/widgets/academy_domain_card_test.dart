@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/features/academy/presentation/icons/academy_icon_registry.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';

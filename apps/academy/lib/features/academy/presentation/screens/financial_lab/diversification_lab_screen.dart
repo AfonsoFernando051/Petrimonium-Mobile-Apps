@@ -7,7 +7,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/stat_card.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/diversification_calculator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_allocation_editor.dart';
@@ -16,7 +16,6 @@ import 'package:petrimonium_academy/features/academy/presentation/screens/financ
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_investment_type_labels.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_narrative_card.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';

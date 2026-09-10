@@ -1,4 +1,4 @@
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Whether a recommendation is the learner's next new lesson, or a past
 /// lesson worth revisiting because it wasn't answered perfectly the first

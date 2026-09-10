@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/lab_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 

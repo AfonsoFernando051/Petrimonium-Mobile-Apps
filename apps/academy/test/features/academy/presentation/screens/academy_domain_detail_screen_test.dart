@@ -5,11 +5,9 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/academy_domain_detail_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/school_detail_screen.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

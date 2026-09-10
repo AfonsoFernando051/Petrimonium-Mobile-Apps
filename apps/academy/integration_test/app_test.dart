@@ -15,11 +15,10 @@ import 'package:petrimonium_academy/features/academy/presentation/screens/lesson
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_domain_card.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/school_card.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lesson_completion_result.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_academy/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:petrimonium_academy/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/screens/mentor_screen.dart';

@@ -4,9 +4,8 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/xp_bar.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium_academy/features/home/domain/entities/next_action.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_academy/features/home/domain/entities/next_action.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/models/mission_display_catalog.dart';
 
 /// Home's single primary CTA — renders whichever [NextAction]

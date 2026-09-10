@@ -17,6 +17,15 @@
 /// color or a callback — see `docs/MOBILE_ARCHITECTURE.md`.
 library;
 
+export 'src/academy/data/academy_catalog_repository.dart';
+export 'src/academy/data/academy_catalog_snapshot.dart';
+export 'src/academy/data/academy_progress_local_repository.dart';
+export 'src/academy/domain/academy_domain.dart';
+export 'src/academy/domain/academy_module.dart';
+export 'src/academy/domain/lesson.dart';
+export 'src/academy/domain/lesson_step.dart';
+export 'src/academy/domain/school.dart';
+export 'src/academy/presentation/academy_icon_registry.dart';
 export 'src/auth/presentation/login_form.dart';
 export 'src/auth/presentation/signup_form.dart';
 export 'src/gamification/data/gamification_remote_datasource.dart';

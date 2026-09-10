@@ -1,11 +1,9 @@
 import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/events/app_event_bus.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium_wallet/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium_wallet/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/datasources/onboarding_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_state_repository.dart';

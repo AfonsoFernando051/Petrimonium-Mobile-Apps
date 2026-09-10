@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:petrimonium_academy/features/academy/presentation/icons/academy_icon_registry.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
@@ -8,8 +8,6 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/cosmic_background.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/school.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/school_detail_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_catalog_error_state.dart';

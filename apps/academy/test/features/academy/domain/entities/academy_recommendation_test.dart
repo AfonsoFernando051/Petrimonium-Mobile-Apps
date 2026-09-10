@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   group('AcademyRecommendation', () {

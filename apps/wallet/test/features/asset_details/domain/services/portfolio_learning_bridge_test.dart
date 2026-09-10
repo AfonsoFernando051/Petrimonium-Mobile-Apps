@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium_wallet/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/services/portfolio_learning_bridge.dart';
 

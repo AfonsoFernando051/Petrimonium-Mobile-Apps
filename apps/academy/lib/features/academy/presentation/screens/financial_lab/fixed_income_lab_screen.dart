@@ -7,7 +7,7 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/labeled_slider.dart';
 import 'package:petrimonium_academy/core/widgets/stat_card.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/fixed_income_calculator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_comprehension_check.dart';
@@ -17,7 +17,6 @@ import 'package:petrimonium_academy/features/academy/presentation/screens/financ
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_stacked_bar_chart.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// The Financial Lab's Fixed Income simulator (`docs/DECISIONS.md`

@@ -6,7 +6,7 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/cosmic_background.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/module_detail_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_catalog_error_state.dart';

@@ -4,11 +4,10 @@ import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/lab_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_completion_footer.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

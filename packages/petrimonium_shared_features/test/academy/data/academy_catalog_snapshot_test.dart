@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/features/academy/presentation/icons/academy_icon_registry.dart';
-import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 Map<String, dynamic> _fixtureJson() => {
   'domains': [
