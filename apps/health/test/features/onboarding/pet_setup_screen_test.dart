@@ -15,6 +15,11 @@ import 'package:petrimonium_health/l10n/app_localizations.dart';
 /// O catálogo de espécies é partilhado com a Wallet e a Academy — a conta é a
 /// mesma nos três apps. Um catálogo mais curto aqui deixaria um Pet criado
 /// noutro app sem representação nesta.
+///
+/// O picker de espécie está escondido (ver `_kSpeciesPickerVisible` no
+/// widget) enquanto o custo de rigging no Rive mantém cada app preso a uma
+/// mascote fixa — Health = fox. Estes testes cobrem o retrato estático + nome,
+/// não a grelha interativa.
 void main() {
   Future<void> pumpPetSetup(WidgetTester tester) async {
     final controller = HealthController(
@@ -37,25 +42,17 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('offers all seven species, in the design canvas order', (tester) async {
+  testWidgets('shows the locked species portrait and a name field, no picker', (tester) async {
     await pumpPetSetup(tester);
+    final l10n = AppLocalizations.of(tester.element(find.byType(PetSetupScreen)));
 
-    // Ordem do artboard `PetHealth`.
-    const expected = [
-      PetSpecies.fox,
-      PetSpecies.dog,
-      PetSpecies.cat,
-      PetSpecies.owl,
-      PetSpecies.wolf,
-      PetSpecies.bear,
-      PetSpecies.lion,
-    ];
-    expect(PetSpecies.values, expected);
+    // Uma única imagem: o retrato estático da espécie fixa, não a grelha.
+    expect(find.byType(Image), findsOneWidget);
+    expect(find.byType(GridView), findsNothing);
+    expect(find.text(l10n.petSetupSpeciesLabel), findsNothing);
 
-    for (final species in expected) {
-      expect(find.text(_label(tester, species)), findsOneWidget, reason: species.name);
-    }
-    expect(find.byType(Image), findsNWidgets(expected.length));
+    expect(find.byType(TextField), findsOneWidget);
+    expect(find.text(l10n.petSetupNameLabel), findsOneWidget);
   });
 
   test('every species resolves to art that actually exists on disk', () {
@@ -79,6 +76,7 @@ void main() {
     expect(PetSpecies.fromApiValue('LION'), PetSpecies.lion);
     expect(PetSpecies.fromApiValue('BEAR'), PetSpecies.bear);
   });
+
   testWidgets('lays the step out as the canvas does', (tester) async {
     await pumpPetSetup(tester);
     final l10n = AppLocalizations.of(tester.element(find.byType(PetSetupScreen)));
@@ -89,9 +87,10 @@ void main() {
     expect(dots, findsOneWidget);
     expect(tester.getTopLeft(dots).dy, lessThan(tester.getTopLeft(title).dy));
 
-    // Título e subtítulo à esquerda, na mesma margem dos rótulos.
-    final speciesLabel = find.text(l10n.petSetupSpeciesLabel);
-    expect(tester.getTopLeft(title).dx, tester.getTopLeft(speciesLabel).dx);
+    // Título e rótulo do nome à esquerda, na mesma margem (a espécie está
+    // escondida enquanto o picker fica desligado).
+    final nameLabel = find.text(l10n.petSetupNameLabel);
+    expect(tester.getTopLeft(title).dx, tester.getTopLeft(nameLabel).dx);
 
     // A nota de rodapé é uma caixa com fundo e contorno, não texto solto.
     final noteBox = find.ancestor(
@@ -103,24 +102,23 @@ void main() {
     expect(decoration.border, isNotNull);
   });
 
-  testWidgets('selection changes the label weight, never its colour', (tester) async {
+  testWidgets('gates the CTA on the pet name, not on a species choice', (tester) async {
     await pumpPetSetup(tester);
     final l10n = AppLocalizations.of(tester.element(find.byType(PetSetupScreen)));
 
-    Text labelOf(PetSpecies s) => tester.widget<Text>(find.text(_label(tester, s)));
+    HealthPrimaryButton cta() => tester.widget<HealthPrimaryButton>(find.byType(HealthPrimaryButton));
+    expect(cta().onPressed, isNull);
 
-    // fox é o pré-selecionado no artboard `PetHealth`.
-    expect(labelOf(PetSpecies.fox).style?.fontWeight, FontWeight.w700);
-    expect(labelOf(PetSpecies.lion).style?.fontWeight, FontWeight.w400);
-    // No canvas as sete espécies partilham a cor do rótulo.
-    expect(labelOf(PetSpecies.fox).style?.color, labelOf(PetSpecies.lion).style?.color);
-    expect(labelOf(PetSpecies.fox).style?.color, HealthColors.textSecondary);
-    expect(l10n.petSetupSpeciesLabel, isNotEmpty);
+    await tester.enterText(find.byType(TextField), 'Rex');
+    await tester.pump();
+
+    expect(cta().onPressed, isNotNull);
+    expect(l10n.petSetupNameLabel, isNotEmpty);
   });
 
   testWidgets('caps the content width on a desktop-sized window', (tester) async {
-    // Numa janela larga a coluna esticava a 1920px e a grelha dava cartões de
-    // ~480px — o passo do pet ocupava o ecrã inteiro com quatro espécies.
+    // Numa janela larga a coluna esticava a 1920px — o passo do pet ocupava
+    // o ecrã inteiro.
     tester.view.physicalSize = const Size(1920, 1080);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -128,34 +126,15 @@ void main() {
 
     await pumpPetSetup(tester);
 
-    // Medir o contentor, não a largura intrínseca do texto: esta última é a
-    // mesma com ou sem limite, e deixava o teste passar à mesma.
-    final grid = tester.getSize(find.byType(GridView));
-    expect(grid.width, lessThanOrEqualTo(HealthContent.bodyWidth));
+    final nameField = tester.getSize(find.byType(TextField));
+    expect(nameField.width, lessThanOrEqualTo(HealthContent.bodyWidth));
 
     final cta = tester.getSize(find.byType(HealthPrimaryButton));
     expect(cta.width, lessThanOrEqualTo(HealthContent.bodyWidth));
 
-    // As sete espécies continuam presentes, em duas linhas de quatro.
-    expect(find.byType(Image), findsNWidgets(PetSpecies.values.length));
-    final firstOfRow = tester.getTopLeft(find.text(_label(tester, PetSpecies.fox)));
-    final lastOfRow = tester.getTopLeft(find.text(_label(tester, PetSpecies.owl)));
-    expect(lastOfRow.dx - firstOfRow.dx, lessThan(HealthContent.bodyWidth));
+    // O retrato estático continua presente, único.
+    expect(find.byType(Image), findsOneWidget);
   });
-
-}
-
-String _label(WidgetTester tester, PetSpecies species) {
-  final l10n = AppLocalizations.of(tester.element(find.byType(PetSetupScreen)));
-  return switch (species) {
-    PetSpecies.fox => l10n.speciesFox,
-    PetSpecies.dog => l10n.speciesDog,
-    PetSpecies.cat => l10n.speciesCat,
-    PetSpecies.owl => l10n.speciesOwl,
-    PetSpecies.wolf => l10n.speciesWolf,
-    PetSpecies.bear => l10n.speciesBear,
-    PetSpecies.lion => l10n.speciesLion,
-  };
 }
 
 class _StubRepository implements HealthRepository {

@@ -32,38 +32,32 @@ abstract interface class TokenStore {
 /// without renaming its keys means an already-installed user's session
 /// survives the upgrade instead of forcing a re-login.
 ///
-/// [readTimeout] guards a read against a platform keyring that never
-/// answers — e.g. a locked GNOME keyring raising an unlock prompt with no
-/// session to show it in, which is not an exception, so no `try`/`catch`
-/// upstream can recover from it, and startup can't decide which screen to
-/// show until it knows whether a token exists. Timing out and reporting "no
-/// stored token" instead means the worst case is a valid session landing on
-/// the login screen (actionable), not a splash screen nobody can leave.
+/// Reads here are unbounded on purpose: a keyring that never answers is
+/// [ApiClient.hasSession]'s problem to guard against (it bounds the wait
+/// there, for the one caller — startup routing — that can't afford to hang),
+/// not every ordinary read. Applying a timeout uniformly here would mean a
+/// keyring that's merely slow to unlock mid-session gets read as "no token"
+/// on a routine API call, forcing a refresh that also times out and logs an
+/// otherwise-valid session out — worse than the request just waiting.
 final class SecureTokenStore implements TokenStore {
   SecureTokenStore({
     FlutterSecureStorage? storage,
     this.accessKey = defaultAccessKey,
     this.refreshKey = defaultRefreshKey,
-    Duration? readTimeout,
-  })  : _storage = storage ?? const FlutterSecureStorage(),
-        _readTimeout = readTimeout ?? const Duration(seconds: 5);
+  }) : _storage = storage ?? const FlutterSecureStorage();
 
   static const String defaultAccessKey = 'auth_token';
   static const String defaultRefreshKey = 'refresh_token';
 
   final FlutterSecureStorage _storage;
-  final Duration _readTimeout;
   final String accessKey;
   final String refreshKey;
 
-  Future<String?> _read(String key) =>
-      _storage.read(key: key).timeout(_readTimeout, onTimeout: () => null);
+  @override
+  Future<String?> readAccessToken() => _storage.read(key: accessKey);
 
   @override
-  Future<String?> readAccessToken() => _read(accessKey);
-
-  @override
-  Future<String?> readRefreshToken() => _read(refreshKey);
+  Future<String?> readRefreshToken() => _storage.read(key: refreshKey);
 
   @override
   Future<void> saveAccessToken(String token) => _storage.write(key: accessKey, value: token);

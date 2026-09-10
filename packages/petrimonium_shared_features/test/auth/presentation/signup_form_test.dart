@@ -23,7 +23,11 @@ void main() {
     return MaterialApp(
       theme: TestTheme.dark,
       home: Scaffold(
-        body: SignupForm(
+        // Both apps mount SignupForm inside a SingleChildScrollView — without
+        // it here, the checklist + confirm-password error overflow the
+        // fixed 800x600 test surface.
+        body: SingleChildScrollView(
+          child: SignupForm(
           nameHint: 'Nome',
           emailHint: 'E-mail',
           passwordHint: 'Senha',
@@ -37,6 +41,7 @@ void main() {
           onGoogleSignup: onGoogleSignup ?? () async {},
           onSuccess: onSuccess ?? () {},
           errorMessageBuilder: errorMessageBuilder ?? (e) => e.toString(),
+          ),
         ),
       ),
     );

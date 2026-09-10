@@ -5,20 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 void main() {
-  test('a keyring that never answers reads as "no stored token"', () async {
-    final store = SecureTokenStore(
-      storage: _HangingStorage(),
-      readTimeout: const Duration(milliseconds: 50),
-    );
-
-    expect(await store.readAccessToken(), isNull);
-    expect(await store.readRefreshToken(), isNull);
-  });
-
   test('a keyring that answers is read normally', () async {
     final store = SecureTokenStore(
       storage: _StubStorage({SecureTokenStore.defaultAccessKey: 'abc'}),
-      readTimeout: const Duration(seconds: 5),
     );
 
     expect(await store.readAccessToken(), 'abc');
@@ -38,10 +27,8 @@ void main() {
 
   test('ApiClient reports no session when the keyring hangs', () async {
     final api = ApiClient(
-      tokenStore: SecureTokenStore(
-        storage: _HangingStorage(),
-        readTimeout: const Duration(milliseconds: 50),
-      ),
+      tokenStore: SecureTokenStore(storage: _HangingStorage()),
+      sessionCheckTimeout: const Duration(milliseconds: 50),
     );
 
     // Must resolve rather than hang: this is the call a splash screen is

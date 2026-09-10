@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -36,6 +37,8 @@ class ApiClient {
   /// [baseUrl] and [refreshTokenEndpoint] default to
   /// [PetrimoniumEnvironment]; they are parameters only so tests can point a
   /// client at a fake host without touching global state.
+  ///
+  /// [sessionCheckTimeout] bounds [hasSession] alone — see its doc comment.
   ApiClient({
     http.Client? client,
     FlutterSecureStorage? secureStorage,
@@ -43,15 +46,18 @@ class ApiClient {
     String? baseUrl,
     String? refreshTokenEndpoint,
     void Function()? onSessionExpired,
+    Duration? sessionCheckTimeout,
   })  : _client = client ?? http.Client(),
         _tokenStore = tokenStore ?? SecureTokenStore(storage: secureStorage),
         _baseUrl = baseUrl ?? PetrimoniumEnvironment.baseUrl,
         _refreshTokenEndpoint =
             refreshTokenEndpoint ?? PetrimoniumEnvironment.refreshTokenEndpoint,
-        _onSessionExpired = onSessionExpired;
+        _onSessionExpired = onSessionExpired,
+        _sessionCheckTimeout = sessionCheckTimeout ?? const Duration(seconds: 5);
 
   final String _baseUrl;
   final String _refreshTokenEndpoint;
+  final Duration _sessionCheckTimeout;
 
   /// Invoked exactly once per definitive session loss, after both tokens have
   /// already been cleared. Null is a valid configuration (a client used for
@@ -99,7 +105,23 @@ class ApiClient {
   /// not validate the token against the backend — just answers "is there a
   /// session worth trying", which is what a splash screen needs before it
   /// can decide whether to route to login or straight into the app.
-  Future<bool> hasSession() async => (await readToken())?.isNotEmpty ?? false;
+  ///
+  /// Bounded by [_sessionCheckTimeout]: this is the one caller that can't
+  /// afford to hang on a platform keyring that never answers (e.g. a locked
+  /// GNOME keyring raising an unlock prompt with no session to show it in —
+  /// not an exception, so no `try`/`catch` upstream can recover from it). A
+  /// timed-out read reads as "no session", landing on the login screen
+  /// (actionable) instead of a splash screen nobody can leave. Every other
+  /// token read stays unbounded — see [SecureTokenStore]'s doc comment for
+  /// why the same guard there would be worse for those callers.
+  Future<bool> hasSession() async {
+    try {
+      final token = await readToken().timeout(_sessionCheckTimeout);
+      return token?.isNotEmpty ?? false;
+    } on TimeoutException {
+      return false;
+    }
+  }
 
   Future<Map<String, String>> _getHeaders() async {
     final token = await readToken();

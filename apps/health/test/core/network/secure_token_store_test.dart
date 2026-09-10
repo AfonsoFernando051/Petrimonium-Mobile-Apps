@@ -11,24 +11,11 @@ import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 /// The generic mechanism itself has its own tests in
 /// `petrimonium_flutter_core`.
 void main() {
-  test('a keyring that never answers reads as "no stored session"', () async {
-    final store = SecureTokenStore(
-      storage: _HangingStorage(),
-      accessKey: 'health_access_token',
-      refreshKey: 'health_refresh_token',
-      readTimeout: const Duration(milliseconds: 50),
-    );
-
-    expect(await store.readAccessToken(), isNull);
-    expect(await store.readRefreshToken(), isNull);
-  });
-
   test('a keyring that answers is read normally', () async {
     final store = SecureTokenStore(
       storage: _StubStorage({'health_access_token': 'abc'}),
       accessKey: 'health_access_token',
       refreshKey: 'health_refresh_token',
-      readTimeout: const Duration(seconds: 5),
     );
 
     expect(await store.readAccessToken(), 'abc');
@@ -41,8 +28,8 @@ void main() {
         storage: _HangingStorage(),
         accessKey: 'health_access_token',
         refreshKey: 'health_refresh_token',
-        readTimeout: const Duration(milliseconds: 50),
       ),
+      sessionCheckTimeout: const Duration(milliseconds: 50),
     );
 
     // Must resolve rather than hang: this is the call the splash screen is
