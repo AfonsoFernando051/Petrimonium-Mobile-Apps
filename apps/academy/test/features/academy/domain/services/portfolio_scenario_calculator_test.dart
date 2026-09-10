@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/portfolio_scenario_calculator.dart';
-import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   group('PortfolioScenarioCalculator.evaluate', () {

@@ -9,7 +9,7 @@ import 'package:petrimonium_wallet/core/utils/financial_input_validators.dart';
 import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/dashboard/presentation/screens/dashboard_screen.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/investment/data/models/asset_registration_model.dart';
 import 'package:petrimonium_wallet/features/investment/domain/services/pending_portfolio_stats_builder.dart';
 import 'package:petrimonium_wallet/features/investment/domain/services/ticker_type_classifier.dart';
@@ -22,7 +22,6 @@ import 'package:petrimonium_wallet/features/investment/presentation/widgets/pet_
 import 'package:petrimonium_wallet/features/investment/presentation/widgets/portfolio_progress_bar.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/widgets/ticker_suggestion_tile.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/widgets/unlockable_rewards_card.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_stats.dart';
 
 class InvestmentConfigurationScreen extends StatefulWidget {
   const InvestmentConfigurationScreen({super.key});

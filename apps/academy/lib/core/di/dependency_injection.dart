@@ -20,12 +20,6 @@ import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferenc
 import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/mentor/data/datasources/mentor_remote_datasource.dart';
 import 'package:petrimonium_academy/features/mentor/data/repositories/mentor_chat_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/achievements_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/missions_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_local_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/missions_repository.dart';
 import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/data/datasources/simulated_wallet_remote_datasource.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';

@@ -7,11 +7,11 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/features/investment/data/models/asset_registration_model.dart';
 import 'package:petrimonium_wallet/features/investment/data/repositories/investment_repository.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
 import '../../../portfolio/presentation/controllers/portfolio_controller_test.dart';
-import '../../../portfolio/domain/services/portfolio_test_fixtures.dart';
+import 'package:petrimonium_shared_features/testing.dart';
 
 class MockInvestmentRepository extends Mock implements InvestmentRepository {}
 

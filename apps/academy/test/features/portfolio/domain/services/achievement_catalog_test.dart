@@ -1,9 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_stats.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/portfolio/domain/services/achievement_catalog.dart';
 
-import 'portfolio_test_fixtures.dart';
+import 'package:petrimonium_shared_features/testing.dart';
 
 void main() {
   group('AchievementCatalog.qualifiedIds — empty portfolio', () {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_wallet/core/constants/app_colors.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// UI presentation (label/icon/color/ideal target) for each backend
 /// [InvestmentTypeEnum]. Kept in the portfolio feature — rather than added to
@@ -43,28 +43,5 @@ extension InvestmentTypeDisplay on InvestmentTypeEnum {
         InvestmentTypeEnum.OTHERS => AppColors.subtleText,
       };
 
-  /// Suggested balanced-portfolio target, expressed as a percent of total
-  /// current value. This is a simple, editable-in-future heuristic (not a
-  /// personalized recommendation engine) used to power the allocation
-  /// "ideal vs current" comparison and rebalance insights.
-  double get idealTargetPercent => switch (this) {
-        InvestmentTypeEnum.STOCKS => 35,
-        InvestmentTypeEnum.FIXED_INCOME => 30,
-        InvestmentTypeEnum.REAL_ESTATE => 15,
-        InvestmentTypeEnum.FUNDS => 12,
-        InvestmentTypeEnum.CRYPTO => 5,
-        InvestmentTypeEnum.OTHERS => 3,
-      };
 
-  /// Assumed average annual yield used only to *estimate* passive income,
-  /// since no real dividend/coupon data source exists yet. Always surfaced
-  /// to the user as "estimated", never presented as a confirmed payment.
-  double get assumedAnnualYield => switch (this) {
-        InvestmentTypeEnum.STOCKS => 0.05,
-        InvestmentTypeEnum.FIXED_INCOME => 0.11,
-        InvestmentTypeEnum.REAL_ESTATE => 0.08,
-        InvestmentTypeEnum.FUNDS => 0.04,
-        InvestmentTypeEnum.CRYPTO => 0.0,
-        InvestmentTypeEnum.OTHERS => 0.0,
-      };
 }

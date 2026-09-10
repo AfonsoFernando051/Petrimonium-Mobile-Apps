@@ -10,7 +10,7 @@ import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/user_position.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/services/portfolio_learning_bridge.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Manages loading and state for the Asset Details screen.
 ///

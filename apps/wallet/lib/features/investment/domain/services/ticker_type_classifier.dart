@@ -1,4 +1,4 @@
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Best-effort classification of a B3 ticker's asset type from its suffix,
 /// mirroring the backend heuristic in `AssetDetailsResponseMapper

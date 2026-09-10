@@ -1,5 +1,5 @@
 import 'package:petrimonium_academy/features/academy/domain/services/diversification_calculator.dart';
-import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// A deterministic, named "what if" scenario for [PortfolioScenarioCalculator]
 /// — never random, so nothing here can read as a forecast

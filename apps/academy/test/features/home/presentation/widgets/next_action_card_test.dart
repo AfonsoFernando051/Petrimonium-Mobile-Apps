@@ -7,7 +7,7 @@ import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart
 import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
 import 'package:petrimonium_academy/features/home/domain/entities/next_action.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/next_action_card.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 const _lesson = Lesson(
   id: 'lesson_1',

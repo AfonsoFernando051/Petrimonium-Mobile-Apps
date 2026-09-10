@@ -22,21 +22,8 @@ import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.da
 import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/datasources/achievements_remote_datasource.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/datasources/missions_remote_datasource.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/repositories/achievements_local_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/repositories/achievements_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/repositories/missions_repository.dart';
 import 'package:petrimonium_wallet/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/achievement_evaluation_result.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/allocation_slice.dart';
 import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/mission_status.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_summary.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/enums/history_range.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/academy/academy_test_fixtures.dart';

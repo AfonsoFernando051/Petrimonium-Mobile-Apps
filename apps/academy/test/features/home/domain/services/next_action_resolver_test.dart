@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/features/home/domain/entities/next_action.dart';
 import 'package:petrimonium_academy/features/home/domain/services/next_action_resolver.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 import '../../../academy/academy_test_fixtures.dart';
 

@@ -21,12 +21,6 @@ import 'package:petrimonium_wallet/features/investment/data/datasources/investme
 import 'package:petrimonium_wallet/features/investment/data/repositories/investment_repository.dart';
 import 'package:petrimonium_wallet/features/mentor/data/datasources/mentor_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/datasources/achievements_remote_datasource.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/datasources/missions_remote_datasource.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/repositories/achievements_local_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/repositories/achievements_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/repositories/missions_repository.dart';
 import 'package:petrimonium_wallet/features/portfolio/data/repositories/portfolio_repository.dart';
 import 'package:petrimonium_wallet/features/settings/data/datasources/settings_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/settings/data/repositories/settings_repository.dart';

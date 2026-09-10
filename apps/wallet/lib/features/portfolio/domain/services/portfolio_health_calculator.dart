@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_health.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_stats.dart';
 
 /// Pure, explainable heuristic that turns real holdings/allocation data into
 /// the 0-100 "Portfolio Health" score and its six facets. There is no

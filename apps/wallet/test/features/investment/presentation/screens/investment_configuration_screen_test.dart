@@ -13,11 +13,8 @@ import 'package:petrimonium_wallet/features/investment/presentation/widgets/pet_
 import 'package:petrimonium_wallet/features/investment/presentation/widgets/portfolio_progress_bar.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/widgets/unlockable_rewards_card.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/data/repositories/achievements_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_lot.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
 
 class MockInvestmentRepository extends Mock implements InvestmentRepository {}
 

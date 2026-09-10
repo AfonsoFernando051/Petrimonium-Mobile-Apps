@@ -3,26 +3,13 @@ import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_local_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/missions_repository.dart';
 import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
 import 'package:petrimonium_academy/features/portfolio/domain/entities/achievement.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/investment_lot.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
 import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_health.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_stats.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_summary.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/enums/history_range.dart';
 import 'package:petrimonium_academy/features/portfolio/domain/services/achievement_catalog.dart';
 import 'package:petrimonium_academy/features/portfolio/domain/services/mission_display_catalog.dart';
 import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio_health_calculator.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/services/wealth_history_calculator.dart';
 
 /// Owns all state for the redesigned Portfolio screen: real holdings/
 /// summary/allocation/history from the backend, plus everything derived

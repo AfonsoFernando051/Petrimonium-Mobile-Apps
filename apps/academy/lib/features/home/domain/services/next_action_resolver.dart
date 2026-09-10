@@ -1,6 +1,6 @@
 import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
 import 'package:petrimonium_academy/features/home/domain/entities/next_action.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Ranks the real, currently-known signals from Academy and Portfolio/
 /// Missions into Home's single primary CTA — the "Next Action Engine".

@@ -13,9 +13,7 @@ import 'package:petrimonium_wallet/features/asset_details/data/repositories/asse
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_data_status.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/controllers/asset_details_controller.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MockAssetDetailsRepository extends Mock implements AssetDetailsRepository {}
