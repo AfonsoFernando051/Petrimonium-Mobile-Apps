@@ -7,7 +7,7 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/labeled_slider.dart';
 import 'package:petrimonium_academy/core/widgets/stat_card.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/inflation_calculator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_comprehension_check.dart';
@@ -17,7 +17,6 @@ import 'package:petrimonium_academy/features/academy/presentation/screens/financ
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_narrative_card.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// The Financial Lab's Inflation simulator (`docs/DECISIONS.md`
@@ -92,23 +91,18 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
           xLabels: [for (final p in result.yearlyBreakdown) '${p.year}'],
           series: [
             LabLineSeries(
-              label: Translator.translate(
-                AppStrings.labInflationNominalValueLabel,
-              ),
+              label: Translator.translate(AppStrings.labInflationNominalValueLabel),
               color: AppColors.subtleText,
               dashed: true,
               values: [for (final p in result.yearlyBreakdown) p.nominalValue],
             ),
             LabLineSeries(
-              label: Translator.translate(
-                AppStrings.labInflationRealValueLabel,
-              ),
+              label: Translator.translate(AppStrings.labInflationRealValueLabel),
               color: AppColors.neonPink,
               values: [for (final p in result.yearlyBreakdown) p.realValue],
             ),
           ],
-          tooltipValueFormatter: (v) =>
-              AppFormatters.currency(v, showCents: false),
+          tooltipValueFormatter: (v) => AppFormatters.currency(v, showCents: false),
         ),
         LabDataTableDisclosure(
           columnLabels: [
@@ -132,12 +126,9 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
             AppStrings.labInflationInterpretation,
             params: {
               'rate': AppFormatters.percentPlain(_inflationPercent),
-              'lostPercent': result.totalPurchasingPowerLostPercent
-                  .toStringAsFixed(1),
+              'lostPercent': result.totalPurchasingPowerLostPercent.toStringAsFixed(1),
               'years': '$_years',
-              'multiplier': AppFormatters.multiplier(
-                result.basketCostMultiplier,
-              ),
+              'multiplier': AppFormatters.multiplier(result.basketCostMultiplier),
             },
           ),
           variant: LabNarrativeVariant.interpretation,
@@ -146,14 +137,8 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
           text: Translator.translate(
             AppStrings.labInflationInvestingConnection,
             params: {
-              'nominal': AppFormatters.percentPlain(
-                _nominalReturnPercent,
-                decimals: 2,
-              ),
-              'inflation': AppFormatters.percentPlain(
-                _inflationPercent,
-                decimals: 2,
-              ),
+              'nominal': AppFormatters.percentPlain(_nominalReturnPercent, decimals: 2),
+              'inflation': AppFormatters.percentPlain(_inflationPercent, decimals: 2),
               'exact': (result.realReturnExact * 100).toStringAsFixed(2),
               'approx': (result.realReturnApproximate * 100).toStringAsFixed(2),
             },
@@ -187,10 +172,7 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
           children: [
             LabeledSlider(
               label: Translator.translate(AppStrings.labInitialAmountLabel),
-              valueLabel: AppFormatters.currency(
-                _initialAmount,
-                showCents: false,
-              ),
+              valueLabel: AppFormatters.currency(_initialAmount, showCents: false),
               value: _initialAmount,
               min: 0,
               max: 100000,
@@ -204,9 +186,7 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
               min: 0,
               max: 20,
               divisions: 40,
-              onChanged: (v) => setState(
-                () => _inflationPercent = double.parse(v.toStringAsFixed(1)),
-              ),
+              onChanged: (v) => setState(() => _inflationPercent = double.parse(v.toStringAsFixed(1))),
             ),
             LabeledSlider(
               label: Translator.translate(AppStrings.labAnnualReturnLabel),
@@ -215,10 +195,7 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
               min: 0,
               max: 30,
               divisions: 60,
-              onChanged: (v) => setState(
-                () =>
-                    _nominalReturnPercent = double.parse(v.toStringAsFixed(1)),
-              ),
+              onChanged: (v) => setState(() => _nominalReturnPercent = double.parse(v.toStringAsFixed(1))),
             ),
             LabeledSlider(
               label: Translator.translate(AppStrings.labYearsLabel),
@@ -248,20 +225,15 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
         const SizedBox(width: 10),
         Expanded(
           child: StatCard(
-            label: Translator.translate(
-              AppStrings.labInflationLostPercentLabel,
-            ),
-            value:
-                '${result.totalPurchasingPowerLostPercent.toStringAsFixed(1)}%',
+            label: Translator.translate(AppStrings.labInflationLostPercentLabel),
+            value: '${result.totalPurchasingPowerLostPercent.toStringAsFixed(1)}%',
             accent: AppColors.warningAmber,
           ),
         ),
         const SizedBox(width: 10),
         Expanded(
           child: StatCard(
-            label: Translator.translate(
-              AppStrings.labInflationBasketMultiplierLabel,
-            ),
+            label: Translator.translate(AppStrings.labInflationBasketMultiplierLabel),
             value: AppFormatters.multiplier(result.basketCostMultiplier),
             accent: AppColors.neonCyan,
           ),

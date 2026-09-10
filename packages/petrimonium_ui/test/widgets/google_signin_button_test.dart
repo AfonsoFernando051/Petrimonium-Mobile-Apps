@@ -4,7 +4,10 @@ import '../test_theme.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
 void main() {
-  Widget wrap(Widget child) => MaterialApp(theme: TestTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    theme: TestTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   testWidgets('renders the given label', (tester) async {
     await tester.pumpWidget(wrap(GoogleSignInButton(label: 'Continuar com o Google', onPressed: () {})));

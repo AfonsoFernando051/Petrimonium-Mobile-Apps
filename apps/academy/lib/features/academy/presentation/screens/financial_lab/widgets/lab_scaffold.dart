@@ -5,10 +5,9 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/cosmic_background.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_companion_header.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 
 /// Shared chrome for every Financial Lab screen (the Lab home and each
 /// simulator) — AppBar with a back button and a Pet companion avatar,
@@ -45,17 +44,12 @@ class LabScaffold extends StatelessWidget {
             PetCompanionHeader(
               controller: companionController,
               anchor: anchor,
-              onDestinationSelected: (destination) =>
-                  Navigator.of(context).pop(destination),
+              onDestinationSelected: (destination) => Navigator.of(context).pop(destination),
             ),
             const SizedBox(width: 10),
             Text(
               Translator.translate(titleKey),
-              style: TextStyle(
-                color: tokens.textPrimary,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -92,8 +86,7 @@ class LabScaffold extends StatelessWidget {
               child: PetSpeechBubbleOverlay(
                 controller: companionController,
                 anchor: anchor,
-                onActionSelected: (action) =>
-                    Navigator.of(context).pop(action.destination),
+                onActionSelected: (action) => Navigator.of(context).pop(action.destination),
               ),
             ),
           ],
@@ -131,11 +124,7 @@ class _SimulatedDataBadge extends StatelessWidget {
             Expanded(
               child: Text(
                 Translator.translate(AppStrings.labSimulatedDataBadge),
-                style: TextStyle(
-                  color: tokens.textPrimary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(color: tokens.textPrimary, fontSize: 11, fontWeight: FontWeight.w600),
                 overflow: TextOverflow.ellipsis,
               ),
             ),

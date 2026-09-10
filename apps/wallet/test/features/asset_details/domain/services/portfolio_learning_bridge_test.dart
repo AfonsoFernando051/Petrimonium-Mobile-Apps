@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium_wallet/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/services/portfolio_learning_bridge.dart';
 
@@ -90,12 +89,7 @@ void main() {
     });
 
     test('surfaces every applicable concept across multiple completed lessons', () {
-      const asset = AssetDetails(
-        ticker: 'PETR4',
-        assetType: 'stock',
-        priceToEarnings: 8.5,
-        returnOnEquity: 0.22,
-      );
+      const asset = AssetDetails(ticker: 'PETR4', assetType: 'stock', priceToEarnings: 8.5, returnOnEquity: 0.22);
 
       final result = PortfolioLearningBridge.resolve(
         lessons: const [_peLesson, _roeLesson],
@@ -123,12 +117,7 @@ void main() {
     });
 
     test('never fabricates a concept for an asset the user has not completed a lesson for', () {
-      const asset = AssetDetails(
-        ticker: 'PETR4',
-        assetType: 'stock',
-        priceToEarnings: 8.5,
-        returnOnEquity: 0.22,
-      );
+      const asset = AssetDetails(ticker: 'PETR4', assetType: 'stock', priceToEarnings: 8.5, returnOnEquity: 0.22);
 
       // Only the P/E lesson was completed -- ROE must not appear even though the asset
       // has a real ROE value and a ROE lesson exists in the catalog.

@@ -16,7 +16,10 @@ class GamificationRemoteDataSource {
     final response = await apiClient.get(summaryEndpoint);
     if (response.statusCode != 200) {
       throw Exception(
-        extractErrorDetail(response, fallback: 'Failed to load gamification summary. Status Code: ${response.statusCode}'),
+        extractErrorDetail(
+          response,
+          fallback: 'Failed to load gamification summary. Status Code: ${response.statusCode}',
+        ),
       );
     }
     return jsonDecode(response.body) as Map<String, dynamic>;

@@ -5,12 +5,7 @@ import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/learning_hero_card.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Minimal in-memory MascotRepository double, mirrors the one used in
@@ -53,9 +48,7 @@ void main() {
   Widget buildTestableWidget() {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(
-        body: LearningHeroCard(mascotController: controller),
-      ),
+      home: Scaffold(body: LearningHeroCard(mascotController: controller)),
     );
   }
 
@@ -113,10 +106,7 @@ void main() {
       await controller.loadProfile();
 
       await tester.pumpWidget(
-        MediaQuery(
-          data: const MediaQueryData(disableAnimations: true),
-          child: buildTestableWidget(),
-        ),
+        MediaQuery(data: const MediaQueryData(disableAnimations: true), child: buildTestableWidget()),
       );
       await tester.pump();
       await tester.pump(const Duration(seconds: 3));

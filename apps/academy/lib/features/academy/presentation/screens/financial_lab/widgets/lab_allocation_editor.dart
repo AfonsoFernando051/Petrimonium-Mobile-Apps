@@ -4,8 +4,8 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/labeled_slider.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_investment_type_labels.dart';
-import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/investment_type_display.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/investment_type_display.dart';
 
 /// A hypothetical-portfolio composition editor — one [LabeledSlider] per
 /// [InvestmentTypeEnum] category (reusing its theme-invariant `.icon`/
@@ -49,10 +49,7 @@ class LabAllocationEditor extends StatelessWidget {
                     width: 10,
                     height: 10,
                     margin: const EdgeInsets.only(right: 8, top: 18),
-                    decoration: BoxDecoration(
-                      color: entry.key.color,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: entry.key.color, shape: BoxShape.circle),
                   ),
                   Expanded(
                     child: LabeledSlider(
@@ -90,19 +87,12 @@ class LabAllocationEditor extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            isValid ? Icons.check_circle_outline : Icons.error_outline,
-            color: color,
-            size: 16,
-          ),
+          Icon(isValid ? Icons.check_circle_outline : Icons.error_outline, color: color, size: 16),
           const SizedBox(width: 6),
           Text(
             '${Translator.translate(AppStrings.labAllocationTotalLabel)}: '
             '${totalPercent.round()}%',
-            style: AppTextStyles.label.copyWith(
-              color: color,
-              fontWeight: FontWeight.w700,
-            ),
+            style: AppTextStyles.label.copyWith(color: color, fontWeight: FontWeight.w700),
           ),
         ],
       ),

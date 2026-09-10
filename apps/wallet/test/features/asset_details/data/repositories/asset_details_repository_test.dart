@@ -16,12 +16,9 @@ void main() {
 
   group('fetchAssetDetails', () {
     test('maps the raw JSON into an AssetDetails domain entity', () async {
-      when(() => mockDataSource.fetchAssetDetails('PETR4')).thenAnswer((_) async => {
-            'ticker': 'PETR4',
-            'shortName': 'Petrobras',
-            'assetType': 'stock',
-            'currentPrice': 32.5,
-          });
+      when(() => mockDataSource.fetchAssetDetails('PETR4')).thenAnswer(
+        (_) async => {'ticker': 'PETR4', 'shortName': 'Petrobras', 'assetType': 'stock', 'currentPrice': 32.5},
+      );
 
       final details = await repository.fetchAssetDetails('PETR4');
 

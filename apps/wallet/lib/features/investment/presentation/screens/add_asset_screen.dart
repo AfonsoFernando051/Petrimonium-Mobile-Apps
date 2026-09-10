@@ -8,9 +8,9 @@ import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
 import 'package:petrimonium_wallet/features/investment/data/models/asset_registration_model.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/investment/domain/services/ticker_type_classifier.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
 /// Wallet's own "add one asset" screen — reached from Home's "Adicionar"
@@ -67,13 +67,15 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       final holdings = await DI.portfolioRepository.fetchHoldings();
       final existing = holdings
           .expand((holding) => holding.lots)
-          .map((lot) => AssetRegistrationModel(
-                name: lot.ticker,
-                quantity: lot.quantity,
-                purchasePrice: lot.purchasePrice,
-                purchaseDate: _formatDate(lot.purchaseDate),
-                type: lot.type,
-              ))
+          .map(
+            (lot) => AssetRegistrationModel(
+              name: lot.ticker,
+              quantity: lot.quantity,
+              purchasePrice: lot.purchasePrice,
+              purchaseDate: _formatDate(lot.purchaseDate),
+              type: lot.type,
+            ),
+          )
           .toList();
       if (!mounted) return;
       setState(() {
@@ -130,9 +132,9 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       lastDate: DateTime.now(),
       builder: (context, child) {
         return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(context).colorScheme.copyWith(primary: tokens.primary),
-          ),
+          data: Theme.of(
+            context,
+          ).copyWith(colorScheme: Theme.of(context).colorScheme.copyWith(primary: tokens.primary)),
           child: child!,
         );
       },
@@ -263,11 +265,19 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                   final price = priceRaw is num ? priceRaw.toDouble() : double.tryParse(priceRaw?.toString() ?? '');
                   return ListTile(
                     onTap: () => onSelected(option),
-                    title: Text(symbol.toUpperCase(), style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold)),
-                    subtitle: name.isEmpty ? null : Text(name, style: TextStyle(color: tokens.textSecondary, fontSize: 12)),
+                    title: Text(
+                      symbol.toUpperCase(),
+                      style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: name.isEmpty
+                        ? null
+                        : Text(name, style: TextStyle(color: tokens.textSecondary, fontSize: 12)),
                     trailing: price == null
                         ? null
-                        : Text(AppFormatters.currency(price), style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold)),
+                        : Text(
+                            AppFormatters.currency(price),
+                            style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold),
+                          ),
                   );
                 },
               ),
@@ -357,7 +367,10 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                           controller: _quantityController,
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
                           style: TextStyle(color: tokens.textPrimary),
-                          decoration: _fieldDecoration(tokens, hint: Translator.translate(AppStrings.addAssetQuantityHint)),
+                          decoration: _fieldDecoration(
+                            tokens,
+                            hint: Translator.translate(AppStrings.addAssetQuantityHint),
+                          ),
                           validator: FinancialInputValidators.quantity,
                         ),
                       ),
@@ -367,7 +380,10 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                           controller: _priceController,
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
                           style: TextStyle(color: tokens.textPrimary),
-                          decoration: _fieldDecoration(tokens, hint: Translator.translate(AppStrings.addAssetPriceHint)),
+                          decoration: _fieldDecoration(
+                            tokens,
+                            hint: Translator.translate(AppStrings.addAssetPriceHint),
+                          ),
                           validator: FinancialInputValidators.price,
                         ),
                       ),
@@ -472,10 +488,7 @@ class _LoadFailedBanner extends StatelessWidget {
               style: TextStyle(color: tokens.textPrimary, fontSize: 12),
             ),
           ),
-          TextButton(
-            onPressed: onRetry,
-            child: Text(Translator.translate(AppStrings.retryButtonLabel)),
-          ),
+          TextButton(onPressed: onRetry, child: Text(Translator.translate(AppStrings.retryButtonLabel))),
         ],
       ),
     );

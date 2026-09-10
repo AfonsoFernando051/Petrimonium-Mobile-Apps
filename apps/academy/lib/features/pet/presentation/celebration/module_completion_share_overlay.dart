@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
@@ -27,12 +28,10 @@ class ModuleCompletionShareOverlay extends StatefulWidget {
   final VoidCallback onDismiss;
 
   @override
-  State<ModuleCompletionShareOverlay> createState() =>
-      _ModuleCompletionShareOverlayState();
+  State<ModuleCompletionShareOverlay> createState() => _ModuleCompletionShareOverlayState();
 }
 
-class _ModuleCompletionShareOverlayState
-    extends State<ModuleCompletionShareOverlay> {
+class _ModuleCompletionShareOverlayState extends State<ModuleCompletionShareOverlay> {
   final GlobalKey _cardKey = GlobalKey();
   bool _sharing = false;
 
@@ -43,27 +42,17 @@ class _ModuleCompletionShareOverlayState
   Future<void> _share() async {
     if (_sharing) return;
     setState(() => _sharing = true);
-    HapticFeedback.selectionClick();
+    unawaited(HapticFeedback.selectionClick());
     try {
-      final file = await WidgetImageCapture.captureToFile(
-        _cardKey,
-        fileName: 'invest_game_module.png',
-      );
+      final file = await WidgetImageCapture.captureToFile(_cardKey, fileName: 'invest_game_module.png');
       await SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(file.path)],
-          text: Translator.translate(AppStrings.shareProgressTagline),
-        ),
+        ShareParams(files: [XFile(file.path)], text: Translator.translate(AppStrings.shareProgressTagline)),
       );
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              Translator.translate(AppStrings.shareProgressErrorMessage),
-            ),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(Translator.translate(AppStrings.shareProgressErrorMessage))));
       }
     } finally {
       if (mounted) setState(() => _sharing = false);
@@ -73,12 +62,8 @@ class _ModuleCompletionShareOverlayState
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
-    final playerLevel = LevelCalculator.fromXp(
-      widget.mascotController.profile.xp,
-    );
-    final petImagePath = PetAssets.imageFor(
-      widget.mascotController.profile.specie.name,
-    );
+    final playerLevel = LevelCalculator.fromXp(widget.mascotController.profile.xp);
+    final petImagePath = PetAssets.imageFor(widget.mascotController.profile.specie.name);
 
     return GestureDetector(
       onTap: _dismiss,
@@ -96,28 +81,18 @@ class _ModuleCompletionShareOverlayState
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
-                        Icons.workspace_premium,
-                        color: AppColors.goldenBorder,
-                        size: 48,
-                      ),
+                      const Icon(Icons.workspace_premium, color: AppColors.goldenBorder, size: 48),
                       const SizedBox(height: 12),
                       Text(
-                        Translator.translate(
-                          AppStrings.academyModuleShareTitle,
-                        ),
+                        Translator.translate(AppStrings.academyModuleShareTitle),
                         textAlign: TextAlign.center,
-                        style: AppTextStyles.headline.copyWith(
-                          color: Colors.white,
-                        ),
+                        style: AppTextStyles.headline.copyWith(color: Colors.white),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         widget.moduleTitle,
                         textAlign: TextAlign.center,
-                        style: AppTextStyles.body.copyWith(
-                          color: AppColors.subtleText,
-                        ),
+                        style: AppTextStyles.body.copyWith(color: AppColors.subtleText),
                       ),
                       const SizedBox(height: 16),
                       RepaintBoundary(
@@ -135,25 +110,13 @@ class _ModuleCompletionShareOverlayState
                             child: OutlinedButton(
                               onPressed: _dismiss,
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(
-                                  color: AppColors.subtleText,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    AppRadii.pill,
-                                  ),
-                                ),
+                                side: const BorderSide(color: AppColors.subtleText),
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.pill)),
                               ),
                               child: Text(
-                                Translator.translate(
-                                  AppStrings.shareProgressContinueButton,
-                                ),
-                                style: AppTextStyles.bodyEmphasis.copyWith(
-                                  color: Colors.white,
-                                ),
+                                Translator.translate(AppStrings.shareProgressContinueButton),
+                                style: AppTextStyles.bodyEmphasis.copyWith(color: Colors.white),
                               ),
                             ),
                           ),
@@ -165,28 +128,15 @@ class _ModuleCompletionShareOverlayState
                                   ? const SizedBox(
                                       width: 16,
                                       height: 16,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
+                                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                                     )
                                   : const Icon(Icons.ios_share, size: 18),
-                              label: Text(
-                                Translator.translate(
-                                  AppStrings.shareProgressButton,
-                                ),
-                              ),
+                              label: Text(Translator.translate(AppStrings.shareProgressButton)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.goldenBorder,
                                 foregroundColor: AppColors.spaceDark,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    AppRadii.pill,
-                                  ),
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.pill)),
                               ),
                             ),
                           ),

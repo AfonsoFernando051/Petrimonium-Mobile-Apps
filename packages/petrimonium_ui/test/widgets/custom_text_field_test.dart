@@ -14,13 +14,7 @@ void main() {
     return MaterialApp(
       theme: TestTheme.dark,
       home: Scaffold(
-        body: CustomTextField(
-          hint: hint,
-          icon: icon,
-          obscure: obscure,
-          controller: controller,
-          errorText: errorText,
-        ),
+        body: CustomTextField(hint: hint, icon: icon, obscure: obscure, controller: controller, errorText: errorText),
       ),
     );
   }

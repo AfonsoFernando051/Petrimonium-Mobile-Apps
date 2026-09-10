@@ -6,7 +6,10 @@ import 'package:petrimonium_academy/features/academy/presentation/widgets/academ
 
 void main() {
   Widget buildTestable(Widget child) {
-    return MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));
+    return MaterialApp(
+      theme: AppTheme.dark,
+      home: Scaffold(body: child),
+    );
   }
 
   group('AcademyProgressBar', () {
@@ -43,10 +46,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      final containers = find.descendant(
-        of: find.byType(FractionallySizedBox),
-        matching: find.byType(Container),
-      );
+      final containers = find.descendant(of: find.byType(FractionallySizedBox), matching: find.byType(Container));
       final container = tester.widget<Container>(containers.first);
       final decoration = container.decoration as BoxDecoration;
       expect(decoration.color, AppColors.goldenBorder);

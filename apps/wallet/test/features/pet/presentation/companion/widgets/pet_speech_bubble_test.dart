@@ -3,18 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_wallet/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/comic_bubble_painter.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_speech_bubble.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Minimal in-memory MascotRepository double, mirrors the one used in
@@ -66,10 +58,7 @@ void main() {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: PetSpeechBubbleOverlay(
-          controller: companionController,
-          onActionSelected: onActionSelected,
-        ),
+        body: PetSpeechBubbleOverlay(controller: companionController, onActionSelected: onActionSelected),
       ),
     );
   }
@@ -155,9 +144,7 @@ void main() {
 
   group('PetSpeechBubbleOverlay — anchored to the Pet', () {
     ComicBubblePainter painterOf(WidgetTester tester) {
-      final finder = find.byWidgetPredicate(
-        (widget) => widget is CustomPaint && widget.painter is ComicBubblePainter,
-      );
+      final finder = find.byWidgetPredicate((widget) => widget is CustomPaint && widget.painter is ComicBubblePainter);
       return tester.widget<CustomPaint>(finder).painter as ComicBubblePainter;
     }
 
@@ -165,10 +152,7 @@ void main() {
     // `LearningHeroCard`'s art) registered as the anchor, plus the overlay,
     // both inside one Stack — mirrors how `DashboardScreen`/`ProfileScreen`
     // actually compose them.
-    Widget buildAnchoredWidget({
-      required PetSpeechBubbleAnchor anchor,
-      required Alignment anchorAlignment,
-    }) {
+    Widget buildAnchoredWidget({required PetSpeechBubbleAnchor anchor, required Alignment anchorAlignment}) {
       return MaterialApp(
         theme: AppTheme.dark,
         home: Scaffold(
@@ -178,18 +162,11 @@ void main() {
                 alignment: anchorAlignment,
                 child: CompositedTransformTarget(
                   link: anchor.link,
-                  child: SizedBox(
-                    key: anchor.boxKey,
-                    width: 40,
-                    height: 40,
-                  ),
+                  child: SizedBox(key: anchor.boxKey, width: 40, height: 40),
                 ),
               ),
               Positioned.fill(
-                child: PetSpeechBubbleOverlay(
-                  controller: companionController,
-                  anchor: anchor,
-                ),
+                child: PetSpeechBubbleOverlay(controller: companionController, anchor: anchor),
               ),
             ],
           ),
@@ -199,9 +176,7 @@ void main() {
 
     testWidgets('anchor near the top of the screen places the bubble below it, tail pointing up', (tester) async {
       final anchor = PetSpeechBubbleAnchor();
-      await tester.pumpWidget(
-        buildAnchoredWidget(anchor: anchor, anchorAlignment: Alignment.topLeft),
-      );
+      await tester.pumpWidget(buildAnchoredWidget(anchor: anchor, anchorAlignment: Alignment.topLeft));
       await tester.pump();
 
       mascotRepository.profileToReturn = PetProfile(xp: 30);
@@ -222,9 +197,7 @@ void main() {
 
     testWidgets('a centered mid-screen anchor places the bubble above it, tail pointing down', (tester) async {
       final anchor = PetSpeechBubbleAnchor();
-      await tester.pumpWidget(
-        buildAnchoredWidget(anchor: anchor, anchorAlignment: Alignment.center),
-      );
+      await tester.pumpWidget(buildAnchoredWidget(anchor: anchor, anchorAlignment: Alignment.center));
       await tester.pump();
 
       mascotRepository.profileToReturn = PetProfile(xp: 30);

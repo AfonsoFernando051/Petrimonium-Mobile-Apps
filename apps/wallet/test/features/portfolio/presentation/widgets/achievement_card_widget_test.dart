@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/achievement.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/achievement.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/achievement_card_widget.dart';
 
 void main() {

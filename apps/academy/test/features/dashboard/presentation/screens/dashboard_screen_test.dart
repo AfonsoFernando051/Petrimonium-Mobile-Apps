@@ -5,37 +5,12 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_academy/features/dashboard/presentation/screens/dashboard_screen.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_academy/features/onboarding/data/models/onboarding_status_model.dart';
 import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_state_repository.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
-import 'package:petrimonium_academy/features/pet/data/repositories/pet_companion_preferences_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/achievements_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/missions_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_local_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/missions_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/achievement_evaluation_result.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/dividend_event.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_summary.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/enums/history_range.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../academy/academy_test_fixtures.dart';
@@ -178,9 +153,9 @@ void main() {
     DI.academyRemoteDataSource = mockRemoteDataSource;
 
     final mockOnboardingRepository = MockOnboardingRepository();
-    when(() => mockOnboardingRepository.getStatus()).thenAnswer(
-      (_) async => const OnboardingStatusModel(hasAnswered: true, profile: null),
-    );
+    when(
+      () => mockOnboardingRepository.getStatus(),
+    ).thenAnswer((_) async => const OnboardingStatusModel(hasAnswered: true, profile: null));
     DI.onboardingRepository = mockOnboardingRepository;
 
     final mockPetRepository = MockPetRepository();
@@ -212,10 +187,7 @@ void main() {
   // elsewhere in the tab content itself (e.g. HomeScreen's Knowledge Map
   // reuses Icons.school for the fixture domain's icon) — every lookup below
   // is scoped to the BottomNavigationBar so it can't collide with those.
-  Finder navIcon(IconData icon) => find.descendant(
-        of: find.byType(BottomNavigationBar),
-        matching: find.byIcon(icon),
-      );
+  Finder navIcon(IconData icon) => find.descendant(of: find.byType(BottomNavigationBar), matching: find.byIcon(icon));
 
   group('DashboardScreen', () {
     testWidgets('renders the Home tab by default without crashing', (tester) async {

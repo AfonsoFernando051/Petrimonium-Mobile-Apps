@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/celebration/level_up_celebration_overlay.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 

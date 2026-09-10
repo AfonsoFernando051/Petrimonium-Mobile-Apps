@@ -64,10 +64,7 @@ class ErrorStateView extends StatelessWidget {
           TextButton.icon(
             onPressed: onRetry,
             icon: Icon(Icons.refresh, color: context.brand.accent, size: 16),
-            label: Text(
-              retryLabel,
-              style: TextStyle(color: context.brand.accent),
-            ),
+            label: Text(retryLabel, style: TextStyle(color: context.brand.accent)),
           ),
         ],
       );
@@ -96,10 +93,7 @@ class ErrorStateView extends StatelessWidget {
           onPressed: onRetry,
           icon: const Icon(Icons.refresh, size: 18),
           label: Text(retryLabel),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: context.brand.accentDeep,
-            foregroundColor: Colors.white,
-          ),
+          style: ElevatedButton.styleFrom(backgroundColor: context.brand.accentDeep, foregroundColor: Colors.white),
         ),
       ],
     );
@@ -116,10 +110,7 @@ class ErrorStateView extends StatelessWidget {
     }
 
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xxxl),
-        child: content,
-      ),
+      child: Padding(padding: const EdgeInsets.all(AppSpacing.xxxl), child: content),
     );
   }
 }

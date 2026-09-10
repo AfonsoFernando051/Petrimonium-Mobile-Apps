@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/widgets/unlockable_rewards_card.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_stats.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_summary.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/services/achievement_catalog.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/achievement_catalog.dart';
 
-import '../../../portfolio/domain/services/portfolio_test_fixtures.dart';
+import 'package:petrimonium_shared_features/testing.dart';
 
 void main() {
   Widget buildTestableWidget(PortfolioStats stats) {
@@ -20,7 +16,9 @@ void main() {
   }
 
   group('UnlockableRewardsCard', () {
-    testWidgets('shows the locked prompt and no check icons when the portfolio has no holdings', (WidgetTester tester) async {
+    testWidgets('shows the locked prompt and no check icons when the portfolio has no holdings', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget(PortfolioStats.empty));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
@@ -30,7 +28,9 @@ void main() {
       expect(find.text('Emblema de Primeiro Investidor'), findsOneWidget);
     });
 
-    testWidgets('shows the unlocked prompt and check icons once the portfolio has a holding', (WidgetTester tester) async {
+    testWidgets('shows the unlocked prompt and check icons once the portfolio has a holding', (
+      WidgetTester tester,
+    ) async {
       // Built via Holding.fromLots (like the real pipeline) rather than the
       // Holding constructor directly: AchievementCatalog reads
       // stats.firstPurchaseDate, which reads Holding.firstPurchaseDate —
@@ -46,9 +46,7 @@ void main() {
           totalAssets: 1,
         ),
         holdings: holdings,
-        allocation: const [
-          AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 120, portfolioPercent: 100),
-        ],
+        allocation: const [AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 120, portfolioPercent: 100)],
       );
 
       await tester.pumpWidget(buildTestableWidget(stats));
@@ -59,7 +57,9 @@ void main() {
       expect(find.byIcon(Icons.check), findsWidgets);
     });
 
-    testWidgets('shows the real XP reward from AchievementCatalog, not a hardcoded number', (WidgetTester tester) async {
+    testWidgets('shows the real XP reward from AchievementCatalog, not a hardcoded number', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget(PortfolioStats.empty));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));

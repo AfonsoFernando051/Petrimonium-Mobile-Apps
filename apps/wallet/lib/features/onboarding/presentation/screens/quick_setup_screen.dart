@@ -79,10 +79,9 @@ class _QuickSetupScreenState extends State<QuickSetupScreen> {
 
     await DI.onboardingStateRepository.markQuickSetupDone();
     if (mounted) {
-      await Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const MyApp()),
-        (route) => false,
-      );
+      await Navigator.of(
+        context,
+      ).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const MyApp()), (route) => false);
     }
   }
 

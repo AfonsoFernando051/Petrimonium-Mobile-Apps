@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
@@ -5,7 +6,7 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/cosmic_background.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/module_detail_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_catalog_error_state.dart';
@@ -61,8 +62,10 @@ class _AllModulesScreenState extends State<AllModulesScreen> {
       transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
         opacity: animation,
         child: SlideTransition(
-          position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-              .animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+          position: Tween(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
           child: child,
         ),
       ),
@@ -71,11 +74,11 @@ class _AllModulesScreenState extends State<AllModulesScreen> {
   }
 
   Future<void> _openModule(AcademyModule module) async {
-    HapticFeedback.selectionClick();
-    await Navigator.of(context).push(
-      _fadeRoute(ModuleDetailScreen(module: module, mascotController: widget.mascotController)),
-    );
-    _controller.load();
+    unawaited(HapticFeedback.selectionClick());
+    await Navigator.of(
+      context,
+    ).push(_fadeRoute(ModuleDetailScreen(module: module, mascotController: widget.mascotController)));
+    unawaited(_controller.load());
   }
 
   @override
@@ -111,22 +114,22 @@ class _AllModulesScreenState extends State<AllModulesScreen> {
           child: _controller.isLoading || _controller.isCatalogLoading
               ? const AppLoadingIndicator()
               : _controller.snapshot == null
-                  ? AcademyCatalogErrorState(onRetry: _controller.load)
-                  : ListView(
-                      padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-                      children: [
-                        for (final module in modules) ...[
-                          ModuleCard(
-                            module: module,
-                            status: _controller.statusFor(module),
-                            completedLessons: _controller.completedLessonCountFor(module),
-                            onTap: () => _openModule(module),
-                            missingPrerequisites: _controller.missingPrerequisitesFor(module),
-                          ),
-                          const SizedBox(height: 12),
-                        ],
-                      ],
-                    ),
+              ? AcademyCatalogErrorState(onRetry: _controller.load)
+              : ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+                  children: [
+                    for (final module in modules) ...[
+                      ModuleCard(
+                        module: module,
+                        status: _controller.statusFor(module),
+                        completedLessons: _controller.completedLessonCountFor(module),
+                        onTap: () => _openModule(module),
+                        missingPrerequisites: _controller.missingPrerequisitesFor(module),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                  ],
+                ),
         ),
       ),
     );

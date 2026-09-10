@@ -3,7 +3,7 @@ import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 class ExampleStepView extends StatelessWidget {
   const ExampleStepView({super.key, required this.step, this.breadcrumb});
@@ -44,7 +44,10 @@ class ExampleStepView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              Text(step.title, style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(
+                step.title,
+                style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 6),
               Text(step.body, style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4)),
             ],

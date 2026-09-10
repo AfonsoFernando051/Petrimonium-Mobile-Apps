@@ -14,10 +14,7 @@ abstract final class PetrimoniumEnvironment {
   ///   flutter build apk --dart-define=API_BASE_URL=https://api.example.com
   /// Defaults to http://localhost:8081, which works for iOS Simulator/Web but
   /// NOT the Android emulator (use 10.0.2.2 there).
-  static const String baseUrl = String.fromEnvironment(
-    'API_BASE_URL',
-    defaultValue: devDefaultBaseUrl,
-  );
+  static const String baseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: devDefaultBaseUrl);
 
   static const String devDefaultBaseUrl = 'http://localhost:8081';
 

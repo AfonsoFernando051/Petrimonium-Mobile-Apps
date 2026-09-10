@@ -29,18 +29,13 @@ void main() {
     test('throws an Exception on a non-200 response', () async {
       when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 400));
 
-      await expectLater(
-        () => dataSource.configurePet(PetSpecieEnum.DOG),
-        throwsA(isA<Exception>()),
-      );
+      await expectLater(() => dataSource.configurePet(PetSpecieEnum.DOG), throwsA(isA<Exception>()));
     });
   });
 
   group('getPetStatus', () {
     test('returns hasPet from the decoded body on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'hasPet': true}), 200),
-      );
+      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(jsonEncode({'hasPet': true}), 200));
 
       final result = await dataSource.getPetStatus();
 
@@ -62,9 +57,7 @@ void main() {
 
   group('getMyPet', () {
     test('returns the decoded pet JSON on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'specie': 'CAT'}), 200),
-      );
+      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(jsonEncode({'specie': 'CAT'}), 200));
 
       final result = await dataSource.getMyPet();
 

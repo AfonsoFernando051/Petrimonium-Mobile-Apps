@@ -1,12 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_accessory.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// In-memory [MascotRepository] double: records every persisted write so
@@ -45,18 +38,13 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveNetWorth(double netWorth) async => savedNetWorth = netWorth;
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async =>
-      savedEquipped = equipped;
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async => savedEquipped = equipped;
 
   @override
-  Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async =>
-      savedUnlocked = unlocked;
+  Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async => savedUnlocked = unlocked;
 
   @override
-  Future<void> saveLastActiveAt(DateTime lastActiveAt) async =>
-      savedLastActiveAt = lastActiveAt;
+  Future<void> saveLastActiveAt(DateTime lastActiveAt) async => savedLastActiveAt = lastActiveAt;
 }
 
 void main() {
@@ -93,10 +81,7 @@ void main() {
     test('there are exactly 9 stages and each has a strictly higher tier than the previous', () {
       expect(PetEvolutionStage.values.length, 9);
       for (var i = 1; i < PetEvolutionStage.values.length; i++) {
-        expect(
-          PetEvolutionStage.values[i].tier,
-          greaterThan(PetEvolutionStage.values[i - 1].tier),
-        );
+        expect(PetEvolutionStage.values[i].tier, greaterThan(PetEvolutionStage.values[i - 1].tier));
       }
     });
 
@@ -157,10 +142,7 @@ void main() {
 
   group('triggerEventAnimation', () {
     testWidgets('overrides the animation immediately and reverts after the given duration', (tester) async {
-      controller.triggerEventAnimation(
-        PetAnimationState.celebrate,
-        duration: const Duration(seconds: 1),
-      );
+      controller.triggerEventAnimation(PetAnimationState.celebrate, duration: const Duration(seconds: 1));
       expect(controller.animationState, PetAnimationState.celebrate);
 
       await tester.pump(const Duration(seconds: 1));
@@ -197,30 +179,22 @@ void main() {
   group('equipAccessory / unequipAccessory', () {
     test('equipping a locked accessory throws', () {
       expect(
-        () => controller.equipAccessory(
-          const PetAccessory(id: PetAccessoryId.baseballCap),
-        ),
+        () => controller.equipAccessory(const PetAccessory(id: PetAccessoryId.baseballCap)),
         throwsA(isA<StateError>()),
       );
     });
 
     test('unlocking then equipping persists the accessory in its slot', () async {
       await controller.unlockAccessory(PetAccessoryId.baseballCap);
-      await controller.equipAccessory(
-        const PetAccessory(id: PetAccessoryId.baseballCap, unlocked: true),
-      );
+      await controller.equipAccessory(const PetAccessory(id: PetAccessoryId.baseballCap, unlocked: true));
 
-      expect(controller.profile.equippedAccessories[AccessoryType.headwear],
-          PetAccessoryId.baseballCap);
-      expect(repository.savedEquipped?[AccessoryType.headwear],
-          PetAccessoryId.baseballCap);
+      expect(controller.profile.equippedAccessories[AccessoryType.headwear], PetAccessoryId.baseballCap);
+      expect(repository.savedEquipped?[AccessoryType.headwear], PetAccessoryId.baseballCap);
     });
 
     test('unequipping clears the slot', () async {
       await controller.unlockAccessory(PetAccessoryId.baseballCap);
-      await controller.equipAccessory(
-        const PetAccessory(id: PetAccessoryId.baseballCap, unlocked: true),
-      );
+      await controller.equipAccessory(const PetAccessory(id: PetAccessoryId.baseballCap, unlocked: true));
 
       await controller.unequipAccessory(AccessoryType.headwear);
 

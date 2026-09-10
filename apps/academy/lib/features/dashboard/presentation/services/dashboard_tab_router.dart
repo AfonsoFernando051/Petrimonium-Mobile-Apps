@@ -1,4 +1,4 @@
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Pure tab-index → behavior mappings for [DashboardScreen]'s 4 bottom-nav
 /// tabs (Home/Academy/Wallet/Mentor). The `dashboard` feature has no domain
@@ -23,11 +23,11 @@ class DashboardTabRouter {
   /// comment on why this mirrors the real tabs + Profile rather than a
   /// generic missions/goals set that doesn't exist in this app.)
   static PetContext petContextFor(int tabIndex) => switch (tabIndex) {
-        homeTab => PetContext.home,
-        academyTab => PetContext.academy,
-        walletTab => PetContext.portfolio,
-        _ => PetContext.mentor,
-      };
+    homeTab => PetContext.home,
+    academyTab => PetContext.academy,
+    walletTab => PetContext.portfolio,
+    _ => PetContext.mentor,
+  };
 
   /// Whether [tabIndex] is the portfolio-flavored tab — used to decide
   /// whether the companion greeting needs the holdings count.

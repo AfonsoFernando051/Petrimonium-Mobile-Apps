@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/passive_income_estimate.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 
@@ -36,12 +36,8 @@ class PassiveIncomeCard extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                Expanded(
-                  child: _figure(context, 'Mensal', estimate.monthlyEstimate, AppColors.goldenBorder),
-                ),
-                Expanded(
-                  child: _figure(context, 'Anual', estimate.annualEstimate, AppColors.neonCyan),
-                ),
+                Expanded(child: _figure(context, 'Mensal', estimate.monthlyEstimate, AppColors.goldenBorder)),
+                Expanded(child: _figure(context, 'Anual', estimate.annualEstimate, AppColors.neonCyan)),
               ],
             ),
             if (estimate.monthlyByType.isNotEmpty) ...[
@@ -102,9 +98,15 @@ class PassiveIncomeCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
         children: [
-          Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+          Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
           const SizedBox(width: 8),
-          Expanded(child: Text(label, style: TextStyle(color: tokens.textPrimary, fontSize: 12))),
+          Expanded(
+            child: Text(label, style: TextStyle(color: tokens.textPrimary, fontSize: 12)),
+          ),
           Text(
             '${AppFormatters.currency(monthlyValue, showCents: false)}/mês',
             style: TextStyle(color: tokens.textSecondary, fontSize: 11),
@@ -116,9 +118,7 @@ class PassiveIncomeCard extends StatelessWidget {
 
   Widget _monthChip(BuildContext context, DateTime month, double value) {
     final tokens = context.colors;
-    const monthNames = [
-      'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez',
-    ];
+    const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
     return Container(
       width: 76,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),

@@ -16,10 +16,12 @@ class SimulatedWalletRemoteDataSource {
   Future<Map<String, dynamic>> fetchPortfolio() async {
     final response = await apiClient.get(ApiConstants.simulatedPortfolioMeEndpoint);
     if (response.statusCode != 200) {
-      throw Exception(extractErrorDetail(
-        response,
-        fallback: 'Failed to load simulated portfolio. Status Code: ${response.statusCode}',
-      ));
+      throw Exception(
+        extractErrorDetail(
+          response,
+          fallback: 'Failed to load simulated portfolio. Status Code: ${response.statusCode}',
+        ),
+      );
     }
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
@@ -30,20 +32,16 @@ class SimulatedWalletRemoteDataSource {
     required double quantity,
     String? clientOrderId,
   }) async {
-    final response = await apiClient.post(
-      ApiConstants.simulatedPortfolioOrdersEndpoint,
-      {
-        'ticker': ticker,
-        'side': side,
-        'quantity': quantity,
-        'clientOrderId': ?clientOrderId,
-      },
-    );
+    final response = await apiClient.post(ApiConstants.simulatedPortfolioOrdersEndpoint, {
+      'ticker': ticker,
+      'side': side,
+      'quantity': quantity,
+      'clientOrderId': ?clientOrderId,
+    });
     if (response.statusCode != 201) {
-      throw Exception(extractErrorDetail(
-        response,
-        fallback: 'Failed to place simulated order. Status Code: ${response.statusCode}',
-      ));
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to place simulated order. Status Code: ${response.statusCode}'),
+      );
     }
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
@@ -51,35 +49,35 @@ class SimulatedWalletRemoteDataSource {
   Future<List<Map<String, dynamic>>> fetchOrders() async {
     final response = await apiClient.get(ApiConstants.simulatedPortfolioOrdersEndpoint);
     if (response.statusCode != 200) {
-      throw Exception(extractErrorDetail(
-        response,
-        fallback: 'Failed to load simulated order history. Status Code: ${response.statusCode}',
-      ));
+      throw Exception(
+        extractErrorDetail(
+          response,
+          fallback: 'Failed to load simulated order history. Status Code: ${response.statusCode}',
+        ),
+      );
     }
     final List<dynamic> data = jsonDecode(response.body);
     return data.cast<Map<String, dynamic>>();
   }
 
   Future<void> reset() async {
-    final response = await apiClient.post(
-      ApiConstants.simulatedPortfolioResetEndpoint,
-      {'confirm': true},
-    );
+    final response = await apiClient.post(ApiConstants.simulatedPortfolioResetEndpoint, {'confirm': true});
     if (response.statusCode != 204) {
-      throw Exception(extractErrorDetail(
-        response,
-        fallback: 'Failed to reset simulated portfolio. Status Code: ${response.statusCode}',
-      ));
+      throw Exception(
+        extractErrorDetail(
+          response,
+          fallback: 'Failed to reset simulated portfolio. Status Code: ${response.statusCode}',
+        ),
+      );
     }
   }
 
   Future<List<Map<String, dynamic>>> searchQuotes(String query) async {
     final response = await apiClient.get(ApiConstants.simulatedPortfolioQuoteSearchEndpoint(query));
     if (response.statusCode != 200) {
-      throw Exception(extractErrorDetail(
-        response,
-        fallback: 'Failed to search assets. Status Code: ${response.statusCode}',
-      ));
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to search assets. Status Code: ${response.statusCode}'),
+      );
     }
     final List<dynamic> data = jsonDecode(response.body);
     return data.cast<Map<String, dynamic>>();
@@ -93,10 +91,9 @@ class SimulatedWalletRemoteDataSource {
       return null;
     }
     if (response.statusCode != 200) {
-      throw Exception(extractErrorDetail(
-        response,
-        fallback: 'Failed to fetch quote. Status Code: ${response.statusCode}',
-      ));
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to fetch quote. Status Code: ${response.statusCode}'),
+      );
     }
     return jsonDecode(response.body) as Map<String, dynamic>;
   }

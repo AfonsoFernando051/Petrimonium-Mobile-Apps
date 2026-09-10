@@ -7,16 +7,9 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_academy/features/auth/presentation/screens/login_screen.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/settings/data/repositories/settings_repository.dart';
 import 'package:petrimonium_academy/features/settings/presentation/screens/settings_screen.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/account_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/appearance_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/companion_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/language_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/notifications_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/privacy_section.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -52,10 +45,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const SettingsScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const SettingsScreen());
   }
 
   // The Settings body is taller than the default 800x600 test viewport, so
@@ -85,7 +75,30 @@ void main() {
       expect(find.text('Rex'), findsOneWidget);
     });
 
-    testWidgets('toggling a notification switch persists the new value to SharedPreferences', (WidgetTester tester) async {
+    // The sections live in `petrimonium_shared_features` and are handed their
+    // copy, so a section rendering at all no longer proves this screen passed
+    // it the right strings — findsOneWidget above would still pass with every
+    // key mis-wired. These assert the wiring itself.
+    testWidgets('hands each section the copy it is supposed to show', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      for (final title in ['COMPANHEIRO', 'IDIOMA', 'PAÍS', 'APARÊNCIA', 'NOTIFICAÇÕES', 'PRIVACIDADE', 'CONTA']) {
+        expect(find.text(title), findsOneWidget, reason: title);
+      }
+      expect(find.text('Nome do companheiro'), findsOneWidget);
+      expect(find.text('Português (Brasil)'), findsOneWidget);
+      expect(find.text('Brasil'), findsOneWidget);
+      expect(find.text('Claro'), findsOneWidget);
+      expect(find.text('Lembretes de missões diárias'), findsOneWidget);
+      expect(find.text('Aparecer nos rankings'), findsOneWidget);
+      expect(find.text('Sair'), findsOneWidget);
+    });
+
+    testWidgets('toggling a notification switch persists the new value to SharedPreferences', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -97,7 +110,9 @@ void main() {
       expect(prefs.getBool('settings_daily_mission_reminders'), isFalse);
     });
 
-    testWidgets('renaming the pet updates the shown name and persists via the mascot repository', (WidgetTester tester) async {
+    testWidgets('renaming the pet updates the shown name and persists via the mascot repository', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
@@ -173,32 +188,34 @@ void main() {
       expect(find.byType(SettingsScreen), findsOneWidget);
     });
 
-    testWidgets('confirming the delete-account dialog erases the account, clears the session and navigates to LoginScreen', (WidgetTester tester) async {
-      await tester.pumpWidget(buildTestableWidget());
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
+    testWidgets(
+      'confirming the delete-account dialog erases the account, clears the session and navigates to LoginScreen',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(buildTestableWidget());
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
 
-      await tapVisible(tester, find.text('Excluir minha conta'));
-      await tester.pump(const Duration(milliseconds: 300));
+        await tapVisible(tester, find.text('Excluir minha conta'));
+        await tester.pump(const Duration(milliseconds: 300));
 
-      // Two "Excluir minha conta" widgets now exist: the section's button and
-      // the dialog's confirm action — the dialog's is the last one added.
-      await tester.tap(find.text('Excluir minha conta').last);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.pump(const Duration(milliseconds: 500));
+        // Two "Excluir minha conta" widgets now exist: the section's button and
+        // the dialog's confirm action — the dialog's is the last one added.
+        await tester.tap(find.text('Excluir minha conta').last);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
+        await tester.pump(const Duration(milliseconds: 500));
 
-      verify(() => mockSettingsRepository.deleteAccount()).called(1);
-      // The local session has to be cleared too, otherwise the device keeps
-      // tokens for an account that no longer exists.
-      verify(() => mockAuthRepository.logout()).called(1);
-      expect(find.byType(LoginScreen), findsOneWidget);
-      expect(find.byType(SettingsScreen), findsNothing);
-    });
+        verify(() => mockSettingsRepository.deleteAccount()).called(1);
+        // The local session has to be cleared too, otherwise the device keeps
+        // tokens for an account that no longer exists.
+        verify(() => mockAuthRepository.logout()).called(1);
+        expect(find.byType(LoginScreen), findsOneWidget);
+        expect(find.byType(SettingsScreen), findsNothing);
+      },
+    );
 
     testWidgets('a failed deletion reports the error and leaves the user signed in', (WidgetTester tester) async {
-      when(() => mockSettingsRepository.deleteAccount())
-          .thenThrow(Exception('Não foi possível excluir a conta'));
+      when(() => mockSettingsRepository.deleteAccount()).thenThrow(Exception('Não foi possível excluir a conta'));
 
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
@@ -220,7 +237,9 @@ void main() {
       expect(find.byType(LoginScreen), findsNothing);
     });
 
-    testWidgets('a successful deletion still signs out locally when the remote logout fails', (WidgetTester tester) async {
+    testWidgets('a successful deletion still signs out locally when the remote logout fails', (
+      WidgetTester tester,
+    ) async {
       // Expected: /auth/logout answers 401 because the account is already gone.
       when(() => mockAuthRepository.logout()).thenThrow(Exception('401'));
 
@@ -240,6 +259,5 @@ void main() {
       expect(find.byType(LoginScreen), findsOneWidget);
       expect(find.byType(SettingsScreen), findsNothing);
     });
-
   });
 }

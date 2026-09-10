@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/events/app_event_bus.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   group('AppEventBus', () {

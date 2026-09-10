@@ -47,10 +47,7 @@ class ChatBubble extends StatelessWidget {
           bottomRight: Radius.circular(4),
         ),
       ),
-      child: Text(
-        message.text,
-        style: const TextStyle(color: Colors.white, fontSize: 14, height: 1.4),
-      ),
+      child: Text(message.text, style: const TextStyle(color: Colors.white, fontSize: 14, height: 1.4)),
     );
   }
 
@@ -70,31 +67,25 @@ class ChatBubble extends StatelessWidget {
       child: message.text.isEmpty
           ? const SizedBox(height: 4)
           : layers == null
-              ? _markdown(context, message.text)
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    LayerChip(
-                      label: Translator.translate(AppStrings.academyContentLabel),
-                      color: AppColors.neonCyan,
-                    ),
-                    const SizedBox(height: 8),
-                    _markdown(context, layers.content),
-                    if (layers.interpretation != null) ...[
-                      const SizedBox(height: 14),
-                      LayerChip(
-                        label: Translator.translate(AppStrings.mentorInterpretationLabel),
-                        color: tokens.mentor,
-                      ),
-                      const SizedBox(height: 8),
-                      DefaultTextStyle.merge(
-                        style: const TextStyle(fontStyle: FontStyle.italic),
-                        child: _markdown(context, layers.interpretation!),
-                      ),
-                    ],
-                  ],
-                ),
+          ? _markdown(context, message.text)
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                LayerChip(label: Translator.translate(AppStrings.academyContentLabel), color: AppColors.neonCyan),
+                const SizedBox(height: 8),
+                _markdown(context, layers.content),
+                if (layers.interpretation != null) ...[
+                  const SizedBox(height: 14),
+                  LayerChip(label: Translator.translate(AppStrings.mentorInterpretationLabel), color: tokens.mentor),
+                  const SizedBox(height: 8),
+                  DefaultTextStyle.merge(
+                    style: const TextStyle(fontStyle: FontStyle.italic),
+                    child: _markdown(context, layers.interpretation!),
+                  ),
+                ],
+              ],
+            ),
     );
   }
 

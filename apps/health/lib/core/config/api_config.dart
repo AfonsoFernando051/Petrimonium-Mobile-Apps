@@ -6,8 +6,6 @@ abstract final class ApiConfig {
   // verifica em `google.oauth.client-ids`. É o mesmo valor da Wallet e da
   // Academy — o client é do backend, não de cada app. Vazio por omissão:
   //   flutter run --dart-define=GOOGLE_SERVER_CLIENT_ID=<web-client-id>.apps.googleusercontent.com
-  static const String googleServerClientId = String.fromEnvironment(
-    'GOOGLE_SERVER_CLIENT_ID',
-  );
+  static const String googleServerClientId = String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID');
   static const String healthBase = '/api/v1/health';
 }

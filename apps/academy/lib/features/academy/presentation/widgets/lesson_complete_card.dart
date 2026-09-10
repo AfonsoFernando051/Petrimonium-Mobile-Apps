@@ -33,17 +33,13 @@ class LessonCompleteCard extends StatelessWidget {
       backgroundColor: tokens.surfaceElevated.withValues(alpha: context.isDarkMode ? 0.85 : 0.96),
       borderColor: tokens.success.withValues(alpha: 0.6),
       borderRadius: 24,
-      boxShadow: [
-        BoxShadow(color: tokens.success.withValues(alpha: 0.25), blurRadius: 28, spreadRadius: 2),
-      ],
+      boxShadow: [BoxShadow(color: tokens.success.withValues(alpha: 0.25), blurRadius: 28, spreadRadius: 2)],
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ClipOval(
-              child: PetRiveCompanion(controller: mascotController, size: 64, interactive: false),
-            ),
+            ClipOval(child: PetRiveCompanion(controller: mascotController, size: 64, interactive: false)),
             const SizedBox(height: 12),
             Text(
               Translator.translate(AppStrings.academyLessonCompleteTitle),

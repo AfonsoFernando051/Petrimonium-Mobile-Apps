@@ -8,13 +8,7 @@ import '../tokens/app_color_tokens.dart';
 /// Substitui o par campo-que-abre-folha nos ecrãs de onboarding: o canvas põe
 /// as opções à vista, sem um toque extra para as descobrir.
 class OptionPill extends StatelessWidget {
-  const OptionPill({
-    super.key,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-    this.leading,
-  });
+  const OptionPill({super.key, required this.label, required this.selected, required this.onTap, this.leading});
 
   final String label;
   final bool selected;
@@ -42,9 +36,7 @@ class OptionPill extends StatelessWidget {
         decoration: BoxDecoration(
           color: selected ? tokens.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(
-            color: selected ? tokens.primary : tokens.textPrimary.withValues(alpha: 0.12),
-          ),
+          border: Border.all(color: selected ? tokens.primary : tokens.textPrimary.withValues(alpha: 0.12)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

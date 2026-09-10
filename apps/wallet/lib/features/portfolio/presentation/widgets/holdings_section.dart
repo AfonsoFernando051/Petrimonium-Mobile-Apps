@@ -3,8 +3,7 @@ import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/expandable_category.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 
@@ -23,8 +22,11 @@ class HoldingsSection extends StatelessWidget {
       byType.putIfAbsent(holding.type, () => []).add(holding);
     }
     final sortedTypes = byType.keys.toList()
-      ..sort((a, b) => byType[b]!.fold<double>(0, (s, h) => s + h.currentValue)
-          .compareTo(byType[a]!.fold<double>(0, (s, h) => s + h.currentValue)));
+      ..sort(
+        (a, b) => byType[b]!
+            .fold<double>(0, (s, h) => s + h.currentValue)
+            .compareTo(byType[a]!.fold<double>(0, (s, h) => s + h.currentValue)),
+      );
 
     return GlassCard(
       backgroundColor: context.colors.surface.withValues(alpha: context.isDarkMode ? 0.55 : 0.94),

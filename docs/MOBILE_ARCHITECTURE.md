@@ -29,7 +29,7 @@ petrimonium-mobile/
 │   ├── petrimonium_ui/               design tokens, theming, presentation widgets
 │   ├── petrimonium_flutter_core/     environment config, API client, utilities
 │   └── petrimonium_shared_features/  features the whole ecosystem shares
-├── tooling/
+├── tooling/          dependency-direction and layering checks
 ├── docs/
 ├── .github/workflows/
 └── melos.yaml
@@ -60,6 +60,33 @@ shared `LoginForm`/`SignupForm` (see "What is deliberately still duplicated"
 below) compose `petrimonium_ui` widgets (`CustomTextField`, `GameButton`,
 `GameSnack`, `SharedAccountNotice`, `OrDivider`, `GoogleSignInButton`,
 `ForgotPasswordButton`), so the declared graph keeps describing what is real.
+
+## Rules that are enforced, not remembered
+
+Four checks run in CI. Three are scripts so that one definition serves both
+CI and a developer's terminal.
+
+| Check | Rule |
+| --- | --- |
+| `tooling/check_dependency_direction.sh` | No package imports an app; no app imports another app |
+| `tooling/check_layering.sh` | No `features/*/domain/` file imports Flutter's widget libraries or the data layer |
+| `dart format --set-exit-if-changed` | The tree stays formatted |
+| `analysis_options.yaml` (root) | One lint baseline; every app and package includes it |
+
+`.github/workflows/architecture.yml` runs the first two **unfiltered**, on
+every change. That is deliberate: the dependency-direction check previously
+lived only in `shared-checks.yml`, which triggers on `packages/**`, so its
+"no app may import another app" rule could never fire on the app-only change
+that would break it.
+
+The layering check carries explicit allowlists of the remaining debt, by
+path. Removing an entry is the definition of done; adding one needs a reason
+in the commit message; a path that no longer exists fails the check so the
+allowlist cannot rot into cover for real violations.
+
+A domain layer worth having is one you can test without a widget binding.
+That is the whole point of the layering rule, and it is what let
+`PortfolioHealthCalculator` move into a package as plain Dart.
 
 ## What belongs in each package
 
@@ -119,21 +146,173 @@ product-supplied copy.
 
 Auth UI: `LoginForm`/`SignupForm` (`lib/src/auth/presentation/`) — see below.
 
+Portfolio (`lib/src/portfolio/`): the entities, the two pure calculators, the
+three remote datasources and the three repositories that Academy and Wallet
+had byte-identical copies of. Also `PortfolioHealthCalculator`, which is
+~90 lines of arithmetic and now carries no Flutter import at all — the
+`HealthMetric` it produces names a `HealthMetricKind` instead of a pt-BR
+label and an `IconData`, and each app maps that enum to its own copy.
+
+Pet (`lib/src/pet/`): the domain — species, accessories, evolution rules and
+stages, profile, animation states. The *companion UI* is not here; see below.
+
+Onboarding DTOs and the Mentor conversation summary round it out.
+
+`lib/testing.dart` is a separate entrypoint carrying test-only builders
+(`lot`, `statsFromLots`). It is deliberately off the main barrel so nothing
+in a production build imports it by accident, and it lives under `lib/`
+because one package cannot import another package's `test/` directory.
+
+### The rules/copy split, and why it keeps recurring
+
+Six extractions here took the same shape, and it is the shape to reach for
+first when something "cannot be shared because it has copy in it":
+
+| Shared (ecosystem rule) | Per app (product copy) |
+| --- | --- |
+| `LevelTier` boundaries | `LevelTitle` catalog |
+| `InvestmentTypeRules` — target allocation, assumed yield | `InvestmentTypeDisplay` — label, icon, color |
+| `PetSpecieEnum` — wire format, display order | `PetSpecieDisplay.displayLabel` |
+| `AchievementRules` — ids, XP, conditions | `AchievementCatalog` — title, description, icon |
+| `HealthMetricKind` + the scoring | `HealthMetricDisplay` — label, icon |
+| `sharedCopy` — wording both products already agreed on | each app's `_productCopy` — its own voice |
+
+The test is whether the two products *must* agree. They must agree about what
+a level is worth and what an asset class yields; they need not agree about
+what to call it.
+
+The last row adds a third layer the first five did not need. Copy is normally
+the product's half — but two products can also simply *agree* on a string, and
+1324 of theirs did. So the split is base/override rather than shared/not: the
+ecosystem wording is the base, an app declares only what it says differently,
+and the override wins. `TranslatorEngine` does the merge; a test in each app
+fails if a product override ever repeats a value the base already has, which
+is what stops the duplication creeping back one paste at a time.
+
+`AppColors.neonCyan` is the clearest illustration of the other direction: cyan
+in Academy, emerald in Wallet, same field name — which is why anything reading
+it is product-branded no matter how identical the source looks.
+
 ## What is deliberately still duplicated
 
-Academy and Wallet still hold byte-identical copies of the pet (22 files),
-settings (11) and mentor (8) blocks. This is known, and it is not an oversight.
+Academy and Wallet still hold 28 clone files in `lib/` (~3100 lines) and 30
+in `test/` (~2800), down from 80 and 93. Every one that is left is behind a
+decision or is duplicated on purpose.
 
-All of them are bound to `Translator` and `AppStrings`, and **the two catalogs
-have already diverged by roughly 650 lines**. Health is a third system
-entirely, using ARB files and `gen_l10n`. Sharing that UI therefore requires
-first deciding which product's wording wins for the shared strings — a
-decision that silently changes one product's copy, which a refactor is not
-allowed to do.
+Read the line count, not the group count. Extracting a screen leaves a thin
+per-app resolver behind — `conversation_list_route`, `level_title`,
+`friendly_error_message` — and those are byte-identical between the apps by
+their very nature, so they register as clones forever. That is the shape
+working, not duplication left behind.
 
-So the prerequisite for sharing *that* UI is a **localization decision, not a
-refactor** — converge on one shared string mechanism, or agree that shared
-widgets keep taking copy as parameters (see below).
+**1. Reaching the translator from a package (9 of the 28).** Counted
+honestly, this blocker is nearly spent. The nine break down as:
+
+| | files | status |
+| --- | --- | --- |
+| Thin per-app resolvers | `level_title`, `friendly_error_message`, `conversation_list_route`, `password_recovery_routes` | by design — these exist *because* the extraction worked |
+| The product-copy half | `pet_specie_enum` | by design — the rules half is already shared |
+| The app-level resolver | `settings_screen` | by design — it is the thing that owns `Translator` |
+| Blocked by `AppEvent`, not by copy | `pet_interaction_sheet`, `pet_companion_header` | both reach `PetCompanionController`, which listens on `AppEventBus` — see 2 |
+| Done | `pet_comic_speech_bubble` + three siblings | moved; see below |
+
+Nothing is now held up by the translator seam alone. Two files are really
+blocker 2 wearing a different hat, and the other six are the pattern working
+rather than debt.
+
+The speech bubble needed one thing none of the others did. `PetMessage`
+carries copy *keys* chosen at runtime, so the widget cannot take plain
+strings — it takes `translate` itself, a `String Function(String, {Map params})`
+the app satisfies with `Translator.translate`. That is still an explicit
+parameter, not a global, and key-safety was never this widget's to hold: the
+keys arrive in its data.
+
+Settings was the first slice through this and shows the shape the rest should
+take: the seven section widgets take their copy as constructor parameters, the
+way `LoginForm` already did, and the screen — which does have a `Translator` —
+resolves the keys and passes them in. No new mechanism, no global to
+initialise, and a wrong key is a compile error rather than a key rendered raw
+on screen. `CompanionSection` is the reason the colour goes the same way:
+`AppColors.neonPink` is hot pink in Academy and emerald in Wallet, so it takes
+an `accentColor` too.
+
+The cost is that "the section rendered" no longer proves the screen passed it
+the right strings, so each app's `settings_screen_test` now asserts the copy
+itself. Budget one such test per screen that gets this treatment.
+
+The Mentor conversation history went next and shows the two things Settings
+did not need. At fifteen strings the parameter list stops being readable, so
+the screen takes a `ConversationListCopy` record instead, built by a per-app
+`buildConversationListScreen()` next to the navigation call. And it takes a
+`ConversationStore` — three methods — rather than `MentorChatRepository`,
+which would have dragged the remote datasource, `ChatMessage`,
+`PetPreferencesRepository` and two label-bearing enums into the package with
+it. Its backdrop is a parameter too: each app's `CosmicBackground` genuinely
+differs, unlike the sections' chrome.
+
+The two password-recovery screens followed the same recipe, and confirmed that
+the seam is now routine: a copy record, the product's `LoginBackground` as a
+parameter, and the repository reduced to the two calls each screen makes
+(`onRequestReset`, `onResetPassword`) — passed as functions, which is what
+`LoginForm` had been doing with `onLogin` since the auth extraction.
+
+A rule fell out of these three: a screen extracted this way needs a wiring
+test left behind in each app, because nothing else covers the route factory
+that resolves its keys. `password_recovery_routes` had no coverage at all for
+a moment; `settings_screen_test` had coverage that would have passed with
+every key wrong.
+
+The copy itself is no longer in the way. Measured rather than assumed, the two
+catalogs held 1377 (language, key) pairs in common and **1324 of them were
+already identical** — the real divergence is 18 keys, which is brand voice
+(`brandTagline`, `meetPetIntro`, the Academy intro) and nothing else. Those
+1324 now live once in `sharedCopy`; each app keeps its 18 overrides plus the
+strings for screens the sibling does not have. All of these files are byte-identical
+between the apps, so every key they touch is by construction in the shared
+452 — none of them needs a wording decision to move.
+
+Two more files only ever wanted the language *code*
+(`onboarding_remote_datasource`, `mentor_chat_repository` — `?lang=` and a
+`language:` argument). Those take a `String`, not a translator, and are not
+part of this blocker at all.
+
+An earlier version of this section claimed the catalogs had "already diverged
+by roughly 650 lines" and that converging on `gen_l10n` was the obvious
+destination. Both were wrong. The divergence was 18 keys, and `gen_l10n` is
+reachable only from a `BuildContext` — while Academy and Wallet translate from
+domain and data code (`level_title`, `friendly_error_message`, three
+repositories/datasources) where no context exists. Migrating would mean either
+pushing `BuildContext` into the domain, which the layering guard now forbids,
+or restructuring those callers to return keys. That is an architecture change,
+not the mechanical migration the old text implied. `friendlyErrorCopy` and
+`levelTierKey` show the way out where it is worth taking: the rule returns a
+key, and the product resolves it.
+
+**2. Whether `AppEvent` becomes an ecosystem type.** The Pet companion UI
+(`pet_rive_companion`, `pet_mascot_widget`, `mascot_controller`,
+`pet_speech_bubble*` — about 1400 lines) is i18n-free and looks ready to
+share, but `MascotController` listens on `AppEventBus` and `AppEvent` is a
+`sealed` hierarchy each app owns. A sealed type cannot be extended from
+another library, which is exactly why `ApiClient` reports an expired session
+through a callback instead of an event.
+
+Moving `AppEvent` into a package would unblock this *and* let `ApiClient`
+emit directly — but it would also make every product's event vocabulary one
+shared vocabulary, and Health has no `AppEvent` at all. That is a design
+decision, not a mechanical move.
+
+**3. The five copy catalogs** — `AchievementCatalog`, `Achievement`,
+`InvestmentTypeDisplay`, `MissionDisplayCatalog` and `HealthMetricDisplay` —
+are duplicated **on purpose** and should stay that way. They read as clones
+today only because the two products happen to say the
+same thing; they are the half of the rules/copy split that each product owns,
+and the moment one product's wording changes they stop looking alike.
+
+The Academy content-icon chain used to be a fourth blocker. It is resolved:
+the catalog entities carry an icon *key* and only presentation resolves it,
+so the whole nine-file block moved to `petrimonium_shared_features`. That is
+also why `tooling/check_layering.sh`'s widget-library allowlist is empty —
+all 21 domain files that imported a Flutter widget library are clean.
 
 Auth was the exception, and is done: verified byte-for-byte identical (or a
 single cosmetic line apart) before touching it, so no localization decision
@@ -224,15 +403,19 @@ belongs in this repository.
 | `wallet.yml`         | `apps/wallet/**`, `packages/**`, `melos.yaml`  |
 | `health.yml`         | `apps/health/**`, `packages/**`, `melos.yaml`  |
 | `shared-checks.yml`  | `packages/**`, `melos.yaml`, root `pubspec.yaml` |
+| `architecture.yml`   | everything — see "Rules that are enforced" above |
 
-A product-only change runs one pipeline. A shared-package change runs all
-four: the package proves itself standing alone, and each app proves the change
-did not break it.
+A product-only change runs one pipeline plus `architecture.yml`. A
+shared-package change runs all five: the package proves itself standing
+alone, and each app proves the change did not break it.
 
 ## Adding a shared component
 
 1. Ask the decision rule at the top. If only two of three products want it,
    that is usually a sign it belongs to those products for now.
+1a. If the answer is "shared, except for the copy", do not stop there — split
+   it. The rules go in the package, the wording stays in each app. See the
+   rules/copy table above; five components have taken that shape already.
 2. Put it in the lowest package that can hold it. UI with no logic goes in
    `petrimonium_ui`.
 3. Take copy as a parameter. Take colors from `context.colors` /

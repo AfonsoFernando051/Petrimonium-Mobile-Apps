@@ -1,6 +1,6 @@
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_data_status.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/user_position.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Comprehensive asset details model — the normalized representation of
 /// everything the app knows about a single asset, combining provider market
@@ -28,14 +28,14 @@ class AssetDetails {
 
   // ── Valuation ─────────────────────────────────────────────────────
   final double? marketCap;
-  final double? priceToEarnings;  // P/E (P/L)
-  final double? priceToBook;     // P/VP
+  final double? priceToEarnings; // P/E (P/L)
+  final double? priceToBook; // P/VP
   final double? evToEbitda;
   final double? dividendYield;
 
   // ── Profitability ─────────────────────────────────────────────────
-  final double? returnOnEquity;  // ROE
-  final double? returnOnAssets;  // ROA
+  final double? returnOnEquity; // ROE
+  final double? returnOnAssets; // ROA
   final double? netMargin;
   final double? operatingMargin;
 
@@ -132,8 +132,7 @@ class AssetDetails {
       recentDividends.where((d) => d.status == DividendStatus.ANNOUNCED).toList();
 
   /// Historical (already paid) dividends, most recent first.
-  List<DividendEvent> get paidDividends =>
-      recentDividends.where((d) => d.status == DividendStatus.PAID).toList();
+  List<DividendEvent> get paidDividends => recentDividends.where((d) => d.status == DividendStatus.PAID).toList();
 
   factory AssetDetails.fromJson(Map<String, dynamic> json) {
     return AssetDetails(
@@ -172,7 +171,8 @@ class AssetDetails {
       userPosition: json['userPosition'] != null
           ? UserPosition.fromJson(json['userPosition'] as Map<String, dynamic>)
           : null,
-      recentDividends: (json['recentDividends'] as List<dynamic>?)
+      recentDividends:
+          (json['recentDividends'] as List<dynamic>?)
               ?.map((e) => DividendEvent.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],

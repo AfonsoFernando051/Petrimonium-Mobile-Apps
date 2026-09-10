@@ -1,12 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/data/datasources/pet_remote_datasource.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 
 /// [loadProfile] paints instantly from the local cache (name/stage/
 /// accessories/lastActiveAt have no backend equivalent — they stay
@@ -19,8 +13,8 @@ class MascotRepositoryImpl implements MascotRepository {
   MascotRepositoryImpl({
     required GamificationRemoteDataSource gamificationRemoteDataSource,
     required PetRemoteDataSource petRemoteDataSource,
-  })  : _gamificationRemoteDataSource = gamificationRemoteDataSource,
-        _petRemoteDataSource = petRemoteDataSource;
+  }) : _gamificationRemoteDataSource = gamificationRemoteDataSource,
+       _petRemoteDataSource = petRemoteDataSource;
 
   final GamificationRemoteDataSource _gamificationRemoteDataSource;
   final PetRemoteDataSource _petRemoteDataSource;
@@ -47,16 +41,11 @@ class MascotRepositoryImpl implements MascotRepository {
 
     var xp = prefs.getInt(_xpKey) ?? 0;
     final specieName = prefs.getString(_specieKey);
-    var specie = PetSpecieEnum.values.firstWhere(
-      (s) => s.name == specieName,
-      orElse: () => PetSpecieEnum.DOG,
-    );
+    var specie = PetSpecieEnum.values.firstWhere((s) => s.name == specieName, orElse: () => PetSpecieEnum.DOG);
     final netWorth = prefs.getDouble(_netWorthKey) ?? 0;
 
     final unlockedNames = prefs.getStringList(_unlockedKey) ?? const [];
-    final unlocked = <PetAccessoryId>{
-      for (final n in unlockedNames) ..._findAccessoryById(n),
-    };
+    final unlocked = <PetAccessoryId>{for (final n in unlockedNames) ..._findAccessoryById(n)};
 
     final equipped = <AccessoryType, PetAccessoryId>{};
     for (final slot in AccessoryType.values) {
@@ -67,8 +56,7 @@ class MascotRepositoryImpl implements MascotRepository {
     }
 
     final lastActiveIso = prefs.getString(_lastActiveAtKey);
-    final lastActiveAt =
-        lastActiveIso != null ? DateTime.tryParse(lastActiveIso) : null;
+    final lastActiveAt = lastActiveIso != null ? DateTime.tryParse(lastActiveIso) : null;
 
     try {
       final summary = await _gamificationRemoteDataSource.fetchSummary();
@@ -82,10 +70,7 @@ class MascotRepositoryImpl implements MascotRepository {
       final petData = await _petRemoteDataSource.getMyPet();
       final realSpecieName = petData?['specie'] as String?;
       if (realSpecieName != null) {
-        specie = PetSpecieEnum.values.firstWhere(
-          (s) => s.name == realSpecieName,
-          orElse: () => specie,
-        );
+        specie = PetSpecieEnum.values.firstWhere((s) => s.name == realSpecieName, orElse: () => specie);
         await saveSpecie(specie);
       }
     } catch (_) {
@@ -135,9 +120,7 @@ class MascotRepositoryImpl implements MascotRepository {
   }
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {
     final prefs = await SharedPreferences.getInstance();
     for (final slot in AccessoryType.values) {
       final key = '$_equippedKeyPrefix${slot.name}';
@@ -153,10 +136,7 @@ class MascotRepositoryImpl implements MascotRepository {
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(
-      _unlockedKey,
-      unlocked.map((a) => a.name).toList(),
-    );
+    await prefs.setStringList(_unlockedKey, unlocked.map((a) => a.name).toList());
   }
 
   @override

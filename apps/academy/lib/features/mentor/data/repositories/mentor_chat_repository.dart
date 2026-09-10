@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/mentor/data/datasources/mentor_remote_datasource.dart';
 import 'package:petrimonium_academy/features/mentor/domain/entities/chat_message.dart';
-import 'package:petrimonium_academy/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/data/models/investment_horizon_enum.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
 import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferences_repository.dart';
@@ -11,7 +11,7 @@ import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferenc
 /// now persisted server-side, scoped to the authenticated user — this class
 /// no longer caches chat history on-device (see [purgeLegacyLocalHistory]
 /// for the one-time cleanup of the old shared cache that predates this).
-class MentorChatRepository {
+class MentorChatRepository implements ConversationStore {
   MentorChatRepository({
     required MentorRemoteDataSource remoteDataSource,
     required PetPreferencesRepository petPreferencesRepository,
@@ -35,29 +35,26 @@ class MentorChatRepository {
     return _remoteDataSource.getConversationMessages(conversationId);
   }
 
+  @override
   Future<List<ConversationSummary>> listConversations() {
     return _remoteDataSource.listConversations();
   }
 
   Future<List<String>> loadSuggestedPrompts() {
-    return _remoteDataSource.getSuggestedPrompts(
-      language: Translator.currentLanguage,
-    );
+    return _remoteDataSource.getSuggestedPrompts(language: Translator.currentLanguage);
   }
 
+  @override
   Future<void> renameConversation(int conversationId, String title) {
     return _remoteDataSource.renameConversation(conversationId, title);
   }
 
+  @override
   Future<void> deleteConversation(int conversationId) {
     return _remoteDataSource.deleteConversation(conversationId);
   }
 
-  Future<MentorChatResult> sendMessage({
-    required String message,
-    int? conversationId,
-    String? currentScreen,
-  }) async {
+  Future<MentorChatResult> sendMessage({required String message, int? conversationId, String? currentScreen}) async {
     final goal = await _petPreferencesRepository.loadGoal();
     final horizon = await _petPreferencesRepository.loadHorizon();
 

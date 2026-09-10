@@ -5,8 +5,7 @@ import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium_wallet/features/onboarding/data/models/onboarding_status_model.dart';
-import 'package:petrimonium_wallet/features/onboarding/data/models/question_model.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:petrimonium_wallet/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
@@ -28,23 +27,15 @@ void main() {
 
     mockOnboardingRepository = MockOnboardingRepository();
     DI.onboardingRepository = mockOnboardingRepository;
-    when(() => mockOnboardingRepository.getStatus()).thenAnswer(
-      (_) async => const OnboardingStatusModel(
-        hasAnswered: false,
-        profile: null,
-      ),
-    );
+    when(
+      () => mockOnboardingRepository.getStatus(),
+    ).thenAnswer((_) async => const OnboardingStatusModel(hasAnswered: false, profile: null));
 
-    when(() => mockOnboardingRepository.getQuestions()).thenAnswer(
-      (_) async => <QuestionModel>[],
-    );
+    when(() => mockOnboardingRepository.getQuestions()).thenAnswer((_) async => <QuestionModel>[]);
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const LoginScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const LoginScreen());
   }
 
   group('LoginScreen', () {
@@ -88,18 +79,12 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       when(() => mockAuthRepository.login(any(), any())).thenAnswer((_) async {});
-      
+
       await tester.pumpWidget(buildTestableWidget());
 
-      final emailField = find.descendant(
-        of: find.byType(CustomTextField),
-        matching: find.byType(TextField),
-      ).first;
-      
-      final passwordField = find.descendant(
-        of: find.byType(CustomTextField),
-        matching: find.byType(TextField),
-      ).last;
+      final emailField = find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField)).first;
+
+      final passwordField = find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField)).last;
 
       await tester.enterText(emailField, 'test@example.com');
       await tester.enterText(passwordField, 'password123');

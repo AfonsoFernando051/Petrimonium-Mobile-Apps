@@ -37,8 +37,8 @@ class ChartLegend extends StatelessWidget {
   }
 
   Widget _dot(Color color) => Container(
-        width: 8,
-        height: 8,
-        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-      );
+    width: 8,
+    height: 8,
+    decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+  );
 }

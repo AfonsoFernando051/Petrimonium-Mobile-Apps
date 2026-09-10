@@ -12,10 +12,7 @@ void main() {
   });
 
   Widget buildThemedTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const WelcomeScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const WelcomeScreen());
   }
 
   group('WelcomeScreen', () {
@@ -31,7 +28,9 @@ void main() {
     // Timer, so it's unaffected by this and the usual "never call
     // pumpAndSettle" rule still applies below.
     testWidgets('renders the badge, headline, body and CTA in the mockup order', (tester) async {
-      tester.platformDispatcher.accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(disableAnimations: true);
+      tester.platformDispatcher.accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(
+        disableAnimations: true,
+      );
       addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
 
       await tester.pumpWidget(buildThemedTestableWidget());
@@ -44,7 +43,9 @@ void main() {
     });
 
     testWidgets('shows a Skip action that also proceeds to PetConfigurationScreen', (tester) async {
-      tester.platformDispatcher.accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(disableAnimations: true);
+      tester.platformDispatcher.accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(
+        disableAnimations: true,
+      );
       addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
 
       await tester.pumpWidget(buildThemedTestableWidget());
@@ -60,7 +61,9 @@ void main() {
     });
 
     testWidgets('tapping the CTA navigates to PetConfigurationScreen', (tester) async {
-      tester.platformDispatcher.accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(disableAnimations: true);
+      tester.platformDispatcher.accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(
+        disableAnimations: true,
+      );
       addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
 
       await tester.pumpWidget(buildThemedTestableWidget());

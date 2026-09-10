@@ -29,9 +29,7 @@ class OnboardingProgressBar extends StatelessWidget {
                   FractionallySizedBox(
                     widthFactor: fraction,
                     child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(colors: AppColors.brandGradient),
-                      ),
+                      decoration: const BoxDecoration(gradient: LinearGradient(colors: AppColors.brandGradient)),
                     ),
                   ),
                 ],

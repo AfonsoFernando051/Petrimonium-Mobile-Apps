@@ -1,8 +1,4 @@
-import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/school.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 enum LessonStatus { locked, available, completed }
 
@@ -152,7 +148,9 @@ class AcademyProgressCalculator {
         ..sort((a, b) => a.order.compareTo(b.order));
       for (final school in schools) {
         for (final module in catalog.modulesForSchool(school.id)) {
-          if (moduleStatus(catalog: catalog, module: module, completedIds: completedIds) == ModuleStatus.locked) continue;
+          if (moduleStatus(catalog: catalog, module: module, completedIds: completedIds) == ModuleStatus.locked) {
+            continue;
+          }
           if (!module.contentAvailable) continue;
           for (final lesson in catalog.lessonsForModule(module.id)) {
             if (!completedIds.contains(lesson.id)) return lesson;

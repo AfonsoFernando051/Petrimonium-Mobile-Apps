@@ -3,10 +3,6 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/game/domain/services/level_title.dart';
 import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
 
 /// Reactions to the Pet's own identity/gamification state — XP, level,
 /// evolution — which the backend `pet` module owns and both apps share (see
@@ -17,11 +13,7 @@ class CorePetBehavior extends PetBehavior {
   const CorePetBehavior();
 
   @override
-  PetMessage? pageEnter(
-    PetContext context, {
-    required int userXp,
-    Map<String, String> data = const {},
-  }) {
+  PetMessage? pageEnter(PetContext context, {required int userXp, Map<String, String> data = const {}}) {
     if (context != PetContext.profile) return null;
     final level = LevelCalculator.fromXp(userXp);
     return PetMessage(
@@ -30,10 +22,7 @@ class CorePetBehavior extends PetBehavior {
       priority: PetMessagePriority.low,
       trigger: PetMessageTrigger.pageEnter,
       textKey: AppStrings.companionProfileSummary,
-      params: {
-        'level': '${level.level}',
-        'stage': LevelTitle.forLevel(level.level),
-      },
+      params: {'level': '${level.level}', 'stage': LevelTitle.forLevel(level.level)},
       mood: PetAnimationState.idle,
     );
   }

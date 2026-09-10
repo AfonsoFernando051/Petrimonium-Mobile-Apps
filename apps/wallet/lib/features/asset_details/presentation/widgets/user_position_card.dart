@@ -44,20 +44,12 @@ class UserPositionCard extends StatelessWidget {
                     children: [
                       Text(
                         AppFormatters.currency(pos.currentValue, showCents: false),
-                        style: TextStyle(
-                          color: tokens.textPrimary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                        ),
+                        style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 22),
                       ),
                       const SizedBox(height: 2),
                       Row(
                         children: [
-                          Icon(
-                            isPositive ? Icons.trending_up : Icons.trending_down,
-                            color: plColor,
-                            size: 16,
-                          ),
+                          Icon(isPositive ? Icons.trending_up : Icons.trending_down, color: plColor, size: 16),
                           const SizedBox(width: 4),
                           Text(
                             '${isPositive ? '+' : ''}${AppFormatters.currency(pos.unrealizedGain, showCents: false)}',
@@ -84,19 +76,9 @@ class UserPositionCard extends StatelessWidget {
                     children: [
                       Text(
                         '${pos.portfolioWeight.toStringAsFixed(1)}%',
-                        style: const TextStyle(
-                          color: AppColors.neonCyan,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                        style: const TextStyle(color: AppColors.neonCyan, fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                      Text(
-                        'da carteira',
-                        style: TextStyle(
-                          color: tokens.textSecondary,
-                          fontSize: 9,
-                        ),
-                      ),
+                      Text('da carteira', style: TextStyle(color: tokens.textSecondary, fontSize: 9)),
                     ],
                   ),
                 ),
@@ -110,8 +92,10 @@ class UserPositionCard extends StatelessWidget {
             // ── Stats grid ──────────────────────────────────────
             Row(
               children: [
-                _Stat(label: 'Cotas', value: pos.quantity.toStringAsFixed(
-                    pos.quantity.truncateToDouble() == pos.quantity ? 0 : 2)),
+                _Stat(
+                  label: 'Cotas',
+                  value: pos.quantity.toStringAsFixed(pos.quantity.truncateToDouble() == pos.quantity ? 0 : 2),
+                ),
                 _Stat(label: 'PM', value: AppFormatters.currency(pos.averagePrice)),
                 _Stat(label: 'Investido', value: AppFormatters.currency(pos.investedValue, showCents: false)),
               ],

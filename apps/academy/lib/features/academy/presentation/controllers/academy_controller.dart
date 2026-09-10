@@ -5,16 +5,10 @@ import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/knowledge_level.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/mastery_tier.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/school.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_recommendation_service.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/knowledge_progress_calculator.dart';
@@ -88,10 +82,7 @@ class AcademyController extends ChangeNotifier {
   Lesson? get nextLesson {
     final catalog = _catalog;
     if (catalog == null) return null;
-    return AcademyProgressCalculator.nextLessonToContinue(
-      catalog: catalog,
-      completedIds: completedLessonIds,
-    );
+    return AcademyProgressCalculator.nextLessonToContinue(catalog: catalog, completedIds: completedLessonIds);
   }
 
   int get totalXpEarned => _catalog?.xpEarnedFor(completedLessonIds) ?? 0;
@@ -102,10 +93,7 @@ class AcademyController extends ChangeNotifier {
     final catalog = _catalog;
     if (catalog == null) return KnowledgeLevel.absoluteBeginner;
     return KnowledgeProgressCalculator.levelForCompletion(
-      KnowledgeProgressCalculator.overallCompletionPercent(
-        catalog,
-        completedLessonIds,
-      ),
+      KnowledgeProgressCalculator.overallCompletionPercent(catalog, completedLessonIds),
     );
   }
 
@@ -127,9 +115,7 @@ class AcademyController extends ChangeNotifier {
     if (remote != null) {
       try {
         final serverIds = await remote.getCompletedLessonIds();
-        completedLessonIds = await _repository.mergeCompletedLessonIds(
-          serverIds,
-        );
+        completedLessonIds = await _repository.mergeCompletedLessonIds(serverIds);
         _notifyListeners();
       } catch (_) {
         // Offline or backend unavailable — keep local-only progress.
@@ -151,10 +137,7 @@ class AcademyController extends ChangeNotifier {
     final generation = ++_progressReadGeneration;
 
     try {
-      final progress = await Future.wait([
-        _repository.loadCompletedLessonIds(),
-        _repository.loadPerfectLessonIds(),
-      ]);
+      final progress = await Future.wait([_repository.loadCompletedLessonIds(), _repository.loadPerfectLessonIds()]);
       if (_isDisposed || generation != _progressReadGeneration) return;
 
       completedLessonIds = progress[0];
@@ -177,10 +160,7 @@ class AcademyController extends ChangeNotifier {
 
     for (final lessonId in pending) {
       try {
-        await remote.completeLesson(
-          lessonId,
-          perfectFirstTry: perfectLessonIds.contains(lessonId),
-        );
+        await remote.completeLesson(lessonId, perfectFirstTry: perfectLessonIds.contains(lessonId));
         await _repository.clearPendingSync(lessonId);
       } catch (_) {
         // Still offline/unavailable — stays pending, retried on the next load().
@@ -260,21 +240,13 @@ class AcademyController extends ChangeNotifier {
   ModuleStatus statusFor(AcademyModule module) {
     final catalog = _catalog;
     if (catalog == null) return ModuleStatus.comingSoon;
-    return AcademyProgressCalculator.moduleStatus(
-      catalog: catalog,
-      module: module,
-      completedIds: completedLessonIds,
-    );
+    return AcademyProgressCalculator.moduleStatus(catalog: catalog, module: module, completedIds: completedLessonIds);
   }
 
   SchoolStatus schoolStatusFor(School school) {
     final catalog = _catalog;
     if (catalog == null) return SchoolStatus.comingSoon;
-    return AcademyProgressCalculator.schoolStatus(
-      catalog: catalog,
-      school: school,
-      completedIds: completedLessonIds,
-    );
+    return AcademyProgressCalculator.schoolStatus(catalog: catalog, school: school, completedIds: completedLessonIds);
   }
 
   /// Titles of whatever prerequisite modules [module] is still missing —
@@ -301,36 +273,24 @@ class AcademyController extends ChangeNotifier {
     );
   }
 
-  List<AcademyModule> modulesForSchool(School school) =>
-      _catalog?.modulesForSchool(school.id) ?? const [];
+  List<AcademyModule> modulesForSchool(School school) => _catalog?.modulesForSchool(school.id) ?? const [];
 
   SchoolStatus domainStatusFor(AcademyDomain domain) {
     final catalog = _catalog;
     if (catalog == null) return SchoolStatus.comingSoon;
-    return AcademyProgressCalculator.domainStatus(
-      catalog: catalog,
-      domain: domain,
-      completedIds: completedLessonIds,
-    );
+    return AcademyProgressCalculator.domainStatus(catalog: catalog, domain: domain, completedIds: completedLessonIds);
   }
 
   List<School> schoolsForDomain(AcademyDomain domain) {
     final catalog = _catalog;
     if (catalog == null) return const [];
-    return domain.schoolIds
-        .map(catalog.schoolById)
-        .whereType<School>()
-        .toList();
+    return domain.schoolIds.map(catalog.schoolById).whereType<School>().toList();
   }
 
   double domainMasteryFor(AcademyDomain domain) {
     final catalog = _catalog;
     if (catalog == null) return 0.0;
-    return KnowledgeProgressCalculator.percentForDomain(
-      catalog,
-      domain,
-      completedLessonIds,
-    );
+    return KnowledgeProgressCalculator.percentForDomain(catalog, domain, completedLessonIds);
   }
 
   int completedLessonCountFor(AcademyModule module) {
@@ -345,11 +305,7 @@ class AcademyController extends ChangeNotifier {
   double masteryFor(School school) {
     final catalog = _catalog;
     if (catalog == null) return 0.0;
-    return KnowledgeProgressCalculator.percentForSchool(
-      catalog,
-      school.id,
-      completedLessonIds,
-    );
+    return KnowledgeProgressCalculator.percentForSchool(catalog, school.id, completedLessonIds);
   }
 
   /// Real, performance-based Mastery per school — distinct from
@@ -365,8 +321,7 @@ class AcademyController extends ChangeNotifier {
     );
   }
 
-  MasteryTier masteryTierFor(School school) =>
-      MasteryCalculator.tierForPercent(realMasteryFor(school));
+  MasteryTier masteryTierFor(School school) => MasteryCalculator.tierForPercent(realMasteryFor(school));
 
   /// "What should I do next" — continue, and (when relevant) review a
   /// weak concept. See `AcademyRecommendationService`.

@@ -3,7 +3,7 @@ import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// `AcademyHomeScreen`'s "what's next" CTA — always the first thing under
 /// the level header when there's a lesson in progress (see
@@ -28,13 +28,14 @@ class AcademyContinueCard extends StatelessWidget {
           children: [
             Text(
               Translator.translate(AppStrings.academyContinueSectionLabel),
-              style: AppTextStyles.caption.copyWith(color: AppColors.goldenBorder, fontWeight: FontWeight.w700, letterSpacing: 2),
+              style: AppTextStyles.caption.copyWith(
+                color: AppColors.goldenBorder,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 2,
+              ),
             ),
             const SizedBox(height: 6),
-            Text(
-              lesson.title,
-              style: AppTextStyles.titleLarge.copyWith(color: tokens.textPrimary),
-            ),
+            Text(lesson.title, style: AppTextStyles.titleLarge.copyWith(color: tokens.textPrimary)),
             const SizedBox(height: 4),
             Text(
               Translator.translate(AppStrings.academyXpToCompleteLabel, params: {'xp': '${lesson.xpReward}'}),

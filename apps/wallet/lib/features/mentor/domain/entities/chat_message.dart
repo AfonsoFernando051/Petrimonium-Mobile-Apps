@@ -37,21 +37,18 @@ class ChatMessage {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'role': role.name,
-        'text': text,
-        'timestamp': timestamp.toIso8601String(),
-        'isError': isError,
-        'sources': sources,
-      };
+    'id': id,
+    'role': role.name,
+    'text': text,
+    'timestamp': timestamp.toIso8601String(),
+    'isError': isError,
+    'sources': sources,
+  };
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
     return ChatMessage(
       id: json['id'] as String,
-      role: ChatRole.values.firstWhere(
-        (r) => r.name == json['role'],
-        orElse: () => ChatRole.mentor,
-      ),
+      role: ChatRole.values.firstWhere((r) => r.name == json['role'], orElse: () => ChatRole.mentor),
       text: json['text'] as String? ?? '',
       timestamp: DateTime.tryParse(json['timestamp'] as String? ?? '') ?? DateTime.now(),
       isError: json['isError'] as bool? ?? false,

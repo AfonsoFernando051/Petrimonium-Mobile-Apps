@@ -17,10 +17,7 @@ class OrDivider extends StatelessWidget {
         Expanded(child: Divider(color: tokens.textTertiary)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Text(
-            label,
-            style: TextStyle(color: tokens.textTertiary, fontSize: 12),
-          ),
+          child: Text(label, style: TextStyle(color: tokens.textTertiary, fontSize: 12)),
         ),
         Expanded(child: Divider(color: tokens.textTertiary)),
       ],

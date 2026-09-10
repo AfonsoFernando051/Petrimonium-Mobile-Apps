@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/widgets/live_portfolio_summary_card.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_stats.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_summary.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/services/achievement_catalog.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/achievement_catalog.dart';
 
-import '../../../portfolio/domain/services/portfolio_test_fixtures.dart';
+import 'package:petrimonium_shared_features/testing.dart';
 
 void main() {
   Widget buildTestableWidget(PortfolioStats stats, {Set<String> alreadyUnlockedIds = const {}}) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: LivePortfolioSummaryCard(stats: stats, alreadyUnlockedIds: alreadyUnlockedIds)),
+      home: Scaffold(
+        body: LivePortfolioSummaryCard(stats: stats, alreadyUnlockedIds: alreadyUnlockedIds),
+      ),
     );
   }
 
   group('LivePortfolioSummaryCard', () {
-    testWidgets('shows a dash for passive income and no achievement banner when the portfolio has no assets', (WidgetTester tester) async {
+    testWidgets('shows a dash for passive income and no achievement banner when the portfolio has no assets', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget(PortfolioStats.empty));
       await tester.pump();
 
@@ -39,9 +39,7 @@ void main() {
           totalAssets: 1,
         ),
         holdings: holdings,
-        allocation: const [
-          AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 1000, portfolioPercent: 100),
-        ],
+        allocation: const [AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 1000, portfolioPercent: 100)],
       );
 
       await tester.pumpWidget(buildTestableWidget(stats));
@@ -52,7 +50,9 @@ void main() {
       expect(find.text('—'), findsNothing);
     });
 
-    testWidgets('shows the real XP reward for a newly-qualifying achievement, not already-unlocked ones', (WidgetTester tester) async {
+    testWidgets('shows the real XP reward for a newly-qualifying achievement, not already-unlocked ones', (
+      WidgetTester tester,
+    ) async {
       final holdings = Holding.fromLots([lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10, currentPrice: 10)]);
       final stats = PortfolioStats(
         summary: const PortfolioSummary(
@@ -74,7 +74,9 @@ void main() {
       expect(find.text('+$expectedXp XP'), findsOneWidget);
     });
 
-    testWidgets('shows 0 XP when everything the portfolio qualifies for is already unlocked', (WidgetTester tester) async {
+    testWidgets('shows 0 XP when everything the portfolio qualifies for is already unlocked', (
+      WidgetTester tester,
+    ) async {
       final holdings = Holding.fromLots([lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10, currentPrice: 10)]);
       final stats = PortfolioStats(
         summary: const PortfolioSummary(

@@ -91,7 +91,9 @@ class _CosmicBackgroundState extends State<CosmicBackground> with SingleTickerPr
         ),
         AnimatedBuilder(
           animation: _twinkleController,
-          builder: (context, _) => CustomPaint(painter: _StarfieldPainter(stars: _stars, t: _twinkleController.value)),
+          builder: (context, _) => CustomPaint(
+            painter: _StarfieldPainter(stars: _stars, t: _twinkleController.value),
+          ),
         ),
         widget.child,
       ],

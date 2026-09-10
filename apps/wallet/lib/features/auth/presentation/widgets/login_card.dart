@@ -7,7 +7,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import '../../../../core/utils/friendly_error_message.dart';
 import '../../../../core/utils/translator.dart';
 import '../../../../main.dart';
-import '../screens/forgot_password_screen.dart';
+import '../password_recovery_routes.dart';
 
 /// Flat, edge-to-edge layout (no glass card/floating badge) — matches the
 /// Wallet design system's "menos decorativo" direction: the mascot + brand
@@ -28,16 +28,11 @@ class _LoginCardState extends State<LoginCard> {
 
   void _goToMyApp() {
     if (!mounted) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const MyApp()),
-      (route) => false,
-    );
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const MyApp()), (route) => false);
   }
 
   void _openForgotPassword() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => buildForgotPasswordScreen(context)));
   }
 
   @override
@@ -65,12 +60,7 @@ class _LoginCardState extends State<LoginCard> {
               Text(
                 Translator.translate(AppStrings.brandTitle).toUpperCase(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: tokens.mentor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 2.5,
-                ),
+                style: TextStyle(color: tokens.mentor, fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 2.5),
               ),
               const SizedBox(height: 4),
               Text(
@@ -139,10 +129,7 @@ class _AuthModeToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: context.colors.surfaceMuted,
-        borderRadius: BorderRadius.circular(10),
-      ),
+      decoration: BoxDecoration(color: context.colors.surfaceMuted, borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
           Expanded(

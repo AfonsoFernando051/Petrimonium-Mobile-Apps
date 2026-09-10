@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 
 /// Home's "how is my knowledge developing" glance
@@ -40,7 +40,12 @@ class KnowledgeMapStrip extends StatelessWidget {
           children: [
             Text(
               Translator.translate(AppStrings.homeKnowledgeMapLabel),
-              style: TextStyle(color: tokens.primary.withValues(alpha: 0.6), fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 2),
+              style: TextStyle(
+                color: tokens.primary.withValues(alpha: 0.6),
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 2,
+              ),
             ),
             GestureDetector(
               onTap: onViewAll,
@@ -68,12 +73,7 @@ class KnowledgeMapStrip extends StatelessWidget {
 }
 
 class _ModuleRow extends StatelessWidget {
-  const _ModuleRow({
-    required this.module,
-    required this.status,
-    required this.completedLessons,
-    required this.onTap,
-  });
+  const _ModuleRow({required this.module, required this.status, required this.completedLessons, required this.onTap});
 
   final AcademyModule module;
   final ModuleStatus status;
@@ -111,7 +111,9 @@ class _ModuleRow extends StatelessWidget {
                     color: _active ? null : tokens.textPrimary.withValues(alpha: 0.08),
                   ),
                   child: Icon(
-                    status == ModuleStatus.completed ? Icons.check_rounded : module.icon,
+                    status == ModuleStatus.completed
+                        ? Icons.check_rounded
+                        : AcademyIconRegistry.resolve(module.iconKey),
                     color: _active || status == ModuleStatus.completed ? Colors.white : tokens.textTertiary,
                     size: 20,
                   ),

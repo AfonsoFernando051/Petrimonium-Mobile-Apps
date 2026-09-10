@@ -20,9 +20,7 @@ void main() {
     });
 
     testWidgets('renders the trailing widget in a Row when provided', (WidgetTester tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        const SectionLabel('HOLDINGS', trailing: Icon(Icons.add)),
-      ));
+      await tester.pumpWidget(buildTestableWidget(const SectionLabel('HOLDINGS', trailing: Icon(Icons.add))));
 
       expect(find.text('HOLDINGS'), findsOneWidget);
       expect(find.byIcon(Icons.add), findsOneWidget);

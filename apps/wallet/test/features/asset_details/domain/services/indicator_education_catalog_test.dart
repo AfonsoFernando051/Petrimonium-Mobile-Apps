@@ -64,7 +64,13 @@ void main() {
     });
 
     test('etf: only builds market cap and DY, never P/L or P/VP', () {
-      const asset = AssetDetails(ticker: 'BOVA11', assetType: 'etf', marketCap: 1000000, dividendYield: 5.0, priceToEarnings: 20);
+      const asset = AssetDetails(
+        ticker: 'BOVA11',
+        assetType: 'etf',
+        marketCap: 1000000,
+        dividendYield: 5.0,
+        priceToEarnings: 20,
+      );
       final indicators = IndicatorEducationCatalog.buildIndicators(asset);
       final ids = indicators.map((i) => i.id).toSet();
       expect(ids, {'market_cap', 'dy'});

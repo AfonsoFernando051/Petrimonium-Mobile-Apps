@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 class SummaryStepView extends StatelessWidget {
   const SummaryStepView({super.key, required this.step});
@@ -17,7 +17,10 @@ class SummaryStepView extends StatelessWidget {
       children: [
         const Icon(Icons.fact_check_outlined, color: AppColors.goldenBorder, size: 32),
         const SizedBox(height: 16),
-        Text(step.title, style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold)),
+        Text(
+          step.title,
+          style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 16),
         for (final takeaway in step.takeaways)
           Padding(

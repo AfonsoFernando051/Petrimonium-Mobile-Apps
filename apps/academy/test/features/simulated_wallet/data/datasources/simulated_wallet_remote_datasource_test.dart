@@ -35,9 +35,9 @@ void main() {
 
   group('fetchPortfolio', () {
     test('returns the decoded JSON on 200', () async {
-      when(() => mockApiClient.get(ApiConstants.simulatedPortfolioMeEndpoint)).thenAnswer(
-        (_) async => http.Response(jsonEncode({'virtualBalance': 10000.0, 'positions': []}), 200),
-      );
+      when(
+        () => mockApiClient.get(ApiConstants.simulatedPortfolioMeEndpoint),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'virtualBalance': 10000.0, 'positions': []}), 200));
 
       final result = await dataSource.fetchPortfolio();
 
@@ -45,9 +45,9 @@ void main() {
     });
 
     test('throws with the surfaced detail on a non-200 response', () async {
-      when(() => mockApiClient.get(ApiConstants.simulatedPortfolioMeEndpoint)).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'User not found'}), 404),
-      );
+      when(
+        () => mockApiClient.get(ApiConstants.simulatedPortfolioMeEndpoint),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'User not found'}), 404));
 
       await expectLater(
         () => dataSource.fetchPortfolio(),
@@ -58,36 +58,43 @@ void main() {
 
   group('placeOrder', () {
     test('sends ticker/side/quantity and returns the decoded order on 201', () async {
-      when(() => mockApiClient.post(ApiConstants.simulatedPortfolioOrdersEndpoint, any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'id': 1, 'ticker': 'PETR4'}), 201),
-      );
+      when(
+        () => mockApiClient.post(ApiConstants.simulatedPortfolioOrdersEndpoint, any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'id': 1, 'ticker': 'PETR4'}), 201));
 
       final result = await dataSource.placeOrder(ticker: 'PETR4', side: 'BUY', quantity: 10);
 
       expect(result['ticker'], 'PETR4');
-      verify(() => mockApiClient.post(
-            ApiConstants.simulatedPortfolioOrdersEndpoint,
-            {'ticker': 'PETR4', 'side': 'BUY', 'quantity': 10.0},
-          )).called(1);
+      verify(
+        () => mockApiClient.post(ApiConstants.simulatedPortfolioOrdersEndpoint, {
+          'ticker': 'PETR4',
+          'side': 'BUY',
+          'quantity': 10.0,
+        }),
+      ).called(1);
     });
 
     test('includes clientOrderId only when provided', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'id': 1, 'ticker': 'PETR4'}), 201),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'id': 1, 'ticker': 'PETR4'}), 201));
 
       await dataSource.placeOrder(ticker: 'PETR4', side: 'BUY', quantity: 10, clientOrderId: 'retry-1');
 
-      verify(() => mockApiClient.post(
-            ApiConstants.simulatedPortfolioOrdersEndpoint,
-            {'ticker': 'PETR4', 'side': 'BUY', 'quantity': 10.0, 'clientOrderId': 'retry-1'},
-          )).called(1);
+      verify(
+        () => mockApiClient.post(ApiConstants.simulatedPortfolioOrdersEndpoint, {
+          'ticker': 'PETR4',
+          'side': 'BUY',
+          'quantity': 10.0,
+          'clientOrderId': 'retry-1',
+        }),
+      ).called(1);
     });
 
     test('throws on a non-201 response', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'Insufficient virtual balance'}), 400),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'Insufficient virtual balance'}), 400));
 
       await expectLater(
         () => dataSource.placeOrder(ticker: 'PETR4', side: 'BUY', quantity: 10),
@@ -99,7 +106,13 @@ void main() {
   group('fetchOrders', () {
     test('returns the decoded order list on 200', () async {
       when(() => mockApiClient.get(ApiConstants.simulatedPortfolioOrdersEndpoint)).thenAnswer(
-        (_) async => http.Response(jsonEncode([{'id': 1}, {'id': 2}]), 200),
+        (_) async => http.Response(
+          jsonEncode([
+            {'id': 1},
+            {'id': 2},
+          ]),
+          200,
+        ),
       );
 
       final result = await dataSource.fetchOrders();
@@ -118,9 +131,9 @@ void main() {
     });
 
     test('throws on a non-204 response', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'confirm must be true'}), 400),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'confirm must be true'}), 400));
 
       await expectLater(() => dataSource.reset(), throwsA(isA<Exception>()));
     });
@@ -129,7 +142,12 @@ void main() {
   group('searchQuotes', () {
     test('returns the decoded quote list on 200', () async {
       when(() => mockApiClient.get(ApiConstants.simulatedPortfolioQuoteSearchEndpoint('petr'))).thenAnswer(
-        (_) async => http.Response(jsonEncode([{'symbol': 'PETR4'}]), 200),
+        (_) async => http.Response(
+          jsonEncode([
+            {'symbol': 'PETR4'},
+          ]),
+          200,
+        ),
       );
 
       final result = await dataSource.searchQuotes('petr');
@@ -146,9 +164,9 @@ void main() {
 
   group('fetchQuote', () {
     test('returns the decoded quote on 200', () async {
-      when(() => mockApiClient.get(ApiConstants.simulatedPortfolioQuoteEndpoint('PETR4'))).thenAnswer(
-        (_) async => http.Response(jsonEncode({'symbol': 'PETR4', 'regularMarketPrice': 30.5}), 200),
-      );
+      when(
+        () => mockApiClient.get(ApiConstants.simulatedPortfolioQuoteEndpoint('PETR4')),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'symbol': 'PETR4', 'regularMarketPrice': 30.5}), 200));
 
       final result = await dataSource.fetchQuote('PETR4');
 

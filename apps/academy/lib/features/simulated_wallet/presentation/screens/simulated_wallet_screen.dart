@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
@@ -44,17 +45,17 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
   }
 
   Future<void> _openNewOrder() async {
-    HapticFeedback.mediumImpact();
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => PlaceSimulatedOrderScreen(controller: widget.controller)),
-    );
+    unawaited(HapticFeedback.mediumImpact());
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => PlaceSimulatedOrderScreen(controller: widget.controller)));
   }
 
   Future<void> _confirmReset() async {
     final confirmed = await ResetSimulatedWalletDialog.show(context);
     if (!confirmed) return;
 
-    HapticFeedback.mediumImpact();
+    unawaited(HapticFeedback.mediumImpact());
     final succeeded = await widget.controller.resetPortfolio();
     if (!mounted) return;
 
@@ -75,7 +76,7 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
       body = const AppLoadingIndicator();
     } else if (controller.error != null) {
       body = ErrorStateView(
-            retryLabel: Translator.translate(AppStrings.retryButtonLabel),
+        retryLabel: Translator.translate(AppStrings.retryButtonLabel),
         title: Translator.translate(AppStrings.simulatedWalletTitle),
         message: controller.error!,
         onRetry: controller.loadPortfolio,
@@ -110,8 +111,7 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
                       ),
                     )
                   else
-                    for (final position in controller.portfolio.positions)
-                      SimulatedPositionTile(position: position),
+                    for (final position in controller.portfolio.positions) SimulatedPositionTile(position: position),
                 ],
               ),
             ),

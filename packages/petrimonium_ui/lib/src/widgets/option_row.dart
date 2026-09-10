@@ -38,9 +38,7 @@ class OptionRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: showDivider
             ? BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: tokens.textPrimary.withValues(alpha: 0.12)),
-                ),
+                border: Border(bottom: BorderSide(color: tokens.textPrimary.withValues(alpha: 0.12))),
               )
             : null,
         child: Row(
@@ -82,14 +80,9 @@ class _SelectionDot extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: selected ? tokens.primary : Colors.transparent,
-        border: Border.all(
-          color: selected ? tokens.primary : tokens.textPrimary.withValues(alpha: 0.24),
-          width: 2,
-        ),
+        border: Border.all(color: selected ? tokens.primary : tokens.textPrimary.withValues(alpha: 0.24), width: 2),
       ),
-      child: selected
-          ? Icon(Icons.check, size: 12, color: tokens.backgroundPrimary)
-          : null,
+      child: selected ? Icon(Icons.check, size: 12, color: tokens.backgroundPrimary) : null,
     );
   }
 }

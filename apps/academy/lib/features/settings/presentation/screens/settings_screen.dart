@@ -1,7 +1,12 @@
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+
+import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
@@ -9,14 +14,6 @@ import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/cosmic_background.dart';
 import 'package:petrimonium_academy/features/auth/presentation/screens/login_screen.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/account_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/appearance_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/companion_section.dart';
-import 'package:petrimonium_academy/core/preferences/country_preference.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/country_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/language_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/notifications_section.dart';
-import 'package:petrimonium_academy/features/settings/presentation/widgets/privacy_section.dart';
 
 /// Settings screen — owns the persisted local prefs + account/pet state and
 /// composes the per-section widgets under `presentation/widgets/`. Kept as
@@ -136,14 +133,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _handleCountrySelected(String countryCode) async {
     if (countryCode == CountryPreference.current) return;
-    HapticFeedback.selectionClick();
+    unawaited(HapticFeedback.selectionClick());
     await CountryPreference.setCountry(countryCode);
     await DI.settingsRepository.syncCountry(countryCode);
   }
 
   Future<void> _handleLanguageSelected(String language) async {
     if (language == Translator.currentLanguage) return;
-    HapticFeedback.selectionClick();
+    unawaited(HapticFeedback.selectionClick());
     await Translator.setLanguage(language);
     await DI.settingsRepository.syncLanguage(language);
     if (!mounted) return;
@@ -161,7 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
     if (!confirmed || !mounted) return;
 
-    HapticFeedback.heavyImpact();
+    unawaited(HapticFeedback.heavyImpact());
     try {
       await DI.settingsRepository.deleteAccount();
     } catch (e) {
@@ -178,24 +175,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } catch (_) {}
 
     if (mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-        (route) => false,
+      unawaited(
+        Navigator.of(
+          context,
+        ).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false),
       );
     }
   }
 
   Future<void> _confirmLogout() async {
     final confirmed = await ConfirmLogoutDialog.show(
-        context,
-        title: Translator.translate(AppStrings.logoutConfirmTitle),
-        message: Translator.translate(AppStrings.logoutConfirmMessage),
-        cancelLabel: Translator.translate(AppStrings.cancelButton),
-        confirmLabel: Translator.translate(AppStrings.logoutButton),
-      );
+      context,
+      title: Translator.translate(AppStrings.logoutConfirmTitle),
+      message: Translator.translate(AppStrings.logoutConfirmMessage),
+      cancelLabel: Translator.translate(AppStrings.cancelButton),
+      confirmLabel: Translator.translate(AppStrings.logoutButton),
+    );
 
     if (confirmed && mounted) {
-      HapticFeedback.mediumImpact();
+      unawaited(HapticFeedback.mediumImpact());
       try {
         await DI.authRepository.logout();
       } catch (e) {
@@ -204,9 +202,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return;
       }
       if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-          (route) => false,
+        unawaited(
+          Navigator.of(
+            context,
+          ).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false),
         );
       }
     }
@@ -240,28 +239,69 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: _loadingPrefs
               ? const AppLoadingIndicator()
               : _loadError != null
-                  ? ErrorStateView(
-            retryLabel: Translator.translate(AppStrings.retryButtonLabel),message: _loadError!, onRetry: _retryLoadLocalPreferences)
-                  : SingleChildScrollView(
+              ? ErrorStateView(
+                  retryLabel: Translator.translate(AppStrings.retryButtonLabel),
+                  message: _loadError!,
+                  onRetry: _retryLoadLocalPreferences,
+                )
+              : SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
                         Translator.translate(AppStrings.settingsSubtitle),
-                        style: AppTextStyles.bodyEmphasis.copyWith(color: tokens.textSecondary, fontWeight: FontWeight.normal),
+                        style: AppTextStyles.bodyEmphasis.copyWith(
+                          color: tokens.textSecondary,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                       const SizedBox(height: AppSpacing.xl),
-                      CompanionSection(sectionLabel: _sectionLabel, petName: _petName, onRename: _handleRenamePet),
+                      CompanionSection(
+                        sectionLabel: _sectionLabel,
+                        sectionTitle: Translator.translate(AppStrings.companionSectionTitle),
+                        renamePetLabel: Translator.translate(AppStrings.renamePetLabel),
+                        renamePetButtonLabel: Translator.translate(AppStrings.renamePetButton),
+                        accentColor: AppColors.neonPink,
+                        petName: _petName,
+                        onRename: _handleRenamePet,
+                      ),
                       const SizedBox(height: AppSpacing.xl),
-                      LanguageSection(sectionLabel: _sectionLabel, onLanguageSelected: _handleLanguageSelected),
+                      LanguageSection(
+                        sectionLabel: _sectionLabel,
+                        sectionTitle: Translator.translate(AppStrings.languageSectionTitle),
+                        portugueseLabel: Translator.translate(AppStrings.languagePt),
+                        europeanPortugueseLabel: Translator.translate(AppStrings.languagePtPt),
+                        englishLabel: Translator.translate(AppStrings.languageEn),
+                        spanishLabel: Translator.translate(AppStrings.languageEs),
+                        selectedLanguage: Translator.currentLanguage,
+                        onLanguageSelected: _handleLanguageSelected,
+                      ),
                       const SizedBox(height: AppSpacing.xl),
-                      CountrySection(sectionLabel: _sectionLabel, onCountrySelected: _handleCountrySelected),
+                      CountrySection(
+                        sectionLabel: _sectionLabel,
+                        sectionTitle: Translator.translate(AppStrings.countrySectionTitle),
+                        brazilLabel: Translator.translate(AppStrings.countryBrazil),
+                        portugalLabel: Translator.translate(AppStrings.countryPortugal),
+                        onCountrySelected: _handleCountrySelected,
+                      ),
                       const SizedBox(height: AppSpacing.xl),
-                      AppearanceSection(sectionLabel: _sectionLabel),
+                      AppearanceSection(
+                        sectionLabel: _sectionLabel,
+                        sectionTitle: Translator.translate(AppStrings.appearanceSectionTitle),
+                        lightLabel: Translator.translate(AppStrings.appearanceLightLabel),
+                        lightDescription: Translator.translate(AppStrings.appearanceLightDescription),
+                        darkLabel: Translator.translate(AppStrings.appearanceDarkLabel),
+                        darkDescription: Translator.translate(AppStrings.appearanceDarkDescription),
+                        systemLabel: Translator.translate(AppStrings.appearanceSystemLabel),
+                        systemDescription: Translator.translate(AppStrings.appearanceSystemDescription),
+                      ),
                       const SizedBox(height: AppSpacing.xl),
                       NotificationsSection(
                         sectionLabel: _sectionLabel,
+                        sectionTitle: Translator.translate(AppStrings.notificationsSectionTitle),
+                        dailyMissionRemindersLabel: Translator.translate(AppStrings.dailyMissionReminders),
+                        achievementAlertsLabel: Translator.translate(AppStrings.achievementAlerts),
                         dailyMissionReminders: _dailyMissionReminders,
                         achievementAlerts: _achievementAlerts,
                         onDailyMissionRemindersChanged: (v) {
@@ -276,6 +316,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(height: AppSpacing.xl),
                       PrivacySection(
                         sectionLabel: _sectionLabel,
+                        sectionTitle: Translator.translate(AppStrings.privacySectionTitle),
+                        showOnRankingsLabel: Translator.translate(AppStrings.showOnRankings),
                         showOnRankings: _showOnRankings,
                         onShowOnRankingsChanged: (v) {
                           setState(() => _showOnRankings = v);
@@ -285,6 +327,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(height: AppSpacing.xl),
                       AccountSection(
                         sectionLabel: _sectionLabel,
+                        sectionTitle: Translator.translate(AppStrings.accountSectionTitle),
+                        logoutLabel: Translator.translate(AppStrings.logoutButton),
+                        deleteAccountLabel: Translator.translate(AppStrings.deleteAccountButton),
                         email: _email,
                         onLogout: _confirmLogout,
                         onDeleteAccount: _confirmDeleteAccount,

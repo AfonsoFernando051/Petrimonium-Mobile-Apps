@@ -25,27 +25,16 @@ class ProfileScreen extends StatelessWidget {
               child: Row(
                 children: [
                   InkWell(
-                    onTap: controller.closeSubScreen,
+                    onTap: controller.navigation.closeSubScreen,
                     borderRadius: BorderRadius.circular(16),
                     child: const SizedBox(
                       width: 32,
                       height: 32,
-                      child: Icon(
-                        Icons.arrow_back,
-                        size: 18,
-                        color: HealthColors.textPrimary,
-                      ),
+                      child: Icon(Icons.arrow_back, size: 18, color: HealthColors.textPrimary),
                     ),
                   ),
                   const SizedBox(width: 8),
-                  ClipOval(
-                    child: Image.asset(
-                      'assets/pets/fox.png',
-                      width: 26,
-                      height: 26,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                  ClipOval(child: Image.asset('assets/pets/fox.png', width: 26, height: 26, fit: BoxFit.contain)),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -68,14 +57,7 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        ClipOval(
-                          child: Image.asset(
-                            'assets/pets/fox.png',
-                            width: 48,
-                            height: 48,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
+                        ClipOval(child: Image.asset('assets/pets/fox.png', width: 48, height: 48, fit: BoxFit.contain)),
                         const SizedBox(width: 14),
                         Expanded(
                           child: Column(
@@ -93,10 +75,7 @@ class ProfileScreen extends StatelessWidget {
                               const SizedBox(height: 2),
                               Text(
                                 l10n.profileSharedAccountNote,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: HealthColors.textSecondary,
-                                ),
+                                style: const TextStyle(fontSize: 12, color: HealthColors.textSecondary),
                               ),
                             ],
                           ),
@@ -106,24 +85,14 @@ class ProfileScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     _ProfileRow(
                       label: l10n.profileRegionalSettings,
-                      onTap: controller.openRegionalPreferences,
+                      onTap: controller.navigation.openRegionalPreferences,
                     ),
                     const SizedBox(height: 12),
-                    _ProfileRow(
-                      label: l10n.profileMentorPreferences,
-                      onTap: controller.openMentor,
-                    ),
+                    _ProfileRow(label: l10n.profileMentorPreferences, onTap: controller.navigation.openMentor),
                     const SizedBox(height: 12),
-                    _ProfileRow(
-                      label: l10n.profileAccountsAndCards,
-                      onTap: controller.openAccounts,
-                    ),
+                    _ProfileRow(label: l10n.profileAccountsAndCards, onTap: controller.navigation.openAccounts),
                     const SizedBox(height: 12),
-                    _ProfileRow(
-                      label: l10n.logout,
-                      danger: true,
-                      onTap: controller.logout,
-                    ),
+                    _ProfileRow(label: l10n.logout, danger: true, onTap: controller.logout),
                     const SizedBox(height: 12),
                     _ProfileRow(
                       label: l10n.deleteAccount,
@@ -175,9 +144,7 @@ Future<void> _confirmDeleteAccount(BuildContext context, AppLocalizations l10n) 
     // zone e o ecrã ficava igual, com o utilizador a achar que foi apagada —
     // `controller.error` só é lido pela HomeScreen, nunca aqui.
     if (!context.mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError)));
   }
 }
 
@@ -205,18 +172,10 @@ class _ProfileRow extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: danger
-                      ? HealthColors.negative
-                      : HealthColors.textPrimary,
-                ),
+                style: TextStyle(fontSize: 14, color: danger ? HealthColors.negative : HealthColors.textPrimary),
               ),
             ),
-            const Text(
-              '›',
-              style: TextStyle(color: HealthColors.textMuted, fontSize: 16),
-            ),
+            const Text('›', style: TextStyle(color: HealthColors.textMuted, fontSize: 16)),
           ],
         ),
       ),

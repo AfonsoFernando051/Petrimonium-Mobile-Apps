@@ -28,7 +28,9 @@ void main() {
 
   group('EmptyStateView', () {
     testWidgets('renders the icon, title and message', (tester) async {
-      await tester.pumpWidget(buildTestableWidget(title: 'Nothing yet', message: 'Add your first item to get started.'));
+      await tester.pumpWidget(
+        buildTestableWidget(title: 'Nothing yet', message: 'Add your first item to get started.'),
+      );
 
       expect(find.byIcon(Icons.inbox_outlined), findsOneWidget);
       expect(find.text('Nothing yet'), findsOneWidget);
@@ -45,11 +47,9 @@ void main() {
 
     testWidgets('renders an action button when both actionLabel and onAction are given', (tester) async {
       var tapped = false;
-      await tester.pumpWidget(buildTestableWidget(
-        message: 'Nothing here.',
-        actionLabel: 'Add now',
-        onAction: () => tapped = true,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(message: 'Nothing here.', actionLabel: 'Add now', onAction: () => tapped = true),
+      );
 
       expect(find.byType(TextButton), findsOneWidget);
       await tester.tap(find.byType(TextButton));

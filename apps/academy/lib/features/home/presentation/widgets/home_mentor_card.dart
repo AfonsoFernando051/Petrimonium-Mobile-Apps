@@ -32,31 +32,31 @@ class _HomeMentorCardState extends State<HomeMentorCard> {
   bool _showReason = false;
 
   String get _reasonText => switch (widget.reason) {
-        HomeMentorReason.continueLesson => Translator.translate(AppStrings.homeMentorReasonContinue),
-        HomeMentorReason.reviewDue => Translator.translate(AppStrings.homeMentorReasonReview),
-        HomeMentorReason.returning => Translator.translate(AppStrings.homeMentorReasonReturn),
-      };
+    HomeMentorReason.continueLesson => Translator.translate(AppStrings.homeMentorReasonContinue),
+    HomeMentorReason.reviewDue => Translator.translate(AppStrings.homeMentorReasonReview),
+    HomeMentorReason.returning => Translator.translate(AppStrings.homeMentorReasonReturn),
+  };
 
   /// The itemized citations backing [_reasonText] — what actually fed this
   /// message (lesson consulted, profile/progress signal, internal guide),
   /// so "why am I seeing this?" is auditable rather than a vague sentence.
   List<String> get _reasonSources => switch (widget.reason) {
-        HomeMentorReason.continueLesson => [
-            Translator.translate(AppStrings.homeMentorSourceContinue1),
-            Translator.translate(AppStrings.homeMentorSourceContinue2),
-            Translator.translate(AppStrings.homeMentorSourceContinue3),
-          ],
-        HomeMentorReason.reviewDue => [
-            Translator.translate(AppStrings.homeMentorSourceReview1),
-            Translator.translate(AppStrings.homeMentorSourceReview2),
-            Translator.translate(AppStrings.homeMentorSourceReview3),
-          ],
-        HomeMentorReason.returning => [
-            Translator.translate(AppStrings.homeMentorSourceReturn1),
-            Translator.translate(AppStrings.homeMentorSourceReturn2),
-            Translator.translate(AppStrings.homeMentorSourceReturn3),
-          ],
-      };
+    HomeMentorReason.continueLesson => [
+      Translator.translate(AppStrings.homeMentorSourceContinue1),
+      Translator.translate(AppStrings.homeMentorSourceContinue2),
+      Translator.translate(AppStrings.homeMentorSourceContinue3),
+    ],
+    HomeMentorReason.reviewDue => [
+      Translator.translate(AppStrings.homeMentorSourceReview1),
+      Translator.translate(AppStrings.homeMentorSourceReview2),
+      Translator.translate(AppStrings.homeMentorSourceReview3),
+    ],
+    HomeMentorReason.returning => [
+      Translator.translate(AppStrings.homeMentorSourceReturn1),
+      Translator.translate(AppStrings.homeMentorSourceReturn2),
+      Translator.translate(AppStrings.homeMentorSourceReturn3),
+    ],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +67,7 @@ class _HomeMentorCardState extends State<HomeMentorCard> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipOval(
-            child: PetRiveCompanion(controller: widget.mascotController, size: 40, interactive: false),
-          ),
+          ClipOval(child: PetRiveCompanion(controller: widget.mascotController, size: 40, interactive: false)),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -80,10 +78,7 @@ class _HomeMentorCardState extends State<HomeMentorCard> {
                   style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  widget.message,
-                  style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4),
-                ),
+                Text(widget.message, style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4)),
                 const SizedBox(height: 6),
                 GestureDetector(
                   onTap: () => setState(() => _showReason = !_showReason),

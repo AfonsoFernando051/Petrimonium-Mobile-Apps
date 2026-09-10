@@ -21,12 +21,12 @@ void main() {
   group('AuthRemoteDataSource - login', () {
     const tEmail = 'test@example.com';
     const tPassword = 'password123';
-    
+
     test('should return UserModel when the response code is 200/201 (success)', () async {
       // arrange
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'email': tEmail, 'accessToken': 'mock_token'}), 200),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'email': tEmail, 'accessToken': 'mock_token'}), 200));
 
       // act
       final result = await dataSource.login(tEmail, tPassword);
@@ -34,17 +34,18 @@ void main() {
       // assert
       expect(result.email, equals(tEmail));
       expect(result.token, equals('mock_token'));
-      verify(() => mockApiClient.post(
-            ApiConstants.loginEndpoint,
-            {'email': tEmail, 'password': tPassword, 'appContext': 'academy'},
-          )).called(1);
+      verify(
+        () => mockApiClient.post(ApiConstants.loginEndpoint, {
+          'email': tEmail,
+          'password': tPassword,
+          'appContext': 'academy',
+        }),
+      ).called(1);
     });
 
     test('should throw an Exception when the response code is not successful', () async {
       // arrange
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response('Bad Request', 400),
-      );
+      when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('Bad Request', 400));
 
       // act
       final call = dataSource.login;
@@ -57,9 +58,9 @@ void main() {
       // Mirrors the real shape GlobalExceptionHandler returns for a 401 on
       // bad credentials — previously this detail was discarded entirely and
       // the user only ever saw "Failed to login. Status Code: 401".
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'Invalid email or password'}), 401),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'Invalid email or password'}), 401));
 
       await expectLater(
         () => dataSource.login(tEmail, tPassword),
@@ -68,9 +69,7 @@ void main() {
     });
 
     test('falls back to a generic message when the error body has no detail', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response('Bad Request', 400),
-      );
+      when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('Bad Request', 400));
 
       await expectLater(
         () => dataSource.login(tEmail, tPassword),
@@ -83,23 +82,22 @@ void main() {
     const tIdToken = 'a-google-id-token';
 
     test('should return UserModel when the response code is 200/201 (success)', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'accessToken': 'mock_token'}), 200),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'accessToken': 'mock_token'}), 200));
 
       final result = await dataSource.loginWithGoogle(tIdToken);
 
       expect(result.token, equals('mock_token'));
-      verify(() => mockApiClient.post(
-            ApiConstants.googleLoginEndpoint,
-            {'idToken': tIdToken, 'appContext': 'academy'},
-          )).called(1);
+      verify(
+        () => mockApiClient.post(ApiConstants.googleLoginEndpoint, {'idToken': tIdToken, 'appContext': 'academy'}),
+      ).called(1);
     });
 
     test('surfaces the backend detail for an invalid Google token (401)', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'Invalid Google token'}), 401),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'Invalid Google token'}), 401));
 
       await expectLater(
         () => dataSource.loginWithGoogle(tIdToken),
@@ -112,12 +110,12 @@ void main() {
     final tName = 'Test User';
     final tEmail = 'test@example.com';
     final tPassword = 'password123';
-    
+
     test('should return UserModel when the response code is 200/201 (success)', () async {
       // arrange
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'email': tEmail, 'accessToken': 'mock_token'}), 201),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'email': tEmail, 'accessToken': 'mock_token'}), 201));
 
       // act
       final result = await dataSource.register(tName, tEmail, tPassword);
@@ -125,21 +123,18 @@ void main() {
       // assert
       expect(result, isA<UserModel>());
       expect(result.email, tEmail);
-      verify(() => mockApiClient.post(
-            ApiConstants.registerEndpoint,
-            {
-              'username': tName,
-              'email': tEmail,
-              'password': tPassword,
-            },
-          )).called(1);
+      verify(
+        () => mockApiClient.post(ApiConstants.registerEndpoint, {
+          'username': tName,
+          'email': tEmail,
+          'password': tPassword,
+        }),
+      ).called(1);
     });
 
     test('should throw an Exception when the response code is not successful', () async {
       // arrange
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response('Bad Request', 400),
-      );
+      when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('Bad Request', 400));
 
       // act
       final call = dataSource.register;
@@ -153,23 +148,22 @@ void main() {
       // the backend's minimum used to show only "Failed to register. Status
       // Code: 400", with no indication of what was actually wrong.
       when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(
-          jsonEncode({'detail': 'username: Username must be between 3 and 50 characters'}),
-          400,
-        ),
+        (_) async =>
+            http.Response(jsonEncode({'detail': 'username: Username must be between 3 and 50 characters'}), 400),
       );
 
       await expectLater(
         () => dataSource.register(tName, tEmail, tPassword),
-        throwsA(predicate((e) =>
-            e is Exception && e.toString().contains('Username must be between 3 and 50 characters'))),
+        throwsA(
+          predicate((e) => e is Exception && e.toString().contains('Username must be between 3 and 50 characters')),
+        ),
       );
     });
 
     test('should surface a duplicate-email conflict reason', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'User already exists'}), 409),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'User already exists'}), 409));
 
       await expectLater(
         () => dataSource.register(tName, tEmail, tPassword),
@@ -182,22 +176,17 @@ void main() {
     const tEmail = 'test@example.com';
 
     test('completes normally on 200, regardless of whether the email is registered', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response('', 200),
-      );
+      when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 200));
 
       await dataSource.requestPasswordReset(tEmail);
 
-      verify(() => mockApiClient.post(
-            ApiConstants.forgotPasswordEndpoint,
-            {'email': tEmail},
-          )).called(1);
+      verify(() => mockApiClient.post(ApiConstants.forgotPasswordEndpoint, {'email': tEmail})).called(1);
     });
 
     test('throws with the surfaced detail on a non-200 (transport-level failure)', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'Service unavailable'}), 503),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'Service unavailable'}), 503));
 
       await expectLater(
         () => dataSource.requestPasswordReset(tEmail),
@@ -208,9 +197,9 @@ void main() {
 
   group('AuthRemoteDataSource - getCurrentUser', () {
     test('returns the decoded username/email on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'username': 'investor', 'email': 'investor@test.com'}), 200),
-      );
+      when(
+        () => mockApiClient.get(any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'username': 'investor', 'email': 'investor@test.com'}), 200));
 
       final result = await dataSource.getCurrentUser();
 
@@ -220,9 +209,9 @@ void main() {
     });
 
     test('throws with the backend detail on a non-200 response', () async {
-      when(() => mockApiClient.get(any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'User not found'}), 401),
-      );
+      when(
+        () => mockApiClient.get(any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'User not found'}), 401));
 
       await expectLater(
         () => dataSource.getCurrentUser(),
@@ -236,22 +225,19 @@ void main() {
     const tNewPassword = 'NewPassw0rd';
 
     test('completes normally on 200', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response('', 200),
-      );
+      when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 200));
 
       await dataSource.resetPassword(tToken, tNewPassword);
 
-      verify(() => mockApiClient.post(
-            ApiConstants.resetPasswordEndpoint,
-            {'token': tToken, 'newPassword': tNewPassword},
-          )).called(1);
+      verify(
+        () => mockApiClient.post(ApiConstants.resetPasswordEndpoint, {'token': tToken, 'newPassword': tNewPassword}),
+      ).called(1);
     });
 
     test('surfaces the backend detail for an invalid/expired token (400)', () async {
-      when(() => mockApiClient.post(any(), any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'detail': 'Token is invalid or has expired'}), 400),
-      );
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'Token is invalid or has expired'}), 400));
 
       await expectLater(
         () => dataSource.resetPassword(tToken, tNewPassword),

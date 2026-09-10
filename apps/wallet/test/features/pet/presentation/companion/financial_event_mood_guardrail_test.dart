@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/events/app_event.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message_catalog.dart';
 
 /// PRD guardrail (§10.3, §12.2, FR-MEN-002): the Pet's celebratory moods are
@@ -16,11 +15,7 @@ void main() {
   /// `happy` counts: the PRD names "comemoração/felicidade" together, and the
   /// ticket that opened this flagged a `happy` portfolio message alongside the
   /// `celebrate` one.
-  const celebratory = {
-    PetAnimationState.celebrate,
-    PetAnimationState.victory,
-    PetAnimationState.happy,
-  };
+  const celebratory = {PetAnimationState.celebrate, PetAnimationState.victory, PetAnimationState.happy};
 
   /// Every event whose `isFinancial` is true. Listed explicitly so that adding
   /// a financial event to `AppEvent` without adding it here is visible in
@@ -39,7 +34,8 @@ void main() {
         expect(
           celebratory.contains(message!.mood),
           isFalse,
-          reason: '${event.runtimeType} produced ${message.mood}, which the PRD '
+          reason:
+              '${event.runtimeType} produced ${message.mood}, which the PRD '
               'reserves for educational milestones',
         );
       });
@@ -47,8 +43,11 @@ void main() {
 
     test('every event listed here really is financial', () {
       for (final event in financialEvents) {
-        expect(event.isFinancial, isTrue,
-            reason: '${event.runtimeType} is in the financial list but not marked isFinancial');
+        expect(
+          event.isFinancial,
+          isTrue,
+          reason: '${event.runtimeType} is in the financial list but not marked isFinancial',
+        );
       }
     });
 
@@ -81,11 +80,7 @@ void main() {
   test('a diversified portfolio is reported factually, without a happy mood', () {
     // Not an AppEvent — a pageEnter nudge — but the same guardrail applies: it
     // describes a financial state.
-    final message = PetMessageCatalog.pageEnter(
-      PetContext.portfolio,
-      userXp: 0,
-      data: const {'count': '4'},
-    );
+    final message = PetMessageCatalog.pageEnter(PetContext.portfolio, userXp: 0, data: const {'count': '4'});
 
     expect(message, isNotNull);
     expect(message!.id, 'portfolio_diversified');

@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/widgets/investment_type_selector.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 
 void main() {
   Widget buildTestableWidget({InvestmentTypeEnum? selected, required ValueChanged<InvestmentTypeEnum> onChanged}) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: InvestmentTypeSelector(selected: selected, onChanged: onChanged)),
+      home: Scaffold(
+        body: InvestmentTypeSelector(selected: selected, onChanged: onChanged),
+      ),
     );
   }
 
   group('InvestmentTypeSelector', () {
-    testWidgets('renders one card per investment type and no tip when nothing is selected', (WidgetTester tester) async {
+    testWidgets('renders one card per investment type and no tip when nothing is selected', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget(selected: null, onChanged: (_) {}));
       await tester.pump();
 

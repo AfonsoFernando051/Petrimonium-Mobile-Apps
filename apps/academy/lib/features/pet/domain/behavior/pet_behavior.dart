@@ -1,6 +1,5 @@
 import 'package:petrimonium_academy/core/events/app_event.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// The shared contract between the Pet's communication layer
 /// (`PetCompanionController`) and each app's own reaction script. Shaped so
@@ -21,11 +20,7 @@ abstract class PetBehavior {
 
   /// A nudge offered when the user lands on [context], or `null` if this
   /// behavior has nothing to say for it.
-  PetMessage? pageEnter(
-    PetContext context, {
-    required int userXp,
-    Map<String, String> data,
-  });
+  PetMessage? pageEnter(PetContext context, {required int userXp, Map<String, String> data});
 
   /// A reaction to something that just happened, or `null` if this behavior
   /// doesn't react to [event].

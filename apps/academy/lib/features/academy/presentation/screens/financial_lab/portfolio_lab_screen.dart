@@ -8,7 +8,7 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/labeled_slider.dart';
 import 'package:petrimonium_academy/core/widgets/stat_card.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/portfolio_scenario_calculator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_allocation_editor.dart';
@@ -16,9 +16,7 @@ import 'package:petrimonium_academy/features/academy/presentation/screens/financ
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_completion_footer.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_narrative_card.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
-import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// The Financial Lab's Portfolio simulator (`docs/DECISIONS.md`
@@ -105,8 +103,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
         _buildTotalAmountInput(),
         LabAllocationEditor(
           weightsPercent: _weights,
-          onChanged: (type, value) =>
-              setState(() => _weights = {..._weights, type: value}),
+          onChanged: (type, value) => setState(() => _weights = {..._weights, type: value}),
           totalPercent: _totalWeight,
           isValid: _isAllocationValid,
         ),
@@ -114,9 +111,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
           _buildScenarioChips(),
           if (result != null) _buildScenarioResult(result),
           LabNarrativeCard(
-            text: Translator.translate(
-              AppStrings.labPortfolioForecastDisclaimer,
-            ),
+            text: Translator.translate(AppStrings.labPortfolioForecastDisclaimer),
             variant: LabNarrativeVariant.disclaimer,
           ),
           LabComprehensionCheck(
@@ -158,10 +153,8 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
     final tokens = context.colors;
     final scenarios = {
       LabScenario.equitiesDown15: AppStrings.labPortfolioScenarioEquitiesDown15,
-      LabScenario.largestPositionDown20:
-          AppStrings.labPortfolioScenarioLargestPositionDown20,
-      LabScenario.broadMarketDown10:
-          AppStrings.labPortfolioScenarioBroadMarketDown10,
+      LabScenario.largestPositionDown20: AppStrings.labPortfolioScenarioLargestPositionDown20,
+      LabScenario.broadMarketDown10: AppStrings.labPortfolioScenarioBroadMarketDown10,
       LabScenario.fixedIncomeUp5: AppStrings.labPortfolioScenarioFixedIncomeUp5,
     };
 
@@ -184,9 +177,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
   }
 
   Widget _buildScenarioResult(PortfolioScenarioResult result) {
-    final impactColor = result.deltaPercent >= 0
-        ? AppColors.positiveGreen
-        : AppColors.negativeRed;
+    final impactColor = result.deltaPercent >= 0 ? AppColors.positiveGreen : AppColors.negativeRed;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -196,9 +187,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
           children: [
             Expanded(
               child: StatCard(
-                label: Translator.translate(
-                  AppStrings.labPortfolioNewValueLabel,
-                ),
+                label: Translator.translate(AppStrings.labPortfolioNewValueLabel),
                 value: AppFormatters.compactCurrency(result.newValue),
                 accent: impactColor,
               ),
@@ -218,14 +207,8 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
             AppStrings.labPortfolioScenarioResult,
             params: {
               'deltaPercent': result.deltaPercent.toStringAsFixed(1),
-              'before': AppFormatters.currency(
-                result.totalAmount,
-                showCents: false,
-              ),
-              'after': AppFormatters.currency(
-                result.newValue,
-                showCents: false,
-              ),
+              'before': AppFormatters.currency(result.totalAmount, showCents: false),
+              'after': AppFormatters.currency(result.newValue, showCents: false),
             },
           ),
           variant: LabNarrativeVariant.interpretation,
@@ -236,12 +219,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
 }
 
 class _ScenarioChip extends StatelessWidget {
-  const _ScenarioChip({
-    required this.label,
-    required this.selected,
-    required this.tokens,
-    required this.onTap,
-  });
+  const _ScenarioChip({required this.label, required this.selected, required this.tokens, required this.onTap});
 
   final String label;
   final bool selected;
@@ -257,20 +235,11 @@ class _ScenarioChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.lg),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: 8,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 8),
           decoration: BoxDecoration(
-            color: selected
-                ? AppColors.neonCyan.withValues(alpha: 0.18)
-                : tokens.textTertiary.withValues(alpha: 0.08),
+            color: selected ? AppColors.neonCyan.withValues(alpha: 0.18) : tokens.textTertiary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(AppRadii.lg),
-            border: Border.all(
-              color: selected
-                  ? AppColors.neonCyan.withValues(alpha: 0.7)
-                  : tokens.border,
-            ),
+            border: Border.all(color: selected ? AppColors.neonCyan.withValues(alpha: 0.7) : tokens.border),
           ),
           child: Text(
             label,

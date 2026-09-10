@@ -1,11 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/academy_domain_detail_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/financial_lab_home_screen.dart';
@@ -17,9 +17,7 @@ import 'package:petrimonium_academy/features/academy/presentation/widgets/academ
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_mastery_section.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_review_card.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/financial_lab_entry_card.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// The "Academia" tab: current level, an unmissable "what's next" CTA, and
@@ -78,9 +76,7 @@ class _AcademyHomeScreenState extends State<AcademyHomeScreen> {
   // cooldown/priority rules decide whether it's actually shown; this just
   // avoids re-evaluating on every rebuild the ChangeNotifier triggers.
   void _notifyCompanionOnce() {
-    if (_companionNotified ||
-        _controller.isLoading ||
-        _controller.isCatalogLoading) {
+    if (_companionNotified || _controller.isLoading || _controller.isCatalogLoading) {
       return;
     }
     final reviewCount = _controller.reviewQueue.length;
@@ -104,30 +100,21 @@ class _AcademyHomeScreenState extends State<AcademyHomeScreen> {
   }
 
   Future<void> _openLesson(Lesson lesson) async {
-    HapticFeedback.selectionClick();
+    unawaited(HapticFeedback.selectionClick());
     await Navigator.of(context).push(
       fadeRoute(
-        LessonScreen(
-          lesson: lesson,
-          catalog: _controller.snapshot!,
-          mascotController: widget.mascotController,
-        ),
+        LessonScreen(lesson: lesson, catalog: _controller.snapshot!, mascotController: widget.mascotController),
       ),
     );
-    _controller.load();
+    unawaited(_controller.load());
   }
 
   Future<void> _openDomain(AcademyDomain domain) async {
-    HapticFeedback.selectionClick();
-    await Navigator.of(context).push(
-      fadeRoute(
-        AcademyDomainDetailScreen(
-          domain: domain,
-          mascotController: widget.mascotController,
-        ),
-      ),
-    );
-    _controller.load();
+    unawaited(HapticFeedback.selectionClick());
+    await Navigator.of(
+      context,
+    ).push(fadeRoute(AcademyDomainDetailScreen(domain: domain, mascotController: widget.mascotController)));
+    unawaited(_controller.load());
   }
 
   @override
@@ -158,9 +145,7 @@ class _AcademyHomeScreenState extends State<AcademyHomeScreen> {
     // 0% row for a `comingSoon` school isn't informative, same reasoning as
     // `PetMessageCatalog._portfolioNudge` only firing once there's something
     // real to say.
-    final masterySchools = _controller.schools
-        .where((s) => s.contentAvailable)
-        .toList();
+    final masterySchools = _controller.schools.where((s) => s.contentAvailable).toList();
 
     return RefreshIndicator(
       color: tokens.primary,
@@ -168,10 +153,7 @@ class _AcademyHomeScreenState extends State<AcademyHomeScreen> {
       onRefresh: _controller.load,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.xl,
-          vertical: AppSpacing.md,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -182,10 +164,7 @@ class _AcademyHomeScreenState extends State<AcademyHomeScreen> {
             ),
             const SizedBox(height: AppSpacing.xxl),
             if (_controller.nextLesson != null) ...[
-              AcademyContinueCard(
-                lesson: _controller.nextLesson!,
-                onStart: () => _openLesson(_controller.nextLesson!),
-              ),
+              AcademyContinueCard(lesson: _controller.nextLesson!, onStart: () => _openLesson(_controller.nextLesson!)),
               const SizedBox(height: AppSpacing.xxl + 4),
             ],
             if (masterySchools.isNotEmpty) ...[

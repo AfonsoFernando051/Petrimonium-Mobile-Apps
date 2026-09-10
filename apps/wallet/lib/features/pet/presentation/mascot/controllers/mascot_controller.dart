@@ -4,14 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/events/app_event_bus.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/pet/domain/entities/pet_accessory.dart';
-import 'package:petrimonium_wallet/features/pet/domain/entities/pet_evolution_rule.dart';
-import 'package:petrimonium_wallet/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
 
 /// After this many days without a session, the mascot rests in [sleep]
 /// instead of its usual idle loop.
@@ -30,10 +22,10 @@ class MascotController extends ChangeNotifier {
     required MascotRepository repository,
     List<PetEvolutionRule> evolutionRules = PetEvolutionRule.defaultRules,
     AppEventBus? eventBus,
-  })  : _repository = repository,
-        _rules = _sortedDescending(evolutionRules),
-        _eventBus = eventBus ?? AppEventBus.instance,
-        _profile = PetProfile();
+  }) : _repository = repository,
+       _rules = _sortedDescending(evolutionRules),
+       _eventBus = eventBus ?? AppEventBus.instance,
+       _profile = PetProfile();
 
   final MascotRepository _repository;
   final List<PetEvolutionRule> _rules;
@@ -85,15 +77,9 @@ class MascotController extends ChangeNotifier {
     final loaded = await _repository.loadProfile();
     final currentTime = now ?? DateTime.now();
     _daysSinceLastSession = currentTime.difference(loaded.lastActiveAt).inDays;
-    final restingState = restingStateFor(
-      lastActiveAt: loaded.lastActiveAt,
-      now: currentTime,
-    );
+    final restingState = restingStateFor(lastActiveAt: loaded.lastActiveAt, now: currentTime);
 
-    _profile = loaded.copyWith(
-      animationState: restingState,
-      lastActiveAt: currentTime,
-    );
+    _profile = loaded.copyWith(animationState: restingState, lastActiveAt: currentTime);
     _loading = false;
     _hasLoaded = true;
     notifyListeners();
@@ -103,10 +89,7 @@ class MascotController extends ChangeNotifier {
 
   /// The animation the mascot should idle in when there is no active event
   /// override, purely a function of when it was last opened.
-  static PetAnimationState restingStateFor({
-    required DateTime lastActiveAt,
-    required DateTime now,
-  }) {
+  static PetAnimationState restingStateFor({required DateTime lastActiveAt, required DateTime now}) {
     final daysSinceActive = now.difference(lastActiveAt).inDays;
     if (daysSinceActive >= kSleepAfterInactiveDays) {
       return PetAnimationState.sleep;
@@ -120,20 +103,14 @@ class MascotController extends ChangeNotifier {
   /// Temporarily overrides the mascot's animation (e.g. `celebrate` when the
   /// user makes a new investment), then gracefully reverts to the resting
   /// state once [duration] elapses.
-  void triggerEventAnimation(
-    PetAnimationState state, {
-    Duration duration = const Duration(seconds: 3),
-  }) {
+  void triggerEventAnimation(PetAnimationState state, {Duration duration = const Duration(seconds: 3)}) {
     _revertTimer?.cancel();
     _profile = _profile.copyWith(animationState: state);
     notifyListeners();
 
     _revertTimer = Timer(duration, () {
       _profile = _profile.copyWith(
-        animationState: restingStateFor(
-          lastActiveAt: _profile.lastActiveAt,
-          now: DateTime.now(),
-        ),
+        animationState: restingStateFor(lastActiveAt: _profile.lastActiveAt, now: DateTime.now()),
       );
       notifyListeners();
     });
@@ -145,9 +122,7 @@ class MascotController extends ChangeNotifier {
   /// evaluated from strongest to weakest; [PetEvolutionRule.defaultRules]
   /// guarantees `babyDog` (0 XP) is always satisfied, so this never returns
   /// null.
-  PetEvolutionStage resolveStage({
-    required int userXp,
-  }) {
+  PetEvolutionStage resolveStage({required int userXp}) {
     for (final rule in _rules) {
       if (rule.isSatisfiedBy(xp: userXp)) {
         return rule.stage;
@@ -177,11 +152,7 @@ class MascotController extends ChangeNotifier {
     final newLevel = LevelCalculator.fromXp(userXp).level;
     final xpDelta = userXp - _profile.xp;
 
-    _profile = _profile.copyWith(
-      stage: targetStage,
-      netWorth: currentNetWorth,
-      xp: userXp,
-    );
+    _profile = _profile.copyWith(stage: targetStage, netWorth: currentNetWorth, xp: userXp);
     notifyListeners();
 
     await _repository.saveNetWorth(currentNetWorth);

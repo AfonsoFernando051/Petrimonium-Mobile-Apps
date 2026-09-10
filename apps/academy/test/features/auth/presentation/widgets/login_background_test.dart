@@ -8,9 +8,7 @@ void main() {
   Widget buildTestableWidget() {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: const Scaffold(
-        body: LoginBackground(),
-      ),
+      home: const Scaffold(body: LoginBackground()),
     );
   }
 

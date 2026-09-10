@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
 
@@ -321,10 +321,7 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
   /// and own their own tap handling instead.
   void _handleTap() {
     HapticFeedback.lightImpact();
-    widget.controller.triggerEventAnimation(
-      PetAnimationState.happy,
-      duration: const Duration(milliseconds: 900),
-    );
+    widget.controller.triggerEventAnimation(PetAnimationState.happy, duration: const Duration(milliseconds: 900));
   }
 
   @override
@@ -338,11 +335,7 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
   Widget build(BuildContext context) {
     final file = _riveFile;
     if (file == null) {
-      return PetMascotWidget(
-        controller: widget.controller,
-        size: widget.size,
-        interactive: widget.interactive,
-      );
+      return PetMascotWidget(controller: widget.controller, size: widget.size, interactive: widget.interactive);
     }
     final rig = _rig;
 

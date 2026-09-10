@@ -32,12 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final l10n = AppLocalizations.of(context);
     setState(() => _formError = null);
     try {
-      if (controller.authMode == AuthMode.signup) {
-        await controller.register(
-          _nameController.text.trim(),
-          _emailController.text.trim(),
-          _passwordController.text,
-        );
+      if (controller.navigation.authMode == AuthMode.signup) {
+        await controller.register(_nameController.text.trim(), _emailController.text.trim(), _passwordController.text);
       } else {
         await controller.login(_emailController.text.trim(), _passwordController.text);
       }
@@ -62,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final controller = HealthScope.of(context);
     final l10n = AppLocalizations.of(context);
-    final isSignup = controller.authMode == AuthMode.signup;
+    final isSignup = controller.navigation.authMode == AuthMode.signup;
     final busy = controller.busy;
 
     return Scaffold(
@@ -108,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         loginLabel: l10n.loginToggleLogin,
                         signupLabel: l10n.loginToggleSignup,
                         onChanged: (signup) =>
-                            controller.setAuthMode(signup ? AuthMode.signup : AuthMode.login),
+                            controller.navigation.setAuthMode(signup ? AuthMode.signup : AuthMode.login),
                       ),
                       const SizedBox(height: 28),
                       if (isSignup) ...[
@@ -131,10 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       if (_formError != null) ...[
                         const SizedBox(height: 12),
-                        Text(
-                          _formError!,
-                          style: const TextStyle(color: HealthColors.negative, fontSize: 12.5),
-                        ),
+                        Text(_formError!, style: const TextStyle(color: HealthColors.negative, fontSize: 12.5)),
                       ],
                       const SizedBox(height: 20),
                       HealthPrimaryButton(
@@ -286,10 +279,7 @@ class _SharedAccountNote extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 12, height: 1.45, color: HealthColors.textSecondary),
-            ),
+            child: Text(text, style: const TextStyle(fontSize: 12, height: 1.45, color: HealthColors.textSecondary)),
           ),
         ],
       ),

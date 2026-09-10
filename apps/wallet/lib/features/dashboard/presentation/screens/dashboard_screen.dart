@@ -16,10 +16,9 @@ import '../../../portfolio/presentation/screens/passive_income_screen.dart';
 import '../../../portfolio/presentation/widgets/dividend_notifications_sheet.dart';
 import '../../../mentor/presentation/screens/mentor_screen.dart';
 import '../../../pet/presentation/companion/pet_companion_controller.dart';
-import '../../../pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import '../../../pet/presentation/companion/widgets/pet_companion_header.dart';
 import '../../../pet/presentation/companion/widgets/pet_speech_bubble.dart';
-import '../../../pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 import '../../../profile/presentation/screens/profile_screen.dart';
 import '../services/dashboard_tab_router.dart';
 
@@ -52,8 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final PetSpeechBubbleAnchor _heroAnchor = PetSpeechBubbleAnchor();
   final PetSpeechBubbleAnchor _headerAnchor = PetSpeechBubbleAnchor();
 
-  PetSpeechBubbleAnchor get _activeCompanionAnchor =>
-      _selectedIndex == 0 ? _heroAnchor : _headerAnchor;
+  PetSpeechBubbleAnchor get _activeCompanionAnchor => _selectedIndex == 0 ? _heroAnchor : _headerAnchor;
 
   // Which conversation the Mentor tab should open into — set by Home's
   // Mentor card ("Por que estou vendo isto?") to resume the exact
@@ -99,8 +97,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // (ações/FIIs/fundos) get sold off mid-session — bounce back to
       // Início rather than leaving the user stranded on a tab with no nav
       // item pointing at it.
-      if (_selectedIndex == DashboardTabRouter.passiveIncomeTab &&
-          !_visibleTabIndices.contains(_selectedIndex)) {
+      if (_selectedIndex == DashboardTabRouter.passiveIncomeTab && !_visibleTabIndices.contains(_selectedIndex)) {
         _selectedIndex = DashboardTabRouter.homeTab;
       }
     });
@@ -113,8 +110,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // `PortfolioController.hasDividendPayingHoldings`.
   List<int> get _visibleTabIndices => [
     DashboardTabRouter.homeTab,
-    if (_portfolioController.hasDividendPayingHoldings)
-      DashboardTabRouter.passiveIncomeTab,
+    if (_portfolioController.hasDividendPayingHoldings) DashboardTabRouter.passiveIncomeTab,
     DashboardTabRouter.mentorTab,
   ];
 
@@ -138,17 +134,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Route _fadeRoute(Widget page) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-                  .animate(
-                    CurvedAnimation(parent: animation, curve: Curves.easeOut),
-                  ),
-              child: child,
-            ),
-          ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+        opacity: animation,
+        child: SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+          child: child,
+        ),
+      ),
       transitionDuration: AppMotion.pageTransition,
     );
   }
@@ -187,18 +182,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // a graceful placeholder rather than a broken/no-op tap target, until real
   // OS-level deep-linking exists.
   void _showAcademyComingSoon() {
-    GameSnack.show(
-      context,
-      Translator.translate(AppStrings.academyBridgeComingSoon),
-    );
+    GameSnack.show(context, Translator.translate(AppStrings.academyBridgeComingSoon));
   }
 
   Future<void> _openProfile() async {
     _companionController.dismiss();
     _companionController.enterContext(PetContext.profile);
-    await Navigator.of(context).push(
-      _fadeRoute(ProfileScreen(companionController: _companionController)),
-    );
+    await Navigator.of(context).push(_fadeRoute(ProfileScreen(companionController: _companionController)));
     // Settings (reached via Profile) may have renamed the pet —
     // reload so the AppBar/greeting reflect it immediately.
     await _mascotController.loadProfile();
@@ -208,18 +198,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // ── Logout ────────────────────────────────────────────────────────────────
   Future<void> _confirmLogout() async {
     final confirmed = await ConfirmLogoutDialog.show(
-        context,
-        title: Translator.translate(AppStrings.logoutConfirmTitle),
-        message: Translator.translate(AppStrings.logoutConfirmMessage),
-        cancelLabel: Translator.translate(AppStrings.cancelButton),
-        confirmLabel: Translator.translate(AppStrings.logoutButton),
-      );
+      context,
+      title: Translator.translate(AppStrings.logoutConfirmTitle),
+      message: Translator.translate(AppStrings.logoutConfirmMessage),
+      cancelLabel: Translator.translate(AppStrings.cancelButton),
+      confirmLabel: Translator.translate(AppStrings.logoutButton),
+    );
 
     if (confirmed && mounted) {
-      HapticFeedback.mediumImpact();
+      unawaited(HapticFeedback.mediumImpact());
       await DI.authRepository.logout();
       if (mounted) {
-        Navigator.of(context).pushReplacement(_fadeRoute(const LoginScreen()));
+        unawaited(Navigator.of(context).pushReplacement(_fadeRoute(const LoginScreen())));
       }
     }
   }
@@ -267,11 +257,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: SafeArea(
               child: IndexedStack(
                 index: _selectedIndex,
-                children: [
-                  _buildHomeContent(),
-                  _buildPassiveIncomeContent(),
-                  _buildMentorContent(),
-                ],
+                children: [_buildHomeContent(), _buildPassiveIncomeContent(), _buildMentorContent()],
               ),
             ),
           ),
@@ -279,8 +265,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: PetSpeechBubbleOverlay(
               controller: _companionController,
               anchor: _activeCompanionAnchor,
-              onActionSelected: (action) =>
-                  _handleCompanionDestination(action.destination),
+              onActionSelected: (action) => _handleCompanionDestination(action.destination),
             ),
           ),
         ],
@@ -331,10 +316,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       clipBehavior: Clip.none,
       children: [
         IconButton(
-          icon: Icon(
-            Icons.notifications_outlined,
-            color: context.colors.textSecondary,
-          ),
+          icon: Icon(Icons.notifications_outlined, color: context.colors.textSecondary),
           tooltip: Translator.translate(AppStrings.notificationsTooltip),
           onPressed: _openNotifications,
         ),
@@ -349,10 +331,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 decoration: BoxDecoration(
                   color: context.colors.error,
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: context.colors.backgroundSecondary,
-                    width: 1.5,
-                  ),
+                  border: Border.all(color: context.colors.backgroundSecondary, width: 1.5),
                 ),
               ),
             ),
@@ -396,7 +375,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return FadeTransition(
           opacity: animation,
           child: ScaleTransition(
-            scale: Tween<double>(begin: 0.9, end: 1.0).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+            scale: Tween<double>(
+              begin: 0.9,
+              end: 1.0,
+            ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
             alignment: Alignment.topRight,
             child: child,
           ),
@@ -408,10 +390,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // ── Início: unified patrimônio + Mentor dashboard, absorbing what used to
   // be a separate Carteira tab (see `DashboardTabRouter`'s class doc). ─────
   Widget _buildHomeContent() {
-    return OverviewScreen(
-      controller: _portfolioController,
-      onOpenMentor: _openMentorFromHome,
-    );
+    return OverviewScreen(controller: _portfolioController, onOpenMentor: _openMentorFromHome);
   }
 
   void _openMentorFromHome(int? conversationId) {
@@ -466,17 +445,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Container(
       decoration: BoxDecoration(
         color: tokens.backgroundSecondary,
-        border: Border(
-          top: BorderSide(
-            color: tokens.primary.withValues(alpha: 0.3),
-            width: 1,
-          ),
-        ),
+        border: Border(top: BorderSide(color: tokens.primary.withValues(alpha: 0.3), width: 1)),
         boxShadow: [
           BoxShadow(
-            color: tokens.primary.withValues(
-              alpha: context.isDarkMode ? 0.12 : 0.08,
-            ),
+            color: tokens.primary.withValues(alpha: context.isDarkMode ? 0.12 : 0.08),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -487,9 +459,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: tokens.primary,
         unselectedItemColor: tokens.textTertiary,
-        selectedLabelStyle: AppTextStyles.caption.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
+        selectedLabelStyle: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w600),
         unselectedLabelStyle: AppTextStyles.caption,
         currentIndex: currentPosition == -1 ? 0 : currentPosition,
         onTap: (position) => _onTabSelected(visible[position]),

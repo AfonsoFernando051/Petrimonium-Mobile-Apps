@@ -20,10 +20,6 @@ class LevelCalculator {
       level++;
     }
     final base = _totalXpForLevel(level);
-    return PlayerLevel(
-      level: level,
-      xpIntoLevel: xp - base,
-      xpForNextLevel: _totalXpForLevel(level + 1) - base,
-    );
+    return PlayerLevel(level: level, xpIntoLevel: xp - base, xpForNextLevel: _totalXpForLevel(level + 1) - base);
   }
 }

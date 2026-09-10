@@ -33,10 +33,7 @@ class SimulatedPortfolioSummary {
       initialBalance: (json['initialBalance'] as num).toDouble(),
       currency: json['currency'] as String? ?? 'BRL',
       resetAt: json['resetAt'] == null ? null : DateTime.parse(json['resetAt'] as String),
-      positions: rawPositions
-          .cast<Map<String, dynamic>>()
-          .map(SimulatedPosition.fromJson)
-          .toList(),
+      positions: rawPositions.cast<Map<String, dynamic>>().map(SimulatedPosition.fromJson).toList(),
     );
   }
 }

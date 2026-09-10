@@ -20,12 +20,12 @@ enum LevelTier {
 
   /// Same boundaries the products already used, unchanged.
   static LevelTier forLevel(int level) => switch (level) {
-        < 5 => LevelTier.beginner,
-        < 10 => LevelTier.learner,
-        < 15 => LevelTier.explorer,
-        < 20 => LevelTier.investor,
-        < 30 => LevelTier.analyst,
-        < 40 => LevelTier.strategist,
-        _ => LevelTier.specialist,
-      };
+    < 5 => LevelTier.beginner,
+    < 10 => LevelTier.learner,
+    < 15 => LevelTier.explorer,
+    < 20 => LevelTier.investor,
+    < 30 => LevelTier.analyst,
+    < 40 => LevelTier.strategist,
+    _ => LevelTier.specialist,
+  };
 }

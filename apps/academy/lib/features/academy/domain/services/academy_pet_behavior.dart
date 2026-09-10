@@ -2,9 +2,6 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart'
     show kSleepAfterInactiveDays;
 
@@ -20,11 +17,7 @@ class AcademyPetBehavior extends PetBehavior {
   const AcademyPetBehavior();
 
   @override
-  PetMessage? pageEnter(
-    PetContext context, {
-    required int userXp,
-    Map<String, String> data = const {},
-  }) {
+  PetMessage? pageEnter(PetContext context, {required int userXp, Map<String, String> data = const {}}) {
     return switch (context) {
       PetContext.home => _homeNudge(userXp, data),
       PetContext.academy => _academyNudge(data),
@@ -58,10 +51,7 @@ class AcademyPetBehavior extends PetBehavior {
         textKey: AppStrings.companionHomeMissionAlmostDone,
         params: {'missionTitle': missionTitle},
         mood: PetAnimationState.think,
-        action: const PetMessageAction(
-          labelKey: AppStrings.companionActionContinue,
-          destination: PetContext.home,
-        ),
+        action: const PetMessageAction(labelKey: AppStrings.companionActionContinue, destination: PetContext.home),
       );
     }
 
@@ -126,10 +116,7 @@ class AcademyPetBehavior extends PetBehavior {
       textKey: AppStrings.companionAcademyContinueLesson,
       params: {'lessonTitle': lessonTitle},
       mood: PetAnimationState.think,
-      action: const PetMessageAction(
-        labelKey: AppStrings.companionActionContinue,
-        destination: PetContext.academy,
-      ),
+      action: const PetMessageAction(labelKey: AppStrings.companionActionContinue, destination: PetContext.academy),
     );
   }
 
@@ -144,10 +131,7 @@ class AcademyPetBehavior extends PetBehavior {
       textKey: AppStrings.companionAcademyReviewDue,
       params: {'count': '$count'},
       mood: PetAnimationState.think,
-      action: const PetMessageAction(
-        labelKey: AppStrings.companionActionContinue,
-        destination: PetContext.academy,
-      ),
+      action: const PetMessageAction(labelKey: AppStrings.companionActionContinue, destination: PetContext.academy),
     );
   }
 
@@ -165,9 +149,7 @@ class AcademyPetBehavior extends PetBehavior {
 
   @override
   PetMessage ambientFallback() {
-    final (id, textKey) =
-        _motivationalMessages[DateTime.now().day %
-            _motivationalMessages.length];
+    final (id, textKey) = _motivationalMessages[DateTime.now().day % _motivationalMessages.length];
     return PetMessage(
       id: id,
       context: PetContext.home,
@@ -200,10 +182,7 @@ class AcademyPetBehavior extends PetBehavior {
     AppStrings.academyIncorrectFeedbackTitle3,
   ];
 
-  static String questionFeedbackTitle({
-    required bool correct,
-    required int seed,
-  }) {
+  static String questionFeedbackTitle({required bool correct, required int seed}) {
     final pool = correct ? _correctAnswerTitles : _incorrectAnswerTitles;
     return pool[seed % pool.length];
   }

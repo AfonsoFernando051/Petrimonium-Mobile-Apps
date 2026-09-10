@@ -4,7 +4,7 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/recommended_for_you_section.dart';
 
 import '../../academy_test_fixtures.dart';
@@ -48,10 +48,7 @@ void main() {
         MaterialApp(
           theme: AppTheme.dark,
           home: Scaffold(
-            body: RecommendedForYouSection(
-              recommendations: recommendations,
-              onTapLesson: (lesson) => tapped = lesson,
-            ),
+            body: RecommendedForYouSection(recommendations: recommendations, onTapLesson: (lesson) => tapped = lesson),
           ),
         ),
       );

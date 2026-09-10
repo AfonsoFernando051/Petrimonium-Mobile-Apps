@@ -3,26 +3,10 @@ import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_local_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/missions_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/achievement.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/investment_lot.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_health.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_stats.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_summary.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/enums/history_range.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/services/achievement_catalog.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/services/mission_display_catalog.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio_health_calculator.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/services/wealth_history_calculator.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement_catalog.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/mission_display_catalog.dart';
 
 /// Owns all state for the redesigned Portfolio screen: real holdings/
 /// summary/allocation/history from the backend, plus everything derived
@@ -41,16 +25,17 @@ class PortfolioController extends ChangeNotifier {
     required MissionsRepository missionsRepository,
     MascotController? mascotController,
     AppEventBus? eventBus,
-  })  : _repository = repository,
-        _achievementsLocalRepository = achievementsLocalRepository,
-        _achievementsRepository = achievementsRepository,
-        _gamificationRepository = gamificationRepository,
-        _missionsRepository = missionsRepository,
-        _mascotController = mascotController,
-        _eventBus = eventBus ?? AppEventBus.instance;
+  }) : _repository = repository,
+       _achievementsLocalRepository = achievementsLocalRepository,
+       _achievementsRepository = achievementsRepository,
+       _gamificationRepository = gamificationRepository,
+       _missionsRepository = missionsRepository,
+       _mascotController = mascotController,
+       _eventBus = eventBus ?? AppEventBus.instance;
 
   final PortfolioRepository _repository;
   final AchievementsLocalRepository _achievementsLocalRepository;
+
   /// Deliberately never called: `GET /api/v1/achievements` requires
   /// `APP_CONTEXT_WALLET` (backend `SecurityConfig`) and this controller only
   /// ever runs in an Academy session, so a live evaluation would 403 on every
@@ -258,15 +243,18 @@ class PortfolioController extends ChangeNotifier {
     // Not yet fetched from the backend for this range — compute locally from
     // already-loaded lots so the UI responds instantly, then fetch+replace.
     chartPoints = WealthHistoryCalculator.compute(_allLots, selectedRange);
-    _repository.fetchHistory(selectedRange).then((points) {
-      _backendHistoryCache[selectedRange] = points;
-      if (selectedAssetFilter == null) {
-        chartPoints = points;
-        notifyListeners();
-      }
-    }).catchError((_) {
-      // Keep the locally-computed series if the backend call fails.
-    });
+    _repository
+        .fetchHistory(selectedRange)
+        .then((points) {
+          _backendHistoryCache[selectedRange] = points;
+          if (selectedAssetFilter == null) {
+            chartPoints = points;
+            notifyListeners();
+          }
+        })
+        .catchError((_) {
+          // Keep the locally-computed series if the backend call fails.
+        });
   }
 
   /// [MissionsRepository.evaluate] re-checks every mission's current
@@ -317,10 +305,7 @@ class PortfolioController extends ChangeNotifier {
     final isConcentrated = stats.largestHoldingPercent > 40;
     if (isConcentrated && !_wasHighlyConcentrated) {
       final biggest = holdings.first;
-      _eventBus.emit(HighConcentrationDetectedEvent(
-        ticker: biggest.ticker,
-        percent: biggest.portfolioPercent,
-      ));
+      _eventBus.emit(HighConcentrationDetectedEvent(ticker: biggest.ticker, percent: biggest.portfolioPercent));
     }
     _wasHighlyConcentrated = isConcentrated;
   }

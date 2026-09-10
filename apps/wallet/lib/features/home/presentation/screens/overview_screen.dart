@@ -9,13 +9,12 @@ import 'package:petrimonium_wallet/core/widgets/layer_chip.dart';
 import 'package:petrimonium_wallet/features/home/presentation/widgets/mentor_insight_card.dart';
 import 'package:petrimonium_wallet/features/home/presentation/widgets/portfolio_not_connected_card.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_wallet/features/portfolio/domain/entities/wealth_change_breakdown.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/allocation_donut_card.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/holdings_section.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/error_banner.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealth_evolution_card.dart';
 
 /// Wallet's "Início" — the unified patrimônio + Mentor screen, absorbing
@@ -87,7 +86,10 @@ class _OverviewScreenState extends State<OverviewScreen> {
             MentorInsightCard(onOpenMentor: widget.onOpenMentor),
 
             if (controller.error != null) ...[
-              ErrorBanner(onRetry: controller.refresh),
+              ErrorBanner(
+                message: 'Não foi possível atualizar seus dados. Puxe para atualizar.',
+                onRetry: controller.refresh,
+              ),
               const SizedBox(height: 16),
             ],
 
@@ -96,10 +98,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
             else ...[
               _WealthHeroCard(controller: controller),
               const SizedBox(height: 16),
-              AllocationDonutCard(
-                allocation: controller.allocation,
-                totalValue: controller.summary.currentValue,
-              ),
+              AllocationDonutCard(allocation: controller.allocation, totalValue: controller.summary.currentValue),
               const SizedBox(height: 16),
               WealthEvolutionCard(controller: controller),
               const SizedBox(height: 16),
@@ -121,10 +120,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                 ],
               ),
               const SizedBox(height: 8),
-              HoldingsSection(
-                holdings: controller.holdings,
-                totalPortfolioValue: controller.summary.currentValue,
-              ),
+              HoldingsSection(holdings: controller.holdings, totalPortfolioValue: controller.summary.currentValue),
             ],
 
             const SizedBox(height: 32),
@@ -172,11 +168,7 @@ class _WealthHeroCard extends StatelessWidget {
     final tokens = context.colors;
     final now = TimeOfDay.now();
     final time = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
-    final types = controller.holdings
-        .map((Holding h) => h.type)
-        .toSet()
-        .map((type) => type.label)
-        .join(', ');
+    final types = controller.holdings.map((Holding h) => h.type).toSet().map((type) => type.label).join(', ');
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -224,8 +216,7 @@ class _WealthChangeCard extends StatelessWidget {
 
   final WealthChangeBreakdown? breakdown;
 
-  String _signed(double value) =>
-      value >= 0 ? '+${AppFormatters.currency(value)}' : AppFormatters.currency(value);
+  String _signed(double value) => value >= 0 ? '+${AppFormatters.currency(value)}' : AppFormatters.currency(value);
 
   @override
   Widget build(BuildContext context) {
@@ -247,10 +238,7 @@ class _WealthChangeCard extends StatelessWidget {
             style: TextStyle(color: tokens.textTertiary, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.6),
           ),
           const SizedBox(height: 12),
-          LayerChip(
-            layer: DataLayer.calculation,
-            label: Translator.translate(AppStrings.homeChangeCalcChipLabel),
-          ),
+          LayerChip(layer: DataLayer.calculation, label: Translator.translate(AppStrings.homeChangeCalcChipLabel)),
           const SizedBox(height: 12),
           if (breakdown == null)
             Text(
@@ -299,9 +287,7 @@ class _AddAssetButton extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(999),
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => AddAssetScreen(controller: controller)),
-        );
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => AddAssetScreen(controller: controller)));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),

@@ -7,26 +7,17 @@ import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/module_detail_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/school_detail_screen.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../academy_test_fixtures.dart';
 
-class MockAcademyCatalogRepository extends Mock
-    implements AcademyCatalogRepository {}
+class MockAcademyCatalogRepository extends Mock implements AcademyCatalogRepository {}
 
-class MockAcademyRemoteDataSource extends Mock
-    implements AcademyRemoteDataSource {}
+class MockAcademyRemoteDataSource extends Mock implements AcademyRemoteDataSource {}
 
 /// Minimal in-memory MascotRepository double — mirrors the one in
 /// `mascot_controller_test.dart`; these tests only need a working
@@ -51,9 +42,7 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveNetWorth(double netWorth) async {}
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
 
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
@@ -74,18 +63,12 @@ void main() {
     DI.academyProgressRepository = AcademyProgressLocalRepository();
 
     mockCatalogRepository = MockAcademyCatalogRepository();
-    when(
-      () => mockCatalogRepository.loadCached(any()),
-    ).thenAnswer((_) async => buildAcademyCatalogSnapshot());
-    when(
-      () => mockCatalogRepository.fetchAndCache(any()),
-    ).thenAnswer((_) async => buildAcademyCatalogSnapshot());
+    when(() => mockCatalogRepository.loadCached(any())).thenAnswer((_) async => buildAcademyCatalogSnapshot());
+    when(() => mockCatalogRepository.fetchAndCache(any())).thenAnswer((_) async => buildAcademyCatalogSnapshot());
     DI.academyCatalogRepository = mockCatalogRepository;
 
     mockRemoteDataSource = MockAcademyRemoteDataSource();
-    when(
-      () => mockRemoteDataSource.getCompletedLessonIds(),
-    ).thenAnswer((_) async => {});
+    when(() => mockRemoteDataSource.getCompletedLessonIds()).thenAnswer((_) async => {});
     DI.academyRemoteDataSource = mockRemoteDataSource;
 
     mascotController = MascotController(repository: FakeMascotRepository());
@@ -94,10 +77,7 @@ void main() {
   Widget buildTestable() {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: SchoolDetailScreen(
-        school: testSchool,
-        mascotController: mascotController,
-      ),
+      home: SchoolDetailScreen(school: testSchool, mascotController: mascotController),
     );
   }
 
@@ -111,18 +91,14 @@ void main() {
   }
 
   group('SchoolDetailScreen', () {
-    testWidgets('renders progress/mastery and the school modules once loaded', (
-      tester,
-    ) async {
+    testWidgets('renders progress/mastery and the school modules once loaded', (tester) async {
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
 
       expect(find.text(testModule.title), findsOneWidget);
     });
 
-    testWidgets('navigates to ModuleDetailScreen when a module is tapped', (
-      tester,
-    ) async {
+    testWidgets('navigates to ModuleDetailScreen when a module is tapped', (tester) async {
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
 
@@ -132,27 +108,24 @@ void main() {
       expect(find.byType(ModuleDetailScreen), findsOneWidget);
     });
 
-    testWidgets(
-      'updates the school progress after a lesson completes on a child route',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        await pumpUntilLoaded(tester);
+    testWidgets('updates the school progress after a lesson completes on a child route', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await pumpUntilLoaded(tester);
 
-        expect(find.text('0% concluído'), findsOneWidget);
-        expect(find.text('0 / 3 lições'), findsOneWidget);
+      expect(find.text('0% concluído'), findsOneWidget);
+      expect(find.text('0 / 3 lições'), findsOneWidget);
 
-        // A SchoolDetailScreen remains mounted underneath its Module/Lesson
-        // routes. LessonSessionController persists this state and emits the
-        // event before the user returns, so the visible school must redraw
-        // with the new values rather than relying on a particular pop path.
-        await DI.academyProgressRepository.markLessonCompleted(testLesson1.id);
-        await DI.academyProgressRepository.markLessonPerfect(testLesson1.id);
-        AppEventBus.instance.emit(LessonCompletedEvent(testLesson1.id));
-        await pumpUntilLoaded(tester);
+      // A SchoolDetailScreen remains mounted underneath its Module/Lesson
+      // routes. LessonSessionController persists this state and emits the
+      // event before the user returns, so the visible school must redraw
+      // with the new values rather than relying on a particular pop path.
+      await DI.academyProgressRepository.markLessonCompleted(testLesson1.id);
+      await DI.academyProgressRepository.markLessonPerfect(testLesson1.id);
+      AppEventBus.instance.emit(LessonCompletedEvent(testLesson1.id));
+      await pumpUntilLoaded(tester);
 
-        expect(find.text('33% concluído'), findsOneWidget);
-        expect(find.text('1 / 3 lições'), findsOneWidget);
-      },
-    );
+      expect(find.text('33% concluído'), findsOneWidget);
+      expect(find.text('1 / 3 lições'), findsOneWidget);
+    });
   });
 }

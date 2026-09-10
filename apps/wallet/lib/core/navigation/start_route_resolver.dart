@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_state_repository.dart';
-import 'package:petrimonium_wallet/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 
 /// Where `MyApp` should route the user on cold start.
@@ -47,10 +47,10 @@ class StartRouteResolver {
     PetRepository? petRepository,
     MascotRepository? mascotRepository,
     OnboardingStateRepository? onboardingStateRepository,
-  })  : _authRepository = authRepository ?? DI.authRepository,
-        _petRepository = petRepository ?? DI.petRepository,
-        _mascotRepository = mascotRepository ?? DI.mascotRepository,
-        _onboardingStateRepository = onboardingStateRepository ?? DI.onboardingStateRepository;
+  }) : _authRepository = authRepository ?? DI.authRepository,
+       _petRepository = petRepository ?? DI.petRepository,
+       _mascotRepository = mascotRepository ?? DI.mascotRepository,
+       _onboardingStateRepository = onboardingStateRepository ?? DI.onboardingStateRepository;
 
   final AuthRepository _authRepository;
   final PetRepository _petRepository;

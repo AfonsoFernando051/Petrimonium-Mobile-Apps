@@ -11,21 +11,18 @@ enum WalletMarketEnum { brazilB3 }
 
 extension WalletMarketEnumDisplay on WalletMarketEnum {
   String get flag => switch (this) {
-        WalletMarketEnum.brazilB3 => '🇧🇷',
-      };
+    WalletMarketEnum.brazilB3 => '🇧🇷',
+  };
 
   String get label => switch (this) {
-        WalletMarketEnum.brazilB3 => 'Brasil · B3',
-      };
+    WalletMarketEnum.brazilB3 => 'Brasil · B3',
+  };
 
   WalletBaseCurrencyEnum get defaultCurrency => switch (this) {
-        WalletMarketEnum.brazilB3 => WalletBaseCurrencyEnum.brl,
-      };
+    WalletMarketEnum.brazilB3 => WalletBaseCurrencyEnum.brl,
+  };
 
   static WalletMarketEnum fromName(String? name) {
-    return WalletMarketEnum.values.firstWhere(
-      (m) => m.name == name,
-      orElse: () => WalletMarketEnum.brazilB3,
-    );
+    return WalletMarketEnum.values.firstWhere((m) => m.name == name, orElse: () => WalletMarketEnum.brazilB3);
   }
 }

@@ -15,11 +15,7 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/share
 /// fabricated, never a buy/sell signal, purely "here's that concept you
 /// learned, applied to something real."
 class AppliedLearningCard extends StatelessWidget {
-  const AppliedLearningCard({
-    super.key,
-    required this.asset,
-    required this.appliedConcepts,
-  });
+  const AppliedLearningCard({super.key, required this.asset, required this.appliedConcepts});
 
   final AssetDetails asset;
   final List<AppliedConcept> appliedConcepts;
@@ -102,18 +98,11 @@ class _AppliedConceptTile extends StatelessWidget {
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        Text(
-                          applied.indicator.label,
-                          style: TextStyle(color: tokens.textSecondary, fontSize: 11),
-                        ),
+                        Text(applied.indicator.label, style: TextStyle(color: tokens.textSecondary, fontSize: 11)),
                         const SizedBox(width: 6),
                         Text(
                           applied.indicator.value ?? '--',
-                          style: TextStyle(
-                            color: tokens.textPrimary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
+                          style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 15),
                         ),
                       ],
                     ),

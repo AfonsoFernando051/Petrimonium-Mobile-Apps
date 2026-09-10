@@ -168,8 +168,7 @@ class IndicatorEducationCatalog {
   }
 
   /// Returns all available explanations (useful for a "learn all" screen).
-  static List<EducationalExplanation> get allExplanations =>
-      _explanations.values.toList();
+  static List<EducationalExplanation> get allExplanations => _explanations.values.toList();
 
   // ── Indicator builders per asset type ────────────────────────────────
 
@@ -192,57 +191,75 @@ class IndicatorEducationCatalog {
     return <AssetIndicator>[
       if (asset.priceToEarnings != null)
         AssetIndicator(
-          id: 'pe', label: 'P/L',
+          id: 'pe',
+          label: 'P/L',
           value: asset.priceToEarnings!.toStringAsFixed(2),
-          rawValue: asset.priceToEarnings, unit: 'x',
+          rawValue: asset.priceToEarnings,
+          unit: 'x',
         ),
       if (asset.priceToBook != null)
         AssetIndicator(
-          id: 'pvp', label: 'P/VP',
+          id: 'pvp',
+          label: 'P/VP',
           value: asset.priceToBook!.toStringAsFixed(2),
-          rawValue: asset.priceToBook, unit: 'x',
+          rawValue: asset.priceToBook,
+          unit: 'x',
         ),
       if (asset.dividendYield != null)
         AssetIndicator(
-          id: 'dy', label: 'DY 12M',
+          id: 'dy',
+          label: 'DY 12M',
           value: '${asset.dividendYield!.toStringAsFixed(2)}%',
-          rawValue: asset.dividendYield, unit: '%',
+          rawValue: asset.dividendYield,
+          unit: '%',
         ),
       if (asset.evToEbitda != null)
         AssetIndicator(
-          id: 'ev_ebitda', label: 'EV/EBITDA',
+          id: 'ev_ebitda',
+          label: 'EV/EBITDA',
           value: asset.evToEbitda!.toStringAsFixed(2),
-          rawValue: asset.evToEbitda, unit: 'x',
+          rawValue: asset.evToEbitda,
+          unit: 'x',
         ),
       if (asset.returnOnEquity != null)
         AssetIndicator(
-          id: 'roe', label: 'ROE',
+          id: 'roe',
+          label: 'ROE',
           value: '${(asset.returnOnEquity! * 100).toStringAsFixed(1)}%',
-          rawValue: asset.returnOnEquity, unit: '%',
+          rawValue: asset.returnOnEquity,
+          unit: '%',
         ),
       if (asset.returnOnAssets != null)
         AssetIndicator(
-          id: 'roa', label: 'ROA',
+          id: 'roa',
+          label: 'ROA',
           value: '${(asset.returnOnAssets! * 100).toStringAsFixed(1)}%',
-          rawValue: asset.returnOnAssets, unit: '%',
+          rawValue: asset.returnOnAssets,
+          unit: '%',
         ),
       if (asset.netMargin != null)
         AssetIndicator(
-          id: 'net_margin', label: 'Margem Líquida',
+          id: 'net_margin',
+          label: 'Margem Líquida',
           value: '${(asset.netMargin! * 100).toStringAsFixed(1)}%',
-          rawValue: asset.netMargin, unit: '%',
+          rawValue: asset.netMargin,
+          unit: '%',
         ),
       if (asset.marketCap != null)
         AssetIndicator(
-          id: 'market_cap', label: 'Valor de Mercado',
+          id: 'market_cap',
+          label: 'Valor de Mercado',
           value: AppFormatters.compactCurrency(asset.marketCap!),
-          rawValue: asset.marketCap, unit: 'R\$',
+          rawValue: asset.marketCap,
+          unit: 'R\$',
         ),
       if (asset.debtToEquity != null)
         AssetIndicator(
-          id: 'debt_equity', label: 'Dívida/PL',
+          id: 'debt_equity',
+          label: 'Dívida/PL',
           value: asset.debtToEquity!.toStringAsFixed(2),
-          rawValue: asset.debtToEquity, unit: 'x',
+          rawValue: asset.debtToEquity,
+          unit: 'x',
         ),
     ];
   }
@@ -251,27 +268,35 @@ class IndicatorEducationCatalog {
     return <AssetIndicator>[
       if (asset.dividendYield != null)
         AssetIndicator(
-          id: 'dy', label: 'DY 12M',
+          id: 'dy',
+          label: 'DY 12M',
           value: '${asset.dividendYield!.toStringAsFixed(2)}%',
-          rawValue: asset.dividendYield, unit: '%',
+          rawValue: asset.dividendYield,
+          unit: '%',
         ),
       if (asset.pvp != null || asset.priceToBook != null)
         AssetIndicator(
-          id: 'pvp', label: 'P/VP',
+          id: 'pvp',
+          label: 'P/VP',
           value: (asset.pvp ?? asset.priceToBook)!.toStringAsFixed(2),
-          rawValue: asset.pvp ?? asset.priceToBook, unit: 'x',
+          rawValue: asset.pvp ?? asset.priceToBook,
+          unit: 'x',
         ),
       if (asset.marketCap != null)
         AssetIndicator(
-          id: 'market_cap', label: 'Valor de Mercado',
+          id: 'market_cap',
+          label: 'Valor de Mercado',
           value: AppFormatters.compactCurrency(asset.marketCap!),
-          rawValue: asset.marketCap, unit: 'R\$',
+          rawValue: asset.marketCap,
+          unit: 'R\$',
         ),
       if (asset.netAssetValue != null)
         AssetIndicator(
-          id: 'nav', label: 'VP por Cota',
+          id: 'nav',
+          label: 'VP por Cota',
           value: AppFormatters.currency(asset.netAssetValue!),
-          rawValue: asset.netAssetValue, unit: 'R\$',
+          rawValue: asset.netAssetValue,
+          unit: 'R\$',
         ),
     ];
   }
@@ -280,15 +305,19 @@ class IndicatorEducationCatalog {
     return <AssetIndicator>[
       if (asset.marketCap != null)
         AssetIndicator(
-          id: 'market_cap', label: 'Patrimônio',
+          id: 'market_cap',
+          label: 'Patrimônio',
           value: AppFormatters.compactCurrency(asset.marketCap!),
-          rawValue: asset.marketCap, unit: 'R\$',
+          rawValue: asset.marketCap,
+          unit: 'R\$',
         ),
       if (asset.dividendYield != null)
         AssetIndicator(
-          id: 'dy', label: 'DY 12M',
+          id: 'dy',
+          label: 'DY 12M',
           value: '${asset.dividendYield!.toStringAsFixed(2)}%',
-          rawValue: asset.dividendYield, unit: '%',
+          rawValue: asset.dividendYield,
+          unit: '%',
         ),
     ];
   }

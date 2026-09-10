@@ -3,25 +3,9 @@ import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_academy/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/achievements_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/missions_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_local_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/missions_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/achievement_evaluation_result.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/dividend_event.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_summary.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/enums/history_range.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
-import '../../domain/services/portfolio_test_fixtures.dart';
+import 'package:petrimonium_shared_features/testing.dart';
 
 /// In-memory [PortfolioRepository] double. The real repository talks to the
 /// network via [PortfolioRemoteDataSource]; tests configure the values it
@@ -258,8 +242,7 @@ void main() {
     // session, so it must never be called here — it would 403 on every
     // single invocation (Demanda #91). Unlock state comes from the local
     // cache only; [achievementsRepository] stays wired only to prove that.
-    test('reads achievement unlock state from the local cache, never from the Wallet-only backend endpoint',
-        () async {
+    test('reads achievement unlock state from the local cache, never from the Wallet-only backend endpoint', () async {
       await achievementsLocalRepository.cacheUnlocked({'first_investment': DateTime(2026, 1, 1)});
       // A different, real catalog id the fake backend claims is unlocked —
       // if the old code path ran, this would end up unlocked too.

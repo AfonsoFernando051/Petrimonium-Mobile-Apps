@@ -43,9 +43,6 @@ abstract final class TestPalette {
 }
 
 abstract final class TestTheme {
-  static ThemeData get dark => PetrimoniumTheme.build(
-        brightness: Brightness.dark,
-        colors: TestPalette.dark,
-        accents: TestPalette.accents,
-      );
+  static ThemeData get dark =>
+      PetrimoniumTheme.build(brightness: Brightness.dark, colors: TestPalette.dark, accents: TestPalette.accents);
 }

@@ -2,15 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/lab_completion_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/inflation_lab_screen.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,9 +23,7 @@ class FakeMascotRepository implements MascotRepository {
   @override
   Future<void> saveNetWorth(double netWorth) async {}
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
   @override
@@ -47,9 +39,7 @@ void main() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     mascotController = MascotController(repository: FakeMascotRepository());
-    companionController = PetCompanionController(
-      mascotController: mascotController,
-    );
+    companionController = PetCompanionController(mascotController: mascotController);
     completionController = LabCompletionController(
       repository: AcademyProgressLocalRepository(),
       mascotController: mascotController,
@@ -69,9 +59,7 @@ void main() {
   }
 
   group('InflationLabScreen', () {
-    testWidgets('renders sliders and summary stats with default inputs', (
-      tester,
-    ) async {
+    testWidgets('renders sliders and summary stats with default inputs', (tester) async {
       await tester.pumpWidget(buildTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
@@ -81,31 +69,21 @@ void main() {
       expect(find.text('5.0%'), findsOneWidget); // default inflation
     });
 
-    testWidgets(
-      'tapping complete before answering the question does not mark it done',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 400));
+    testWidgets('tapping complete before answering the question does not mark it done', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
 
-        final completeButton = find.text(
-          Translator.translate('labCompleteButton'),
-        );
-        await tester.ensureVisible(completeButton);
-        await tester.pump();
-        await tester.tap(completeButton);
-        await tester.pump();
+      final completeButton = find.text(Translator.translate('labCompleteButton'));
+      await tester.ensureVisible(completeButton);
+      await tester.pump();
+      await tester.tap(completeButton);
+      await tester.pump();
 
-        expect(
-          find.text(Translator.translate('labCompletedLabel')),
-          findsNothing,
-        );
-      },
-    );
+      expect(find.text(Translator.translate('labCompletedLabel')), findsNothing);
+    });
 
-    testWidgets('tapping complete after answering correctly marks it done', (
-      tester,
-    ) async {
+    testWidgets('tapping complete after answering correctly marks it done', (tester) async {
       await tester.pumpWidget(buildTestable());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
@@ -116,18 +94,13 @@ void main() {
       await tester.tap(optionB);
       await tester.pump();
 
-      final completeButton = find.text(
-        Translator.translate('labCompleteButton'),
-      );
+      final completeButton = find.text(Translator.translate('labCompleteButton'));
       await tester.ensureVisible(completeButton);
       await tester.pump();
       await tester.tap(completeButton);
       await tester.pump();
 
-      expect(
-        find.text(Translator.translate('labCompletedLabel')),
-        findsOneWidget,
-      );
+      expect(find.text(Translator.translate('labCompletedLabel')), findsOneWidget);
     });
   });
 }

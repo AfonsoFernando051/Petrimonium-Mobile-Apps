@@ -5,7 +5,7 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// "What should I do next" (`docs/ACADEMY_ENGINE.md` §3d, brief §20/22) —
 /// up to two reason-annotated suggestions from
@@ -30,7 +30,12 @@ class RecommendedForYouSection extends StatelessWidget {
       children: [
         Text(
           Translator.translate(AppStrings.academyRecommendedSectionLabel),
-          style: TextStyle(color: tokens.primary.withValues(alpha: 0.6), fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 2),
+          style: TextStyle(
+            color: tokens.primary.withValues(alpha: 0.6),
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 2,
+          ),
         ),
         const SizedBox(height: 10),
         for (final recommendation in recommendations) ...[

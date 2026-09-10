@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
@@ -38,9 +39,7 @@ class _ExperienceLevelScreenState extends State<ExperienceLevelScreen> {
     try {
       await DI.petPreferencesRepository.saveExperienceLevel(_selected);
       if (mounted) {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (_) => const JourneyReadyScreen()));
+        unawaited(Navigator.of(context).push(MaterialPageRoute(builder: (_) => const JourneyReadyScreen())));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -61,11 +60,7 @@ class _ExperienceLevelScreenState extends State<ExperienceLevelScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           for (final level in ExperienceLevelEnum.values)
-            _ExperienceLevelRow(
-              level: level,
-              isSelected: level == _selected,
-              onTap: () => _select(level),
-            ),
+            _ExperienceLevelRow(level: level, isSelected: level == _selected, onTap: () => _select(level)),
         ],
       ),
     );
@@ -93,7 +88,9 @@ class _ExperienceLevelRow extends StatelessWidget {
             duration: const Duration(milliseconds: 180),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.neonCyan.withValues(alpha: 0.14) : tokens.textPrimary.withValues(alpha: 0.05),
+              color: isSelected
+                  ? AppColors.neonCyan.withValues(alpha: 0.14)
+                  : tokens.textPrimary.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isSelected ? AppColors.neonCyan : tokens.textPrimary.withValues(alpha: 0.12),
@@ -126,10 +123,7 @@ class _ExperienceLevelRow extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Text(
-                        level.description,
-                        style: TextStyle(color: tokens.textSecondary, fontSize: 12),
-                      ),
+                      Text(level.description, style: TextStyle(color: tokens.textSecondary, fontSize: 12)),
                     ],
                   ),
                 ),

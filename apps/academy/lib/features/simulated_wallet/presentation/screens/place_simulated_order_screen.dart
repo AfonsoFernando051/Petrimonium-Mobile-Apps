@@ -84,12 +84,8 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
     }
 
     setState(() => _isSubmitting = true);
-    HapticFeedback.mediumImpact();
-    final order = await widget.controller.placeOrder(
-      ticker: selected.symbol,
-      side: _side,
-      quantity: quantity,
-    );
+    unawaited(HapticFeedback.mediumImpact());
+    final order = await widget.controller.placeOrder(ticker: selected.symbol, side: _side, quantity: quantity);
     if (!mounted) return;
     setState(() => _isSubmitting = false);
 
@@ -116,10 +112,7 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
         children: [
           const SimulationDisclaimerBanner(),
           const SizedBox(height: AppSpacing.md),
-          _SideToggle(
-            selected: _side,
-            onChanged: (side) => setState(() => _side = side),
-          ),
+          _SideToggle(selected: _side, onChanged: (side) => setState(() => _side = side)),
           const SizedBox(height: AppSpacing.md),
           TextField(
             controller: _searchController,

@@ -6,9 +6,7 @@ import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 void main() {
   test('a keyring that answers is read normally', () async {
-    final store = SecureTokenStore(
-      storage: _StubStorage({SecureTokenStore.defaultAccessKey: 'abc'}),
-    );
+    final store = SecureTokenStore(storage: _StubStorage({SecureTokenStore.defaultAccessKey: 'abc'}));
 
     expect(await store.readAccessToken(), 'abc');
     expect(await store.readRefreshToken(), isNull);

@@ -26,8 +26,10 @@ class _PetCompanionCardState extends State<PetCompanionCard> with TickerProvider
     vsync: this,
     duration: const Duration(milliseconds: 2600),
   );
-  late final Animation<double> _breatheAnimation =
-      Tween<double>(begin: 0.97, end: 1.03).animate(CurvedAnimation(parent: _breatheController, curve: Curves.easeInOut));
+  late final Animation<double> _breatheAnimation = Tween<double>(
+    begin: 0.97,
+    end: 1.03,
+  ).animate(CurvedAnimation(parent: _breatheController, curve: Curves.easeInOut));
   bool _breatheLoopStarted = false;
 
   late final AnimationController _bounceController = AnimationController(
@@ -88,16 +90,10 @@ class _PetCompanionCardState extends State<PetCompanionCard> with TickerProvider
   ({String mood, String message}) get _reaction {
     final count = widget.assetCount;
     if (count == 0) {
-      return (
-        mood: '🙂',
-        message: 'Todo grande investidor começa com um único investimento. Vamos começar?',
-      );
+      return (mood: '🙂', message: 'Todo grande investidor começa com um único investimento. Vamos começar?');
     }
     if (count == 1) {
-      return (
-        mood: '😄',
-        message: 'Parabéns! Você começou sua jornada de investimentos!',
-      );
+      return (mood: '😄', message: 'Parabéns! Você começou sua jornada de investimentos!');
     }
     if (count == 2) {
       return (mood: '🎉', message: 'Seu portfólio está crescendo!');

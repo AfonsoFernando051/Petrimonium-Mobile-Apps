@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/school.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 
 import '../../academy_test_fixtures.dart';
@@ -14,7 +11,11 @@ void main() {
 
   group('lessonStatus', () {
     test('the first lesson of a module is always available when nothing is completed', () {
-      final status = AcademyProgressCalculator.lessonStatus(catalog: catalog, lesson: moduleLessons.first, completedIds: {});
+      final status = AcademyProgressCalculator.lessonStatus(
+        catalog: catalog,
+        lesson: moduleLessons.first,
+        completedIds: {},
+      );
       expect(status, LessonStatus.available);
     });
 
@@ -48,7 +49,7 @@ void main() {
         schoolId: 'x',
         title: 'x',
         description: 'x',
-        icon: Icons.school,
+        iconKey: 'savings_outlined',
         order: 1,
         contentAvailable: false,
       );
@@ -64,7 +65,7 @@ void main() {
         schoolId: contentModule.schoolId,
         title: 'x',
         description: 'x',
-        icon: Icons.school,
+        iconKey: 'savings_outlined',
         order: 1,
         lessonIds: contentModule.lessonIds,
         prerequisites: const ['some-unmet-prereq'],
@@ -84,7 +85,7 @@ void main() {
         schoolId: contentModule.schoolId,
         title: 'x',
         description: 'x',
-        icon: Icons.school,
+        iconKey: 'savings_outlined',
         order: 2,
         lessonIds: contentModule.lessonIds,
         prerequisites: [contentModule.id],
@@ -129,7 +130,7 @@ void main() {
         schoolId: contentModule.schoolId,
         title: 'x',
         description: 'x',
-        icon: Icons.school,
+        iconKey: 'savings_outlined',
         order: 3,
         lessonIds: contentModule.lessonIds,
         prerequisites: [contentModule.id],
@@ -151,8 +152,18 @@ void main() {
 
   group('schoolStatus', () {
     test('a school with no content-available modules is comingSoon', () {
-      const emptySchool = School(id: 'empty', title: 'x', description: 'x', icon: Icons.school, order: 1, contentAvailable: false);
-      expect(AcademyProgressCalculator.schoolStatus(catalog: catalog, school: emptySchool, completedIds: {}), SchoolStatus.comingSoon);
+      const emptySchool = School(
+        id: 'empty',
+        title: 'x',
+        description: 'x',
+        iconKey: 'savings_outlined',
+        order: 1,
+        contentAvailable: false,
+      );
+      expect(
+        AcademyProgressCalculator.schoolStatus(catalog: catalog, school: emptySchool, completedIds: {}),
+        SchoolStatus.comingSoon,
+      );
     });
 
     test('an unmet school-level prerequisite locks it', () {
@@ -160,12 +171,15 @@ void main() {
         id: 'gated-school',
         title: 'x',
         description: 'x',
-        icon: Icons.school,
+        iconKey: 'savings_outlined',
         order: 1,
         prerequisites: const ['some-unmet-prereq'],
         contentAvailable: true,
       );
-      expect(AcademyProgressCalculator.schoolStatus(catalog: catalog, school: gated, completedIds: {}), SchoolStatus.locked);
+      expect(
+        AcademyProgressCalculator.schoolStatus(catalog: catalog, school: gated, completedIds: {}),
+        SchoolStatus.locked,
+      );
     });
 
     test('a real available school with content resolves to a real status (not comingSoon/locked)', () {
@@ -181,7 +195,7 @@ void main() {
         id: 'gated-school-real',
         title: 'x',
         description: 'x',
-        icon: Icons.school,
+        iconKey: 'savings_outlined',
         order: 2,
         prerequisites: const ['test_school'],
         contentAvailable: true,
@@ -205,7 +219,7 @@ void main() {
         id: 'gated-school-titled',
         title: 'x',
         description: 'x',
-        icon: Icons.school,
+        iconKey: 'savings_outlined',
         order: 3,
         prerequisites: const ['test_school'],
         contentAvailable: true,
@@ -226,8 +240,11 @@ void main() {
 
   group('domainStatus', () {
     test('a domain with no schools is comingSoon', () {
-      const empty = AcademyDomain(id: 'empty', title: 'x', description: 'x', icon: Icons.school, order: 1);
-      expect(AcademyProgressCalculator.domainStatus(catalog: catalog, domain: empty, completedIds: {}), SchoolStatus.comingSoon);
+      const empty = AcademyDomain(id: 'empty', title: 'x', description: 'x', iconKey: 'savings_outlined', order: 1);
+      expect(
+        AcademyProgressCalculator.domainStatus(catalog: catalog, domain: empty, completedIds: {}),
+        SchoolStatus.comingSoon,
+      );
     });
 
     test('a domain whose only school has no content-available modules is comingSoon', () {
@@ -235,7 +252,7 @@ void main() {
         id: 'placeholder-domain',
         title: 'x',
         description: 'x',
-        icon: Icons.school,
+        iconKey: 'savings_outlined',
         order: 1,
         schoolIds: [catalog.schools.firstWhere((s) => !s.contentAvailable).id],
       );
@@ -260,12 +277,18 @@ void main() {
     test('returns null once every available lesson is completed', () {
       final allAvailableLessonIds = catalog.modules.where((m) => m.contentAvailable).expand((m) => m.lessonIds).toSet();
 
-      final next = AcademyProgressCalculator.nextLessonToContinue(catalog: catalog, completedIds: allAvailableLessonIds);
+      final next = AcademyProgressCalculator.nextLessonToContinue(
+        catalog: catalog,
+        completedIds: allAvailableLessonIds,
+      );
       expect(next, isNull);
     });
 
     test('skips a completed lesson and returns the next incomplete one in the same module', () {
-      final next = AcademyProgressCalculator.nextLessonToContinue(catalog: catalog, completedIds: {moduleLessons.first.id});
+      final next = AcademyProgressCalculator.nextLessonToContinue(
+        catalog: catalog,
+        completedIds: {moduleLessons.first.id},
+      );
       expect(next, isNot(equals(moduleLessons.first)));
     });
   });

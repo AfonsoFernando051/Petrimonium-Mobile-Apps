@@ -29,12 +29,8 @@ class PetHeroCapsule extends StatefulWidget {
   State<PetHeroCapsule> createState() => _PetHeroCapsuleState();
 }
 
-class _PetHeroCapsuleState extends State<PetHeroCapsule>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 3),
-  );
+class _PetHeroCapsuleState extends State<PetHeroCapsule> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(vsync: this, duration: const Duration(seconds: 3));
   late final Animation<double> _breathe = Tween<double>(
     begin: 0.98,
     end: 1.02,
@@ -76,23 +72,12 @@ class _PetHeroCapsuleState extends State<PetHeroCapsule>
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: RadialGradient(
-            colors: [
-              widget.auraColor.withValues(alpha: 0.18),
-              AppColors.spaceDark.withValues(alpha: 0.05),
-            ],
+            colors: [widget.auraColor.withValues(alpha: 0.18), AppColors.spaceDark.withValues(alpha: 0.05)],
           ),
           border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
           boxShadow: [
-            BoxShadow(
-              color: widget.auraColor.withValues(alpha: 0.22),
-              blurRadius: 46,
-              spreadRadius: 12,
-            ),
-            BoxShadow(
-              color: widget.secondaryAuraColor.withValues(alpha: 0.12),
-              blurRadius: 24,
-              spreadRadius: 6,
-            ),
+            BoxShadow(color: widget.auraColor.withValues(alpha: 0.22), blurRadius: 46, spreadRadius: 12),
+            BoxShadow(color: widget.secondaryAuraColor.withValues(alpha: 0.12), blurRadius: 24, spreadRadius: 6),
           ],
         ),
         padding: EdgeInsets.all(widget.size * 0.08),

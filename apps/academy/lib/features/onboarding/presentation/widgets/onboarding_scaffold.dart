@@ -79,7 +79,9 @@ class OnboardingScaffold extends StatelessWidget {
                       )
                     else
                       const SizedBox(width: 44),
-                    Expanded(child: OnboardingProgressBar(step: step, total: totalSteps)),
+                    Expanded(
+                      child: OnboardingProgressBar(step: step, total: totalSteps),
+                    ),
                     if (showSkip) ...[
                       const SizedBox(width: 8),
                       TextButton(
@@ -122,11 +124,7 @@ class OnboardingScaffold extends StatelessWidget {
                                   const SizedBox(height: 8),
                                   Text(
                                     subtitle!,
-                                    style: TextStyle(
-                                      color: tokens.textSecondary,
-                                      fontSize: 14,
-                                      height: 1.4,
-                                    ),
+                                    style: TextStyle(color: tokens.textSecondary, fontSize: 14, height: 1.4),
                                   ),
                                 ],
                               ],
@@ -147,13 +145,9 @@ class OnboardingScaffold extends StatelessWidget {
                               // or use Expanded/Flexible children, since the
                               // scroll axis here is unbounded.
                               return SingleChildScrollView(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
                                 child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    minHeight: constraints.maxHeight,
-                                  ),
+                                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
                                   child: body,
                                 ),
                               );

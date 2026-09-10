@@ -1,10 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/enums/history_range.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/services/wealth_history_calculator.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 
 /// A held position's own cost-basis → current-value trend line — ported
@@ -50,7 +48,10 @@ class AssetValuationChartCard extends StatelessWidget {
                   lineTouchData: const LineTouchData(enabled: false),
                   lineBarsData: [
                     LineChartBarData(
-                      spots: [for (var i = 0; i < chartPoints.length; i++) FlSpot(i.toDouble(), chartPoints[i].portfolioValue)],
+                      spots: [
+                        for (var i = 0; i < chartPoints.length; i++)
+                          FlSpot(i.toDouble(), chartPoints[i].portfolioValue),
+                      ],
                       isCurved: true,
                       color: holding.type.color,
                       barWidth: 3,

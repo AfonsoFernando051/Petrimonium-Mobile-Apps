@@ -12,11 +12,7 @@ import 'package:path_provider/path_provider.dart';
 class WidgetImageCapture {
   WidgetImageCapture._();
 
-  static Future<File> captureToFile(
-    GlobalKey boundaryKey, {
-    required String fileName,
-    double pixelRatio = 3.0,
-  }) async {
+  static Future<File> captureToFile(GlobalKey boundaryKey, {required String fileName, double pixelRatio = 3.0}) async {
     final boundary = boundaryKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     final image = await boundary.toImage(pixelRatio: pixelRatio);
     final byteData = await image.toByteData(format: ui.ImageByteFormat.png);

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
@@ -38,9 +39,7 @@ class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
     try {
       await DI.petPreferencesRepository.saveGoal(_selectedGoal);
       if (mounted) {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (_) => const TimeHorizonScreen()));
+        unawaited(Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TimeHorizonScreen())));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -61,11 +60,7 @@ class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           for (final goal in PetGoalEnum.values)
-            _GoalRow(
-              goal: goal,
-              isSelected: goal == _selectedGoal,
-              onTap: () => _selectGoal(goal),
-            ),
+            _GoalRow(goal: goal, isSelected: goal == _selectedGoal, onTap: () => _selectGoal(goal)),
         ],
       ),
     );
@@ -93,7 +88,9 @@ class _GoalRow extends StatelessWidget {
             duration: const Duration(milliseconds: 180),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.neonCyan.withValues(alpha: 0.14) : tokens.textPrimary.withValues(alpha: 0.05),
+              color: isSelected
+                  ? AppColors.neonCyan.withValues(alpha: 0.14)
+                  : tokens.textPrimary.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isSelected ? AppColors.neonCyan : tokens.textPrimary.withValues(alpha: 0.12),

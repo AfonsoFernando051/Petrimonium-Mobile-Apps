@@ -1,0 +1,43 @@
+name: Architecture
+
+# Deliberately NOT path-filtered.
+#
+# The other workflows are scoped to the product they build, which is right for
+# builds and wrong for rules: `check_dependency_direction.sh` lived only in
+# shared-checks.yml, which triggers on `packages/**`, so its second rule — "no
+# app may import another app" — could never fire on the change that would
+# actually break it (an app-only change). These checks are seconds long; they
+# run on everything.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependency direction
+        # No package may import an app; no app may import another app.
+        run: ./tooling/check_dependency_direction.sh
+
+      - name: Layering
+        # No domain file may import Flutter's widget libraries or the data
+        # layer. Carries an explicit allowlist of the remaining debt.
+        run: ./tooling/check_layering.sh
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.4"
+          cache: true
+          cache-key: "flutter-format-3.41.4-v1"
+      # melos.yaml has had a `format-check` script all along, but nothing ran
+      # it and the tree had drifted, so it could only ever have failed. The
+      # tree is formatted now, which is what makes enforcing it possible.
+      - run: dart format --line-length 120 --set-exit-if-changed --output none apps packages

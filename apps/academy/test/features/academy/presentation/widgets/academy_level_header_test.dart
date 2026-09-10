@@ -16,11 +16,7 @@ void main() {
         MaterialApp(
           theme: AppTheme.dark,
           home: const Scaffold(
-            body: AcademyLevelHeader(
-              level: 5,
-              totalXpEarned: 1234,
-              knowledgeLevel: KnowledgeLevel.investor,
-            ),
+            body: AcademyLevelHeader(level: 5, totalXpEarned: 1234, knowledgeLevel: KnowledgeLevel.investor),
           ),
         ),
       );

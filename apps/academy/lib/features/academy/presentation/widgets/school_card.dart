@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/school.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_progress_bar.dart';
 
@@ -78,7 +78,11 @@ class SchoolCard extends StatelessWidget {
                           color: accentColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        child: Icon(isLocked ? Icons.lock_outline : school.icon, color: accentColor, size: 22),
+                        child: Icon(
+                          isLocked ? Icons.lock_outline : AcademyIconRegistry.resolve(school.iconKey),
+                          color: accentColor,
+                          size: 22,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(

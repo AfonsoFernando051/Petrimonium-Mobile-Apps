@@ -1,40 +1,28 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../core/i18n/locale_controller.dart';
+import '../../mentor/presentation/mentor_chat_controller.dart';
+import 'health_navigation_controller.dart';
+
+export '../../mentor/presentation/mentor_chat_controller.dart';
+export 'health_navigation_controller.dart';
 import '../../../core/money/money.dart';
 import '../../../core/profile/health_profile.dart';
 import '../data/health_repository.dart';
 import '../domain/category_catalog.dart';
 import '../domain/health_models.dart';
-import '../domain/mentor_models.dart';
 import '../domain/pet_species.dart';
 
 enum AppStage { loading, signedOut, onboarding, home }
-
-/// Which onboarding screen to show. There is no Pet yet on a brand-new
-/// account; an account that already has a Pet from Academy/Wallet skips
-/// straight to `quickSetup` (country/currency/locale) — see
-/// `Petrimonium Health.dc.html`'s `screenIsPetSetup`/`screenIsQuickSetup`.
-enum OnboardingStep { petSetup, quickSetup }
-
-enum AuthMode { login, signup }
-
-/// Screen stacked above the main tab scaffold (back-navigable), mirroring
-/// the prototype's `subScreen`.
-enum AppSubScreen { root, profile, regionalPreferences, addDebt, addIncome }
-
-enum AppTab { home, transactions, accounts, mentor }
 
 final class CurrencyLockedException implements Exception {
   const CurrencyLockedException();
 }
 
 final class HealthController extends ChangeNotifier {
-  HealthController({
-    required HealthRepository repository,
-    required LocaleController localeController,
-  }) : _repository = repository,
-       _localeController = localeController;
+  HealthController({required HealthRepository repository, required LocaleController localeController})
+    : _repository = repository,
+      _localeController = localeController;
 
   final HealthRepository _repository;
   final LocaleController _localeController;
@@ -54,24 +42,19 @@ final class HealthController extends ChangeNotifier {
   bool refreshing = false;
   String? error;
 
-  // --- Screen-flow state (mirrors the design prototype's Component.state) ---
-  AuthMode authMode = AuthMode.login;
-  AppSubScreen subScreen = AppSubScreen.root;
-  AppTab tab = AppTab.home;
-  bool notifOpen = false;
-  bool insightDismissed = false;
+  /// Where the user is in the app. Routing is its own job, not this class's.
+  late final HealthNavigationController navigation = HealthNavigationController(onChanged: notifyListeners);
 
-  // --- Mentor chat ---
-  List<ChatMessage> mentorMessages = const [];
-  int? mentorConversationId;
-  List<String> mentorSuggestions = const [];
-  bool mentorBusy = false;
-  String? mentorError;
+  /// The Mentor conversation. Its state is not the user's financial data.
+  late final MentorChatController mentor = MentorChatController(
+    repository: _repository,
+    localeController: _localeController,
+    onChanged: notifyListeners,
+  );
 
   CurrencyCode get currency => profile?.primaryCurrency ?? CurrencyCode.brl;
 
-  OnboardingStep get onboardingStep =>
-      pet == null ? OnboardingStep.petSetup : OnboardingStep.quickSetup;
+  OnboardingStep get onboardingStep => pet == null ? OnboardingStep.petSetup : OnboardingStep.quickSetup;
 
   /// Whether *this* onboarding pass started without a Pet — decided once,
   /// the moment `stage` first becomes `onboarding`, so the progress dots on
@@ -138,11 +121,7 @@ final class HealthController extends ChangeNotifier {
 
     // These resources are independent. Loading them concurrently bounds a
     // stalled/offline startup to one HTTP timeout instead of three in a row.
-    final results = await Future.wait<Object?>([
-      loadPet(),
-      loadAccount(),
-      _repository.getProfile(),
-    ]);
+    final results = await Future.wait<Object?>([loadPet(), loadAccount(), _repository.getProfile()]);
     pet = results[0] as PetIdentity?;
     account = results[1] as AccountIdentity?;
     final loadedProfile = results[2] as HealthProfile?;
@@ -160,10 +139,7 @@ final class HealthController extends ChangeNotifier {
 
   /// `POST /api/pets/configure` — shared identity endpoint, not Health-only.
   /// Advances `onboardingStep` to `quickSetup` as soon as `pet` is set.
-  Future<void> createPet({
-    required PetSpecies species,
-    required String name,
-  }) async {
+  Future<void> createPet({required PetSpecies species, required String name}) async {
     await _withBusy(() async {
       await _repository.configurePet(specie: species.apiValue, name: name);
       pet = PetIdentity(name: name, species: species.apiValue);
@@ -182,9 +158,7 @@ final class HealthController extends ChangeNotifier {
 
   Future<void> updateProfile(HealthProfile value) async {
     final existing = profile;
-    if (existing != null &&
-        existing.primaryCurrency != value.primaryCurrency &&
-        !existing.currencyChangeAllowed) {
+    if (existing != null && existing.primaryCurrency != value.primaryCurrency && !existing.currencyChangeAllowed) {
       throw const CurrencyLockedException();
     }
     await _withBusy(() async {
@@ -218,13 +192,8 @@ final class HealthController extends ChangeNotifier {
     error = null;
     stage = AppStage.signedOut;
     onboardingHadPetStep = false;
-    authMode = AuthMode.login;
-    subScreen = AppSubScreen.root;
-    tab = AppTab.home;
-    notifOpen = false;
-    insightDismissed = false;
-    mentorMessages = const [];
-    mentorConversationId = null;
+    navigation.reset();
+    mentor.reset();
     notifyListeners();
   }
 
@@ -289,12 +258,7 @@ final class HealthController extends ChangeNotifier {
   // templates; one-off ones as planned transactions with no recurrence link.
 
   List<HealthRecurrence> get debtRecurrences => recurrences
-      .where(
-        (r) =>
-            r.active &&
-            r.type == TransactionType.expense &&
-            DebtCategory.fromApiCategory(r.category) != null,
-      )
+      .where((r) => r.active && r.type == TransactionType.expense && DebtCategory.fromApiCategory(r.category) != null)
       .toList(growable: false);
 
   /// A one-off is a commitment the user entered by hand. An occurrence the
@@ -311,12 +275,7 @@ final class HealthController extends ChangeNotifier {
       .toList(growable: false);
 
   List<HealthRecurrence> get incomeRecurrences => recurrences
-      .where(
-        (r) =>
-            r.active &&
-            r.type == TransactionType.income &&
-            IncomeCategory.fromApiCategory(r.category) != null,
-      )
+      .where((r) => r.active && r.type == TransactionType.income && IncomeCategory.fromApiCategory(r.category) != null)
       .toList(growable: false);
 
   /// See [oneOffDebts]: a generated occurrence is not a separate income.
@@ -525,18 +484,9 @@ final class HealthController extends ChangeNotifier {
     await refreshData();
   }
 
-  Future<void> createCard({
-    required String name,
-    required int closingDay,
-    required int dueDay,
-  }) async {
+  Future<void> createCard({required String name, required int closingDay, required int dueDay}) async {
     await _withBusy(
-      () => _repository.createCard(
-        name: name,
-        currency: currency,
-        closingDay: closingDay,
-        dueDay: dueDay,
-      ),
+      () => _repository.createCard(name: name, currency: currency, closingDay: closingDay, dueDay: dueDay),
     );
     await refreshData();
   }
@@ -582,11 +532,7 @@ final class HealthController extends ChangeNotifier {
     return invoices;
   }
 
-  Future<void> payInvoice({
-    required int invoiceId,
-    required int accountId,
-    required DateTime paymentDate,
-  }) async {
+  Future<void> payInvoice({required int invoiceId, required int accountId, required DateTime paymentDate}) async {
     await _withBusy(
       () => _repository.payInvoice(
         invoiceId: invoiceId,
@@ -596,132 +542,6 @@ final class HealthController extends ChangeNotifier {
       ),
     );
     await refreshData();
-  }
-
-  // --- Screen-flow navigation -------------------------------------------
-
-  void setAuthMode(AuthMode mode) {
-    authMode = mode;
-    notifyListeners();
-  }
-
-  void openProfile() {
-    subScreen = AppSubScreen.profile;
-    notifyListeners();
-  }
-
-  void openRegionalPreferences() {
-    subScreen = AppSubScreen.regionalPreferences;
-    notifyListeners();
-  }
-
-  void openAccounts() {
-    subScreen = AppSubScreen.root;
-    tab = AppTab.accounts;
-    notifyListeners();
-  }
-
-  void openMentor() {
-    subScreen = AppSubScreen.root;
-    tab = AppTab.mentor;
-    notifyListeners();
-  }
-
-  void openAddDebt() {
-    subScreen = AppSubScreen.addDebt;
-    notifyListeners();
-  }
-
-  void openAddIncome() {
-    subScreen = AppSubScreen.addIncome;
-    notifyListeners();
-  }
-
-  void closeSubScreen() {
-    subScreen = AppSubScreen.root;
-    notifyListeners();
-  }
-
-  void selectTab(AppTab value) {
-    tab = value;
-    notifOpen = false;
-    notifyListeners();
-  }
-
-  void toggleNotif() {
-    notifOpen = !notifOpen;
-    notifyListeners();
-  }
-
-  void dismissInsight() {
-    insightDismissed = true;
-    notifyListeners();
-  }
-
-  // --- Mentor chat --------------------------------------------------------
-
-  Future<void> loadMentorSuggestions() async {
-    try {
-      final language = _localeController.current.tag.split('-').first;
-      mentorSuggestions = await _repository.getMentorSuggestions(
-        language: language,
-      );
-    } catch (_) {
-      mentorSuggestions = const [];
-    }
-    notifyListeners();
-  }
-
-  void startNewMentorConversation() {
-    mentorConversationId = null;
-    mentorMessages = const [];
-    mentorError = null;
-    notifyListeners();
-  }
-
-  Future<void> sendMentorMessage(String text) async {
-    final trimmed = text.trim();
-    if (trimmed.isEmpty || mentorBusy) return;
-    final userMessage = ChatMessage(
-      id: 'u-${DateTime.now().microsecondsSinceEpoch}',
-      author: ChatAuthor.user,
-      text: trimmed,
-    );
-    mentorMessages = [...mentorMessages, userMessage];
-    mentorBusy = true;
-    mentorError = null;
-    notifyListeners();
-    try {
-      final reply = await _repository.sendMentorMessage(
-        message: trimmed,
-        conversationId: mentorConversationId,
-      );
-      mentorConversationId = reply.conversationId;
-      mentorMessages = [
-        ...mentorMessages,
-        ChatMessage(
-          id: 'm-${DateTime.now().microsecondsSinceEpoch}',
-          author: ChatAuthor.mentor,
-          text: reply.reply,
-          sources: reply.sources,
-        ),
-      ];
-    } catch (exception) {
-      mentorError = exception.toString();
-    } finally {
-      mentorBusy = false;
-      notifyListeners();
-    }
-  }
-
-  void toggleMessageWhy(String messageId) {
-    for (final message in mentorMessages) {
-      if (message.id == messageId) {
-        message.whyOpen = !message.whyOpen;
-        break;
-      }
-    }
-    notifyListeners();
   }
 
   void _ensureCurrency(CurrencyCode actual) {

@@ -12,14 +12,14 @@ void main() {
   Widget buildTestable(VoidCallback onStart) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(
-        body: AcademyReviewCard(lessonCount: 3, estimatedMinutes: 6, onStart: onStart),
-      ),
+      home: Scaffold(body: AcademyReviewCard(lessonCount: 3, estimatedMinutes: 6, onStart: onStart)),
     );
   }
 
   group('AcademyReviewCard', () {
-    testWidgets('renders lesson count/minutes and a start action — no GameButton (secondary, not primary)', (tester) async {
+    testWidgets('renders lesson count/minutes and a start action — no GameButton (secondary, not primary)', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildTestable(() {}));
 
       // Deliberately not a GameButton (see class doc) — this is a secondary

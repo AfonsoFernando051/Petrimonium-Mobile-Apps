@@ -8,15 +8,9 @@ void main() {
       // Impede o caso silencioso de acrescentar um idioma ao enum sem o ARB:
       // a opção apareceria nas Preferências e a interface continuaria noutra
       // língua, sem erro nenhum.
-      final geradas = AppLocalizations.supportedLocales
-          .map((locale) => locale.languageCode)
-          .toSet();
+      final geradas = AppLocalizations.supportedLocales.map((locale) => locale.languageCode).toSet();
       for (final entrada in InterfaceLocale.values) {
-        expect(
-          geradas,
-          contains(entrada.locale.languageCode),
-          reason: '${entrada.tag} não tem localização gerada',
-        );
+        expect(geradas, contains(entrada.locale.languageCode), reason: '${entrada.tag} não tem localização gerada');
       }
     });
 
@@ -28,10 +22,7 @@ void main() {
     });
 
     test('os quatro idiomas do design estão disponíveis', () {
-      expect(
-        InterfaceLocale.values.map((entrada) => entrada.tag).toSet(),
-        {'pt-BR', 'pt-PT', 'en', 'es'},
-      );
+      expect(InterfaceLocale.values.map((entrada) => entrada.tag).toSet(), {'pt-BR', 'pt-PT', 'en', 'es'});
     });
   });
 }

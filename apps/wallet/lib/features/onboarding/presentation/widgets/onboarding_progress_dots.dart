@@ -8,11 +8,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 /// widget and given a soft glow on the active dot so it reads as a premium
 /// product signal rather than a generic carousel indicator.
 class OnboardingProgressDots extends StatelessWidget {
-  const OnboardingProgressDots({
-    super.key,
-    required this.step,
-    required this.total,
-  });
+  const OnboardingProgressDots({super.key, required this.step, required this.total});
 
   final int step;
   final int total;
@@ -34,13 +30,7 @@ class OnboardingProgressDots extends StatelessWidget {
             color: active ? AppColors.neonCyan : tokens.border,
             borderRadius: BorderRadius.circular(4),
             boxShadow: active
-                ? [
-                    BoxShadow(
-                      color: AppColors.neonCyan.withValues(alpha: 0.55),
-                      blurRadius: 8,
-                      spreadRadius: 0.5,
-                    ),
-                  ]
+                ? [BoxShadow(color: AppColors.neonCyan.withValues(alpha: 0.55), blurRadius: 8, spreadRadius: 0.5)]
                 : null,
           ),
         );

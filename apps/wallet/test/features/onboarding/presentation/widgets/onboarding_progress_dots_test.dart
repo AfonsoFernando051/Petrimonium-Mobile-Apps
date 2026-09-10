@@ -25,9 +25,7 @@ void main() {
       await tester.pumpWidget(buildTestableWidget(step: 3, total: 4));
       await tester.pump();
 
-      final containers = tester
-          .widgetList<AnimatedContainer>(find.byType(AnimatedContainer))
-          .toList();
+      final containers = tester.widgetList<AnimatedContainer>(find.byType(AnimatedContainer)).toList();
 
       expect(containers.length, 4);
       // step is 1-based; index 2 (the 3rd dot) is active.

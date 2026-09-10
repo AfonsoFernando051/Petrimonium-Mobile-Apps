@@ -33,10 +33,7 @@ class AssetHeader extends StatelessWidget {
                 _AssetTypeBadge(assetType: asset.assetType),
                 if (asset.sector != null) ...[
                   const SizedBox(width: 8),
-                  Text(
-                    '· ${asset.sector}',
-                    style: AppTextStyles.caption.copyWith(color: tokens.textSecondary),
-                  ),
+                  Text('· ${asset.sector}', style: AppTextStyles.caption.copyWith(color: tokens.textSecondary)),
                 ],
               ],
             ),
@@ -79,11 +76,7 @@ class AssetHeader extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          isPositive ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                          color: changeColor,
-                          size: 20,
-                        ),
+                        Icon(isPositive ? Icons.arrow_drop_up : Icons.arrow_drop_down, color: changeColor, size: 20),
                         Text(
                           AppFormatters.percent(asset.dailyChangePercent!),
                           style: AppTextStyles.body.copyWith(color: changeColor, fontWeight: FontWeight.bold),
@@ -167,11 +160,7 @@ class _AssetTypeBadge extends StatelessWidget {
 // ── 52-Week Range Bar ───────────────────────────────────────────────────
 
 class _FiftyTwoWeekRange extends StatelessWidget {
-  const _FiftyTwoWeekRange({
-    required this.low,
-    required this.high,
-    this.current,
-  });
+  const _FiftyTwoWeekRange({required this.low, required this.high, this.current});
 
   final double low;
   final double high;
@@ -217,9 +206,7 @@ class _FiftyTwoWeekRange extends StatelessWidget {
                     widthFactor: position,
                     child: Container(
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [tokens.error, tokens.warning, tokens.success],
-                        ),
+                        gradient: LinearGradient(colors: [tokens.error, tokens.warning, tokens.success]),
                         borderRadius: BorderRadius.circular(3),
                       ),
                     ),

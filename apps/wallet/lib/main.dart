@@ -1,3 +1,4 @@
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -11,7 +12,6 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_wallet/core/navigation/start_route_resolver.dart';
-import 'package:petrimonium_wallet/core/preferences/country_preference.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_wallet/features/dashboard/presentation/screens/dashboard_screen.dart';
@@ -158,16 +158,8 @@ class _SplashScreen extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: isDark
-                ? [
-                    AppColors.spaceDark,
-                    AppColors.spacePurple,
-                    AppColors.spaceBlue,
-                  ]
-                : [
-                    tokens.backgroundPrimary,
-                    tokens.primaryContainer,
-                    tokens.backgroundSecondary,
-                  ],
+                ? [AppColors.spaceDark, AppColors.spacePurple, AppColors.spaceBlue]
+                : [tokens.backgroundPrimary, tokens.primaryContainer, tokens.backgroundSecondary],
           ),
         ),
         child: Center(
@@ -177,26 +169,14 @@ class _SplashScreen extends StatelessWidget {
               Image.asset(
                 'assets/images/generated_fox.png',
                 height: 120,
-                errorBuilder: (context, error, stackTrace) =>
-                    Icon(Icons.pets, size: 80, color: tokens.primary),
+                errorBuilder: (context, error, stackTrace) => Icon(Icons.pets, size: 80, color: tokens.primary),
               ),
               const SizedBox(height: 32),
-              SizedBox(
-                width: 28,
-                height: 28,
-                child: CircularProgressIndicator(
-                  color: tokens.primary,
-                  strokeWidth: 2,
-                ),
-              ),
+              SizedBox(width: 28, height: 28, child: CircularProgressIndicator(color: tokens.primary, strokeWidth: 2)),
               const SizedBox(height: 20),
               Text(
                 'Inicializando Módulo de Comandante...',
-                style: GoogleFonts.outfit(
-                  color: tokens.textSecondary,
-                  fontSize: 13,
-                  letterSpacing: 0.5,
-                ),
+                style: GoogleFonts.outfit(color: tokens.textSecondary, fontSize: 13, letterSpacing: 0.5),
               ),
             ],
           ),

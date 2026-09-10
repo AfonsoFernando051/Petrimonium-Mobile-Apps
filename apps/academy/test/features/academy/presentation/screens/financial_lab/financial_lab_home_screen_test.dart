@@ -5,15 +5,9 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/lab_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/compound_interest_lab_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/financial_lab_home_screen.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,9 +35,7 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveNetWorth(double netWorth) async {}
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
 
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
@@ -63,15 +55,11 @@ void main() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     mascotController = MascotController(repository: FakeMascotRepository());
-    companionController = PetCompanionController(
-      mascotController: mascotController,
-    );
+    companionController = PetCompanionController(mascotController: mascotController);
 
     DI.academyProgressRepository = AcademyProgressLocalRepository();
     mockLabRemoteDataSource = MockLabRemoteDataSource();
-    when(
-      () => mockLabRemoteDataSource.getCompletedSimulatorIds(),
-    ).thenAnswer((_) async => {});
+    when(() => mockLabRemoteDataSource.getCompletedSimulatorIds()).thenAnswer((_) async => {});
     DI.labRemoteDataSource = mockLabRemoteDataSource;
   });
 
@@ -87,37 +75,31 @@ void main() {
   }
 
   group('FinancialLabHomeScreen', () {
-    testWidgets(
-      'renders all five simulator tiles as available',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        // CosmicBackground has repeating AnimationControllers — never
-        // pumpAndSettle here.
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 300));
+    testWidgets('renders all five simulator tiles as available', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      // CosmicBackground has repeating AnimationControllers — never
+      // pumpAndSettle here.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-        expect(find.byIcon(Icons.trending_up_rounded), findsOneWidget);
-        expect(find.byIcon(Icons.shopping_basket_outlined), findsOneWidget);
-        // All five simulators are available now.
-        expect(find.byIcon(Icons.chevron_right), findsNWidgets(5));
-        expect(find.byIcon(Icons.account_balance_outlined), findsOneWidget);
-        expect(find.text('EM BREVE'), findsNothing);
-      },
-    );
+      expect(find.byIcon(Icons.trending_up_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.shopping_basket_outlined), findsOneWidget);
+      // All five simulators are available now.
+      expect(find.byIcon(Icons.chevron_right), findsNWidgets(5));
+      expect(find.byIcon(Icons.account_balance_outlined), findsOneWidget);
+      expect(find.text('EM BREVE'), findsNothing);
+    });
 
-    testWidgets(
-      'navigates to CompoundInterestLabScreen when the compound interest tile is tapped',
-      (tester) async {
-        await tester.pumpWidget(buildTestable());
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 300));
+    testWidgets('navigates to CompoundInterestLabScreen when the compound interest tile is tapped', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-        await tester.tap(find.byIcon(Icons.trending_up_rounded));
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.byIcon(Icons.trending_up_rounded));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
 
-        expect(find.byType(CompoundInterestLabScreen), findsOneWidget);
-      },
-    );
+      expect(find.byType(CompoundInterestLabScreen), findsOneWidget);
+    });
   });
 }

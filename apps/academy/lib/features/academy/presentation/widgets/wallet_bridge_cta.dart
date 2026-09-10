@@ -33,11 +33,7 @@ class WalletBridgeCta extends StatelessWidget {
         color: available ? tokens.primary : tokens.textTertiary,
       ),
       label: Text(
-        Translator.translate(
-          available
-              ? AppStrings.walletBridgeCtaLabel
-              : AppStrings.walletBridgeComingSoon,
-        ),
+        Translator.translate(available ? AppStrings.walletBridgeCtaLabel : AppStrings.walletBridgeComingSoon),
         style: TextStyle(
           color: available ? tokens.primary : tokens.textTertiary,
           fontSize: 13,

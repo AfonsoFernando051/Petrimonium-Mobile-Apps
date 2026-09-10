@@ -30,8 +30,7 @@ class OnboardingStateRepository {
   static const _portfolioConnectedKey = 'onboarding_portfolio_connected';
   static const _portfolioSkippedAtKey = 'onboarding_portfolio_skipped_at';
   static const _sessionCountKey = 'onboarding_session_count';
-  static const _reminderShownAtSessionKey =
-      'onboarding_reminder_shown_at_session';
+  static const _reminderShownAtSessionKey = 'onboarding_reminder_shown_at_session';
   static const _portfolioActivationSeenKey = 'portfolio_activation_seen';
   static const _mentorWelcomeSeenKey = 'onboarding_mentor_welcome_seen';
   static const _quickSetupDoneKey = 'onboarding_quick_setup_done';
@@ -106,10 +105,7 @@ class OnboardingStateRepository {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(await UserScopedPrefs.key(_portfolioStepDoneKey), true);
     await prefs.setBool(await UserScopedPrefs.key(_portfolioConnectedKey), false);
-    await prefs.setString(
-      await UserScopedPrefs.key(_portfolioSkippedAtKey),
-      (now ?? DateTime.now()).toIso8601String(),
-    );
+    await prefs.setString(await UserScopedPrefs.key(_portfolioSkippedAtKey), (now ?? DateTime.now()).toIso8601String());
   }
 
   /// Increments and returns the number of app sessions (cold starts) so
@@ -149,8 +145,7 @@ class OnboardingStateRepository {
     if (sessionCount < kPortfolioReminderAfterSessions) return false;
 
     final lastShown = prefs.getInt(await _migrateInt(prefs, _reminderShownAtSessionKey));
-    if (lastShown != null &&
-        sessionCount - lastShown < kPortfolioReminderCooldownSessions) {
+    if (lastShown != null && sessionCount - lastShown < kPortfolioReminderCooldownSessions) {
       return false;
     }
     return true;

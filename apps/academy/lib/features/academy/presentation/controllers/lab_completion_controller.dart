@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/lab_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lab_simulator.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
@@ -33,8 +33,7 @@ class LabCompletionController extends ChangeNotifier {
   Set<String> completedSimulatorIds = {};
   bool isLoading = true;
 
-  bool isCompleted(LabSimulatorId id) =>
-      completedSimulatorIds.contains(id.sourceId);
+  bool isCompleted(LabSimulatorId id) => completedSimulatorIds.contains(id.sourceId);
 
   Future<void> load() async {
     isLoading = true;
@@ -57,9 +56,7 @@ class LabCompletionController extends ChangeNotifier {
     // completed on another device). Never blocks the initial render.
     try {
       final serverIds = await remote.getCompletedSimulatorIds();
-      completedSimulatorIds = await _repository.mergeCompletedSimulatorIds(
-        serverIds,
-      );
+      completedSimulatorIds = await _repository.mergeCompletedSimulatorIds(serverIds);
       notifyListeners();
     } catch (_) {
       // Offline or backend unavailable — keep local-only progress.
@@ -96,9 +93,7 @@ class LabCompletionController extends ChangeNotifier {
   Future<void> completeSimulator(LabSimulatorId id, String resolvedTitle) async {
     if (isCompleted(id)) return;
 
-    completedSimulatorIds = await _repository.markSimulatorCompleted(
-      id.sourceId,
-    );
+    completedSimulatorIds = await _repository.markSimulatorCompleted(id.sourceId);
     // Recorded before the sync attempt below — if it fails or the app is
     // killed mid-request, the next `load()` still knows to retry it.
     await _repository.markSimulatorPendingSync(id.sourceId);
@@ -111,10 +106,7 @@ class LabCompletionController extends ChangeNotifier {
     try {
       final result = await remote.completeSimulator(id.sourceId);
       await _repository.clearSimulatorPendingSync(id.sourceId);
-      await _mascotController.evaluateEvolution(
-        _mascotController.profile.netWorth,
-        result.totalXp,
-      );
+      await _mascotController.evaluateEvolution(_mascotController.profile.netWorth, result.totalXp);
       notifyListeners();
     } catch (_) {
       // Offline or backend unavailable — stays in the pending-sync set (see

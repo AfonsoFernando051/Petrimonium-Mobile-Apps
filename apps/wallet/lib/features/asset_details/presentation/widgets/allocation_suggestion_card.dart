@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 
 /// Compares this holding's real share of the portfolio against its asset
@@ -24,8 +23,8 @@ class AllocationSuggestionCard extends StatelessWidget {
     final label = aligned
         ? 'Alinhado com a meta da categoria (${holding.type.idealTargetPercent.toStringAsFixed(0)}%).'
         : overweight > 0
-            ? 'Categoria acima da meta sugerida (${holding.type.idealTargetPercent.toStringAsFixed(0)}%).'
-            : 'Categoria abaixo da meta sugerida (${holding.type.idealTargetPercent.toStringAsFixed(0)}%).';
+        ? 'Categoria acima da meta sugerida (${holding.type.idealTargetPercent.toStringAsFixed(0)}%).'
+        : 'Categoria abaixo da meta sugerida (${holding.type.idealTargetPercent.toStringAsFixed(0)}%).';
 
     return GlassCard(
       backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.55 : 0.94),
@@ -50,7 +49,9 @@ class AllocationSuggestionCard extends StatelessWidget {
                 children: [
                   Icon(overweight > 0 ? Icons.arrow_circle_up : Icons.arrow_circle_down, color: color, size: 18),
                   const SizedBox(width: 10),
-                  Expanded(child: Text(label, style: TextStyle(color: tokens.textSecondary, fontSize: 11))),
+                  Expanded(
+                    child: Text(label, style: TextStyle(color: tokens.textSecondary, fontSize: 11)),
+                  ),
                   Text(
                     '${holding.portfolioPercent.toStringAsFixed(0)}%',
                     style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 13),

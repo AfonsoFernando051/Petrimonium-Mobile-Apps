@@ -5,12 +5,11 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/widgets/layer_chip.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/dividend_radar_section.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/passive_income_card.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/proventos_evolution_bar_card.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/error_banner.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 
 /// The "Proventos" (Passive Income) tab — its own dedicated home, no longer
@@ -35,10 +34,7 @@ class _PassiveIncomeScreenState extends State<PassiveIncomeScreen> {
   }
 
   Future<void> _refreshAll() async {
-    await Future.wait([
-      widget.controller.refresh(),
-      widget.controller.refreshDividendRadar(),
-    ]);
+    await Future.wait([widget.controller.refresh(), widget.controller.refreshDividendRadar()]);
   }
 
   @override
@@ -71,7 +67,10 @@ class _PassiveIncomeScreenState extends State<PassiveIncomeScreen> {
             const SizedBox(height: 16),
 
             if (controller.error != null) ...[
-              ErrorBanner(onRetry: controller.refresh),
+              ErrorBanner(
+                message: 'Não foi possível atualizar seus dados. Puxe para atualizar.',
+                onRetry: controller.refresh,
+              ),
               const SizedBox(height: 12),
             ],
 

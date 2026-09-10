@@ -80,10 +80,7 @@ class _ChatBubbleState extends State<ChatBubble> {
           bottomRight: Radius.circular(4),
         ),
       ),
-      child: Text(
-        widget.message.text,
-        style: const TextStyle(color: Colors.white, fontSize: 14, height: 1.4),
-      ),
+      child: Text(widget.message.text, style: const TextStyle(color: Colors.white, fontSize: 14, height: 1.4)),
     );
   }
 
@@ -161,6 +158,5 @@ class _ChatBubbleState extends State<ChatBubble> {
     );
   }
 
-  Widget _markdown(BuildContext context, String data) =>
-      MentorReplyLayersView.markdown(context, data);
+  Widget _markdown(BuildContext context, String data) => MentorReplyLayersView.markdown(context, data);
 }

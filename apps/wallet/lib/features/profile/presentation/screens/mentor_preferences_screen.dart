@@ -75,7 +75,12 @@ class _MentorPreferencesScreenState extends State<MentorPreferencesScreen> {
             children: [
               Text(
                 Translator.translate(AppStrings.mentorPreferencesGoalLabel),
-                style: TextStyle(color: tokens.textTertiary, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.6),
+                style: TextStyle(
+                  color: tokens.textTertiary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.6,
+                ),
               ),
               const SizedBox(height: 8),
               for (final goal in PetGoalEnum.values)
@@ -88,7 +93,12 @@ class _MentorPreferencesScreenState extends State<MentorPreferencesScreen> {
               const SizedBox(height: 20),
               Text(
                 Translator.translate(AppStrings.mentorPreferencesHorizonLabel),
-                style: TextStyle(color: tokens.textTertiary, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.6),
+                style: TextStyle(
+                  color: tokens.textTertiary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.6,
+                ),
               ),
               const SizedBox(height: 8),
               for (final horizon in InvestmentHorizonEnum.values)
@@ -151,7 +161,10 @@ class _OptionTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label, style: TextStyle(color: tokens.textPrimary, fontSize: 14, fontWeight: FontWeight.w600)),
+                  Text(
+                    label,
+                    style: TextStyle(color: tokens.textPrimary, fontSize: 14, fontWeight: FontWeight.w600),
+                  ),
                   if (description != null)
                     Text(description!, style: TextStyle(color: tokens.textSecondary, fontSize: 12)),
                 ],

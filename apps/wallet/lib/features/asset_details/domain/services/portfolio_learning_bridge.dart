@@ -1,4 +1,4 @@
-import 'package:petrimonium_wallet/features/academy/domain/entities/lesson.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/applied_concept.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/services/indicator_education_catalog.dart';
@@ -42,12 +42,9 @@ class PortfolioLearningBridge {
       final explanation = IndicatorEducationCatalog.getExplanation(indicator.id);
       if (explanation == null) continue;
 
-      applied.add(AppliedConcept(
-        indicator: indicator,
-        explanation: explanation,
-        lessonId: lesson.id,
-        lessonTitle: lesson.title,
-      ));
+      applied.add(
+        AppliedConcept(indicator: indicator, explanation: explanation, lessonId: lesson.id, lessonTitle: lesson.title),
+      );
     }
     return applied;
   }

@@ -7,7 +7,9 @@ void main() {
   Widget buildTestableWidget(DataLayer layer, String label) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: LayerChip(layer: layer, label: label)),
+      home: Scaffold(
+        body: LayerChip(layer: layer, label: label),
+      ),
     );
   }
 

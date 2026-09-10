@@ -15,7 +15,9 @@ void main() {
   Widget buildTestable(VoidCallback onStart) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: AcademyContinueCard(lesson: testLesson1, onStart: onStart)),
+      home: Scaffold(
+        body: AcademyContinueCard(lesson: testLesson1, onStart: onStart),
+      ),
     );
   }
 

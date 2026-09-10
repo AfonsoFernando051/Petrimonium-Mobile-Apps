@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/school.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// A small but structurally realistic [AcademyCatalogSnapshot] for tests
 /// that used to exercise the real (now-deleted) hardcoded `AcademyCatalog`:
@@ -26,7 +20,7 @@ const testDomain = AcademyDomain(
   id: 'test_domain',
   title: 'Test Domain',
   description: 'desc',
-  icon: Icons.school,
+  iconKey: 'savings_outlined',
   order: 1,
   schoolIds: ['test_school', 'test_coming_soon_school'],
 );
@@ -35,7 +29,7 @@ const testSchool = School(
   id: 'test_school',
   title: 'Test School',
   description: 'desc',
-  icon: Icons.school,
+  iconKey: 'savings_outlined',
   order: 1,
   contentAvailable: true,
 );
@@ -44,7 +38,7 @@ const testComingSoonSchool = School(
   id: 'test_coming_soon_school',
   title: 'Coming Soon School',
   description: 'desc',
-  icon: Icons.school,
+  iconKey: 'savings_outlined',
   order: 2,
   contentAvailable: false,
 );
@@ -54,7 +48,7 @@ const testModule = AcademyModule(
   schoolId: 'test_school',
   title: 'Test Module',
   description: 'desc',
-  icon: Icons.school,
+  iconKey: 'savings_outlined',
   order: 1,
   lessonIds: ['test_lesson_1', 'test_lesson_2', 'test_lesson_3'],
   contentAvailable: true,
@@ -92,5 +86,7 @@ const testLesson3 = Lesson(
   title: 'Lesson 3',
   order: 3,
   xpReward: 20,
-  steps: [SummaryStep(title: 'Summary', takeaways: ['Takeaway'])],
+  steps: [
+    SummaryStep(title: 'Summary', takeaways: ['Takeaway']),
+  ],
 );

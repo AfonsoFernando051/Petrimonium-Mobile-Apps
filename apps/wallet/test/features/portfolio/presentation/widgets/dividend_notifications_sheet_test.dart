@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/dividend_event_tile.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/dividend_notifications_sheet.dart';
 
@@ -53,11 +53,9 @@ void main() {
 
     testWidgets('shows an error state with retry when loading fails with no data', (WidgetTester tester) async {
       var retried = false;
-      await tester.pumpWidget(buildTestableWidget(
-        isLoading: false,
-        error: 'network error',
-        onRetry: () => retried = true,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(isLoading: false, error: 'network error', onRetry: () => retried = true),
+      );
 
       expect(find.text('Não foi possível carregar suas notificações.'), findsOneWidget);
 
@@ -69,10 +67,7 @@ void main() {
     testWidgets('shows an empty state when there is no upcoming dividend', (WidgetTester tester) async {
       await tester.pumpWidget(buildTestableWidget(isLoading: false));
 
-      expect(
-        find.text('Nenhum provento confirmado a caminho para os seus ativos no momento.'),
-        findsOneWidget,
-      );
+      expect(find.text('Nenhum provento confirmado a caminho para os seus ativos no momento.'), findsOneWidget);
     });
 
     testWidgets('renders a DividendEventTile per upcoming event', (WidgetTester tester) async {

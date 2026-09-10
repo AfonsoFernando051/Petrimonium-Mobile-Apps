@@ -12,10 +12,8 @@ enum AccountType {
   const AccountType(this.apiValue);
   final String apiValue;
 
-  static AccountType parse(String value) => values.firstWhere(
-    (type) => type.apiValue == value,
-    orElse: () => AccountType.other,
-  );
+  static AccountType parse(String value) =>
+      values.firstWhere((type) => type.apiValue == value, orElse: () => AccountType.other);
 }
 
 final class HealthAccount {
@@ -35,15 +33,9 @@ final class HealthAccount {
       id: _id(json['id']),
       name: json['name'] as String,
       type: AccountType.parse(json['type'] as String),
-      initialBalance: Money.fromDecimal(
-        json['initialBalance'] as String,
-        currency,
-      ),
+      initialBalance: Money.fromDecimal(json['initialBalance'] as String, currency),
       balanceReferenceDate: _date(json['balanceReferenceDate']),
-      currentBalance: Money.fromDecimal(
-        json['currentBalance'] as String,
-        currency,
-      ),
+      currentBalance: Money.fromDecimal(json['currentBalance'] as String, currency),
       archived: json['archived'] as bool? ?? false,
     );
   }
@@ -70,10 +62,8 @@ enum TransactionType {
   const TransactionType(this.apiValue);
   final String apiValue;
 
-  static TransactionType parse(String value) => values.firstWhere(
-    (type) => type.apiValue == value,
-    orElse: () => TransactionType.other,
-  );
+  static TransactionType parse(String value) =>
+      values.firstWhere((type) => type.apiValue == value, orElse: () => TransactionType.other);
 }
 
 enum TransactionStatus {
@@ -118,9 +108,7 @@ final class HealthTransaction {
       date: _date(json['date']),
       source: json['source'] as String? ?? 'MANUAL',
       transferId: json['transferId'] == null ? null : _id(json['transferId']),
-      recurrenceId: json['recurrenceId'] == null
-          ? null
-          : _id(json['recurrenceId']),
+      recurrenceId: json['recurrenceId'] == null ? null : _id(json['recurrenceId']),
       invoiceId: json['invoiceId'] == null ? null : _id(json['invoiceId']),
     );
   }
@@ -138,11 +126,7 @@ final class HealthTransaction {
   final int? recurrenceId;
   final int? invoiceId;
 
-  bool get isSystemEntry =>
-      source != 'MANUAL' ||
-      transferId != null ||
-      recurrenceId != null ||
-      invoiceId != null;
+  bool get isSystemEntry => source != 'MANUAL' || transferId != null || recurrenceId != null || invoiceId != null;
 }
 
 final class HealthCard {
@@ -188,14 +172,9 @@ final class CardInvoice {
       id: _id(json['id']),
       cardId: _id(json['cardId']),
       currency: currency,
-      amount: Money.fromDecimal(
-        (json['amount'] ?? json['totalAmount']) as String,
-        currency,
-      ),
+      amount: Money.fromDecimal((json['amount'] ?? json['totalAmount']) as String, currency),
       dueDate: _date(json['dueDate']),
-      paid:
-          json['paid'] as bool? ??
-          ((json['status'] as String?)?.toUpperCase() == 'PAID'),
+      paid: json['paid'] as bool? ?? ((json['status'] as String?)?.toUpperCase() == 'PAID'),
     );
   }
 
@@ -210,10 +189,7 @@ final class CardInvoice {
 final class CategoryExpense {
   const CategoryExpense({required this.category, required this.amount});
 
-  factory CategoryExpense.fromJson(
-    Map<String, dynamic> json,
-    CurrencyCode currency,
-  ) => CategoryExpense(
+  factory CategoryExpense.fromJson(Map<String, dynamic> json, CurrencyCode currency) => CategoryExpense(
     category: json['category'] as String,
     amount: Money.fromDecimal(json['amount'] as String, currency),
   );
@@ -223,16 +199,9 @@ final class CategoryExpense {
 }
 
 final class UpcomingCommitment {
-  const UpcomingCommitment({
-    required this.description,
-    required this.amount,
-    required this.date,
-  });
+  const UpcomingCommitment({required this.description, required this.amount, required this.date});
 
-  factory UpcomingCommitment.fromJson(
-    Map<String, dynamic> json,
-    CurrencyCode currency,
-  ) => UpcomingCommitment(
+  factory UpcomingCommitment.fromJson(Map<String, dynamic> json, CurrencyCode currency) => UpcomingCommitment(
     description: json['description'] as String? ?? '',
     amount: Money.fromDecimal(json['amount'] as String, currency),
     date: _date(json['date'] ?? json['dueDate']),
@@ -259,26 +228,24 @@ final class MonthlySummary {
     required this.upcoming,
   });
 
-  factory MonthlySummary.empty(CurrencyCode currency, DateTime month) =>
-      MonthlySummary(
-        month: DateTime(month.year, month.month),
-        currency: currency,
-        currentBalance: Money.zero(currency),
-        realizedIncome: Money.zero(currency),
-        realizedExpenses: Money.zero(currency),
-        plannedIncome: Money.zero(currency),
-        plannedExpenses: Money.zero(currency),
-        openCardInvoices: Money.zero(currency),
-        monthResult: Money.zero(currency),
-        projectedEndBalance: Money.zero(currency),
-        expensesByCategory: const [],
-        upcoming: const [],
-      );
+  factory MonthlySummary.empty(CurrencyCode currency, DateTime month) => MonthlySummary(
+    month: DateTime(month.year, month.month),
+    currency: currency,
+    currentBalance: Money.zero(currency),
+    realizedIncome: Money.zero(currency),
+    realizedExpenses: Money.zero(currency),
+    plannedIncome: Money.zero(currency),
+    plannedExpenses: Money.zero(currency),
+    openCardInvoices: Money.zero(currency),
+    monthResult: Money.zero(currency),
+    projectedEndBalance: Money.zero(currency),
+    expensesByCategory: const [],
+    upcoming: const [],
+  );
 
   factory MonthlySummary.fromJson(Map<String, dynamic> json) {
     final currency = CurrencyCode.parse(json['currency'] as String);
-    Money amount(String key) =>
-        Money.fromDecimal(json[key] as String, currency);
+    Money amount(String key) => Money.fromDecimal(json[key] as String, currency);
     final rawMonth = json['month'] as String;
     final month = DateTime.parse('$rawMonth-01');
     return MonthlySummary(
@@ -371,10 +338,7 @@ final class AccountIdentity {
   const AccountIdentity({required this.username, required this.email});
 
   factory AccountIdentity.fromJson(Map<String, dynamic> json) =>
-      AccountIdentity(
-        username: json['username'] as String? ?? '',
-        email: json['email'] as String? ?? '',
-      );
+      AccountIdentity(username: json['username'] as String? ?? '', email: json['email'] as String? ?? '');
 
   final String username;
   final String email;
@@ -383,10 +347,8 @@ final class AccountIdentity {
 final class PetIdentity {
   const PetIdentity({this.name, this.species});
 
-  factory PetIdentity.fromJson(Map<String, dynamic> json) => PetIdentity(
-    name: json['name'] as String?,
-    species: (json['specie'] ?? json['species']) as String?,
-  );
+  factory PetIdentity.fromJson(Map<String, dynamic> json) =>
+      PetIdentity(name: json['name'] as String?, species: (json['specie'] ?? json['species']) as String?);
 
   final String? name;
   final String? species;

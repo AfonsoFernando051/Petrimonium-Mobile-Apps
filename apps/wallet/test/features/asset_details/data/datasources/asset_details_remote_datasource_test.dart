@@ -18,15 +18,12 @@ void main() {
 
   group('AssetDetailsRemoteDataSource.fetchAssetDetails', () {
     test('returns the decoded JSON for the requested ticker on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response(
-            jsonEncode({
-              'ticker': 'PETR4',
-              'shortName': 'Petrobras',
-              'assetType': 'stock',
-              'currentPrice': 32.5,
-            }),
-            200,
-          ));
+      when(() => mockApiClient.get(any())).thenAnswer(
+        (_) async => http.Response(
+          jsonEncode({'ticker': 'PETR4', 'shortName': 'Petrobras', 'assetType': 'stock', 'currentPrice': 32.5}),
+          200,
+        ),
+      );
 
       final result = await dataSource.fetchAssetDetails('PETR4');
 
@@ -40,8 +37,7 @@ void main() {
 
       await expectLater(
         () => dataSource.fetchAssetDetails('ZZZZ'),
-        throwsA(predicate((e) =>
-            e is Exception && e.toString().contains('ZZZZ') && e.toString().contains('404'))),
+        throwsA(predicate((e) => e is Exception && e.toString().contains('ZZZZ') && e.toString().contains('404'))),
       );
     });
   });

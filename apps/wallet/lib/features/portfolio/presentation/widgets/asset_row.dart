@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/screens/asset_details_screen.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/price_status.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
@@ -89,11 +88,7 @@ class AssetRow extends StatelessWidget {
                   ),
                 ),
               const SizedBox(width: 2),
-              Icon(
-                isPositive ? Icons.chevron_right : Icons.chevron_right,
-                color: tokens.textTertiary,
-                size: 16,
-              ),
+              Icon(isPositive ? Icons.chevron_right : Icons.chevron_right, color: tokens.textTertiary, size: 16),
             ],
           ),
         ),

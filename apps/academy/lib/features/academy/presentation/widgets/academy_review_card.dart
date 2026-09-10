@@ -21,7 +21,12 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 /// same "what should I do next" attention was the exact problem a signal-
 /// hierarchy audit flagged here.
 class AcademyReviewCard extends StatelessWidget {
-  const AcademyReviewCard({super.key, required this.lessonCount, required this.estimatedMinutes, required this.onStart});
+  const AcademyReviewCard({
+    super.key,
+    required this.lessonCount,
+    required this.estimatedMinutes,
+    required this.onStart,
+  });
 
   final int lessonCount;
   final int estimatedMinutes;

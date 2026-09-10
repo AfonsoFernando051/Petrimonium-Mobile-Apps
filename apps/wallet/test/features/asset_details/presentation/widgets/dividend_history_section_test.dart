@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/dividend_history_section.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   Widget buildTestableWidget(AssetDetails asset) {
@@ -47,9 +47,7 @@ void main() {
     testWidgets('shows upcoming dividends under "Próximos pagamentos"', (tester) async {
       final asset = AssetDetails(
         ticker: 'PETR4',
-        recentDividends: [
-          event(status: DividendStatus.ANNOUNCED, paymentDate: DateTime(2025, 3, 10)),
-        ],
+        recentDividends: [event(status: DividendStatus.ANNOUNCED, paymentDate: DateTime(2025, 3, 10))],
       );
 
       await tester.pumpWidget(buildTestableWidget(asset));
@@ -87,9 +85,7 @@ void main() {
     testWidgets('does not show the toggle when there are 3 or fewer paid dividends', (tester) async {
       final asset = AssetDetails(
         ticker: 'PETR4',
-        recentDividends: [
-          event(status: DividendStatus.PAID, paymentDate: DateTime(2025, 1, 1)),
-        ],
+        recentDividends: [event(status: DividendStatus.PAID, paymentDate: DateTime(2025, 1, 1))],
       );
 
       await tester.pumpWidget(buildTestableWidget(asset));
@@ -100,9 +96,7 @@ void main() {
     testWidgets('renders "—" for a dividend tile without a payment date and hides amount when zero', (tester) async {
       final asset = AssetDetails(
         ticker: 'PETR4',
-        recentDividends: [
-          event(status: DividendStatus.PAID, paymentDate: null, estimatedGrossAmount: 0),
-        ],
+        recentDividends: [event(status: DividendStatus.PAID, paymentDate: null, estimatedGrossAmount: 0)],
       );
 
       await tester.pumpWidget(buildTestableWidget(asset));

@@ -1,3 +1,6 @@
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+
+import 'package:petrimonium_academy/features/mentor/presentation/conversation_list_route.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
@@ -7,11 +10,7 @@ import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/mentor/domain/entities/chat_message.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/controllers/mentor_chat_controller.dart';
-import 'package:petrimonium_academy/features/mentor/presentation/screens/conversation_list_screen.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/widgets/chat_bubble.dart';
-import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_input_bar.dart';
-import 'package:petrimonium_academy/features/mentor/presentation/widgets/suggested_prompt_chip.dart';
-import 'package:petrimonium_academy/features/mentor/presentation/widgets/typing_indicator.dart';
 
 /// The "Mentor" tab — a full-screen chat with the user's pet acting as their
 /// personal investment mentor. Owns its own controller/state (mirrors how
@@ -78,25 +77,22 @@ class _MentorScreenState extends State<MentorScreen> {
   Route<T> _fadeRoute<T>(Widget page) {
     return PageRouteBuilder<T>(
       pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-                  .animate(
-                    CurvedAnimation(parent: animation, curve: Curves.easeOut),
-                  ),
-              child: child,
-            ),
-          ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+        opacity: animation,
+        child: SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+          child: child,
+        ),
+      ),
       transitionDuration: AppMotion.pageTransition,
     );
   }
 
   Future<void> _openHistory() async {
-    final result = await Navigator.of(
-      context,
-    ).push<int?>(_fadeRoute(const ConversationListScreen()));
+    final result = await Navigator.of(context).push<int?>(_fadeRoute(buildConversationListScreen()));
     if (result == null) return;
     if (result == ConversationListScreen.newConversationSentinel) {
       _controller.startNewChat();
@@ -137,6 +133,7 @@ class _MentorScreenState extends State<MentorScreen> {
             controller: _textController,
             onSend: _send,
             isSending: _controller.isSending,
+            hintText: 'Pergunte algo ao seu mentor...',
           ),
           const SizedBox(height: 8),
         ],
@@ -191,8 +188,7 @@ class _MentorScreenState extends State<MentorScreen> {
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) =>
-                      Icon(Icons.pets, color: tokens.textSecondary, size: 20),
+                  errorBuilder: (_, _, _) => Icon(Icons.pets, color: tokens.textSecondary, size: 20),
                 ),
               ),
             ),
@@ -204,11 +200,7 @@ class _MentorScreenState extends State<MentorScreen> {
               children: [
                 Text(
                   Translator.translate(AppStrings.mentorHeaderTitle),
-                  style: TextStyle(
-                    color: tokens.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 Text(
                   Translator.translate(AppStrings.mentorHeaderSubtitle),
@@ -218,15 +210,9 @@ class _MentorScreenState extends State<MentorScreen> {
             ),
           ),
           IconButton(
-            icon: Icon(
-              Icons.add_comment_outlined,
-              color: tokens.textSecondary,
-              size: 20,
-            ),
+            icon: Icon(Icons.add_comment_outlined, color: tokens.textSecondary, size: 20),
             tooltip: Translator.translate(AppStrings.mentorNewChatTooltip),
-            onPressed: _controller.messages.isEmpty
-                ? null
-                : _controller.startNewChat,
+            onPressed: _controller.messages.isEmpty ? null : _controller.startNewChat,
           ),
           IconButton(
             icon: Icon(Icons.history, color: tokens.textSecondary, size: 20),
@@ -245,7 +231,7 @@ class _MentorScreenState extends State<MentorScreen> {
 
     if (_controller.historyError != null) {
       return ErrorStateView(
-            retryLabel: Translator.translate(AppStrings.retryButtonLabel),
+        retryLabel: Translator.translate(AppStrings.retryButtonLabel),
         message: _controller.historyError!,
         onRetry: () => _controller.loadConversation(_controller.conversationId),
       );
@@ -291,8 +277,7 @@ class _MentorScreenState extends State<MentorScreen> {
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) =>
-                      Icon(Icons.pets, color: tokens.textSecondary, size: 40),
+                  errorBuilder: (_, _, _) => Icon(Icons.pets, color: tokens.textSecondary, size: 40),
                 ),
               ),
             ),
@@ -301,11 +286,7 @@ class _MentorScreenState extends State<MentorScreen> {
           Text(
             Translator.translate(AppStrings.mentorEmptyStateGreeting),
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: tokens.textPrimary,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 6),
           Text(
@@ -320,12 +301,7 @@ class _MentorScreenState extends State<MentorScreen> {
               spacing: 8,
               runSpacing: 8,
               children: _controller.suggestedPrompts
-                  .map(
-                    (prompt) => SuggestedPromptChip(
-                      label: prompt,
-                      onTap: () => _send(prompt),
-                    ),
-                  )
+                  .map((prompt) => SuggestedPromptChip(label: prompt, onTap: () => _send(prompt)))
                   .toList(),
             ),
         ],
@@ -364,7 +340,10 @@ class _DateDivider extends StatelessWidget {
             color: tokens.surface.withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(999),
           ),
-          child: Text(label, style: TextStyle(color: tokens.textTertiary, fontSize: 11, fontWeight: FontWeight.w600)),
+          child: Text(
+            label,
+            style: TextStyle(color: tokens.textTertiary, fontSize: 11, fontWeight: FontWeight.w600),
+          ),
         ),
       ),
     );

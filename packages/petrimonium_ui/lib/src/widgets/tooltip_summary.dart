@@ -27,10 +27,7 @@ class TooltipSummary extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.md),
         border: Border.all(color: accentColor.withValues(alpha: 0.3)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: children,
-      ),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: children),
     );
   }
 }

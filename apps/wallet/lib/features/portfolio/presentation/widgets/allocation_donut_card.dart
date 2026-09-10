@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 
 /// The Asset Allocation donut: portfolio composition by [AllocationSlice]
 /// category, with the total patrimônio centered in the hole and a
@@ -75,10 +75,7 @@ class AllocationDonutCard extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: AppTextStyles.title.copyWith(color: tokens.textPrimary, fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          'Total',
-                          style: AppTextStyles.caption.copyWith(color: tokens.textSecondary),
-                        ),
+                        Text('Total', style: AppTextStyles.caption.copyWith(color: tokens.textSecondary)),
                       ],
                     ),
                   ],
@@ -90,12 +87,14 @@ class AllocationDonutCard extends StatelessWidget {
                 runSpacing: AppSpacing.xs,
                 children: [
                   for (final slice in allocation)
-                    ChartLegend(items: [
-                      ChartLegendItem(
-                        color: slice.type.color,
-                        label: '${slice.type.shortLabel} · ${slice.portfolioPercent.toStringAsFixed(0)}%',
-                      ),
-                    ]),
+                    ChartLegend(
+                      items: [
+                        ChartLegendItem(
+                          color: slice.type.color,
+                          label: '${slice.type.shortLabel} · ${slice.portfolioPercent.toStringAsFixed(0)}%',
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ],

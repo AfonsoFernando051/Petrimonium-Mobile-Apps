@@ -2,14 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/steps/choice_question_step_view.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Minimal in-memory MascotRepository double, mirrors the one in
@@ -160,12 +154,7 @@ void main() {
     testWidgets('does not invoke onSelect once answeredCorrectly is true', (tester) async {
       var callCount = 0;
       await tester.pumpWidget(
-        buildTestable(
-          selectedIndex: 1,
-          hasAnswered: true,
-          answeredCorrectly: true,
-          onSelect: (_) => callCount++,
-        ),
+        buildTestable(selectedIndex: 1, hasAnswered: true, answeredCorrectly: true, onSelect: (_) => callCount++),
       );
 
       await tester.tap(find.text('3'), warnIfMissed: false);
@@ -177,12 +166,7 @@ void main() {
     testWidgets('still invokes onSelect after a wrong answer, allowing a retry', (tester) async {
       var callCount = 0;
       await tester.pumpWidget(
-        buildTestable(
-          selectedIndex: 0,
-          hasAnswered: true,
-          answeredCorrectly: false,
-          onSelect: (_) => callCount++,
-        ),
+        buildTestable(selectedIndex: 0, hasAnswered: true, answeredCorrectly: false, onSelect: (_) => callCount++),
       );
 
       await tester.tap(find.text('4'));

@@ -7,24 +7,19 @@ import '../tokens/app_color_tokens.dart';
 class GameSnack {
   GameSnack._();
 
-  static void show(
-    BuildContext context,
-    String message, {
-    bool isError = false,
-    bool isSuccess = false,
-  }) {
+  static void show(BuildContext context, String message, {bool isError = false, bool isSuccess = false}) {
     final tokens = context.colors;
     final color = isError
         ? tokens.error.withValues(alpha: 0.92)
         : isSuccess
-            ? tokens.success.withValues(alpha: 0.92)
-            : tokens.surfaceElevated.withValues(alpha: 0.98);
+        ? tokens.success.withValues(alpha: 0.92)
+        : tokens.surfaceElevated.withValues(alpha: 0.98);
 
     final icon = isError
         ? Icons.error_outline
         : isSuccess
-            ? Icons.check_circle_outline
-            : Icons.info_outline;
+        ? Icons.check_circle_outline
+        : Icons.info_outline;
 
     // Neutral (non-success/error) snacks sit on a plain surface — that
     // surface is near-white in Light theme, so its content needs dark text,
@@ -41,11 +36,7 @@ class GameSnack {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(
-                  color: contentColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13,
-                ),
+                style: TextStyle(color: contentColor, fontWeight: FontWeight.w600, fontSize: 13),
               ),
             ),
           ],
@@ -58,8 +49,8 @@ class GameSnack {
             color: isError
                 ? tokens.error
                 : isSuccess
-                    ? tokens.success
-                    : tokens.primary.withValues(alpha: 0.4),
+                ? tokens.success
+                : tokens.primary.withValues(alpha: 0.4),
             width: 1,
           ),
         ),
@@ -70,12 +61,7 @@ class GameSnack {
   }
 
   /// Convenience: light haptic + show
-  static void showWithHaptic(
-    BuildContext context,
-    String message, {
-    bool isError = false,
-    bool isSuccess = false,
-  }) {
+  static void showWithHaptic(BuildContext context, String message, {bool isError = false, bool isSuccess = false}) {
     HapticFeedback.lightImpact();
     show(context, message, isError: isError, isSuccess: isSuccess);
   }

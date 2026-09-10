@@ -5,7 +5,7 @@ import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 class _MonthlyProventos {
@@ -90,13 +90,18 @@ class _ProventosEvolutionBarCardState extends State<ProventosEvolutionBarCard> {
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
-                ChartLegend(items: [
-                  ChartLegendItem(color: AppColors.neonBlue, label: Translator.translate(AppStrings.proventosLegendReceived)),
-                  ChartLegendItem(
-                    color: AppColors.neonBlue.withValues(alpha: 0.35),
-                    label: Translator.translate(AppStrings.proventosLegendExpected),
-                  ),
-                ]),
+                ChartLegend(
+                  items: [
+                    ChartLegendItem(
+                      color: AppColors.neonBlue,
+                      label: Translator.translate(AppStrings.proventosLegendReceived),
+                    ),
+                    ChartLegendItem(
+                      color: AppColors.neonBlue.withValues(alpha: 0.35),
+                      label: Translator.translate(AppStrings.proventosLegendExpected),
+                    ),
+                  ],
+                ),
               ],
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -219,10 +224,7 @@ class _ProventosEvolutionBarCardState extends State<ProventosEvolutionBarCard> {
       ),
       barGroups: [
         for (var i = 0; i < months.length; i++)
-          BarChartGroupData(
-            x: i,
-            barRods: [_rodFor(months[i], i, receivedColor, expectedColor)],
-          ),
+          BarChartGroupData(x: i, barRods: [_rodFor(months[i], i, receivedColor, expectedColor)]),
       ],
     );
   }
@@ -241,4 +243,3 @@ class _ProventosEvolutionBarCardState extends State<ProventosEvolutionBarCard> {
     );
   }
 }
-

@@ -1,10 +1,5 @@
 import 'package:petrimonium_wallet/features/investment/data/models/asset_registration_model.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_lot.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_stats.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_summary.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Builds a real `PortfolioStats` snapshot from the assets a user is
 /// *currently adding* on the Portfolio Setup screen — before anything is
@@ -24,9 +19,7 @@ class PendingPortfolioStatsBuilder {
   static PortfolioStats build(List<AssetRegistrationModel> assets) {
     if (assets.isEmpty) return PortfolioStats.empty;
 
-    final lots = <InvestmentLot>[
-      for (var i = 0; i < assets.length; i++) _toLot(i, assets[i]),
-    ];
+    final lots = <InvestmentLot>[for (var i = 0; i < assets.length; i++) _toLot(i, assets[i])];
 
     final holdings = Holding.fromLots(lots);
     final totalValue = holdings.fold<double>(0, (sum, h) => sum + h.currentValue);
@@ -36,11 +29,13 @@ class PendingPortfolioStatsBuilder {
       byType[holding.type] = (byType[holding.type] ?? 0) + holding.currentValue;
     }
     final allocation = byType.entries
-        .map((entry) => AllocationSlice(
-              type: entry.key,
-              currentValue: entry.value,
-              portfolioPercent: totalValue == 0 ? 0 : (entry.value / totalValue) * 100,
-            ))
+        .map(
+          (entry) => AllocationSlice(
+            type: entry.key,
+            currentValue: entry.value,
+            portfolioPercent: totalValue == 0 ? 0 : (entry.value / totalValue) * 100,
+          ),
+        )
         .toList();
 
     final summary = PortfolioSummary(

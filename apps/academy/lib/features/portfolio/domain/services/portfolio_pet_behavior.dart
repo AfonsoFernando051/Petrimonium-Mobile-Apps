@@ -1,9 +1,7 @@
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// The real-portfolio Pet reaction script — holdings, dividends,
 /// concentration risk, missions/achievements, and the Mentor chat nudge.
@@ -22,11 +20,7 @@ class PortfolioPetBehavior extends PetBehavior {
   const PortfolioPetBehavior();
 
   @override
-  PetMessage? pageEnter(
-    PetContext context, {
-    required int userXp,
-    Map<String, String> data = const {},
-  }) {
+  PetMessage? pageEnter(PetContext context, {required int userXp, Map<String, String> data = const {}}) {
     return switch (context) {
       PetContext.portfolio => _portfolioNudge(data),
       PetContext.mentor => _mentorNudge(),
@@ -72,9 +66,7 @@ class PortfolioPetBehavior extends PetBehavior {
   /// or cool down, so it's rendered inline by the screen instead of going
   /// through `PetCompanionController`.
   static String investorStatusReaction({required bool alreadyInvests}) =>
-      alreadyInvests
-      ? AppStrings.companionInvestorStatusYes
-      : AppStrings.companionInvestorStatusNo;
+      alreadyInvests ? AppStrings.companionInvestorStatusYes : AppStrings.companionInvestorStatusNo;
 
   PetMessage _mentorNudge() {
     return const PetMessage(
@@ -100,10 +92,7 @@ class PortfolioPetBehavior extends PetBehavior {
         // aporte is acknowledged and bridged into learning, not rewarded with
         // the animation a finished lesson gets.
         mood: PetAnimationState.idle,
-        action: PetMessageAction(
-          labelKey: AppStrings.companionActionUnderstand,
-          destination: PetContext.academy,
-        ),
+        action: PetMessageAction(labelKey: AppStrings.companionActionUnderstand, destination: PetContext.academy),
       ),
       HighConcentrationDetectedEvent(:final ticker, :final percent) => PetMessage(
         id: 'event_high_concentration_$ticker',
@@ -113,10 +102,7 @@ class PortfolioPetBehavior extends PetBehavior {
         textKey: AppStrings.companionEventHighConcentration,
         params: {'ticker': ticker, 'percent': percent.toStringAsFixed(0)},
         mood: PetAnimationState.think,
-        action: const PetMessageAction(
-          labelKey: AppStrings.companionActionUnderstand,
-          destination: PetContext.mentor,
-        ),
+        action: const PetMessageAction(labelKey: AppStrings.companionActionUnderstand, destination: PetContext.mentor),
       ),
       MissionCompletedEvent(:final missionTitle) => PetMessage(
         id: 'event_mission_completed_$missionTitle',

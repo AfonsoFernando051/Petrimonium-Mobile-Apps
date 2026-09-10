@@ -55,18 +55,12 @@ class LabSimulatorCatalog {
       titleKey: AppStrings.labCompoundInterestTitle,
       subtitleKey: AppStrings.labCompoundInterestSubtitle,
       available: true,
-      build:
-          (
-            mascotController,
-            companionController,
-            completionController,
-            onOpenWallet,
-          ) => CompoundInterestLabScreen(
-            mascotController: mascotController,
-            companionController: companionController,
-            completionController: completionController,
-            onOpenWallet: onOpenWallet,
-          ),
+      build: (mascotController, companionController, completionController, onOpenWallet) => CompoundInterestLabScreen(
+        mascotController: mascotController,
+        companionController: companionController,
+        completionController: completionController,
+        onOpenWallet: onOpenWallet,
+      ),
     ),
     LabSimulatorEntry(
       id: LabSimulatorId.inflation,
@@ -74,18 +68,12 @@ class LabSimulatorCatalog {
       titleKey: AppStrings.labInflationTitle,
       subtitleKey: AppStrings.labInflationSubtitle,
       available: true,
-      build:
-          (
-            mascotController,
-            companionController,
-            completionController,
-            onOpenWallet,
-          ) => InflationLabScreen(
-            mascotController: mascotController,
-            companionController: companionController,
-            completionController: completionController,
-            onOpenWallet: onOpenWallet,
-          ),
+      build: (mascotController, companionController, completionController, onOpenWallet) => InflationLabScreen(
+        mascotController: mascotController,
+        companionController: companionController,
+        completionController: completionController,
+        onOpenWallet: onOpenWallet,
+      ),
     ),
     LabSimulatorEntry(
       id: LabSimulatorId.fixedIncome,
@@ -93,18 +81,12 @@ class LabSimulatorCatalog {
       titleKey: AppStrings.labFixedIncomeTitle,
       subtitleKey: AppStrings.labFixedIncomeSubtitle,
       available: true,
-      build:
-          (
-            mascotController,
-            companionController,
-            completionController,
-            onOpenWallet,
-          ) => FixedIncomeLabScreen(
-            mascotController: mascotController,
-            companionController: companionController,
-            completionController: completionController,
-            onOpenWallet: onOpenWallet,
-          ),
+      build: (mascotController, companionController, completionController, onOpenWallet) => FixedIncomeLabScreen(
+        mascotController: mascotController,
+        companionController: companionController,
+        completionController: completionController,
+        onOpenWallet: onOpenWallet,
+      ),
     ),
     LabSimulatorEntry(
       id: LabSimulatorId.diversification,
@@ -112,18 +94,12 @@ class LabSimulatorCatalog {
       titleKey: AppStrings.labDiversificationTitle,
       subtitleKey: AppStrings.labDiversificationSubtitle,
       available: true,
-      build:
-          (
-            mascotController,
-            companionController,
-            completionController,
-            onOpenWallet,
-          ) => DiversificationLabScreen(
-            mascotController: mascotController,
-            companionController: companionController,
-            completionController: completionController,
-            onOpenWallet: onOpenWallet,
-          ),
+      build: (mascotController, companionController, completionController, onOpenWallet) => DiversificationLabScreen(
+        mascotController: mascotController,
+        companionController: companionController,
+        completionController: completionController,
+        onOpenWallet: onOpenWallet,
+      ),
     ),
     LabSimulatorEntry(
       id: LabSimulatorId.portfolio,
@@ -131,18 +107,12 @@ class LabSimulatorCatalog {
       titleKey: AppStrings.labPortfolioTitle,
       subtitleKey: AppStrings.labPortfolioSubtitle,
       available: true,
-      build:
-          (
-            mascotController,
-            companionController,
-            completionController,
-            onOpenWallet,
-          ) => PortfolioLabScreen(
-            mascotController: mascotController,
-            companionController: companionController,
-            completionController: completionController,
-            onOpenWallet: onOpenWallet,
-          ),
+      build: (mascotController, companionController, completionController, onOpenWallet) => PortfolioLabScreen(
+        mascotController: mascotController,
+        companionController: companionController,
+        completionController: completionController,
+        onOpenWallet: onOpenWallet,
+      ),
     ),
   ];
 }

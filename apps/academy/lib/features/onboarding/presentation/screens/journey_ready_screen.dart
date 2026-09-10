@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
@@ -10,7 +11,6 @@ import 'package:petrimonium_academy/features/onboarding/presentation/onboarding_
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/mission_reward_card.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
 
 /// Onboarding's closing beat — a summary of the choices just made plus the
 /// actual first mission, so the flow ends on an action rather than more
@@ -35,10 +35,7 @@ class _JourneyReadyScreenState extends State<JourneyReadyScreen> {
   }
 
   Future<void> _load() async {
-    final results = await Future.wait([
-      DI.petPreferencesRepository.loadGoal(),
-      DI.mascotRepository.loadProfile(),
-    ]);
+    final results = await Future.wait([DI.petPreferencesRepository.loadGoal(), DI.mascotRepository.loadProfile()]);
     if (!mounted) return;
     setState(() {
       _goal = results[0] as PetGoalEnum;
@@ -51,8 +48,8 @@ class _JourneyReadyScreenState extends State<JourneyReadyScreen> {
     try {
       await DI.onboardingStateRepository.completeTutorial();
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const PortfolioChoiceScreen()),
+        unawaited(
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const PortfolioChoiceScreen())),
         );
       }
     } finally {
@@ -74,45 +71,32 @@ class _JourneyReadyScreenState extends State<JourneyReadyScreen> {
       isCtaLoading: _isStarting,
       onCta: (goal == null || profile == null) ? null : _handleStart,
       body: (goal == null || profile == null)
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.neonCyan),
-            )
+          ? const Center(child: CircularProgressIndicator(color: AppColors.neonCyan))
           : Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 GlassCard(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 16,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
                   child: Column(
                     children: [
                       _SummaryRow(
                         icon: goal.icon,
                         color: AppColors.neonPink,
-                        label: Translator.translate(
-                          AppStrings.journeyReadyGoalLabel,
-                        ),
+                        label: Translator.translate(AppStrings.journeyReadyGoalLabel),
                         value: goal.label,
                       ),
                       const _SummaryDivider(),
                       _SummaryRow(
                         icon: Icons.school_outlined,
                         color: AppColors.neonCyan,
-                        label: Translator.translate(
-                          AppStrings.journeyReadyPathLabel,
-                        ),
-                        value: Translator.translate(
-                          AppStrings.journeyReadyPathValue,
-                        ),
+                        label: Translator.translate(AppStrings.journeyReadyPathLabel),
+                        value: Translator.translate(AppStrings.journeyReadyPathValue),
                       ),
                       const _SummaryDivider(),
                       _SummaryRow(
                         icon: Icons.pets,
                         color: AppColors.neonPurple,
-                        label: Translator.translate(
-                          AppStrings.journeyReadyCompanionLabel,
-                        ),
+                        label: Translator.translate(AppStrings.journeyReadyCompanionLabel),
                         value:
                             '${profile.name ?? ''} · ${Translator.translate(AppStrings.onboardingLevelBadge, params: {'level': '${LevelCalculator.fromXp(profile.xp).level}'})}',
                       ),
@@ -120,25 +104,16 @@ class _JourneyReadyScreenState extends State<JourneyReadyScreen> {
                       _SummaryRow(
                         icon: Icons.star_rounded,
                         color: AppColors.goldenBorder,
-                        label: Translator.translate(
-                          AppStrings.journeyReadyProgressLabel,
-                        ),
-                        value: Translator.translate(
-                          AppStrings.academyXpPill,
-                          params: {'xp': '${profile.xp}'},
-                        ),
+                        label: Translator.translate(AppStrings.journeyReadyProgressLabel),
+                        value: Translator.translate(AppStrings.academyXpPill, params: {'xp': '${profile.xp}'}),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
                 MissionRewardCard(
-                  eyebrow: Translator.translate(
-                    AppStrings.journeyReadyFirstMissionLabel,
-                  ),
-                  title: Translator.translate(
-                    AppStrings.missionCompoundInterestTitle,
-                  ),
+                  eyebrow: Translator.translate(AppStrings.journeyReadyFirstMissionLabel),
+                  title: Translator.translate(AppStrings.missionCompoundInterestTitle),
                   xp: kStandardLessonXpReward,
                   completed: false,
                 ),
@@ -149,12 +124,7 @@ class _JourneyReadyScreenState extends State<JourneyReadyScreen> {
 }
 
 class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({
-    required this.icon,
-    required this.color,
-    required this.label,
-    required this.value,
-  });
+  const _SummaryRow({required this.icon, required this.color, required this.label, required this.value});
 
   final IconData icon;
   final Color color;
@@ -169,10 +139,7 @@ class _SummaryRow extends StatelessWidget {
         Container(
           width: 38,
           height: 38,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.14),
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: BoxDecoration(color: color.withValues(alpha: 0.14), borderRadius: BorderRadius.circular(12)),
           child: Icon(icon, color: color, size: 19),
         ),
         const SizedBox(width: 12),
@@ -182,20 +149,12 @@ class _SummaryRow extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: TextStyle(
-                  color: tokens.textTertiary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(color: tokens.textTertiary, fontSize: 11, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 2),
               Text(
                 value,
-                style: TextStyle(
-                  color: tokens.textPrimary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(color: tokens.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
               ),
             ],
           ),

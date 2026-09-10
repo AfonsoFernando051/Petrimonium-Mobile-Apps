@@ -6,10 +6,8 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import '../../test_theme.dart';
 
 void main() {
-  Finder emailField() =>
-      find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField)).first;
-  Finder passwordField() =>
-      find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField)).last;
+  Finder emailField() => find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField)).first;
+  Finder passwordField() => find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField)).last;
 
   Widget buildTestableWidget({
     Future<void> Function(String, String)? onLogin,
@@ -52,9 +50,13 @@ void main() {
 
     testWidgets('shows an error snack and does not call onLogin when fields are empty', (tester) async {
       var loginCalled = false;
-      await tester.pumpWidget(buildTestableWidget(onLogin: (_, _) async {
-        loginCalled = true;
-      }));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          onLogin: (_, _) async {
+            loginCalled = true;
+          },
+        ),
+      );
 
       await tester.tap(find.text('Entrar'));
       await tester.pump();
@@ -68,13 +70,15 @@ void main() {
       String? loggedEmail;
       String? loggedPassword;
       var succeeded = false;
-      await tester.pumpWidget(buildTestableWidget(
-        onLogin: (email, password) async {
-          loggedEmail = email;
-          loggedPassword = password;
-        },
-        onSuccess: () => succeeded = true,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          onLogin: (email, password) async {
+            loggedEmail = email;
+            loggedPassword = password;
+          },
+          onSuccess: () => succeeded = true,
+        ),
+      );
 
       await tester.enterText(emailField(), 'user@example.com');
       await tester.enterText(passwordField(), 'password123');
@@ -90,10 +94,12 @@ void main() {
     });
 
     testWidgets('shows a snack built from errorMessageBuilder when onLogin throws', (tester) async {
-      await tester.pumpWidget(buildTestableWidget(
-        onLogin: (_, _) async => throw Exception('bad credentials'),
-        errorMessageBuilder: (_) => 'credenciais inválidas',
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(
+          onLogin: (_, _) async => throw Exception('bad credentials'),
+          errorMessageBuilder: (_) => 'credenciais inválidas',
+        ),
+      );
 
       await tester.enterText(emailField(), 'user@example.com');
       await tester.enterText(passwordField(), 'wrongpass');
@@ -118,10 +124,9 @@ void main() {
     testWidgets('calls onGoogleLogin and onSuccess when the Google button is tapped', (tester) async {
       var googleCalled = false;
       var succeeded = false;
-      await tester.pumpWidget(buildTestableWidget(
-        onGoogleLogin: () async => googleCalled = true,
-        onSuccess: () => succeeded = true,
-      ));
+      await tester.pumpWidget(
+        buildTestableWidget(onGoogleLogin: () async => googleCalled = true, onSuccess: () => succeeded = true),
+      );
 
       await tester.tap(find.byType(GoogleSignInButton));
       await tester.pump();

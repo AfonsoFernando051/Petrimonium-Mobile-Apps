@@ -7,8 +7,7 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/academy_intro_screen.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
 import 'package:petrimonium_academy/features/pet/presentation/widgets/pet_species_selector.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/pet_configuration_screen.dart';
@@ -34,10 +33,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const PetConfigurationScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const PetConfigurationScreen());
   }
 
   group('PetConfigurationScreen', () {
@@ -48,10 +44,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('Escolha seu parceiro de jornada'), findsOneWidget);
-      expect(
-        find.text('Ele evolui com o que você aprende — nunca com quanto você tem.'),
-        findsOneWidget,
-      );
+      expect(find.text('Ele evolui com o que você aprende — nunca com quanto você tem.'), findsOneWidget);
       expect(find.text('Mas antes... eu preciso de um nome!'), findsOneWidget);
       expect(find.text('Como você gostaria de chamar seu companheiro?'), findsOneWidget);
       // Picker escondido enquanto o custo de rigging no Rive prende cada app
@@ -146,6 +139,5 @@ void main() {
         reason: 'o nome vem depois do retrato, como no canvas',
       );
     });
-
   });
 }

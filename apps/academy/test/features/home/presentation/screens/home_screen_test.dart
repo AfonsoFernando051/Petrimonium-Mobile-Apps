@@ -8,35 +8,11 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/all_modules_screen.dart';
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
-import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/home/presentation/screens/home_screen.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/next_action_card.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/achievements_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/missions_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_local_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/missions_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/achievement_evaluation_result.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/dividend_event.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_summary.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/enums/history_range.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
 import '../../../academy/academy_test_fixtures.dart';
@@ -190,9 +166,7 @@ void main() {
     mascotController.dispose();
   });
 
-  Widget buildTestableWidget({
-    VoidCallback? onOpenAcademyTab,
-  }) {
+  Widget buildTestableWidget({VoidCallback? onOpenAcademyTab}) {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
@@ -249,7 +223,9 @@ void main() {
   });
 
   group('HomeScreen — greeting, streak and Mentor insight', () {
-    testWidgets('shows the real name once resolved and the streak badge from the real gamification summary', (tester) async {
+    testWidgets('shows the real name once resolved and the streak badge from the real gamification summary', (
+      tester,
+    ) async {
       when(() => mockAuthRepository.getSavedUserName()).thenAnswer((_) async => 'Camila');
       when(() => mockAuthRepository.refreshUserName()).thenAnswer((_) async => 'Camila');
       gamificationRepository.summaryToReturn = const GamificationSummary(
@@ -280,10 +256,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(
-        find.text('Você estava progredindo em "${testLesson1.title}". Continuar de onde parou?'),
-        findsOneWidget,
-      );
+      expect(find.text('Você estava progredindo em "${testLesson1.title}". Continuar de onde parou?'), findsOneWidget);
       expect(find.text('Por que estou vendo isto?'), findsOneWidget);
 
       // The real next-lesson data also triggers PetCompanionController's own

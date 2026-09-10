@@ -2,10 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/features/pet/domain/behavior/core_pet_behavior.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   const behavior = CorePetBehavior();
@@ -22,12 +19,7 @@ void main() {
 
   group('CorePetBehavior.pageEnter — contexts it does not own', () {
     test('offers nothing for home/academy/portfolio/mentor', () {
-      for (final context in [
-        PetContext.home,
-        PetContext.academy,
-        PetContext.portfolio,
-        PetContext.mentor,
-      ]) {
+      for (final context in [PetContext.home, PetContext.academy, PetContext.portfolio, PetContext.mentor]) {
         expect(behavior.pageEnter(context, userXp: 0), isNull);
       }
     });
@@ -35,9 +27,7 @@ void main() {
 
   group('CorePetBehavior.onEvent', () {
     test('xpGained carries the amount', () {
-      final message = behavior.onEvent(
-        const XpGainedEvent(amount: 15, newTotalXp: 115),
-      );
+      final message = behavior.onEvent(const XpGainedEvent(amount: 15, newTotalXp: 115));
       expect(message!.id, 'event_xp_gained');
       expect(message.params, {'xp': '15'});
       expect(message.priority, PetMessagePriority.normal);
@@ -52,9 +42,7 @@ void main() {
     });
 
     test("evolved carries the new stage's label", () {
-      final message = behavior.onEvent(
-        const PetEvolvedEvent(PetEvolutionStage.royalDog),
-      );
+      final message = behavior.onEvent(const PetEvolvedEvent(PetEvolutionStage.royalDog));
       expect(message!.id, 'event_evolved');
       expect(message.params, {'stage': 'Real'});
       expect(message.priority, PetMessagePriority.high);

@@ -15,15 +15,13 @@ import '../../../auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../pet/presentation/mascot/controllers/mascot_controller.dart';
-import '../../../portfolio/domain/entities/achievement.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement.dart';
 import '../../../portfolio/presentation/controllers/portfolio_controller.dart';
 import '../../../mentor/presentation/screens/mentor_screen.dart';
 import '../../../pet/presentation/celebration/level_up_celebration_overlay.dart';
 import '../../../pet/presentation/companion/pet_companion_controller.dart';
-import '../../../pet/presentation/companion/pet_context.dart';
 import '../../../pet/presentation/companion/widgets/pet_companion_header.dart';
 import '../../../pet/presentation/companion/widgets/pet_speech_bubble.dart';
-import '../../../pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 import '../../../profile/presentation/screens/profile_screen.dart';
 import '../../../simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
 import '../../../simulated_wallet/presentation/screens/simulated_wallet_screen.dart';
@@ -65,8 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final PetSpeechBubbleAnchor _heroAnchor = PetSpeechBubbleAnchor();
   final PetSpeechBubbleAnchor _headerAnchor = PetSpeechBubbleAnchor();
 
-  PetSpeechBubbleAnchor get _activeCompanionAnchor =>
-      _selectedIndex == 0 ? _heroAnchor : _headerAnchor;
+  PetSpeechBubbleAnchor get _activeCompanionAnchor => _selectedIndex == 0 ? _heroAnchor : _headerAnchor;
 
   // The level just reached, awaiting `LevelUpCelebrationOverlay` — `null`
   // when there's no level-up celebration to show. Replaces the old plain
@@ -95,9 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       missionsRepository: DI.missionsRepository,
       mascotController: _mascotController,
     );
-    _simulatedWalletController = SimulatedWalletController(
-      repository: DI.simulatedWalletRepository,
-    );
+    _simulatedWalletController = SimulatedWalletController(repository: DI.simulatedWalletRepository);
     _initCompanionGreeting();
     _portfolioController.addListener(_onPortfolioChanged);
     _portfolioController.loadAll();
@@ -121,9 +116,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (_portfolioController.newlyUnlocked.isEmpty) return;
     final unlocked = _portfolioController.newlyUnlocked;
     _portfolioController.clearNewlyUnlocked();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => _acknowledgeFinancialMilestones(unlocked),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _acknowledgeFinancialMilestones(unlocked));
   }
 
   /// Financial-outcome milestones (holdings, dividends, returns, patrimony
@@ -136,10 +129,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _acknowledgeFinancialMilestones(List<Achievement> unlocked) {
     if (!mounted) return;
     final title = unlocked.map((a) => a.title).join(', ');
-    GameSnack.show(
-      context,
-      Translator.translate(AppStrings.portfolioMilestoneUnlocked, params: {'title': title}),
-    );
+    GameSnack.show(context, Translator.translate(AppStrings.portfolioMilestoneUnlocked, params: {'title': title}));
   }
 
   // Every tab is always visible — unlike the old Proventos tab, none of the
@@ -173,17 +163,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Route _fadeRoute(Widget page) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-                  .animate(
-                    CurvedAnimation(parent: animation, curve: Curves.easeOut),
-                  ),
-              child: child,
-            ),
-          ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+        opacity: animation,
+        child: SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+          child: child,
+        ),
+      ),
       transitionDuration: AppMotion.pageTransition,
     );
   }
@@ -220,9 +209,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> _openProfile() async {
     _companionController.dismiss();
     _companionController.enterContext(PetContext.profile);
-    await Navigator.of(context).push(
-      _fadeRoute(ProfileScreen(companionController: _companionController)),
-    );
+    await Navigator.of(context).push(_fadeRoute(ProfileScreen(companionController: _companionController)));
     // Settings (reached via Profile) may have renamed the pet —
     // reload so the AppBar/greeting reflect it immediately.
     await _mascotController.loadProfile();
@@ -232,18 +219,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // ── Logout ────────────────────────────────────────────────────────────────
   Future<void> _confirmLogout() async {
     final confirmed = await ConfirmLogoutDialog.show(
-        context,
-        title: Translator.translate(AppStrings.logoutConfirmTitle),
-        message: Translator.translate(AppStrings.logoutConfirmMessage),
-        cancelLabel: Translator.translate(AppStrings.cancelButton),
-        confirmLabel: Translator.translate(AppStrings.logoutButton),
-      );
+      context,
+      title: Translator.translate(AppStrings.logoutConfirmTitle),
+      message: Translator.translate(AppStrings.logoutConfirmMessage),
+      cancelLabel: Translator.translate(AppStrings.cancelButton),
+      confirmLabel: Translator.translate(AppStrings.logoutButton),
+    );
 
     if (confirmed && mounted) {
-      HapticFeedback.mediumImpact();
+      unawaited(HapticFeedback.mediumImpact());
       await DI.authRepository.logout();
       if (mounted) {
-        Navigator.of(context).pushReplacement(_fadeRoute(const LoginScreen()));
+        unawaited(Navigator.of(context).pushReplacement(_fadeRoute(const LoginScreen())));
       }
     }
   }
@@ -290,12 +277,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: SafeArea(
               child: IndexedStack(
                 index: _selectedIndex,
-                children: [
-                  _buildHomeContent(),
-                  _buildAcademyContent(),
-                  _buildWalletContent(),
-                  _buildMentorContent(),
-                ],
+                children: [_buildHomeContent(), _buildAcademyContent(), _buildWalletContent(), _buildMentorContent()],
               ),
             ),
           ),
@@ -303,8 +285,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: PetSpeechBubbleOverlay(
               controller: _companionController,
               anchor: _activeCompanionAnchor,
-              onActionSelected: (action) =>
-                  _handleCompanionDestination(action.destination),
+              onActionSelected: (action) => _handleCompanionDestination(action.destination),
             ),
           ),
           if (_celebratingLevel != null)
@@ -352,20 +333,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _mascotController.profile.name?.isNotEmpty == true
                     ? Translator.translate(
                         AppStrings.appBarPlayerNamedGreeting,
-                        params: {
-                          'petName': _mascotController.profile.name!,
-                          'level': '$level',
-                        },
+                        params: {'petName': _mascotController.profile.name!, 'level': '$level'},
                       )
-                    : Translator.translate(
-                        AppStrings.appBarPlayerGenericGreeting,
-                        params: {'level': '$level'},
-                      ),
+                    : Translator.translate(AppStrings.appBarPlayerGenericGreeting, params: {'level': '$level'}),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.caption.copyWith(
-                  color: context.colors.primary.withValues(alpha: 0.9),
-                ),
+                style: AppTextStyles.caption.copyWith(color: context.colors.primary.withValues(alpha: 0.9)),
               ),
             ],
           ),
@@ -411,8 +384,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // In-app stand-in for the §1.6 Wallet bridge CTA while Wallet's
       // screens still live in this repo (see `WalletBridgeCta`'s doc
       // comment) — opens the Carteira tab instead of an external app.
-      onOpenPortfolioTab: () =>
-          setState(() => _selectedIndex = DashboardTabRouter.walletTab),
+      onOpenPortfolioTab: () => setState(() => _selectedIndex = DashboardTabRouter.walletTab),
     );
   }
 
@@ -428,14 +400,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   BottomNavigationBarItem _navItemFor(int tabIndex) {
     return switch (tabIndex) {
       DashboardTabRouter.homeTab => BottomNavigationBarItem(
-        icon: const Padding(
-          padding: EdgeInsets.all(4.0),
-          child: Icon(Icons.rocket_launch_outlined),
-        ),
-        activeIcon: const Padding(
-          padding: EdgeInsets.all(4.0),
-          child: Icon(Icons.rocket_launch),
-        ),
+        icon: const Padding(padding: EdgeInsets.all(4.0), child: Icon(Icons.rocket_launch_outlined)),
+        activeIcon: const Padding(padding: EdgeInsets.all(4.0), child: Icon(Icons.rocket_launch)),
         label: Translator.translate(AppStrings.navHome),
       ),
       DashboardTabRouter.academyTab => BottomNavigationBarItem(
@@ -467,17 +433,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Container(
       decoration: BoxDecoration(
         color: tokens.backgroundSecondary,
-        border: Border(
-          top: BorderSide(
-            color: tokens.primary.withValues(alpha: 0.3),
-            width: 1,
-          ),
-        ),
+        border: Border(top: BorderSide(color: tokens.primary.withValues(alpha: 0.3), width: 1)),
         boxShadow: [
           BoxShadow(
-            color: tokens.primary.withValues(
-              alpha: context.isDarkMode ? 0.12 : 0.08,
-            ),
+            color: tokens.primary.withValues(alpha: context.isDarkMode ? 0.12 : 0.08),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -488,9 +447,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: tokens.primary,
         unselectedItemColor: tokens.textTertiary,
-        selectedLabelStyle: AppTextStyles.caption.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
+        selectedLabelStyle: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w600),
         unselectedLabelStyle: AppTextStyles.caption,
         currentIndex: currentPosition == -1 ? 0 : currentPosition,
         onTap: (position) => _onTabSelected(visible[position]),

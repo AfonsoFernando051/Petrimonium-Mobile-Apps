@@ -34,7 +34,7 @@ class _MentorScreenState extends State<MentorScreen> {
     final message = text ?? _inputController.text;
     if (message.trim().isEmpty) return;
     _inputController.clear();
-    controller.sendMentorMessage(message);
+    controller.mentor.send(message);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -53,7 +53,7 @@ class _MentorScreenState extends State<MentorScreen> {
 
     if (!_requestedSuggestions) {
       _requestedSuggestions = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) => controller.loadMentorSuggestions());
+      WidgetsBinding.instance.addPostFrameCallback((_) => controller.mentor.loadSuggestions());
     }
 
     return Padding(
@@ -62,16 +62,21 @@ class _MentorScreenState extends State<MentorScreen> {
         children: [
           _MentorHeader(controller: controller, l10n: l10n),
           Expanded(
-            child: controller.mentorMessages.isEmpty
+            child: controller.mentor.messages.isEmpty
                 ? _EmptyState(controller: controller, l10n: l10n, onSend: (text) => _send(controller, text))
                 : _Transcript(controller: controller, scrollController: _scrollController),
           ),
-          if (controller.mentorError != null)
+          if (controller.mentor.error != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 6),
               child: Text(l10n.mentorSendError, style: const TextStyle(fontSize: 12, color: HealthColors.negative)),
             ),
-          _InputBar(controller: _inputController, l10n: l10n, busy: controller.mentorBusy, onSend: () => _send(controller)),
+          _InputBar(
+            controller: _inputController,
+            l10n: l10n,
+            busy: controller.mentor.busy,
+            onSend: () => _send(controller),
+          ),
         ],
       ),
     );
@@ -110,7 +115,10 @@ class _MentorHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(l10n.mentorLabel, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: HealthColors.textPrimary)),
+                Text(
+                  l10n.mentorLabel,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: HealthColors.textPrimary),
+                ),
                 const SizedBox(height: 1),
                 Text(l10n.mentorSubtitle, style: const TextStyle(fontSize: 11, color: HealthColors.textSecondary)),
               ],
@@ -118,7 +126,7 @@ class _MentorHeader extends StatelessWidget {
           ),
           IconButton(
             tooltip: l10n.mentorNewChat,
-            onPressed: controller.startNewMentorConversation,
+            onPressed: controller.mentor.startNewConversation,
             icon: const Icon(Icons.edit_outlined, size: 18, color: HealthColors.textSecondary),
           ),
         ],
@@ -167,20 +175,29 @@ class _EmptyState extends StatelessWidget {
             alignment: WrapAlignment.center,
             spacing: 8,
             runSpacing: 8,
-            children: controller.mentorSuggestions.map((prompt) {
-              return GestureDetector(
-                onTap: () => onSend(prompt),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: HealthColors.textPrimary.withValues(alpha: .14)),
-                  ),
-                  child: Text(prompt, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: HealthColors.textPrimary)),
-                ),
-              );
-            }).toList(growable: false),
+            children: controller.mentor.suggestions
+                .map((prompt) {
+                  return GestureDetector(
+                    onTap: () => onSend(prompt),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: HealthColors.textPrimary.withValues(alpha: .14)),
+                      ),
+                      child: Text(
+                        prompt,
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w500,
+                          color: HealthColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                  );
+                })
+                .toList(growable: false),
           ),
         ],
       ),
@@ -200,9 +217,9 @@ class _Transcript extends StatelessWidget {
     return ListView.builder(
       controller: scrollController,
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 2),
-      itemCount: controller.mentorMessages.length + (controller.mentorBusy ? 1 : 0),
+      itemCount: controller.mentor.messages.length + (controller.mentor.busy ? 1 : 0),
       itemBuilder: (context, index) {
-        if (index >= controller.mentorMessages.length) {
+        if (index >= controller.mentor.messages.length) {
           return const Padding(
             padding: EdgeInsets.symmetric(vertical: 6),
             child: Align(
@@ -211,7 +228,7 @@ class _Transcript extends StatelessWidget {
             ),
           );
         }
-        final message = controller.mentorMessages[index];
+        final message = controller.mentor.messages[index];
         final isUser = message.author == ChatAuthor.user;
         return Align(
           alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
@@ -243,50 +260,69 @@ class _Transcript extends StatelessWidget {
                   ],
                   Text(
                     message.text,
-                    style: TextStyle(fontSize: 14, height: 1.4, color: isUser ? Colors.white : HealthColors.textPrimary),
+                    style: TextStyle(
+                      fontSize: 14,
+                      height: 1.4,
+                      color: isUser ? Colors.white : HealthColors.textPrimary,
+                    ),
                   ),
                   if (!isUser && message.sources.isNotEmpty) ...[
                     const SizedBox(height: 8),
                     GestureDetector(
-                      onTap: () => controller.toggleMessageWhy(message.id),
+                      onTap: () => controller.mentor.toggleWhy(message.id),
                       child: Text(
                         l10n.mentorInsightWhy,
-                        style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.primary),
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ),
                     if (message.whyOpen) ...[
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.only(top: 8),
-                        decoration: const BoxDecoration(border: Border(top: BorderSide(color: HealthColors.border))),
+                        decoration: const BoxDecoration(
+                          border: Border(top: BorderSide(color: HealthColors.border)),
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               l10n.mentorWhySourcesTitle.toUpperCase(),
-                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: HealthColors.textMuted),
+                              style: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                color: HealthColors.textMuted,
+                              ),
                             ),
                             const SizedBox(height: 6),
-                            ...message.sources.map((source) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 4),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.only(top: 6, right: 6),
-                                        width: 5,
-                                        height: 5,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.primary,
-                                          shape: BoxShape.circle,
-                                        ),
+                            ...message.sources.map(
+                              (source) => Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 6, right: 6),
+                                      width: 5,
+                                      height: 5,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        shape: BoxShape.circle,
                                       ),
-                                      Expanded(
-                                        child: Text(source, style: const TextStyle(fontSize: 11, color: HealthColors.textSecondary)),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        source,
+                                        style: const TextStyle(fontSize: 11, color: HealthColors.textSecondary),
                                       ),
-                                    ],
-                                  ),
-                                )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),

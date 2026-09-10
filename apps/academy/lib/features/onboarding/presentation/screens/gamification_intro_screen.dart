@@ -15,9 +15,7 @@ class GamificationIntroScreen extends StatelessWidget {
   const GamificationIntroScreen({super.key});
 
   void _goNext(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const FinancialGoalScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const FinancialGoalScreen()));
   }
 
   @override
@@ -63,12 +61,7 @@ class GamificationIntroScreen extends StatelessWidget {
 }
 
 class _RuleRow extends StatelessWidget {
-  const _RuleRow({
-    required this.icon,
-    required this.iconColor,
-    required this.title,
-    required this.body,
-  });
+  const _RuleRow({required this.icon, required this.iconColor, required this.title, required this.body});
 
   final IconData icon;
   final Color iconColor;
@@ -85,10 +78,7 @@ class _RuleRow extends StatelessWidget {
           width: 40,
           height: 40,
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: iconColor.withValues(alpha: 0.16),
-            borderRadius: BorderRadius.circular(14),
-          ),
+          decoration: BoxDecoration(color: iconColor.withValues(alpha: 0.16), borderRadius: BorderRadius.circular(14)),
           child: Icon(icon, color: iconColor, size: 20),
         ),
         const SizedBox(width: 14),
@@ -98,21 +88,10 @@ class _RuleRow extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  color: tokens.textPrimary,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(color: tokens.textPrimary, fontSize: 15, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
-              Text(
-                body,
-                style: TextStyle(
-                  color: tokens.textSecondary,
-                  fontSize: 13,
-                  height: 1.4,
-                ),
-              ),
+              Text(body, style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4)),
             ],
           ),
         ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/knowledge_map_strip.dart';
 
@@ -11,7 +11,7 @@ const _module1 = AcademyModule(
   schoolId: 's1',
   title: 'Renda Fixa',
   description: 'desc',
-  icon: Icons.savings,
+  iconKey: 'savings_outlined',
   order: 2,
   lessonIds: ['l1', 'l2'],
   contentAvailable: true,
@@ -22,7 +22,7 @@ const _module2 = AcademyModule(
   schoolId: 's1',
   title: 'Fundamentos',
   description: 'desc',
-  icon: Icons.school,
+  iconKey: 'savings_outlined',
   order: 1,
   lessonIds: ['l3', 'l4'],
   contentAvailable: true,

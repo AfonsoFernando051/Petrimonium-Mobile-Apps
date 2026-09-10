@@ -3,18 +3,13 @@ import 'dart:convert';
 import 'package:petrimonium_wallet/core/constants/api_constants.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.dart';
-import 'package:petrimonium_wallet/features/mentor/domain/entities/conversation_summary.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Result of a `POST /api/mentor/chat` call — besides the reply text, the
 /// backend now also returns which conversation it was persisted to (created
 /// on the fly the first time) and its (possibly just-set) title.
 class MentorChatResult {
-  const MentorChatResult({
-    required this.reply,
-    required this.conversationId,
-    this.title,
-    this.sources = const [],
-  });
+  const MentorChatResult({required this.reply, required this.conversationId, this.title, this.sources = const []});
 
   final String reply;
   final int conversationId;
@@ -56,12 +51,7 @@ class MentorRemoteDataSource {
     }, timeout: _chatTimeout);
 
     if (response.statusCode != 200) {
-      throw Exception(
-        extractErrorDetail(
-          response,
-          fallback: 'Mentor chat request failed (${response.statusCode})',
-        ),
-      );
+      throw Exception(extractErrorDetail(response, fallback: 'Mentor chat request failed (${response.statusCode})'));
     }
 
     final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -74,36 +64,21 @@ class MentorRemoteDataSource {
   }
 
   Future<List<ConversationSummary>> listConversations() async {
-    final response = await apiClient.get(
-      ApiConstants.mentorConversationsEndpoint,
-    );
+    final response = await apiClient.get(ApiConstants.mentorConversationsEndpoint);
 
     if (response.statusCode != 200) {
-      throw Exception(
-        extractErrorDetail(
-          response,
-          fallback: 'Failed to load conversations (${response.statusCode})',
-        ),
-      );
+      throw Exception(extractErrorDetail(response, fallback: 'Failed to load conversations (${response.statusCode})'));
     }
 
     final data = jsonDecode(response.body) as List<dynamic>;
-    return data
-        .map((e) => ConversationSummary.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return data.map((e) => ConversationSummary.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   Future<List<String>> getSuggestedPrompts({required String language}) async {
-    final response = await apiClient.get(
-      ApiConstants.mentorSuggestionsEndpoint(language),
-    );
+    final response = await apiClient.get(ApiConstants.mentorSuggestionsEndpoint(language));
     if (response.statusCode != 200) {
       throw Exception(
-        extractErrorDetail(
-          response,
-          fallback:
-              'Failed to load Mentor suggestions (${response.statusCode})',
-        ),
+        extractErrorDetail(response, fallback: 'Failed to load Mentor suggestions (${response.statusCode})'),
       );
     }
     final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -114,17 +89,10 @@ class MentorRemoteDataSource {
   }
 
   Future<List<ChatMessage>> getConversationMessages(int conversationId) async {
-    final response = await apiClient.get(
-      ApiConstants.mentorConversationEndpoint(conversationId),
-    );
+    final response = await apiClient.get(ApiConstants.mentorConversationEndpoint(conversationId));
 
     if (response.statusCode != 200) {
-      throw Exception(
-        extractErrorDetail(
-          response,
-          fallback: 'Failed to load conversation (${response.statusCode})',
-        ),
-      );
+      throw Exception(extractErrorDetail(response, fallback: 'Failed to load conversation (${response.statusCode})'));
     }
 
     final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -135,41 +103,24 @@ class MentorRemoteDataSource {
         id: (json['id'] as int).toString(),
         role: json['role'] == 'user' ? ChatRole.user : ChatRole.mentor,
         text: json['text'] as String? ?? '',
-        timestamp:
-            DateTime.tryParse(json['createdAt'] as String? ?? '') ??
-            DateTime.now(),
+        timestamp: DateTime.tryParse(json['createdAt'] as String? ?? '') ?? DateTime.now(),
       );
     }).toList();
   }
 
   Future<void> renameConversation(int conversationId, String title) async {
-    final response = await apiClient.patch(
-      ApiConstants.mentorConversationEndpoint(conversationId),
-      {'title': title},
-    );
+    final response = await apiClient.patch(ApiConstants.mentorConversationEndpoint(conversationId), {'title': title});
 
     if (response.statusCode != 204) {
-      throw Exception(
-        extractErrorDetail(
-          response,
-          fallback: 'Failed to rename conversation (${response.statusCode})',
-        ),
-      );
+      throw Exception(extractErrorDetail(response, fallback: 'Failed to rename conversation (${response.statusCode})'));
     }
   }
 
   Future<void> deleteConversation(int conversationId) async {
-    final response = await apiClient.delete(
-      ApiConstants.mentorConversationEndpoint(conversationId),
-    );
+    final response = await apiClient.delete(ApiConstants.mentorConversationEndpoint(conversationId));
 
     if (response.statusCode != 204) {
-      throw Exception(
-        extractErrorDetail(
-          response,
-          fallback: 'Failed to delete conversation (${response.statusCode})',
-        ),
-      );
+      throw Exception(extractErrorDetail(response, fallback: 'Failed to delete conversation (${response.statusCode})'));
     }
   }
 }

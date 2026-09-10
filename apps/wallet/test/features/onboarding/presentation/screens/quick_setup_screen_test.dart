@@ -16,10 +16,7 @@ void main() {
   });
 
   Widget buildThemedTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const QuickSetupScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const QuickSetupScreen());
   }
 
   group('QuickSetupScreen', () {
@@ -53,10 +50,7 @@ void main() {
       await tester.pumpWidget(buildThemedTestableWidget());
       await tester.pump();
 
-      final marketPill = find.ancestor(
-        of: find.text('Brasil · B3'),
-        matching: find.byType(OptionPill),
-      );
+      final marketPill = find.ancestor(of: find.text('Brasil · B3'), matching: find.byType(OptionPill));
       expect(tester.widget<OptionPill>(marketPill).selected, isTrue);
 
       await tester.tap(find.text('Brasil · B3'));

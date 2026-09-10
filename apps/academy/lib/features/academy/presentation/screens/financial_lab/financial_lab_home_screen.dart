@@ -9,8 +9,7 @@ import 'package:petrimonium_academy/features/academy/presentation/controllers/la
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/lab_simulator_catalog.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_scaffold.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Entry point for the Financial Lab (`docs/ACADEMY_ENGINE.md` §3d/§3g) —
@@ -78,11 +77,7 @@ class _FinancialLabHomeScreenState extends State<FinancialLabHomeScreen> {
       children: [
         Text(
           Translator.translate(AppStrings.financialLabSubtitle),
-          style: TextStyle(
-            color: tokens.textSecondary,
-            fontSize: 13,
-            height: 1.4,
-          ),
+          style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4),
         ),
         ListenableBuilder(
           listenable: _completionController,
@@ -94,13 +89,9 @@ class _FinancialLabHomeScreenState extends State<FinancialLabHomeScreen> {
                 _LabTile(
                   icon: entry.icon,
                   title: Translator.translate(entry.titleKey),
-                  subtitle: entry.subtitleKey == null
-                      ? null
-                      : Translator.translate(entry.subtitleKey!),
+                  subtitle: entry.subtitleKey == null ? null : Translator.translate(entry.subtitleKey!),
                   available: entry.available,
-                  completed:
-                      entry.available &&
-                      _completionController.isCompleted(entry.id),
+                  completed: entry.available && _completionController.isCompleted(entry.id),
                   onTap: !entry.available
                       ? null
                       : () {
@@ -150,9 +141,7 @@ class _LabTile extends StatelessWidget {
     return Semantics(
       button: true,
       enabled: available,
-      label: available
-          ? title
-          : '$title. ${Translator.translate(AppStrings.labComingSoon)}',
+      label: available ? title : '$title. ${Translator.translate(AppStrings.labComingSoon)}',
       child: GestureDetector(
         onTap: available ? onTap : null,
         child: Opacity(
@@ -166,10 +155,7 @@ class _LabTile extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: accent.withValues(alpha: 0.14),
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: accent.withValues(alpha: 0.14), shape: BoxShape.circle),
                     child: Icon(icon, color: accent, size: 20),
                   ),
                   const SizedBox(width: 12),
@@ -179,21 +165,11 @@ class _LabTile extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: TextStyle(
-                            color: tokens.textPrimary,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
+                          style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.w600, fontSize: 14),
                         ),
                         if (subtitle != null) ...[
                           const SizedBox(height: 2),
-                          Text(
-                            subtitle!,
-                            style: TextStyle(
-                              color: tokens.textTertiary,
-                              fontSize: 11,
-                            ),
-                          ),
+                          Text(subtitle!, style: TextStyle(color: tokens.textTertiary, fontSize: 11)),
                         ],
                       ],
                     ),
@@ -203,11 +179,7 @@ class _LabTile extends StatelessWidget {
                   else if (completed)
                     Icon(Icons.check_circle, color: tokens.success, size: 18)
                   else
-                    Icon(
-                      Icons.chevron_right,
-                      color: tokens.textTertiary,
-                      size: 18,
-                    ),
+                    Icon(Icons.chevron_right, color: tokens.textTertiary, size: 18),
                 ],
               ),
             ),

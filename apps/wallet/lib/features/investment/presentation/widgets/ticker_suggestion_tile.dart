@@ -8,7 +8,13 @@ import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 /// its current price, so the user recognizes the right result at a glance
 /// instead of matching a bare ticker string.
 class TickerSuggestionTile extends StatelessWidget {
-  const TickerSuggestionTile({super.key, required this.symbol, required this.name, required this.price, required this.onTap});
+  const TickerSuggestionTile({
+    super.key,
+    required this.symbol,
+    required this.name,
+    required this.price,
+    required this.onTap,
+  });
 
   final String symbol;
   final String name;

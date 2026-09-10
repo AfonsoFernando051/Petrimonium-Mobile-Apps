@@ -3,11 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/home/domain/entities/next_action.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/next_action_card.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
 
 const _lesson = Lesson(
   id: 'lesson_1',
@@ -33,11 +31,7 @@ void main() {
     Translator.currentLanguage = 'pt';
   });
 
-  Widget buildTestableWidget({
-    required NextAction action,
-    VoidCallback? onStartLesson,
-    VoidCallback? onOpenAcademy,
-  }) {
+  Widget buildTestableWidget({required NextAction action, VoidCallback? onStartLesson, VoidCallback? onOpenAcademy}) {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(

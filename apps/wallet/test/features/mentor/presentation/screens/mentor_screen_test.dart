@@ -8,8 +8,7 @@ import 'package:petrimonium_wallet/features/mentor/data/datasources/mentor_remot
 import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/screens/mentor_screen.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/widgets/chat_bubble.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/widgets/mentor_input_bar.dart';
-import 'package:petrimonium_wallet/features/mentor/presentation/widgets/suggested_prompt_chip.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 
 class MockMentorChatRepository extends Mock implements MentorChatRepository {}
@@ -25,9 +24,7 @@ void main() {
 
     mockMentorChatRepository = MockMentorChatRepository();
     DI.mentorChatRepository = mockMentorChatRepository;
-    when(
-      () => mockMentorChatRepository.purgeLegacyLocalHistory(),
-    ).thenAnswer((_) async {});
+    when(() => mockMentorChatRepository.purgeLegacyLocalHistory()).thenAnswer((_) async {});
     when(
       () => mockMentorChatRepository.loadSuggestedPrompts(),
     ).thenAnswer((_) async => ['Como começar a investir?', 'O que é um ETF?']);
@@ -45,65 +42,20 @@ void main() {
   }
 
   group('MentorScreen', () {
-    testWidgets(
-      'shows the header, empty state and suggested prompts on a fresh chat',
-      (tester) async {
-        await tester.pumpWidget(buildTestableWidget());
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 300));
+    testWidgets('shows the header, empty state and suggested prompts on a fresh chat', (tester) async {
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-        expect(find.text('Mentor'), findsOneWidget);
-        expect(find.text('Não executa transações · não é consultoria regulada'), findsOneWidget);
-        expect(
-          find.text('Posso te ajudar a entender sua carteira ou tirar dúvidas.'),
-          findsOneWidget,
-        );
-        expect(find.byType(SuggestedPromptChip), findsWidgets);
-        expect(find.text('Como começar a investir?'), findsOneWidget);
-        expect(find.byType(MentorInputBar), findsOneWidget);
-      },
-    );
+      expect(find.text('Mentor'), findsOneWidget);
+      expect(find.text('Não executa transações · não é consultoria regulada'), findsOneWidget);
+      expect(find.text('Posso te ajudar a entender sua carteira ou tirar dúvidas.'), findsOneWidget);
+      expect(find.byType(SuggestedPromptChip), findsWidgets);
+      expect(find.text('Como começar a investir?'), findsOneWidget);
+      expect(find.byType(MentorInputBar), findsOneWidget);
+    });
 
-    testWidgets(
-      'tapping a suggested prompt sends it and renders both bubbles',
-      (tester) async {
-        when(
-          () => mockMentorChatRepository.sendMessage(
-            message: any(named: 'message'),
-            conversationId: any(named: 'conversationId'),
-            currentScreen: any(named: 'currentScreen'),
-          ),
-        ).thenAnswer(
-          (_) async => const MentorChatResult(
-            reply: 'Dividendos são...',
-            conversationId: 1,
-            title: 'Dividendos',
-          ),
-        );
-
-        await tester.pumpWidget(buildTestableWidget());
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 300));
-
-        await tester.tap(find.byType(SuggestedPromptChip).first);
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 300));
-
-        verify(
-          () => mockMentorChatRepository.sendMessage(
-            message: 'Como começar a investir?',
-            conversationId: any(named: 'conversationId'),
-            currentScreen: 'mentor',
-          ),
-        ).called(1);
-        expect(find.byType(ChatBubble), findsWidgets);
-        expect(find.text('Dividendos são...'), findsOneWidget);
-      },
-    );
-
-    testWidgets('typing a message and tapping send clears the input field', (
-      tester,
-    ) async {
+    testWidgets('tapping a suggested prompt sends it and renders both bubbles', (tester) async {
       when(
         () => mockMentorChatRepository.sendMessage(
           message: any(named: 'message'),
@@ -111,8 +63,36 @@ void main() {
           currentScreen: any(named: 'currentScreen'),
         ),
       ).thenAnswer(
-        (_) async => const MentorChatResult(reply: 'Olá!', conversationId: 2),
+        (_) async => const MentorChatResult(reply: 'Dividendos são...', conversationId: 1, title: 'Dividendos'),
       );
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tester.tap(find.byType(SuggestedPromptChip).first);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      verify(
+        () => mockMentorChatRepository.sendMessage(
+          message: 'Como começar a investir?',
+          conversationId: any(named: 'conversationId'),
+          currentScreen: 'mentor',
+        ),
+      ).called(1);
+      expect(find.byType(ChatBubble), findsWidgets);
+      expect(find.text('Dividendos são...'), findsOneWidget);
+    });
+
+    testWidgets('typing a message and tapping send clears the input field', (tester) async {
+      when(
+        () => mockMentorChatRepository.sendMessage(
+          message: any(named: 'message'),
+          conversationId: any(named: 'conversationId'),
+          currentScreen: any(named: 'currentScreen'),
+        ),
+      ).thenAnswer((_) async => const MentorChatResult(reply: 'Olá!', conversationId: 2));
 
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
@@ -146,9 +126,7 @@ void main() {
           conversationId: any(named: 'conversationId'),
           currentScreen: any(named: 'currentScreen'),
         ),
-      ).thenAnswer(
-        (_) async => const MentorChatResult(reply: 'Olá!', conversationId: 3),
-      );
+      ).thenAnswer((_) async => const MentorChatResult(reply: 'Olá!', conversationId: 3));
 
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();

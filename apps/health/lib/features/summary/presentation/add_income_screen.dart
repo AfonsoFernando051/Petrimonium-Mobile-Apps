@@ -32,11 +32,11 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
   }
 
   String _typeLabel(AppLocalizations l10n, IncomeCategory type) => switch (type) {
-        IncomeCategory.salary => l10n.incomeTypeSalary,
-        IncomeCategory.freelance => l10n.incomeTypeFreelance,
-        IncomeCategory.rental => l10n.incomeTypeRental,
-        IncomeCategory.other => l10n.incomeTypeOther,
-      };
+    IncomeCategory.salary => l10n.incomeTypeSalary,
+    IncomeCategory.freelance => l10n.incomeTypeFreelance,
+    IncomeCategory.rental => l10n.incomeTypeRental,
+    IncomeCategory.other => l10n.incomeTypeOther,
+  };
 
   Future<void> _submit(HealthController controller) async {
     final l10n = AppLocalizations.of(context);
@@ -48,7 +48,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
     try {
       await controller.addIncome(category: _type, name: name, value: value, recurring: _recurring);
       if (!mounted) return;
-      controller.closeSubScreen();
+      controller.navigation.closeSubScreen();
     } catch (_) {
       if (!mounted) return;
       setState(() => _error = l10n.genericError);
@@ -73,7 +73,7 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
               child: Row(
                 children: [
                   InkWell(
-                    onTap: controller.closeSubScreen,
+                    onTap: controller.navigation.closeSubScreen,
                     borderRadius: BorderRadius.circular(16),
                     child: const SizedBox(
                       width: 32,
@@ -83,7 +83,14 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Text(l10n.addIncomeTitle, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: HealthColors.textPrimary)),
+                    child: Text(
+                      l10n.addIncomeTitle,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: HealthColors.textPrimary,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -94,9 +101,19 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l10n.addIncomeIntro, style: const TextStyle(fontSize: 12.5, color: HealthColors.textSecondary, height: 1.4)),
+                    Text(
+                      l10n.addIncomeIntro,
+                      style: const TextStyle(fontSize: 12.5, color: HealthColors.textSecondary, height: 1.4),
+                    ),
                     const SizedBox(height: 18),
-                    Text(l10n.incomeTypeLabel, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: HealthColors.textSecondary)),
+                    Text(
+                      l10n.incomeTypeLabel,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: HealthColors.textSecondary,
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     GridView.count(
                       shrinkWrap: true,
@@ -105,47 +122,69 @@ class _AddIncomeScreenState extends State<AddIncomeScreen> {
                       mainAxisSpacing: 8,
                       crossAxisSpacing: 8,
                       childAspectRatio: 2.6,
-                      children: IncomeCategory.values.map((type) {
-                        final selected = type == _type;
-                        return GestureDetector(
-                          onTap: () => setState(() => _type = type),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: selected ? Theme.of(context).colorScheme.primary.withValues(alpha: .08) : HealthColors.inputFill,
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: selected ? Theme.of(context).colorScheme.primary : HealthColors.border, width: 1.5),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(type.icon, style: const TextStyle(fontSize: 16)),
-                                const SizedBox(width: 8),
-                                Flexible(
-                                  child: Text(
-                                    _typeLabel(l10n, type),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                                      color: selected ? HealthColors.textPrimary : HealthColors.textSecondary,
-                                    ),
+                      children: IncomeCategory.values
+                          .map((type) {
+                            final selected = type == _type;
+                            return GestureDetector(
+                              onTap: () => setState(() => _type = type),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: selected
+                                      ? Theme.of(context).colorScheme.primary.withValues(alpha: .08)
+                                      : HealthColors.inputFill,
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                    color: selected ? Theme.of(context).colorScheme.primary : HealthColors.border,
+                                    width: 1.5,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(growable: false),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(type.icon, style: const TextStyle(fontSize: 16)),
+                                    const SizedBox(width: 8),
+                                    Flexible(
+                                      child: Text(
+                                        _typeLabel(l10n, type),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                                          color: selected ? HealthColors.textPrimary : HealthColors.textSecondary,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          })
+                          .toList(growable: false),
                     ),
                     const SizedBox(height: 18),
-                    Text(l10n.incomeRecurringLabel, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: HealthColors.textSecondary)),
+                    Text(
+                      l10n.incomeRecurringLabel,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: HealthColors.textSecondary,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        HealthChip(label: l10n.yesEveryMonth, selected: _recurring, onTap: () => setState(() => _recurring = true)),
+                        HealthChip(
+                          label: l10n.yesEveryMonth,
+                          selected: _recurring,
+                          onTap: () => setState(() => _recurring = true),
+                        ),
                         const SizedBox(width: 8),
-                        HealthChip(label: l10n.noOnce, selected: !_recurring, onTap: () => setState(() => _recurring = false)),
+                        HealthChip(
+                          label: l10n.noOnce,
+                          selected: !_recurring,
+                          onTap: () => setState(() => _recurring = false),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),

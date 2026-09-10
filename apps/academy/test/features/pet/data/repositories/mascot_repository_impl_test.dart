@@ -3,11 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/data/datasources/pet_remote_datasource.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
 import 'package:petrimonium_academy/features/pet/data/repositories/mascot_repository_impl.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
 
 class MockGamificationRemoteDataSource extends Mock implements GamificationRemoteDataSource {}
 
@@ -30,14 +26,16 @@ void main() {
 
   group('loadProfile', () {
     test('overwrites xp and specie with the backend\'s real values and caches them', () async {
-      when(() => mockGamificationDataSource.fetchSummary()).thenAnswer((_) async => {
-            'totalXp': 120,
-            'level': 2,
-            'xpIntoLevel': 20,
-            'xpForNextLevel': 100,
-            'currentStreak': 0,
-            'longestStreak': 0,
-          });
+      when(() => mockGamificationDataSource.fetchSummary()).thenAnswer(
+        (_) async => {
+          'totalXp': 120,
+          'level': 2,
+          'xpIntoLevel': 20,
+          'xpForNextLevel': 100,
+          'currentStreak': 0,
+          'longestStreak': 0,
+        },
+      );
       when(() => mockPetDataSource.getMyPet()).thenAnswer((_) async => {'specie': 'FOX'});
 
       final profile = await repository.loadProfile();

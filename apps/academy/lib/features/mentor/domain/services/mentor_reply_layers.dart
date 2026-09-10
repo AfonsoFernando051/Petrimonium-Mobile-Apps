@@ -28,10 +28,11 @@ class MentorReplyLayers {
     if (contentIndex == -1) return null;
 
     final interpretationIndex = text.indexOf(_interpretationMarker, contentIndex);
-    final content = (interpretationIndex == -1
-            ? text.substring(contentIndex + _contentMarker.length)
-            : text.substring(contentIndex + _contentMarker.length, interpretationIndex))
-        .trim();
+    final content =
+        (interpretationIndex == -1
+                ? text.substring(contentIndex + _contentMarker.length)
+                : text.substring(contentIndex + _contentMarker.length, interpretationIndex))
+            .trim();
     if (content.isEmpty) return null;
 
     final interpretation = interpretationIndex == -1

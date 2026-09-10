@@ -9,7 +9,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.dark,
-          home: const Scaffold(body: LayerChip(label: 'CONTEÚDO EDUCATIVO', color: Colors.cyan)),
+          home: const Scaffold(
+            body: LayerChip(label: 'CONTEÚDO EDUCATIVO', color: Colors.cyan),
+          ),
         ),
       );
 

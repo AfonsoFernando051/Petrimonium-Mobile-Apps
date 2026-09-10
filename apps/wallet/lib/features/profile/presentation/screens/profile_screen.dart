@@ -9,7 +9,7 @@ import 'package:petrimonium_wallet/features/onboarding/presentation/screens/quic
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_companion_header.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_speech_bubble.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/profile/presentation/screens/mentor_preferences_screen.dart';
 import 'package:petrimonium_wallet/features/profile/presentation/screens/privacy_and_memory_screen.dart';
 import 'package:petrimonium_wallet/features/settings/presentation/screens/settings_screen.dart';
@@ -105,21 +105,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 24),
                   _ProfileMenuRow(
                     label: Translator.translate(AppStrings.profileMentorPreferencesLabel),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const MentorPreferencesScreen()),
-                    ),
+                    onTap: () =>
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MentorPreferencesScreen())),
                   ),
                   _ProfileMenuRow(
                     label: Translator.translate(AppStrings.profilePrivacyMemoryLabel),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const PrivacyAndMemoryScreen()),
-                    ),
+                    onTap: () =>
+                        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PrivacyAndMemoryScreen())),
                   ),
                   _ProfileMenuRow(
                     label: Translator.translate(AppStrings.profileCurrencyMarketLabel),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const QuickSetupScreen(isSettingsMode: true)),
-                    ),
+                    onTap: () => Navigator.of(
+                      context,
+                    ).push(MaterialPageRoute(builder: (_) => const QuickSetupScreen(isSettingsMode: true))),
                   ),
                 ],
               ),

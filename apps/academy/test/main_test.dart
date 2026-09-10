@@ -6,39 +6,16 @@ import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_academy/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_academy/features/dashboard/presentation/screens/dashboard_screen.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/portfolio_choice_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_state_repository.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/journey_ready_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/welcome_screen.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/financial_goal_screen.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/achievements_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/missions_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/datasources/portfolio_remote_datasource.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_local_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/achievements_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/missions_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/achievement_evaluation_result.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/dividend_event.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/mission_status.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_summary.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/enums/history_range.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/academy/academy_test_fixtures.dart';
@@ -234,7 +211,9 @@ void main() {
       expect(find.byType(FinancialGoalScreen), findsOneWidget);
     });
 
-    testWidgets('routes to JourneyReadyScreen (tutorial) once a goal is set but the tutorial is unfinished', (tester) async {
+    testWidgets('routes to JourneyReadyScreen (tutorial) once a goal is set but the tutorial is unfinished', (
+      tester,
+    ) async {
       final authRepository = MockAuthRepository();
       when(() => authRepository.isLoggedIn()).thenAnswer((_) async => true);
       when(() => authRepository.getSavedUserName()).thenAnswer((_) async => null);
@@ -258,7 +237,9 @@ void main() {
       expect(find.byType(JourneyReadyScreen), findsOneWidget);
     });
 
-    testWidgets('routes to PortfolioChoiceScreen once tutorial is done but the portfolio step is unresolved', (tester) async {
+    testWidgets('routes to PortfolioChoiceScreen once tutorial is done but the portfolio step is unresolved', (
+      tester,
+    ) async {
       final authRepository = MockAuthRepository();
       when(() => authRepository.isLoggedIn()).thenAnswer((_) async => true);
       when(() => authRepository.getSavedUserName()).thenAnswer((_) async => null);

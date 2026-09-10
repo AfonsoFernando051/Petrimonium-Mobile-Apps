@@ -84,10 +84,7 @@ class _SpeciesCard extends StatelessWidget {
           // uma grade de caixas.
           color: isSelected ? tokens.textPrimary.withValues(alpha: 0.06) : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: isSelected ? AppColors.neonCyan : Colors.transparent,
-            width: 1.5,
-          ),
+          border: Border.all(color: isSelected ? AppColors.neonCyan : Colors.transparent, width: 1.5),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

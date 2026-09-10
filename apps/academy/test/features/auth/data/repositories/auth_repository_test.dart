@@ -19,8 +19,12 @@ void main() {
     mockApiClient = MockApiClient();
     mockRemoteDataSource = MockAuthRemoteDataSource();
     when(() => mockRemoteDataSource.apiClient).thenReturn(mockApiClient);
-    when(() => mockApiClient.saveTokens(accessToken: any(named: 'accessToken'), refreshToken: any(named: 'refreshToken')))
-        .thenAnswer((_) async {});
+    when(
+      () => mockApiClient.saveTokens(
+        accessToken: any(named: 'accessToken'),
+        refreshToken: any(named: 'refreshToken'),
+      ),
+    ).thenAnswer((_) async {});
     when(() => mockApiClient.readToken()).thenAnswer((_) async => null);
     when(() => mockApiClient.readRefreshToken()).thenAnswer((_) async => null);
     when(() => mockApiClient.clearTokens()).thenAnswer((_) async {});
@@ -39,8 +43,7 @@ void main() {
 
     test('should call login on remote data source and save both tokens via ApiClient (secure storage)', () async {
       // arrange
-      when(() => mockRemoteDataSource.login(any(), any()))
-          .thenAnswer((_) async => tUserModel);
+      when(() => mockRemoteDataSource.login(any(), any())).thenAnswer((_) async => tUserModel);
 
       // act
       await repository.login(tEmail, tPassword);
@@ -50,33 +53,44 @@ void main() {
       verify(() => mockApiClient.saveTokens(accessToken: tToken, refreshToken: tRefreshToken)).called(1);
     });
 
-    test('should call remoteDataSource.register and save both tokens via ApiClient when register is successful', () async {
-      // arrange
-      when(() => mockRemoteDataSource.register(any(), any(), any()))
-          .thenAnswer((_) async => UserModel(email: tEmail, token: tToken, refreshToken: tRefreshToken));
+    test(
+      'should call remoteDataSource.register and save both tokens via ApiClient when register is successful',
+      () async {
+        // arrange
+        when(
+          () => mockRemoteDataSource.register(any(), any(), any()),
+        ).thenAnswer((_) async => UserModel(email: tEmail, token: tToken, refreshToken: tRefreshToken));
 
-      // act
-      await repository.register(tName, tEmail, tPassword);
+        // act
+        await repository.register(tName, tEmail, tPassword);
 
-      // assert
-      verify(() => mockRemoteDataSource.register(tName, tEmail, tPassword)).called(1);
-      verify(() => mockApiClient.saveTokens(accessToken: tToken, refreshToken: tRefreshToken)).called(1);
-    });
+        // assert
+        verify(() => mockRemoteDataSource.register(tName, tEmail, tPassword)).called(1);
+        verify(() => mockApiClient.saveTokens(accessToken: tToken, refreshToken: tRefreshToken)).called(1);
+      },
+    );
 
     test('should not save tokens when the backend response carries no refresh token (e.g. register today)', () async {
       // Register's backend response has no token pair yet — _saveTokens must
       // no-op rather than call ApiClient with a null refreshToken.
-      when(() => mockRemoteDataSource.register(any(), any(), any()))
-          .thenAnswer((_) async => UserModel(email: tEmail, token: null, refreshToken: null));
+      when(
+        () => mockRemoteDataSource.register(any(), any(), any()),
+      ).thenAnswer((_) async => UserModel(email: tEmail, token: null, refreshToken: null));
 
       await repository.register(tName, tEmail, tPassword);
 
-      verifyNever(() => mockApiClient.saveTokens(accessToken: any(named: 'accessToken'), refreshToken: any(named: 'refreshToken')));
+      verifyNever(
+        () => mockApiClient.saveTokens(
+          accessToken: any(named: 'accessToken'),
+          refreshToken: any(named: 'refreshToken'),
+        ),
+      );
     });
 
     test('register caches the username the backend echoed back', () async {
-      when(() => mockRemoteDataSource.register(any(), any(), any()))
-          .thenAnswer((_) async => UserModel(email: tEmail, token: tToken, refreshToken: tRefreshToken, username: tName));
+      when(
+        () => mockRemoteDataSource.register(any(), any(), any()),
+      ).thenAnswer((_) async => UserModel(email: tEmail, token: tToken, refreshToken: tRefreshToken, username: tName));
 
       await repository.register(tName, tEmail, tPassword);
 
@@ -88,8 +102,9 @@ void main() {
     });
 
     test('refreshUserName fetches and caches the real name from GET /api/users/me', () async {
-      when(() => mockRemoteDataSource.getCurrentUser())
-          .thenAnswer((_) async => UserModel(email: tEmail, username: tName));
+      when(
+        () => mockRemoteDataSource.getCurrentUser(),
+      ).thenAnswer((_) async => UserModel(email: tEmail, username: tName));
 
       final result = await repository.refreshUserName();
 

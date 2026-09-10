@@ -5,7 +5,7 @@ import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/companion/rive/pet_rive_companion.dart';
 
 /// Tapping the companion header opens this — a lightweight, structured menu
@@ -34,19 +34,11 @@ class PetInteractionSheet extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         child: Container(
           decoration: BoxDecoration(
-            color: tokens.surfaceElevated.withValues(
-              alpha: context.isDarkMode ? 0.92 : 0.98,
-            ),
+            color: tokens.surfaceElevated.withValues(alpha: context.isDarkMode ? 0.92 : 0.98),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: AppColors.neonCyan.withValues(alpha: 0.3),
-            ),
+            border: Border.all(color: AppColors.neonCyan.withValues(alpha: 0.3)),
             boxShadow: [
-              BoxShadow(
-                color: AppColors.neonCyan.withValues(alpha: 0.15),
-                blurRadius: 28,
-                offset: const Offset(0, -6),
-              ),
+              BoxShadow(color: AppColors.neonCyan.withValues(alpha: 0.15), blurRadius: 28, offset: const Offset(0, -6)),
             ],
           ),
           child: Padding(
@@ -62,10 +54,7 @@ class PetInteractionSheet extends StatelessWidget {
                       height: 44,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.neonCyan.withValues(alpha: 0.6),
-                          width: 1.5,
-                        ),
+                        border: Border.all(color: AppColors.neonCyan.withValues(alpha: 0.6), width: 1.5),
                       ),
                       child: ClipOval(
                         child: PetRiveCompanion(
@@ -85,23 +74,12 @@ class PetInteractionSheet extends StatelessWidget {
                           Text(
                             petName?.isNotEmpty == true
                                 ? petName!
-                                : Translator.translate(
-                                    AppStrings.companionInteractionTitle,
-                                  ),
-                            style: TextStyle(
-                              color: tokens.textPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+                                : Translator.translate(AppStrings.companionInteractionTitle),
+                            style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           Text(
-                            Translator.translate(
-                              AppStrings.companionInteractionSubtitle,
-                            ),
-                            style: TextStyle(
-                              color: tokens.textSecondary,
-                              fontSize: 12,
-                            ),
+                            Translator.translate(AppStrings.companionInteractionSubtitle),
+                            style: TextStyle(color: tokens.textSecondary, fontSize: 12),
                           ),
                         ],
                       ),
@@ -111,25 +89,19 @@ class PetInteractionSheet extends StatelessWidget {
                 const SizedBox(height: 20),
                 _InteractionOption(
                   icon: Icons.school_outlined,
-                  label: Translator.translate(
-                    AppStrings.companionInteractionLearn,
-                  ),
+                  label: Translator.translate(AppStrings.companionInteractionLearn),
                   onTap: () => _select(context, PetContext.academy),
                 ),
                 const SizedBox(height: 10),
                 _InteractionOption(
                   icon: Icons.diamond_outlined,
-                  label: Translator.translate(
-                    AppStrings.companionInteractionPortfolio,
-                  ),
+                  label: Translator.translate(AppStrings.companionInteractionPortfolio),
                   onTap: () => _select(context, PetContext.portfolio),
                 ),
                 const SizedBox(height: 10),
                 _InteractionOption(
                   icon: Icons.person_outline,
-                  label: Translator.translate(
-                    AppStrings.companionInteractionProgress,
-                  ),
+                  label: Translator.translate(AppStrings.companionInteractionProgress),
                   onTap: () => _select(context, PetContext.profile),
                 ),
               ],
@@ -142,11 +114,7 @@ class PetInteractionSheet extends StatelessWidget {
 }
 
 class _InteractionOption extends StatelessWidget {
-  const _InteractionOption({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
+  const _InteractionOption({required this.icon, required this.label, required this.onTap});
 
   final IconData icon;
   final String label;
@@ -164,9 +132,7 @@ class _InteractionOption extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            color: tokens.surface.withValues(
-              alpha: context.isDarkMode ? 0.4 : 0.7,
-            ),
+            color: tokens.surface.withValues(alpha: context.isDarkMode ? 0.4 : 0.7),
             border: Border.all(color: tokens.border),
           ),
           child: Row(
@@ -176,11 +142,7 @@ class _InteractionOption extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: TextStyle(
-                    color: tokens.textPrimary,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.w600, fontSize: 14),
                 ),
               ),
               Icon(Icons.chevron_right, color: tokens.textTertiary, size: 18),

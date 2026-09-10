@@ -1,9 +1,9 @@
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/comic_bubble_painter.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_comic_speech_bubble.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
+import 'package:petrimonium_ui/petrimonium_ui.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Floats [PetCompanionController]'s current message next to wherever the
 /// Pet actually renders on screen — anchored via [anchor], not a hardcoded
@@ -36,12 +36,7 @@ import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/
 /// after every possible anchor location — regardless of which screen region
 /// hosts the Pet.
 class PetSpeechBubbleOverlay extends StatefulWidget {
-  const PetSpeechBubbleOverlay({
-    super.key,
-    required this.controller,
-    this.anchor,
-    this.onActionSelected,
-  });
+  const PetSpeechBubbleOverlay({super.key, required this.controller, this.anchor, this.onActionSelected});
 
   final PetCompanionController controller;
 
@@ -107,15 +102,14 @@ class _PetSpeechBubbleOverlayState extends State<PetSpeechBubbleOverlay> {
         builder: (context, _) {
           final message = widget.controller.currentMessage;
           return AnimatedSwitcher(
-            duration: reducedMotion
-                ? Duration.zero
-                : const Duration(milliseconds: 220),
+            duration: reducedMotion ? Duration.zero : const Duration(milliseconds: 220),
             transitionBuilder: (child, animation) => FadeTransition(
               opacity: animation,
               child: ScaleTransition(
-                scale: Tween<double>(begin: 0.9, end: 1.0).animate(
-                  CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
-                ),
+                scale: Tween<double>(
+                  begin: 0.9,
+                  end: 1.0,
+                ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutBack)),
                 child: child,
               ),
             ),
@@ -158,34 +152,29 @@ class _AnchoredBubble extends StatelessWidget {
   final PetSpeechBubbleAnchor? anchor;
   final ValueChanged<PetMessageAction>? onActionSelected;
 
-  Widget _bubble(PetBubbleTailPosition tail, double maxWidth) =>
-      PetComicSpeechBubble(
-        message: message,
-        tailPosition: tail,
-        maxWidth: maxWidth,
-        onDismiss: controller.dismiss,
-        onAction: () {
-          if (message.action != null) {
-            controller.dismiss();
-            onActionSelected?.call(message.action!);
-          }
-        },
-      );
+  Widget _bubble(PetBubbleTailPosition tail, double maxWidth) => PetComicSpeechBubble(
+    message: message,
+    translate: Translator.translate,
+    dismissTooltip: Translator.translate(AppStrings.companionDismissTooltip),
+    tailPosition: tail,
+    maxWidth: maxWidth,
+    onDismiss: controller.dismiss,
+    onAction: () {
+      if (message.action != null) {
+        controller.dismiss();
+        onActionSelected?.call(message.action!);
+      }
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
     final resolvedAnchor = anchor;
     if (resolvedAnchor == null) {
-      return Align(
-        alignment: Alignment.topCenter,
-        child: _bubble(PetBubbleTailPosition.bottomLeft, 360),
-      );
+      return Align(alignment: Alignment.topCenter, child: _bubble(PetBubbleTailPosition.bottomLeft, 360));
     }
 
-    final placement = PetBubblePlacement.resolve(
-      context,
-      resolvedAnchor.boxKey,
-    );
+    final placement = PetBubblePlacement.resolve(context, resolvedAnchor.boxKey);
     return CompositedTransformFollower(
       link: resolvedAnchor.link,
       showWhenUnlinked: false,
@@ -235,9 +224,7 @@ class PetBubblePlacement {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final renderObject = anchorKey.currentContext?.findRenderObject();
 
-    if (renderObject is! RenderBox ||
-        !renderObject.attached ||
-        !renderObject.hasSize) {
+    if (renderObject is! RenderBox || !renderObject.attached || !renderObject.hasSize) {
       // The anchor hasn't laid out yet (should be rare — Pet visuals mount
       // well before any event-driven message can fire). Fall back to a
       // reasonable default rather than crashing.
@@ -255,19 +242,14 @@ class PetBubblePlacement {
     final anchorCenterX = anchorTopLeft.dx + anchorSize.width / 2;
     final placeBelow = anchorTopLeft.dy < _minSpaceAboveForTopPlacement;
 
-    final horizontalFraction = screenWidth <= 0
-        ? 0.5
-        : anchorCenterX / screenWidth;
+    final horizontalFraction = screenWidth <= 0 ? 0.5 : anchorCenterX / screenWidth;
     final side = horizontalFraction < 0.4
         ? _PetAnchorSide.left
-        : (horizontalFraction > 0.6
-              ? _PetAnchorSide.right
-              : _PetAnchorSide.center);
+        : (horizontalFraction > 0.6 ? _PetAnchorSide.right : _PetAnchorSide.center);
 
     final maxWidthRaw = switch (side) {
       _PetAnchorSide.left => screenWidth - anchorTopLeft.dx - _horizontalMargin,
-      _PetAnchorSide.right =>
-        anchorTopLeft.dx + anchorSize.width - _horizontalMargin,
+      _PetAnchorSide.right => anchorTopLeft.dx + anchorSize.width - _horizontalMargin,
       _PetAnchorSide.center => screenWidth - _horizontalMargin * 2,
     };
 
@@ -280,31 +262,24 @@ class PetBubblePlacement {
     );
   }
 
-  static Alignment _targetAnchorFor(_PetAnchorSide side, bool below) =>
-      switch (side) {
-        _PetAnchorSide.left => below ? Alignment.bottomLeft : Alignment.topLeft,
-        _PetAnchorSide.right =>
-          below ? Alignment.bottomRight : Alignment.topRight,
-        _PetAnchorSide.center =>
-          below ? Alignment.bottomCenter : Alignment.topCenter,
-      };
+  static Alignment _targetAnchorFor(_PetAnchorSide side, bool below) => switch (side) {
+    _PetAnchorSide.left => below ? Alignment.bottomLeft : Alignment.topLeft,
+    _PetAnchorSide.right => below ? Alignment.bottomRight : Alignment.topRight,
+    _PetAnchorSide.center => below ? Alignment.bottomCenter : Alignment.topCenter,
+  };
 
-  static Alignment _followerAnchorFor(_PetAnchorSide side, bool below) =>
-      switch (side) {
-        _PetAnchorSide.left => below ? Alignment.topLeft : Alignment.bottomLeft,
-        _PetAnchorSide.right =>
-          below ? Alignment.topRight : Alignment.bottomRight,
-        _PetAnchorSide.center =>
-          below ? Alignment.topCenter : Alignment.bottomCenter,
-      };
+  static Alignment _followerAnchorFor(_PetAnchorSide side, bool below) => switch (side) {
+    _PetAnchorSide.left => below ? Alignment.topLeft : Alignment.bottomLeft,
+    _PetAnchorSide.right => below ? Alignment.topRight : Alignment.bottomRight,
+    _PetAnchorSide.center => below ? Alignment.topCenter : Alignment.bottomCenter,
+  };
 
-  static PetBubbleTailPosition _tailFor(_PetAnchorSide side, bool below) =>
-      switch ((side, below)) {
-        (_PetAnchorSide.left, false) => PetBubbleTailPosition.bottomLeft,
-        (_PetAnchorSide.left, true) => PetBubbleTailPosition.topLeft,
-        (_PetAnchorSide.right, false) => PetBubbleTailPosition.bottomRight,
-        (_PetAnchorSide.right, true) => PetBubbleTailPosition.topRight,
-        (_PetAnchorSide.center, false) => PetBubbleTailPosition.bottomCenter,
-        (_PetAnchorSide.center, true) => PetBubbleTailPosition.topCenter,
-      };
+  static PetBubbleTailPosition _tailFor(_PetAnchorSide side, bool below) => switch ((side, below)) {
+    (_PetAnchorSide.left, false) => PetBubbleTailPosition.bottomLeft,
+    (_PetAnchorSide.left, true) => PetBubbleTailPosition.topLeft,
+    (_PetAnchorSide.right, false) => PetBubbleTailPosition.bottomRight,
+    (_PetAnchorSide.right, true) => PetBubbleTailPosition.topRight,
+    (_PetAnchorSide.center, false) => PetBubbleTailPosition.bottomCenter,
+    (_PetAnchorSide.center, true) => PetBubbleTailPosition.topCenter,
+  };
 }

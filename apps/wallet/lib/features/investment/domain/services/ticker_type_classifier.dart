@@ -1,4 +1,4 @@
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Best-effort classification of a B3 ticker's asset type from its suffix,
 /// mirroring the backend heuristic in `AssetDetailsResponseMapper
@@ -23,10 +23,32 @@ class TickerTypeClassifier {
   /// unlisted "11" ticker still defaults to FII below, same as the
   /// backend's `detectAssetTypeFromTicker` heuristic.
   static const Set<String> _knownEtfTickers = {
-    'BOVA11', 'IVVB11', 'SMAL11', 'SPXI11', 'DIVO11', 'FIND11', 'GOLD11',
-    'HASH11', 'WRLD11', 'BBSD11', 'MATB11', 'ISUS11', 'PIBB11', 'XBOV11',
-    'ECOO11', 'BRAX11', 'XINA11', 'ASIA11', 'EURP11', 'USTK11', 'NASD11',
-    'URA11', 'ACWI11', 'IMAB11', 'FIXA11', 'B5MB11',
+    'BOVA11',
+    'IVVB11',
+    'SMAL11',
+    'SPXI11',
+    'DIVO11',
+    'FIND11',
+    'GOLD11',
+    'HASH11',
+    'WRLD11',
+    'BBSD11',
+    'MATB11',
+    'ISUS11',
+    'PIBB11',
+    'XBOV11',
+    'ECOO11',
+    'BRAX11',
+    'XINA11',
+    'ASIA11',
+    'EURP11',
+    'USTK11',
+    'NASD11',
+    'URA11',
+    'ACWI11',
+    'IMAB11',
+    'FIXA11',
+    'B5MB11',
   };
 
   static InvestmentTypeEnum? classify(String rawTicker) {

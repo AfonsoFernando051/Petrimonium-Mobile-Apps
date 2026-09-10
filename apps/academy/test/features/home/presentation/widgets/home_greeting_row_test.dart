@@ -12,7 +12,9 @@ void main() {
   Widget buildTestable({String? userName, int? streakDays}) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: HomeGreetingRow(userName: userName, streakDays: streakDays)),
+      home: Scaffold(
+        body: HomeGreetingRow(userName: userName, streakDays: streakDays),
+      ),
     );
   }
 

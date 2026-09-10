@@ -7,33 +7,27 @@ import 'package:petrimonium_academy/features/academy/presentation/widgets/wallet
 void main() {
   setUp(() => Translator.currentLanguage = 'en');
 
-  Widget wrap(Widget child) =>
-      MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    theme: AppTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   group('WalletBridgeCta', () {
-    testWidgets(
-      'shows the real-portfolio label and is tappable when onOpenWallet is provided',
-      (tester) async {
-        var tapped = false;
-        await tester.pumpWidget(
-          wrap(WalletBridgeCta(onOpenWallet: () => tapped = true)),
-        );
+    testWidgets('shows the real-portfolio label and is tappable when onOpenWallet is provided', (tester) async {
+      var tapped = false;
+      await tester.pumpWidget(wrap(WalletBridgeCta(onOpenWallet: () => tapped = true)));
 
-        expect(find.text('See this in your real portfolio'), findsOneWidget);
-        await tester.tap(find.byType(WalletBridgeCta));
-        expect(tapped, isTrue);
-      },
-    );
+      expect(find.text('See this in your real portfolio'), findsOneWidget);
+      await tester.tap(find.byType(WalletBridgeCta));
+      expect(tapped, isTrue);
+    });
 
-    testWidgets(
-      'shows a disabled "coming soon" state when onOpenWallet is null — never a broken link',
-      (tester) async {
-        await tester.pumpWidget(wrap(const WalletBridgeCta(onOpenWallet: null)));
+    testWidgets('shows a disabled "coming soon" state when onOpenWallet is null — never a broken link', (tester) async {
+      await tester.pumpWidget(wrap(const WalletBridgeCta(onOpenWallet: null)));
 
-        expect(find.text('Coming soon in Wallet'), findsOneWidget);
-        final button = tester.widget<TextButton>(find.byType(TextButton));
-        expect(button.onPressed, isNull);
-      },
-    );
+      expect(find.text('Coming soon in Wallet'), findsOneWidget);
+      final button = tester.widget<TextButton>(find.byType(TextButton));
+      expect(button.onPressed, isNull);
+    });
   });
 }

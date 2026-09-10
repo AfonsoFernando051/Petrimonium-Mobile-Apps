@@ -79,38 +79,29 @@ void main() {
   });
 
   group('isPortfolioStepDone / isPortfolioConnected', () {
-    test(
-      'both default to false — the step is unresolved until the user acts',
-      () async {
-        expect(await repository.isPortfolioStepDone(), isFalse);
-        expect(await repository.isPortfolioConnected(), isFalse);
-      },
-    );
+    test('both default to false — the step is unresolved until the user acts', () async {
+      expect(await repository.isPortfolioStepDone(), isFalse);
+      expect(await repository.isPortfolioConnected(), isFalse);
+    });
 
-    test(
-      'markPortfolioConnected resolves the step as connected and clears any prior skip',
-      () async {
-        await repository.markPortfolioSkipped(now: DateTime(2024, 1, 1));
-        await repository.markPortfolioConnected();
+    test('markPortfolioConnected resolves the step as connected and clears any prior skip', () async {
+      await repository.markPortfolioSkipped(now: DateTime(2024, 1, 1));
+      await repository.markPortfolioConnected();
 
-        expect(await repository.isPortfolioStepDone(), isTrue);
-        expect(await repository.isPortfolioConnected(), isTrue);
-        // A stale skip timestamp must not survive a later connect — otherwise
-        // shouldShowPortfolioReminder could still fire for a user who already
-        // connected their portfolio.
-        expect(await repository.shouldShowPortfolioReminder(), isFalse);
-      },
-    );
+      expect(await repository.isPortfolioStepDone(), isTrue);
+      expect(await repository.isPortfolioConnected(), isTrue);
+      // A stale skip timestamp must not survive a later connect — otherwise
+      // shouldShowPortfolioReminder could still fire for a user who already
+      // connected their portfolio.
+      expect(await repository.shouldShowPortfolioReminder(), isFalse);
+    });
 
-    test(
-      'markPortfolioSkipped resolves the step as done but not connected',
-      () async {
-        await repository.markPortfolioSkipped(now: DateTime(2024, 1, 1));
+    test('markPortfolioSkipped resolves the step as done but not connected', () async {
+      await repository.markPortfolioSkipped(now: DateTime(2024, 1, 1));
 
-        expect(await repository.isPortfolioStepDone(), isTrue);
-        expect(await repository.isPortfolioConnected(), isFalse);
-      },
-    );
+      expect(await repository.isPortfolioStepDone(), isTrue);
+      expect(await repository.isPortfolioConnected(), isFalse);
+    });
   });
 
   group('incrementSessionCount / currentSessionCount', () {
@@ -126,84 +117,66 @@ void main() {
   });
 
   group('shouldShowPortfolioReminder', () {
-    test(
-      'never true if the user never reached/skipped the portfolio step',
-      () async {
-        for (var i = 0; i < kPortfolioReminderAfterSessions + 5; i++) {
-          await repository.incrementSessionCount();
-        }
-        expect(await repository.shouldShowPortfolioReminder(), isFalse);
-      },
-    );
-
-    test(
-      'never true if the user connected a portfolio (not skipped)',
-      () async {
-        await repository.markPortfolioConnected();
-        for (var i = 0; i < kPortfolioReminderAfterSessions + 5; i++) {
-          await repository.incrementSessionCount();
-        }
-        expect(await repository.shouldShowPortfolioReminder(), isFalse);
-      },
-    );
-
-    test(
-      'false before kPortfolioReminderAfterSessions sessions have passed since skipping',
-      () async {
-        await repository.markPortfolioSkipped();
-        for (var i = 0; i < kPortfolioReminderAfterSessions - 1; i++) {
-          await repository.incrementSessionCount();
-        }
-        expect(await repository.shouldShowPortfolioReminder(), isFalse);
-      },
-    );
-
-    test(
-      'true once kPortfolioReminderAfterSessions sessions have passed since skipping',
-      () async {
-        await repository.markPortfolioSkipped();
-        for (var i = 0; i < kPortfolioReminderAfterSessions; i++) {
-          await repository.incrementSessionCount();
-        }
-        expect(await repository.shouldShowPortfolioReminder(), isTrue);
-      },
-    );
-
-    test(
-      'false again immediately after being shown (before the cooldown elapses)',
-      () async {
-        await repository.markPortfolioSkipped();
-        int session = 0;
-        for (var i = 0; i < kPortfolioReminderAfterSessions; i++) {
-          session = await repository.incrementSessionCount();
-        }
-        expect(await repository.shouldShowPortfolioReminder(), isTrue);
-        await repository.markReminderShown(session);
-
-        expect(await repository.shouldShowPortfolioReminder(), isFalse);
-      },
-    );
-
-    test(
-      'true again once kPortfolioReminderCooldownSessions have passed since the last reminder',
-      () async {
-        await repository.markPortfolioSkipped();
-        int session = 0;
-        for (var i = 0; i < kPortfolioReminderAfterSessions; i++) {
-          session = await repository.incrementSessionCount();
-        }
-        await repository.markReminderShown(session);
-        expect(await repository.shouldShowPortfolioReminder(), isFalse);
-
-        for (var i = 0; i < kPortfolioReminderCooldownSessions - 1; i++) {
-          await repository.incrementSessionCount();
-        }
-        expect(await repository.shouldShowPortfolioReminder(), isFalse);
-
+    test('never true if the user never reached/skipped the portfolio step', () async {
+      for (var i = 0; i < kPortfolioReminderAfterSessions + 5; i++) {
         await repository.incrementSessionCount();
-        expect(await repository.shouldShowPortfolioReminder(), isTrue);
-      },
-    );
+      }
+      expect(await repository.shouldShowPortfolioReminder(), isFalse);
+    });
+
+    test('never true if the user connected a portfolio (not skipped)', () async {
+      await repository.markPortfolioConnected();
+      for (var i = 0; i < kPortfolioReminderAfterSessions + 5; i++) {
+        await repository.incrementSessionCount();
+      }
+      expect(await repository.shouldShowPortfolioReminder(), isFalse);
+    });
+
+    test('false before kPortfolioReminderAfterSessions sessions have passed since skipping', () async {
+      await repository.markPortfolioSkipped();
+      for (var i = 0; i < kPortfolioReminderAfterSessions - 1; i++) {
+        await repository.incrementSessionCount();
+      }
+      expect(await repository.shouldShowPortfolioReminder(), isFalse);
+    });
+
+    test('true once kPortfolioReminderAfterSessions sessions have passed since skipping', () async {
+      await repository.markPortfolioSkipped();
+      for (var i = 0; i < kPortfolioReminderAfterSessions; i++) {
+        await repository.incrementSessionCount();
+      }
+      expect(await repository.shouldShowPortfolioReminder(), isTrue);
+    });
+
+    test('false again immediately after being shown (before the cooldown elapses)', () async {
+      await repository.markPortfolioSkipped();
+      int session = 0;
+      for (var i = 0; i < kPortfolioReminderAfterSessions; i++) {
+        session = await repository.incrementSessionCount();
+      }
+      expect(await repository.shouldShowPortfolioReminder(), isTrue);
+      await repository.markReminderShown(session);
+
+      expect(await repository.shouldShowPortfolioReminder(), isFalse);
+    });
+
+    test('true again once kPortfolioReminderCooldownSessions have passed since the last reminder', () async {
+      await repository.markPortfolioSkipped();
+      int session = 0;
+      for (var i = 0; i < kPortfolioReminderAfterSessions; i++) {
+        session = await repository.incrementSessionCount();
+      }
+      await repository.markReminderShown(session);
+      expect(await repository.shouldShowPortfolioReminder(), isFalse);
+
+      for (var i = 0; i < kPortfolioReminderCooldownSessions - 1; i++) {
+        await repository.incrementSessionCount();
+      }
+      expect(await repository.shouldShowPortfolioReminder(), isFalse);
+
+      await repository.incrementSessionCount();
+      expect(await repository.shouldShowPortfolioReminder(), isTrue);
+    });
   });
 
   group('hasSeenPortfolioActivation / markPortfolioActivationSeen', () {

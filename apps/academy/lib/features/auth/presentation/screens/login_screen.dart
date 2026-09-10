@@ -8,13 +8,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          LoginBackground(),
-          LoginCard(),
-        ],
-      ),
+      body: Stack(fit: StackFit.expand, children: [LoginBackground(), LoginCard()]),
     );
   }
 }

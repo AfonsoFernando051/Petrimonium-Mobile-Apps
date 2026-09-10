@@ -10,10 +10,7 @@ void main() {
     Translator.currentLanguage = 'pt';
   });
 
-  Widget buildTestableWidget({
-    PetSpecieEnum selected = PetSpecieEnum.WOLF,
-    ValueChanged<PetSpecieEnum>? onSelected,
-  }) {
+  Widget buildTestableWidget({PetSpecieEnum selected = PetSpecieEnum.WOLF, ValueChanged<PetSpecieEnum>? onSelected}) {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
@@ -49,17 +46,17 @@ void main() {
         PetSpecieEnum.LION,
       ];
       expect(PetSpecieEnumExtension.displayOrder, expected);
-      expect(PetSpecieEnumExtension.displayOrder.toSet(), PetSpecieEnum.values.toSet(),
-          reason: 'nenhuma espécie pode ficar de fora do seletor');
+      expect(
+        PetSpecieEnumExtension.displayOrder.toSet(),
+        PetSpecieEnum.values.toSet(),
+        reason: 'nenhuma espécie pode ficar de fora do seletor',
+      );
 
-      final positions = [
-        for (final s in expected) tester.getTopLeft(find.text(s.displayLabel)),
-      ];
+      final positions = [for (final s in expected) tester.getTopLeft(find.text(s.displayLabel))];
       for (var i = 1; i < positions.length; i++) {
         final previous = positions[i - 1];
         final current = positions[i];
-        final laterInReadingOrder =
-            current.dy > previous.dy || (current.dy == previous.dy && current.dx > previous.dx);
+        final laterInReadingOrder = current.dy > previous.dy || (current.dy == previous.dy && current.dx > previous.dx);
         expect(laterInReadingOrder, isTrue, reason: '${expected[i].name} veio antes de ${expected[i - 1].name}');
       }
     });

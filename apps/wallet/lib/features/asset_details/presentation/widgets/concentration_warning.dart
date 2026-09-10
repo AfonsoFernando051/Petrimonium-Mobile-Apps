@@ -32,11 +32,7 @@ class ConcentrationWarning extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   'Concentração',
-                  style: TextStyle(
-                    color: tokens.warning,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: tokens.warning, fontWeight: FontWeight.bold, fontSize: 13),
                 ),
               ],
             ),
@@ -50,11 +46,7 @@ class ConcentrationWarning extends StatelessWidget {
             Text(
               'Concentração não é automaticamente ruim, mas é útil entender '
               'quanto do seu portfólio depende de um único ativo ou setor.',
-              style: TextStyle(
-                color: tokens.textTertiary,
-                fontSize: 11,
-                height: 1.4,
-              ),
+              style: TextStyle(color: tokens.textTertiary, fontSize: 11, height: 1.4),
             ),
           ],
         ),

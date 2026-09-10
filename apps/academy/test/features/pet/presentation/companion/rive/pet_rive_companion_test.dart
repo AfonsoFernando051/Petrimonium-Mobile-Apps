@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/rive/pet_rive_companion.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
@@ -29,9 +24,7 @@ class FakeMascotRepository implements MascotRepository {
   @override
   Future<void> saveNetWorth(double netWorth) async {}
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
   @override
@@ -58,43 +51,29 @@ Future<MascotController> _catController(FakeMascotRepository repository) async {
 }
 
 void main() {
-  testWidgets(
-    'falls back to PetMascotWidget when no .riv asset exists for the species',
-    (tester) async {
-      final controller = await _catController(FakeMascotRepository());
+  testWidgets('falls back to PetMascotWidget when no .riv asset exists for the species', (tester) async {
+    final controller = await _catController(FakeMascotRepository());
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: PetRiveCompanion(controller: controller, size: 48),
-        ),
-      );
-      // Let the failed RiveFile.asset() future resolve — PetMascotWidget's
-      // own looping breathe animation means pumpAndSettle would never
-      // return, so a bounded pump is used instead.
-      await tester.pump();
-      await tester.pump();
+    await tester.pumpWidget(MaterialApp(home: PetRiveCompanion(controller: controller, size: 48)));
+    // Let the failed RiveFile.asset() future resolve — PetMascotWidget's
+    // own looping breathe animation means pumpAndSettle would never
+    // return, so a bounded pump is used instead.
+    await tester.pump();
+    await tester.pump();
 
-      expect(find.byType(PetMascotWidget), findsOneWidget);
-      expect(find.byType(RiveAnimation), findsNothing);
-    },
-  );
+    expect(find.byType(PetMascotWidget), findsOneWidget);
+    expect(find.byType(RiveAnimation), findsNothing);
+  });
 
-  testWidgets(
-    'does not throw when the widget is disposed while the asset load is in flight',
-    (tester) async {
-      final controller = await _catController(FakeMascotRepository());
+  testWidgets('does not throw when the widget is disposed while the asset load is in flight', (tester) async {
+    final controller = await _catController(FakeMascotRepository());
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: PetRiveCompanion(controller: controller, size: 48),
-        ),
-      );
-      // Unmount immediately, before the async load future resolves.
-      await tester.pumpWidget(const MaterialApp(home: SizedBox()));
-      await tester.pump();
-      await tester.pump();
+    await tester.pumpWidget(MaterialApp(home: PetRiveCompanion(controller: controller, size: 48)));
+    // Unmount immediately, before the async load future resolves.
+    await tester.pumpWidget(const MaterialApp(home: SizedBox()));
+    await tester.pump();
+    await tester.pump();
 
-      expect(tester.takeException(), isNull);
-    },
-  );
+    expect(tester.takeException(), isNull);
+  });
 }

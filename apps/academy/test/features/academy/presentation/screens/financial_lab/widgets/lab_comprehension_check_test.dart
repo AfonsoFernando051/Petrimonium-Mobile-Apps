@@ -2,14 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_comprehension_check.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 class FakeMascotRepository implements MascotRepository {
@@ -26,9 +20,7 @@ class FakeMascotRepository implements MascotRepository {
   @override
   Future<void> saveNetWorth(double netWorth) async {}
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
   @override
@@ -48,58 +40,50 @@ void main() {
     explanation: 'Explicação de teste.',
   );
 
-  Widget wrap(Widget child) =>
-      MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    theme: AppTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   group('LabComprehensionCheck', () {
-    testWidgets(
-      'picking the wrong option shows feedback but does not fire onAnsweredCorrectly',
-      (tester) async {
-        var fired = false;
-        await tester.pumpWidget(
-          wrap(
-            LabComprehensionCheck(
-              step: step,
-              mascotController: MascotController(
-                repository: FakeMascotRepository(),
-              ),
-              onAnsweredCorrectly: () => fired = true,
-            ),
+    testWidgets('picking the wrong option shows feedback but does not fire onAnsweredCorrectly', (tester) async {
+      var fired = false;
+      await tester.pumpWidget(
+        wrap(
+          LabComprehensionCheck(
+            step: step,
+            mascotController: MascotController(repository: FakeMascotRepository()),
+            onAnsweredCorrectly: () => fired = true,
           ),
-        );
+        ),
+      );
 
-        await tester.tap(find.text('Errada'));
-        await tester.pump();
+      await tester.tap(find.text('Errada'));
+      await tester.pump();
 
-        expect(find.text('Explicação de teste.'), findsOneWidget);
-        expect(fired, isFalse);
-        // Options stay tappable after a wrong answer (no-punishment retry).
-        expect(find.text('Certa'), findsOneWidget);
-      },
-    );
+      expect(find.text('Explicação de teste.'), findsOneWidget);
+      expect(fired, isFalse);
+      // Options stay tappable after a wrong answer (no-punishment retry).
+      expect(find.text('Certa'), findsOneWidget);
+    });
 
-    testWidgets(
-      'picking the correct option fires onAnsweredCorrectly exactly once',
-      (tester) async {
-        var fireCount = 0;
-        await tester.pumpWidget(
-          wrap(
-            LabComprehensionCheck(
-              step: step,
-              mascotController: MascotController(
-                repository: FakeMascotRepository(),
-              ),
-              onAnsweredCorrectly: () => fireCount++,
-            ),
+    testWidgets('picking the correct option fires onAnsweredCorrectly exactly once', (tester) async {
+      var fireCount = 0;
+      await tester.pumpWidget(
+        wrap(
+          LabComprehensionCheck(
+            step: step,
+            mascotController: MascotController(repository: FakeMascotRepository()),
+            onAnsweredCorrectly: () => fireCount++,
           ),
-        );
+        ),
+      );
 
-        await tester.tap(find.text('Certa'));
-        await tester.pump();
+      await tester.tap(find.text('Certa'));
+      await tester.pump();
 
-        expect(fireCount, 1);
-        expect(find.text('Explicação de teste.'), findsOneWidget);
-      },
-    );
+      expect(fireCount, 1);
+      expect(find.text('Explicação de teste.'), findsOneWidget);
+    });
   });
 }

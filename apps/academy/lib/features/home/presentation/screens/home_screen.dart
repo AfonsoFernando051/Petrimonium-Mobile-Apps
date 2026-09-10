@@ -1,12 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/all_modules_screen.dart';
@@ -22,12 +22,9 @@ import 'package:petrimonium_academy/features/home/presentation/widgets/next_acti
 import 'package:petrimonium_academy/features/home/presentation/widgets/learning_hero_card.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_context.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/services/mission_display_catalog.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/mission_display_catalog.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/controllers/portfolio_controller.dart';
-import 'package:petrimonium_academy/features/portfolio/presentation/widgets/shared/error_banner.dart';
 
 /// Home — the app's learning-first orchestration layer
 /// (`docs/PRODUCT_VISION.md` §8): where the user is in their learning
@@ -120,9 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // is known, so Home isn't silent just because no level-up is imminent
   // (`PetMessageCatalog._homeNudge`'s fallback).
   void _notifyCompanionOnce() {
-    if (_companionNotified ||
-        _academyController.isLoading ||
-        _academyController.isCatalogLoading) {
+    if (_companionNotified || _academyController.isLoading || _academyController.isCatalogLoading) {
       return;
     }
     final reviewCount = _academyController.reviewQueue.length;
@@ -219,64 +214,50 @@ class _HomeScreenState extends State<HomeScreen> {
   Route _fadeRoute(Widget page) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: Tween(begin: const Offset(0, 0.04), end: Offset.zero)
-                  .animate(
-                    CurvedAnimation(parent: animation, curve: Curves.easeOut),
-                  ),
-              child: child,
-            ),
-          ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+        opacity: animation,
+        child: SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+          child: child,
+        ),
+      ),
       transitionDuration: const Duration(milliseconds: 350),
     );
   }
 
   Future<void> _startLesson(Lesson lesson) async {
-    HapticFeedback.selectionClick();
+    unawaited(HapticFeedback.selectionClick());
     await Navigator.of(context).push(
       _fadeRoute(
-        LessonScreen(
-          lesson: lesson,
-          catalog: _academyController.snapshot!,
-          mascotController: widget.mascotController,
-        ),
+        LessonScreen(lesson: lesson, catalog: _academyController.snapshot!, mascotController: widget.mascotController),
       ),
     );
-    _academyController.load();
+    unawaited(_academyController.load());
   }
 
   Future<void> _openModule(AcademyModule module) async {
-    HapticFeedback.selectionClick();
-    await Navigator.of(context).push(
-      _fadeRoute(
-        ModuleDetailScreen(
-          module: module,
-          mascotController: widget.mascotController,
-        ),
-      ),
-    );
-    _academyController.load();
+    unawaited(HapticFeedback.selectionClick());
+    await Navigator.of(
+      context,
+    ).push(_fadeRoute(ModuleDetailScreen(module: module, mascotController: widget.mascotController)));
+    unawaited(_academyController.load());
   }
 
   Future<void> _openAllModules() async {
-    HapticFeedback.selectionClick();
-    await Navigator.of(context).push(
-      _fadeRoute(AllModulesScreen(mascotController: widget.mascotController)),
-    );
-    _academyController.load();
+    unawaited(HapticFeedback.selectionClick());
+    await Navigator.of(context).push(_fadeRoute(AllModulesScreen(mascotController: widget.mascotController)));
+    unawaited(_academyController.load());
   }
 
   /// Only the `review` recommendation, if any — `continueLearning` is
   /// already this screen's `NextActionCard` (when nothing more urgent
   /// outranks it), so showing it again here would be redundant (brief's own
   /// "one primary action per screen" principle).
-  List<AcademyRecommendation> get _reviewRecommendations => _academyController
-      .recommendations
-      .where((r) => r.type == RecommendationType.review)
-      .toList();
+  List<AcademyRecommendation> get _reviewRecommendations =>
+      _academyController.recommendations.where((r) => r.type == RecommendationType.review).toList();
 
   void _tapModuleChip(AcademyModule module) {
     final status = _academyController.statusFor(module);
@@ -290,29 +271,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final portfolioController = widget.portfolioController;
 
-    if (portfolioController.isLoading &&
-        portfolioController.holdings.isEmpty &&
-        portfolioController.error == null) {
+    if (portfolioController.isLoading && portfolioController.holdings.isEmpty && portfolioController.error == null) {
       return const AppLoadingIndicator();
     }
 
     return RefreshIndicator(
       color: context.colors.primary,
       backgroundColor: context.colors.surfaceElevated,
-      onRefresh: () => Future.wait([
-        portfolioController.refresh(),
-        _academyController.load(),
-      ]),
+      onRefresh: () => Future.wait([portfolioController.refresh(), _academyController.load()]),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            HomeGreetingRow(
-              userName: _userName,
-              streakDays: portfolioController.gamificationSummary?.currentStreak,
-            ),
+            HomeGreetingRow(userName: _userName, streakDays: portfolioController.gamificationSummary?.currentStreak),
             const SizedBox(height: 16),
 
             if (_mentorInsight != null) ...[
@@ -329,9 +302,11 @@ class _HomeScreenState extends State<HomeScreen> {
             // otherwise a `nextLesson == null` reads as "every lesson
             // complete" below, which would be misleading during a transient
             // fetch failure that still has cached content to show.
-            if (_academyController.catalogError != null &&
-                _academyController.snapshot == null) ...[
-              ErrorBanner(onRetry: _academyController.load),
+            if (_academyController.catalogError != null && _academyController.snapshot == null) ...[
+              ErrorBanner(
+                message: 'Não foi possível atualizar seus dados. Puxe para atualizar.',
+                onRetry: _academyController.load,
+              ),
               const SizedBox(height: 12),
             ],
 
@@ -345,19 +320,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
 
-            LearningHeroCard(
-              mascotController: widget.mascotController,
-              anchor: widget.heroAnchor,
-            ),
+            LearningHeroCard(mascotController: widget.mascotController, anchor: widget.heroAnchor),
             const SizedBox(height: 16),
 
-            if (!_academyController.isLoading &&
-                !_academyController.isCatalogLoading) ...[
+            if (!_academyController.isLoading && !_academyController.isCatalogLoading) ...[
               KnowledgeMapStrip(
                 modules: _academyController.modules,
                 statusFor: _academyController.statusFor,
-                completedLessonCountFor:
-                    _academyController.completedLessonCountFor,
+                completedLessonCountFor: _academyController.completedLessonCountFor,
                 onTapModule: _tapModuleChip,
                 onViewAll: _openAllModules,
               ),
@@ -365,10 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
 
             if (_reviewRecommendations.isNotEmpty) ...[
-              RecommendedForYouSection(
-                recommendations: _reviewRecommendations,
-                onTapLesson: _startLesson,
-              ),
+              RecommendedForYouSection(recommendations: _reviewRecommendations, onTapLesson: _startLesson),
               const SizedBox(height: 16),
             ],
 

@@ -5,7 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/features/investment/data/datasources/investment_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/investment/data/models/asset_registration_model.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
 
@@ -34,10 +34,9 @@ void main() {
 
       // Unconfirmed by default: the backend's destructive-replace guard is what
       // protects a caller that hasn't seen the current portfolio.
-      verify(() => mockApiClient.post(
-            '/api/investments/configure?confirmReplace=false',
-            [investment.toJson()],
-          )).called(1);
+      verify(
+        () => mockApiClient.post('/api/investments/configure?confirmReplace=false', [investment.toJson()]),
+      ).called(1);
     });
 
     test('sends confirmReplace=true when the caller acknowledges the replacement', () async {
@@ -45,27 +44,23 @@ void main() {
 
       await dataSource.configureInvestments([investment], confirmReplace: true);
 
-      verify(() => mockApiClient.post(
-            '/api/investments/configure?confirmReplace=true',
-            [investment.toJson()],
-          )).called(1);
+      verify(
+        () => mockApiClient.post('/api/investments/configure?confirmReplace=true', [investment.toJson()]),
+      ).called(1);
     });
 
     test('throws an Exception on a non-200 response', () async {
       when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 400));
 
-      await expectLater(
-        () => dataSource.configureInvestments([investment]),
-        throwsA(isA<Exception>()),
-      );
+      await expectLater(() => dataSource.configureInvestments([investment]), throwsA(isA<Exception>()));
     });
   });
 
   group('fetchQuote', () {
     test('returns the decoded JSON on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer(
-        (_) async => http.Response(jsonEncode({'ticker': 'PETR4', 'price': 32.5}), 200),
-      );
+      when(
+        () => mockApiClient.get(any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'ticker': 'PETR4', 'price': 32.5}), 200));
 
       final result = await dataSource.fetchQuote('PETR4');
 

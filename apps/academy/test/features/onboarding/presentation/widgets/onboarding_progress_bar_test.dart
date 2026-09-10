@@ -7,7 +7,9 @@ void main() {
   Widget buildTestable(int step, int total) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: OnboardingProgressBar(step: step, total: total)),
+      home: Scaffold(
+        body: OnboardingProgressBar(step: step, total: total),
+      ),
     );
   }
 

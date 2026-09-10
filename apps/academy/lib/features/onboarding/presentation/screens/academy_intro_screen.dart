@@ -5,7 +5,7 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/gamification_intro_screen.dart';
@@ -55,15 +55,11 @@ class _AcademyIntroScreenState extends State<AcademyIntroScreen> {
   }
 
   void _goNext(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const GamificationIntroScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GamificationIntroScreen()));
   }
 
   void _skip(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const FinancialGoalScreen()),
-    );
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const FinancialGoalScreen()));
   }
 
   @override
@@ -149,10 +145,7 @@ class _TrackStep extends StatelessWidget {
                   ),
                 ),
               ),
-              if (!isLast)
-                Expanded(
-                  child: Container(width: 1.5, color: tokens.textPrimary.withValues(alpha: 0.12)),
-                ),
+              if (!isLast) Expanded(child: Container(width: 1.5, color: tokens.textPrimary.withValues(alpha: 0.12))),
             ],
           ),
           const SizedBox(width: 14),

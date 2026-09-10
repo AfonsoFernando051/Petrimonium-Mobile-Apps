@@ -1,8 +1,6 @@
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_domain.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/knowledge_level.dart';
 
 /// Derives **Knowledge Progress** — how much of the curriculum the learner
@@ -25,17 +23,11 @@ class KnowledgeProgressCalculator {
   const KnowledgeProgressCalculator._();
 
   static double overallCompletionPercent(AcademyCatalogSnapshot catalog, Set<String> completedLessonIds) {
-    return _completionPercent(
-      catalog.modules.where((m) => m.contentAvailable),
-      completedLessonIds,
-    );
+    return _completionPercent(catalog.modules.where((m) => m.contentAvailable), completedLessonIds);
   }
 
   static double percentForSchool(AcademyCatalogSnapshot catalog, String schoolId, Set<String> completedLessonIds) {
-    return _completionPercent(
-      catalog.modulesForSchool(schoolId).where((m) => m.contentAvailable),
-      completedLessonIds,
-    );
+    return _completionPercent(catalog.modulesForSchool(schoolId).where((m) => m.contentAvailable), completedLessonIds);
   }
 
   /// Same as [percentForSchool], aggregated across every school belonging to
@@ -43,9 +35,7 @@ class KnowledgeProgressCalculator {
   /// aggregation shape.
   static double percentForDomain(AcademyCatalogSnapshot catalog, AcademyDomain domain, Set<String> completedLessonIds) {
     return _completionPercent(
-      domain.schoolIds
-          .expand(catalog.modulesForSchool)
-          .where((m) => m.contentAvailable),
+      domain.schoolIds.expand(catalog.modulesForSchool).where((m) => m.contentAvailable),
       completedLessonIds,
     );
   }

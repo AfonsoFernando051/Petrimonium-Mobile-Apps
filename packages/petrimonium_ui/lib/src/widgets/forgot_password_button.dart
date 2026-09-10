@@ -17,11 +17,7 @@ class ForgotPasswordButton extends StatelessWidget {
       onTap: onTap,
       child: Text(
         label,
-        style: TextStyle(
-          color: textSecondary,
-          decoration: TextDecoration.underline,
-          decorationColor: textSecondary,
-        ),
+        style: TextStyle(color: textSecondary, decoration: TextDecoration.underline, decorationColor: textSecondary),
       ),
     );
   }

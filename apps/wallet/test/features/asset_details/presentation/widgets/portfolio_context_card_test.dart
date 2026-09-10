@@ -33,31 +33,18 @@ void main() {
     });
 
     testWidgets('renders portfolio weight and category for a stock', (tester) async {
-      const asset = AssetDetails(
-        ticker: 'PETR4',
-        shortName: 'Petrobras',
-        assetType: 'stock',
-        userPosition: position,
-      );
+      const asset = AssetDetails(ticker: 'PETR4', shortName: 'Petrobras', assetType: 'stock', userPosition: position);
 
       await tester.pumpWidget(buildTestableWidget(asset));
 
       expect(find.text('NA SUA CARTEIRA'), findsOneWidget);
-      expect(
-        find.text('Petrobras representa 12.3% do seu portfólio total.'),
-        findsOneWidget,
-      );
+      expect(find.text('Petrobras representa 12.3% do seu portfólio total.'), findsOneWidget);
       expect(find.text('Categoria: ações.'), findsOneWidget);
       expect(find.textContaining('Setor:'), findsNothing);
     });
 
     testWidgets('shows the sector line when sector is present', (tester) async {
-      const asset = AssetDetails(
-        ticker: 'HGLG11',
-        assetType: 'fii',
-        sector: 'Logística',
-        userPosition: position,
-      );
+      const asset = AssetDetails(ticker: 'HGLG11', assetType: 'fii', sector: 'Logística', userPosition: position);
 
       await tester.pumpWidget(buildTestableWidget(asset));
 

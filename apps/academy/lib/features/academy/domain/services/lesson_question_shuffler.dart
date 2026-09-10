@@ -1,7 +1,6 @@
 import 'dart:math';
 
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Creates a session-specific presentation of a lesson's choice questions.
 ///
@@ -38,10 +37,7 @@ class LessonQuestionShuffler {
     );
   }
 
-  static ChoiceQuestionStep _shuffleChoiceQuestion(
-    ChoiceQuestionStep step,
-    Random random,
-  ) {
+  static ChoiceQuestionStep _shuffleChoiceQuestion(ChoiceQuestionStep step, Random random) {
     // Invalid catalog data is already unusable as a question. Leaving it
     // untouched preserves the API payload for the existing validation/error
     // paths instead of silently associating a different option as correct.
@@ -51,9 +47,7 @@ class LessonQuestionShuffler {
 
     final indexedOptions = step.options.indexed.toList();
     _fisherYatesShuffle(indexedOptions, random);
-    final correctIndex = indexedOptions.indexWhere(
-      (option) => option.$1 == step.correctIndex,
-    );
+    final correctIndex = indexedOptions.indexWhere((option) => option.$1 == step.correctIndex);
 
     return ChoiceQuestionStep(
       framing: step.framing,

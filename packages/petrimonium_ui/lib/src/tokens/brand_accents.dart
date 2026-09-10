@@ -62,20 +62,14 @@ class PetrimoniumBrandAccents extends ThemeExtension<PetrimoniumBrandAccents> {
   }
 
   @override
-  PetrimoniumBrandAccents lerp(
-    ThemeExtension<PetrimoniumBrandAccents>? other,
-    double t,
-  ) {
+  PetrimoniumBrandAccents lerp(ThemeExtension<PetrimoniumBrandAccents>? other, double t) {
     if (other is! PetrimoniumBrandAccents) return this;
     // Gradients are lerped stop-by-stop where the two sides have the same
     // number of stops; when they don't, snapping at the midpoint is the only
     // honest answer (there is no meaningful blend between a 2-stop and a
     // 3-stop gradient) and avoids a RangeError mid-animation.
     final lerpedGradient = gradient.length == other.gradient.length
-        ? <Color>[
-            for (var i = 0; i < gradient.length; i++)
-              Color.lerp(gradient[i], other.gradient[i], t)!,
-          ]
+        ? <Color>[for (var i = 0; i < gradient.length; i++) Color.lerp(gradient[i], other.gradient[i], t)!]
         : (t < 0.5 ? gradient : other.gradient);
     return PetrimoniumBrandAccents(
       gradient: lerpedGradient,

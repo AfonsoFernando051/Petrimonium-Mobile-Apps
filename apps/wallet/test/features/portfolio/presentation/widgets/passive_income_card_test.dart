@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/passive_income_estimate.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/passive_income_card.dart';
 
 void main() {
   Widget buildTestableWidget(PassiveIncomeEstimate estimate) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: SingleChildScrollView(child: PassiveIncomeCard(estimate: estimate))),
+      home: Scaffold(
+        body: SingleChildScrollView(child: PassiveIncomeCard(estimate: estimate)),
+      ),
     );
   }
 
@@ -22,14 +23,13 @@ void main() {
       expect(find.textContaining('Projeção para os próximos 6 meses'), findsNothing);
     });
 
-    testWidgets('renders monthly/annual totals and a breakdown row per type when populated', (WidgetTester tester) async {
+    testWidgets('renders monthly/annual totals and a breakdown row per type when populated', (
+      WidgetTester tester,
+    ) async {
       const estimate = PassiveIncomeEstimate(
         monthlyEstimate: 100,
         annualEstimate: 1200,
-        monthlyByType: {
-          InvestmentTypeEnum.FIXED_INCOME: 80,
-          InvestmentTypeEnum.REAL_ESTATE: 20,
-        },
+        monthlyByType: {InvestmentTypeEnum.FIXED_INCOME: 80, InvestmentTypeEnum.REAL_ESTATE: 20},
       );
 
       // The month chip's fixed-height Container overflows by a few pixels

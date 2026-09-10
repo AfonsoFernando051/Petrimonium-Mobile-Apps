@@ -75,12 +75,7 @@ class _SignupFormState extends State<SignupForm> {
     super.initState();
     // Re-renders on every keystroke so field-level validation below updates
     // live, instead of only surfacing errors after a failed submit.
-    for (final controller in [
-      _nameController,
-      _emailController,
-      _passwordController,
-      _confirmPasswordController,
-    ]) {
+    for (final controller in [_nameController, _emailController, _passwordController, _confirmPasswordController]) {
       controller.addListener(_onFieldChanged);
     }
   }
@@ -174,12 +169,7 @@ class _SignupFormState extends State<SignupForm> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CustomTextField(
-          hint: widget.nameHint,
-          icon: Icons.person,
-          controller: _nameController,
-          errorText: _nameError,
-        ),
+        CustomTextField(hint: widget.nameHint, icon: Icons.person, controller: _nameController, errorText: _nameError),
         const SizedBox(height: 14),
         CustomTextField(
           hint: widget.emailHint,
@@ -188,12 +178,7 @@ class _SignupFormState extends State<SignupForm> {
           errorText: _emailError,
         ),
         const SizedBox(height: 14),
-        CustomTextField(
-          hint: widget.passwordHint,
-          icon: Icons.lock,
-          obscure: true,
-          controller: _passwordController,
-        ),
+        CustomTextField(hint: widget.passwordHint, icon: Icons.lock, obscure: true, controller: _passwordController),
         if (_passwordController.text.isNotEmpty) ...[
           const SizedBox(height: 10),
           _PasswordRequirementsChecklist(password: _passwordController.text),
@@ -260,11 +245,7 @@ class _PasswordRequirementsChecklist extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 2),
             child: Row(
               children: [
-                Icon(
-                  met ? Icons.check_circle : Icons.circle_outlined,
-                  size: 14,
-                  color: color,
-                ),
+                Icon(met ? Icons.check_circle : Icons.circle_outlined, size: 14, color: color),
                 const SizedBox(width: 8),
                 Flexible(
                   child: Text(rule.key, style: TextStyle(color: color, fontSize: 12)),

@@ -4,18 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
-import 'package:petrimonium_wallet/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium_wallet/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium_wallet/features/academy/data/repositories/academy_progress_local_repository.dart';
-import 'package:petrimonium_wallet/features/academy/domain/entities/lesson.dart';
-import 'package:petrimonium_wallet/features/academy/domain/entities/lesson_step.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/asset_details/data/repositories/asset_details_repository.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_data_status.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/controllers/asset_details_controller.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_lot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MockAssetDetailsRepository extends Mock implements AssetDetailsRepository {}
@@ -32,12 +25,7 @@ const _peLesson = Lesson(
   steps: [ExplanationStep(title: 'x', body: 'y')],
 );
 
-const _peLessonCatalog = AcademyCatalogSnapshot(
-  domains: [],
-  schools: [],
-  modules: [],
-  lessons: [_peLesson],
-);
+const _peLessonCatalog = AcademyCatalogSnapshot(domains: [], schools: [], modules: [], lessons: [_peLesson]);
 
 Holding _holdingFor(InvestmentTypeEnum type) {
   final lot = InvestmentLot(
@@ -88,9 +76,7 @@ void main() {
     });
 
     test('notifies listeners on completion', () async {
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) async => const AssetDetails(ticker: 'PETR4'),
-      );
+      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) async => const AssetDetails(ticker: 'PETR4'));
       var notifications = 0;
       controller.addListener(() => notifications++);
 
@@ -104,9 +90,7 @@ void main() {
     test('shows an immediate cached preview built from the Holding before the fetch resolves', () async {
       final holding = _holdingFor(InvestmentTypeEnum.STOCKS);
       // Never resolves during this test — asserts on the synchronous preview state.
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) => Completer<AssetDetails>().future,
-      );
+      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) => Completer<AssetDetails>().future);
 
       final future = controller.loadAssetDetails('PETR4', holding: holding);
 
@@ -124,9 +108,7 @@ void main() {
 
     test('maps REAL_ESTATE holdings to the "fii" asset type', () async {
       final holding = _holdingFor(InvestmentTypeEnum.REAL_ESTATE);
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) => Completer<AssetDetails>().future,
-      );
+      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) => Completer<AssetDetails>().future);
 
       final future = controller.loadAssetDetails('PETR4', holding: holding);
       expect(controller.assetDetails!.assetType, 'fii');
@@ -135,9 +117,7 @@ void main() {
 
     test('maps FUNDS holdings to the "etf" asset type', () async {
       final holding = _holdingFor(InvestmentTypeEnum.FUNDS);
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) => Completer<AssetDetails>().future,
-      );
+      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) => Completer<AssetDetails>().future);
 
       final future = controller.loadAssetDetails('PETR4', holding: holding);
       expect(controller.assetDetails!.assetType, 'etf');
@@ -146,9 +126,7 @@ void main() {
 
     test('maps CRYPTO holdings to the "crypto" asset type', () async {
       final holding = _holdingFor(InvestmentTypeEnum.CRYPTO);
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) => Completer<AssetDetails>().future,
-      );
+      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) => Completer<AssetDetails>().future);
       final future = controller.loadAssetDetails('PETR4', holding: holding);
       expect(controller.assetDetails!.assetType, 'crypto');
       unawaited(future);
@@ -156,18 +134,16 @@ void main() {
 
     test('maps any other type (e.g. STOCKS) to "stock"', () async {
       final holding = _holdingFor(InvestmentTypeEnum.STOCKS);
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) => Completer<AssetDetails>().future,
-      );
+      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) => Completer<AssetDetails>().future);
       final future = controller.loadAssetDetails('PETR4', holding: holding);
       expect(controller.assetDetails!.assetType, 'stock');
       unawaited(future);
     });
 
     test('does not overwrite an already-loaded assetDetails with a fresh preview on a later call', () async {
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) async => const AssetDetails(ticker: 'PETR4', shortName: 'Real data'),
-      );
+      when(
+        () => mockRepository.fetchAssetDetails(any()),
+      ).thenAnswer((_) async => const AssetDetails(ticker: 'PETR4', shortName: 'Real data'));
       await controller.loadAssetDetails('PETR4');
       expect(controller.assetDetails!.shortName, 'Real data');
 
@@ -199,9 +175,9 @@ void main() {
 
   group('loadAssetDetails — applied concepts (Educational Portfolio Intelligence)', () {
     test('stays empty when the Academy catalog was never cached (e.g. user never opened Academy)', () async {
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) async => const AssetDetails(ticker: 'PETR4', priceToEarnings: 8.5),
-      );
+      when(
+        () => mockRepository.fetchAssetDetails(any()),
+      ).thenAnswer((_) async => const AssetDetails(ticker: 'PETR4', priceToEarnings: 8.5));
 
       await controller.loadAssetDetails('PETR4');
       await pumpEventQueue();
@@ -211,9 +187,9 @@ void main() {
 
     test('stays empty when no relevant lesson has been completed', () async {
       when(() => mockCatalogRepository.loadCached(any())).thenAnswer((_) async => _peLessonCatalog);
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) async => const AssetDetails(ticker: 'PETR4', priceToEarnings: 8.5),
-      );
+      when(
+        () => mockRepository.fetchAssetDetails(any()),
+      ).thenAnswer((_) async => const AssetDetails(ticker: 'PETR4', priceToEarnings: 8.5));
 
       await controller.loadAssetDetails('PETR4');
       await pumpEventQueue();
@@ -223,9 +199,9 @@ void main() {
 
     test('populates once the relevant lesson is completed and the asset has a real value, and notifies', () async {
       when(() => mockCatalogRepository.loadCached(any())).thenAnswer((_) async => _peLessonCatalog);
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) async => const AssetDetails(ticker: 'PETR4', priceToEarnings: 8.5),
-      );
+      when(
+        () => mockRepository.fetchAssetDetails(any()),
+      ).thenAnswer((_) async => const AssetDetails(ticker: 'PETR4', priceToEarnings: 8.5));
       await DI.academyProgressRepository.markLessonCompleted('fundamental_analysis_pl_pvp');
 
       var notifications = 0;
@@ -242,9 +218,9 @@ void main() {
 
     test('never throws or breaks the main load when the catalog read fails', () async {
       when(() => mockCatalogRepository.loadCached(any())).thenThrow(Exception('cache corrupted'));
-      when(() => mockRepository.fetchAssetDetails(any())).thenAnswer(
-        (_) async => const AssetDetails(ticker: 'PETR4', priceToEarnings: 8.5),
-      );
+      when(
+        () => mockRepository.fetchAssetDetails(any()),
+      ).thenAnswer((_) async => const AssetDetails(ticker: 'PETR4', priceToEarnings: 8.5));
 
       await controller.loadAssetDetails('PETR4');
       await pumpEventQueue();
@@ -262,9 +238,9 @@ void main() {
     });
 
     test('re-fetches using the ticker of the currently loaded asset', () async {
-      when(() => mockRepository.fetchAssetDetails('PETR4')).thenAnswer(
-        (_) async => const AssetDetails(ticker: 'PETR4'),
-      );
+      when(
+        () => mockRepository.fetchAssetDetails('PETR4'),
+      ).thenAnswer((_) async => const AssetDetails(ticker: 'PETR4'));
       await controller.loadAssetDetails('PETR4');
 
       await controller.refresh();

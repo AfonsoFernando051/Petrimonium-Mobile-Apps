@@ -5,8 +5,10 @@ import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/widgets/lab_stacked_bar_chart.dart';
 
 void main() {
-  Widget wrap(Widget child) =>
-      MaterialApp(theme: AppTheme.dark, home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    theme: AppTheme.dark,
+    home: Scaffold(body: child),
+  );
 
   List<LabStackedBarPoint> points() => const [
     LabStackedBarPoint(xLabel: '0', base: 1000, total: 1000),
@@ -34,9 +36,7 @@ void main() {
       expect(find.text('Rendimento'), findsOneWidget);
     });
 
-    testWidgets('renders nothing chart-wise with fewer than 2 points', (
-      tester,
-    ) async {
+    testWidgets('renders nothing chart-wise with fewer than 2 points', (tester) async {
       await tester.pumpWidget(
         wrap(
           const LabStackedBarChart(

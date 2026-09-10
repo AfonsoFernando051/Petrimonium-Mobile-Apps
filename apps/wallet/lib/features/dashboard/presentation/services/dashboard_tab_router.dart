@@ -1,4 +1,4 @@
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Pure tab-index → behavior mappings for [DashboardScreen]'s 3 bottom-nav
 /// tabs (Início/Proventos/Mentor). Início absorbs what used to be a separate
@@ -22,10 +22,10 @@ class DashboardTabRouter {
   /// destination for the pet's "learn more" action (see
   /// `DashboardScreen._handleCompanionDestination`), just not a tab.
   static PetContext petContextFor(int tabIndex) => switch (tabIndex) {
-        homeTab => PetContext.home,
-        passiveIncomeTab => PetContext.portfolio,
-        _ => PetContext.mentor,
-      };
+    homeTab => PetContext.home,
+    passiveIncomeTab => PetContext.portfolio,
+    _ => PetContext.mentor,
+  };
 
   /// Whether [tabIndex] is one of the two portfolio-flavored tabs — used to
   /// decide whether the companion greeting needs the holdings count. Início

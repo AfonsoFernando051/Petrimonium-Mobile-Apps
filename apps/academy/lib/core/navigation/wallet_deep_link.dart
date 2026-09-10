@@ -22,12 +22,8 @@ class WalletDeepLink {
   /// is a stable concept id — a `LabSimulatorId.sourceId` for Financial Lab
   /// completions today; any other stable, backend-agnostic string is valid
   /// for future callers (e.g. a `Lesson.portfolioConcepts` indicator id).
-  static Uri portfolioHighlight(String highlight) => Uri(
-    scheme: 'petrimonium',
-    host: 'wallet',
-    path: '/portfolio',
-    queryParameters: {'highlight': highlight},
-  );
+  static Uri portfolioHighlight(String highlight) =>
+      Uri(scheme: 'petrimonium', host: 'wallet', path: '/portfolio', queryParameters: {'highlight': highlight});
 
   /// Convenience overload for a completed Financial Lab simulator.
   static Uri forSimulator(LabSimulatorId id) => portfolioHighlight(id.sourceId);

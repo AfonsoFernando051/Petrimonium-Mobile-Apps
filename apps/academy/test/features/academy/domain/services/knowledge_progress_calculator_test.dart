@@ -47,8 +47,11 @@ void main() {
 
     test('is 1.0 when every lesson of that school\'s content-available modules is completed', () {
       final school = catalog.schools.firstWhere((s) => s.contentAvailable);
-      final schoolLessonIds =
-          catalog.modulesForSchool(school.id).where((m) => m.contentAvailable).expand((m) => m.lessonIds).toSet();
+      final schoolLessonIds = catalog
+          .modulesForSchool(school.id)
+          .where((m) => m.contentAvailable)
+          .expand((m) => m.lessonIds)
+          .toSet();
 
       expect(KnowledgeProgressCalculator.percentForSchool(catalog, school.id, schoolLessonIds), 1.0);
     });

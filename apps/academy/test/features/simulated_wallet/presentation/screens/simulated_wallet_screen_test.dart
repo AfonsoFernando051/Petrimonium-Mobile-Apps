@@ -17,9 +17,7 @@ void main() {
 
   setUp(() {
     remoteDataSource = FakeSimulatedWalletRemoteDataSource();
-    controller = SimulatedWalletController(
-      repository: SimulatedWalletRepository(remoteDataSource: remoteDataSource),
-    );
+    controller = SimulatedWalletController(repository: SimulatedWalletRepository(remoteDataSource: remoteDataSource));
   });
 
   tearDown(() => controller.dispose());

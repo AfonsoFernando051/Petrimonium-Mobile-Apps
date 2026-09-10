@@ -21,9 +21,6 @@ class SectionLabel extends StatelessWidget {
       ),
     );
     if (trailing == null) return text;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [text, trailing!],
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [text, trailing!]);
   }
 }

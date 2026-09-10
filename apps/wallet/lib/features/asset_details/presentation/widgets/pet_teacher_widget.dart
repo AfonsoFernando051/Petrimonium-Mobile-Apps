@@ -48,11 +48,7 @@ class PetTeacherWidget extends StatelessWidget {
                     children: [
                       Text(
                         'Seu Companheiro',
-                        style: TextStyle(
-                          color: context.colors.textPrimary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
+                        style: TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
                       ),
                       Text(
                         _petGreeting(),
@@ -73,11 +69,7 @@ class PetTeacherWidget extends StatelessWidget {
             // ── Suggested questions ─────────────────────────────
             Text(
               Translator.translate(AppStrings.petTeacherAskMentor),
-              style: TextStyle(
-                color: context.colors.textSecondary,
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(color: context.colors.textSecondary, fontSize: 10, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -128,13 +120,7 @@ class _QuestionChip extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: AppColors.neonCyan.withValues(alpha: 0.2)),
           ),
-          child: Text(
-            question,
-            style: TextStyle(
-              color: AppColors.neonCyan,
-              fontSize: 11,
-            ),
-          ),
+          child: Text(question, style: TextStyle(color: AppColors.neonCyan, fontSize: 11)),
         ),
       ),
     );

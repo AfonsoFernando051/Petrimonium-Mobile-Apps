@@ -20,10 +20,7 @@ void main() {
     // LocaleController persists the chosen locale; give it a store to write to.
     TestWidgetsFlutterBinding.ensureInitialized();
     SharedPreferences.setMockInitialValues({});
-    controller = HealthController(
-      repository: _Repository(),
-      localeController: LocaleController(),
-    );
+    controller = HealthController(repository: _Repository(), localeController: LocaleController());
     // refreshData() is a no-op until a profile is loaded, so go through the
     // same entry point onboarding uses.
     await controller.saveOnboarding(
@@ -37,20 +34,16 @@ void main() {
 
   test('a generated occurrence is not listed as a one-off income', () {
     expect(controller.incomeRecurrences, hasLength(1));
-    expect(
-      controller.oneOffIncomes.map((t) => t.description),
-      ['Prémio'],
-      reason: 'only the hand-entered income is a one-off',
-    );
+    expect(controller.oneOffIncomes.map((t) => t.description), [
+      'Prémio',
+    ], reason: 'only the hand-entered income is a one-off');
   });
 
   test('a generated occurrence is not listed as a one-off debt', () {
     expect(controller.debtRecurrences, hasLength(1));
-    expect(
-      controller.oneOffDebts.map((t) => t.description),
-      ['Dentista'],
-      reason: 'only the hand-entered commitment is a one-off',
-    );
+    expect(controller.oneOffDebts.map((t) => t.description), [
+      'Dentista',
+    ], reason: 'only the hand-entered commitment is a one-off');
   });
 }
 
@@ -62,18 +55,17 @@ HealthTransaction _planned({
   required String description,
   required String category,
   int? recurrenceId,
-}) =>
-    HealthTransaction(
-      id: id,
-      accountId: 1,
-      type: type,
-      status: TransactionStatus.planned,
-      amount: _eur('1500.00'),
-      description: description,
-      category: category,
-      date: DateTime(2026, 9, 7),
-      recurrenceId: recurrenceId,
-    );
+}) => HealthTransaction(
+  id: id,
+  accountId: 1,
+  type: type,
+  status: TransactionStatus.planned,
+  amount: _eur('1500.00'),
+  description: description,
+  category: category,
+  date: DateTime(2026, 9, 7),
+  recurrenceId: recurrenceId,
+);
 
 class _Repository implements HealthRepository {
   @override
@@ -81,47 +73,47 @@ class _Repository implements HealthRepository {
 
   @override
   Future<HealthProfile?> getProfile() async => const HealthProfile(
-        country: CountryCode.portugal,
-        primaryCurrency: CurrencyCode.eur,
-        interfaceLocale: InterfaceLocale.ptPt,
-      );
+    country: CountryCode.portugal,
+    primaryCurrency: CurrencyCode.eur,
+    interfaceLocale: InterfaceLocale.ptPt,
+  );
 
   @override
   Future<List<HealthAccount>> getAccounts() async => [
-        HealthAccount(
-          id: 1,
-          name: 'Conta à ordem',
-          type: AccountType.checking,
-          initialBalance: _eur('850.00'),
-          balanceReferenceDate: DateTime(2026, 9, 1),
-          currentBalance: _eur('850.00'),
-          archived: false,
-        ),
-      ];
+    HealthAccount(
+      id: 1,
+      name: 'Conta à ordem',
+      type: AccountType.checking,
+      initialBalance: _eur('850.00'),
+      balanceReferenceDate: DateTime(2026, 9, 1),
+      currentBalance: _eur('850.00'),
+      archived: false,
+    ),
+  ];
 
   @override
   Future<List<HealthRecurrence>> getRecurrences() async => [
-        HealthRecurrence(
-          id: 1,
-          accountId: 1,
-          type: TransactionType.income,
-          amount: _eur('1500.00'),
-          description: 'Ordenado',
-          category: 'INCOME_SALARY',
-          dayOfMonth: 7,
-          startDate: DateTime(2026, 9, 7),
-        ),
-        HealthRecurrence(
-          id: 2,
-          accountId: 1,
-          type: TransactionType.expense,
-          amount: _eur('1500.00'),
-          description: 'Renda',
-          category: 'DEBT_HOME_FINANCING',
-          dayOfMonth: 8,
-          startDate: DateTime(2026, 9, 8),
-        ),
-      ];
+    HealthRecurrence(
+      id: 1,
+      accountId: 1,
+      type: TransactionType.income,
+      amount: _eur('1500.00'),
+      description: 'Ordenado',
+      category: 'INCOME_SALARY',
+      dayOfMonth: 7,
+      startDate: DateTime(2026, 9, 7),
+    ),
+    HealthRecurrence(
+      id: 2,
+      accountId: 1,
+      type: TransactionType.expense,
+      amount: _eur('1500.00'),
+      description: 'Renda',
+      category: 'DEBT_HOME_FINANCING',
+      dayOfMonth: 8,
+      startDate: DateTime(2026, 9, 8),
+    ),
+  ];
 
   @override
   Future<List<HealthTransaction>> getTransactions({
@@ -130,44 +122,26 @@ class _Repository implements HealthRepository {
     int? accountId,
     String? category,
     TransactionStatus? status,
-  }) async =>
-      [
-        // What the backend generated from the two recurrences above.
-        _planned(
-          id: 10,
-          type: TransactionType.income,
-          description: 'Ordenado',
-          category: 'INCOME_SALARY',
-          recurrenceId: 1,
-        ),
-        _planned(
-          id: 11,
-          type: TransactionType.expense,
-          description: 'Renda',
-          category: 'DEBT_HOME_FINANCING',
-          recurrenceId: 2,
-        ),
-        // What the user entered by hand.
-        _planned(
-          id: 12,
-          type: TransactionType.income,
-          description: 'Prémio',
-          category: 'INCOME_OTHER',
-        ),
-        _planned(
-          id: 13,
-          type: TransactionType.expense,
-          description: 'Dentista',
-          category: 'DEBT_OTHER',
-        ),
-      ];
+  }) async => [
+    // What the backend generated from the two recurrences above.
+    _planned(id: 10, type: TransactionType.income, description: 'Ordenado', category: 'INCOME_SALARY', recurrenceId: 1),
+    _planned(
+      id: 11,
+      type: TransactionType.expense,
+      description: 'Renda',
+      category: 'DEBT_HOME_FINANCING',
+      recurrenceId: 2,
+    ),
+    // What the user entered by hand.
+    _planned(id: 12, type: TransactionType.income, description: 'Prémio', category: 'INCOME_OTHER'),
+    _planned(id: 13, type: TransactionType.expense, description: 'Dentista', category: 'DEBT_OTHER'),
+  ];
 
   @override
   Future<List<HealthCard>> getCards() async => const [];
 
   @override
-  Future<MonthlySummary> getSummary(DateTime month) async =>
-      MonthlySummary.empty(CurrencyCode.eur, month);
+  Future<MonthlySummary> getSummary(DateTime month) async => MonthlySummary.empty(CurrencyCode.eur, month);
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);

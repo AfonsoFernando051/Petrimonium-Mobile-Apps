@@ -12,8 +12,7 @@ class RegionalPreferencesScreen extends StatefulWidget {
   const RegionalPreferencesScreen({super.key});
 
   @override
-  State<RegionalPreferencesScreen> createState() =>
-      _RegionalPreferencesScreenState();
+  State<RegionalPreferencesScreen> createState() => _RegionalPreferencesScreenState();
 }
 
 class _RegionalPreferencesScreenState extends State<RegionalPreferencesScreen> {
@@ -55,15 +54,14 @@ class _RegionalPreferencesScreenState extends State<RegionalPreferencesScreen> {
           country: _country,
           primaryCurrency: _currency,
           interfaceLocale: _locale,
-          currencyChangeAllowed:
-              controller.profile?.currencyChangeAllowed ?? true,
+          currencyChangeAllowed: controller.profile?.currencyChangeAllowed ?? true,
         ),
       );
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).preferencesSaved)),
-      );
-      controller.closeSubScreen();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).preferencesSaved)));
+      controller.navigation.closeSubScreen();
     } on CurrencyLockedException {
       if (!mounted) return;
       await showDialog<void>(
@@ -71,12 +69,7 @@ class _RegionalPreferencesScreenState extends State<RegionalPreferencesScreen> {
         builder: (context) => AlertDialog(
           title: Text(l10n.currencyLockedTitle),
           content: Text(l10n.currencyLockedBody),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(l10n.close),
-            ),
-          ],
+          actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(l10n.close))],
         ),
       );
     } catch (_) {
@@ -89,17 +82,13 @@ class _RegionalPreferencesScreenState extends State<RegionalPreferencesScreen> {
   Widget build(BuildContext context) {
     final controller = HealthScope.of(context);
     final l10n = AppLocalizations.of(context);
-    final currencyChangeAllowed =
-        controller.profile?.currencyChangeAllowed ?? true;
+    final currencyChangeAllowed = controller.profile?.currencyChangeAllowed ?? true;
 
     return Scaffold(
       backgroundColor: HealthColors.background,
       appBar: AppBar(
         backgroundColor: HealthColors.background,
-        leading: IconButton(
-          onPressed: controller.openProfile,
-          icon: const Icon(Icons.arrow_back),
-        ),
+        leading: IconButton(onPressed: controller.navigation.openProfile, icon: const Icon(Icons.arrow_back)),
         title: Text(l10n.preferences),
       ),
       body: SafeArea(
@@ -113,17 +102,13 @@ class _RegionalPreferencesScreenState extends State<RegionalPreferencesScreen> {
                 HealthChip(
                   label: l10n.countryBrazil,
                   selected: _country == CountryCode.brazil,
-                  onTap: () =>
-                      _selectCountry(CountryCode.brazil, currencyChangeAllowed),
+                  onTap: () => _selectCountry(CountryCode.brazil, currencyChangeAllowed),
                 ),
                 const SizedBox(width: 8),
                 HealthChip(
                   label: l10n.countryPortugal,
                   selected: _country == CountryCode.portugal,
-                  onTap: () => _selectCountry(
-                    CountryCode.portugal,
-                    currencyChangeAllowed,
-                  ),
+                  onTap: () => _selectCountry(CountryCode.portugal, currencyChangeAllowed),
                 ),
               ],
             ),
@@ -151,11 +136,7 @@ class _RegionalPreferencesScreenState extends State<RegionalPreferencesScreen> {
               const SizedBox(height: 10),
               Text(
                 l10n.currencyLockedBody,
-                style: const TextStyle(
-                  color: HealthColors.textMuted,
-                  fontSize: 12,
-                  height: 1.4,
-                ),
+                style: const TextStyle(color: HealthColors.textMuted, fontSize: 12, height: 1.4),
               ),
             ],
             const SizedBox(height: 22),
@@ -197,25 +178,14 @@ class _RegionalPreferencesScreenState extends State<RegionalPreferencesScreen> {
             const SizedBox(height: 12),
             Text(
               l10n.countrySuggestion,
-              style: const TextStyle(
-                color: HealthColors.textMuted,
-                fontSize: 12,
-                height: 1.4,
-              ),
+              style: const TextStyle(color: HealthColors.textMuted, fontSize: 12, height: 1.4),
             ),
             if (_error != null) ...[
               const SizedBox(height: 14),
-              Text(
-                _error!,
-                style: const TextStyle(color: HealthColors.negative),
-              ),
+              Text(_error!, style: const TextStyle(color: HealthColors.negative)),
             ],
             const SizedBox(height: 28),
-            HealthPrimaryButton(
-              label: l10n.save,
-              busy: controller.busy,
-              onPressed: _save,
-            ),
+            HealthPrimaryButton(label: l10n.save, busy: controller.busy, onPressed: _save),
           ],
         ),
       ),
@@ -231,10 +201,6 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(
     text,
-    style: const TextStyle(
-      fontSize: 12.5,
-      fontWeight: FontWeight.w600,
-      color: HealthColors.textSecondary,
-    ),
+    style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: HealthColors.textSecondary),
   );
 }

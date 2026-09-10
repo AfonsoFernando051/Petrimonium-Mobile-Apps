@@ -51,13 +51,10 @@ void main() {
       expect(align.alignment, Alignment.centerLeft);
     });
 
-    testWidgets('renders an empty mentor message without a MarkdownBody (typewriter reveal in progress)', (tester) async {
-      final message = ChatMessage(
-        id: '3',
-        role: ChatRole.mentor,
-        text: '',
-        timestamp: DateTime(2024, 1, 1),
-      );
+    testWidgets('renders an empty mentor message without a MarkdownBody (typewriter reveal in progress)', (
+      tester,
+    ) async {
+      final message = ChatMessage(id: '3', role: ChatRole.mentor, text: '', timestamp: DateTime(2024, 1, 1));
 
       await tester.pumpWidget(buildTestableWidget(message));
 
@@ -134,8 +131,10 @@ void main() {
       final message = ChatMessage(
         id: '8',
         role: ChatRole.mentor,
-        text: '[[DATA]]\nSuas ações e FIIs desvalorizaram no período.\n'
-            r'[[CALCULATION]]' '\n- R\$ 812,40 (-1,7%) no mês\n'
+        text:
+            '[[DATA]]\nSuas ações e FIIs desvalorizaram no período.\n'
+            r'[[CALCULATION]]'
+            '\n- R\$ 812,40 (-1,7%) no mês\n'
             '[[INTERPRETATION]]\nIsso é normal em mercados voláteis.',
         timestamp: DateTime(2024, 3, 15, 9, 41),
       );

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/features/investment/data/models/asset_registration_model.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/investment/domain/services/pending_portfolio_stats_builder.dart';
 
 AssetRegistrationModel asset({
@@ -89,10 +89,7 @@ void main() {
 
   group('PendingPortfolioStatsBuilder.build — malformed purchase date', () {
     test('an unparsable date falls back to now rather than throwing', () {
-      expect(
-        () => PendingPortfolioStatsBuilder.build([asset(purchaseDate: 'not-a-date')]),
-        returnsNormally,
-      );
+      expect(() => PendingPortfolioStatsBuilder.build([asset(purchaseDate: 'not-a-date')]), returnsNormally);
     });
   });
 

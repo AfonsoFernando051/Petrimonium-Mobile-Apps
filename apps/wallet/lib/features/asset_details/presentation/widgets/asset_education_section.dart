@@ -40,11 +40,7 @@ class _AssetEducationSectionState extends State<AssetEducationSection> {
                   child: AnimatedRotation(
                     turns: _expanded ? 0.5 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: Icon(
-                      Icons.expand_more,
-                      color: AppColors.neonCyan,
-                      size: 22,
-                    ),
+                    child: Icon(Icons.expand_more, color: AppColors.neonCyan, size: 22),
                   ),
                 ),
               ],
@@ -88,11 +84,7 @@ class _AssetEducationSectionState extends State<AssetEducationSection> {
                 onTap: () => setState(() => _expanded = true),
                 child: const Text(
                   'Saiba mais →',
-                  style: TextStyle(
-                    color: AppColors.neonCyan,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(color: AppColors.neonCyan, fontSize: 11, fontWeight: FontWeight.w600),
                 ),
               ),
             ],
@@ -168,12 +160,7 @@ class _AssetEducationSectionState extends State<AssetEducationSection> {
 }
 
 class _EducationBlock extends StatelessWidget {
-  const _EducationBlock({
-    required this.icon,
-    required this.title,
-    required this.content,
-    required this.accentColor,
-  });
+  const _EducationBlock({required this.icon, required this.title, required this.content, required this.accentColor});
 
   final IconData icon;
   final String title;
@@ -192,20 +179,13 @@ class _EducationBlock extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(
-                  color: accentColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: accentColor, fontWeight: FontWeight.bold, fontSize: 12),
               ),
             ),
           ],
         ),
         const SizedBox(height: 6),
-        Text(
-          content,
-          style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.5),
-        ),
+        Text(content, style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.5)),
       ],
     );
   }

@@ -2,12 +2,8 @@ import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/game/domain/services/level_title.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_wallet/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_context.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart'
     show kSleepAfterInactiveDays;
-import 'package:petrimonium_wallet/features/pet/presentation/companion/pet_message.dart';
 
 /// The single source of truth for what the pet companion says. Nothing
 /// outside this file constructs a [PetMessage] with literal copy — screens
@@ -26,11 +22,7 @@ class PetMessageCatalog {
   /// A nudge offered when the user lands on [context], subject to
   /// `PetCompanionController`'s cooldown/priority rules — never guaranteed
   /// to actually show.
-  static PetMessage? pageEnter(
-    PetContext context, {
-    required int userXp,
-    Map<String, String> data = const {},
-  }) {
+  static PetMessage? pageEnter(PetContext context, {required int userXp, Map<String, String> data = const {}}) {
     switch (context) {
       case PetContext.home:
         return _homeNudge(userXp, data);
@@ -79,10 +71,7 @@ class PetMessageCatalog {
         textKey: AppStrings.companionHomeMissionAlmostDone,
         params: {'missionTitle': missionTitle},
         mood: PetAnimationState.think,
-        action: const PetMessageAction(
-          labelKey: AppStrings.companionActionContinue,
-          destination: PetContext.home,
-        ),
+        action: const PetMessageAction(labelKey: AppStrings.companionActionContinue, destination: PetContext.home),
       );
     }
 
@@ -160,9 +149,7 @@ class PetMessageCatalog {
   ];
 
   static PetMessage homeMotivationalFallback() {
-    final (id, textKey) =
-        _motivationalMessages[DateTime.now().day %
-            _motivationalMessages.length];
+    final (id, textKey) = _motivationalMessages[DateTime.now().day % _motivationalMessages.length];
     return PetMessage(
       id: id,
       context: PetContext.home,
@@ -196,10 +183,7 @@ class PetMessageCatalog {
     AppStrings.academyIncorrectFeedbackTitle3,
   ];
 
-  static String questionFeedbackTitle({
-    required bool correct,
-    required int seed,
-  }) {
+  static String questionFeedbackTitle({required bool correct, required int seed}) {
     final pool = correct ? _correctAnswerTitles : _incorrectAnswerTitles;
     return pool[seed % pool.length];
   }
@@ -219,10 +203,7 @@ class PetMessageCatalog {
       textKey: AppStrings.companionAcademyContinueLesson,
       params: {'lessonTitle': lessonTitle},
       mood: PetAnimationState.think,
-      action: const PetMessageAction(
-        labelKey: AppStrings.companionActionContinue,
-        destination: PetContext.academy,
-      ),
+      action: const PetMessageAction(labelKey: AppStrings.companionActionContinue, destination: PetContext.academy),
     );
   }
 
@@ -238,10 +219,7 @@ class PetMessageCatalog {
       textKey: AppStrings.companionAcademyReviewDue,
       params: {'count': '$count'},
       mood: PetAnimationState.think,
-      action: const PetMessageAction(
-        labelKey: AppStrings.companionActionContinue,
-        destination: PetContext.academy,
-      ),
+      action: const PetMessageAction(labelKey: AppStrings.companionActionContinue, destination: PetContext.academy),
     );
   }
 
@@ -288,9 +266,7 @@ class PetMessageCatalog {
   /// it's rendered inline by the screen instead of going through
   /// `PetCompanionController`.
   static String investorStatusReaction({required bool alreadyInvests}) =>
-      alreadyInvests
-      ? AppStrings.companionInvestorStatusYes
-      : AppStrings.companionInvestorStatusNo;
+      alreadyInvests ? AppStrings.companionInvestorStatusYes : AppStrings.companionInvestorStatusNo;
 
   static PetMessage _mentorNudge() {
     return const PetMessage(
@@ -311,10 +287,7 @@ class PetMessageCatalog {
       priority: PetMessagePriority.low,
       trigger: PetMessageTrigger.pageEnter,
       textKey: AppStrings.companionProfileSummary,
-      params: {
-        'level': '${level.level}',
-        'stage': LevelTitle.forLevel(level.level),
-      },
+      params: {'level': '${level.level}', 'stage': LevelTitle.forLevel(level.level)},
       mood: PetAnimationState.idle,
     );
   }
@@ -419,11 +392,9 @@ class PetMessageCatalog {
       DifficultyDetectedEvent(:final schoolTitle) => difficultyDetected(schoolTitle),
       SchoolMasteredEvent(:final schoolTitle) => schoolMastered(schoolTitle),
       FirstInvestmentAddedEvent() => firstInvestment(),
-      HighConcentrationDetectedEvent(:final ticker, :final percent) =>
-        highConcentration(ticker, percent),
+      HighConcentrationDetectedEvent(:final ticker, :final percent) => highConcentration(ticker, percent),
       MissionCompletedEvent(:final missionTitle) => missionCompleted(missionTitle),
-      FinancialLabSimulatorCompletedEvent(:final simulatorTitle) =>
-        labSimulatorCompleted(simulatorTitle),
+      FinancialLabSimulatorCompletedEvent(:final simulatorTitle) => labSimulatorCompleted(simulatorTitle),
       // A session expiring is a plumbing concern (see ApiClient/main.dart's
       // root listener, which handles the actual logout-and-redirect) — not
       // a moment the companion should comment on.
@@ -442,10 +413,7 @@ class PetMessageCatalog {
       // reserves the celebratory moods for educational milestones (§10.3,
       // §12.2). Acknowledged and bridged into learning — not rewarded.
       mood: PetAnimationState.idle,
-      action: PetMessageAction(
-        labelKey: AppStrings.companionActionUnderstand,
-        destination: PetContext.academy,
-      ),
+      action: PetMessageAction(labelKey: AppStrings.companionActionUnderstand, destination: PetContext.academy),
     );
   }
 
@@ -463,10 +431,7 @@ class PetMessageCatalog {
       textKey: AppStrings.companionEventHighConcentration,
       params: {'ticker': ticker, 'percent': percent.toStringAsFixed(0)},
       mood: PetAnimationState.think,
-      action: const PetMessageAction(
-        labelKey: AppStrings.companionActionUnderstand,
-        destination: PetContext.mentor,
-      ),
+      action: const PetMessageAction(labelKey: AppStrings.companionActionUnderstand, destination: PetContext.mentor),
     );
   }
 

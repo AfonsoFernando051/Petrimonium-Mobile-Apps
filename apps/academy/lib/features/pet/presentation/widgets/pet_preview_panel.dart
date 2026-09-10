@@ -15,13 +15,7 @@ class PetPreviewPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return GlassCard(
       borderColor: AppColors.neonCyan.withValues(alpha: 0.3),
-      boxShadow: [
-        BoxShadow(
-          color: AppColors.neonCyan.withValues(alpha: 0.1),
-          blurRadius: 15,
-          spreadRadius: 2,
-        ),
-      ],
+      boxShadow: [BoxShadow(color: AppColors.neonCyan.withValues(alpha: 0.1), blurRadius: 15, spreadRadius: 2)],
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xxl),
         child: Column(
@@ -80,7 +74,11 @@ class _PreviewRow extends StatelessWidget {
             padding: const EdgeInsets.only(top: AppSpacing.sm),
             child: Text(
               label,
-              style: AppTextStyles.bodyEmphasis.copyWith(color: context.colors.textSecondary, fontWeight: FontWeight.normal, height: 1.3),
+              style: AppTextStyles.bodyEmphasis.copyWith(
+                color: context.colors.textSecondary,
+                fontWeight: FontWeight.normal,
+                height: 1.3,
+              ),
             ),
           ),
         ),

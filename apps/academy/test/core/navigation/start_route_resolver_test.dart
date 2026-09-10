@@ -3,12 +3,7 @@ import 'package:petrimonium_academy/core/navigation/start_route_resolver.dart';
 import 'package:petrimonium_academy/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_state_repository.dart';
-import 'package:petrimonium_academy/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium_academy/features/pet/domain/entities/pet_profile.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/accessory_type.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_accessory_id.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_evolution_stage.dart';
-import 'package:petrimonium_academy/features/pet/domain/repositories/mascot_repository.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/domain/repositories/pet_repository.dart';
 
 /// In-memory [AuthRepository] double — real `AuthRepository` reads/writes
@@ -93,9 +88,7 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveNetWorth(double netWorth) async {}
 
   @override
-  Future<void> saveEquippedAccessories(
-    Map<AccessoryType, PetAccessoryId> equipped,
-  ) async {}
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
 
   @override
   Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
@@ -174,16 +167,13 @@ void main() {
     );
   });
 
-  test(
-    'not logged in routes to login, before touching any other state',
-    () async {
-      authRepository.loggedIn = false;
+  test('not logged in routes to login, before touching any other state', () async {
+    authRepository.loggedIn = false;
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      expect(route, StartRoute.login);
-    },
-  );
+    expect(route, StartRoute.login);
+  });
 
   test('logged in but no pet configured routes to meetPet', () async {
     petRepository.hasPet = false;
@@ -209,16 +199,13 @@ void main() {
     expect(route, StartRoute.meetPet);
   });
 
-  test(
-    'pet ready but no financial goal chosen routes to financialGoal',
-    () async {
-      onboardingStateRepository.hasSetGoalValue = false;
+  test('pet ready but no financial goal chosen routes to financialGoal', () async {
+    onboardingStateRepository.hasSetGoalValue = false;
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      expect(route, StartRoute.financialGoal);
-    },
-  );
+    expect(route, StartRoute.financialGoal);
+  });
 
   test('goal chosen but tutorial unfinished routes to tutorial', () async {
     onboardingStateRepository.tutorialCompleted = false;
@@ -228,16 +215,13 @@ void main() {
     expect(route, StartRoute.tutorial);
   });
 
-  test(
-    'tutorial done but portfolio step unresolved routes to portfolioChoice',
-    () async {
-      onboardingStateRepository.portfolioStepDone = false;
+  test('tutorial done but portfolio step unresolved routes to portfolioChoice', () async {
+    onboardingStateRepository.portfolioStepDone = false;
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      expect(route, StartRoute.portfolioChoice);
-    },
-  );
+    expect(route, StartRoute.portfolioChoice);
+  });
 
   test('everything resolved routes home', () async {
     final route = await resolver.resolve();
@@ -245,41 +229,32 @@ void main() {
     expect(route, StartRoute.home);
   });
 
-  test(
-    'portfolio step resolved via skip (not just connect) still routes home — portfolio stays optional',
-    () async {
-      // isPortfolioStepDone() is true whether the user connected or skipped;
-      // the resolver must not distinguish between the two, or treat an empty
-      // portfolio as a reason to route back to portfolioChoice.
-      onboardingStateRepository.portfolioStepDone = true;
+  test('portfolio step resolved via skip (not just connect) still routes home — portfolio stays optional', () async {
+    // isPortfolioStepDone() is true whether the user connected or skipped;
+    // the resolver must not distinguish between the two, or treat an empty
+    // portfolio as a reason to route back to portfolioChoice.
+    onboardingStateRepository.portfolioStepDone = true;
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      expect(route, StartRoute.home);
-    },
-  );
+    expect(route, StartRoute.home);
+  });
 
-  test(
-    'a failure reading pet/onboarding state logs the user out and routes to login',
-    () async {
-      petRepository.statusError = Exception('boom');
+  test('a failure reading pet/onboarding state logs the user out and routes to login', () async {
+    petRepository.statusError = Exception('boom');
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      expect(route, StartRoute.login);
-      expect(authRepository.logoutCalled, isTrue);
-    },
-  );
+    expect(route, StartRoute.login);
+    expect(authRepository.logoutCalled, isTrue);
+  });
 
-  test(
-    'a failure never routes to a screen that assumes unavailable state',
-    () async {
-      petRepository.statusError = Exception('network down');
+  test('a failure never routes to a screen that assumes unavailable state', () async {
+    petRepository.statusError = Exception('network down');
 
-      final route = await resolver.resolve();
+    final route = await resolver.resolve();
 
-      expect(route, isNot(StartRoute.home));
-      expect(route, isNot(StartRoute.meetPet));
-    },
-  );
+    expect(route, isNot(StartRoute.home));
+    expect(route, isNot(StartRoute.meetPet));
+  });
 }

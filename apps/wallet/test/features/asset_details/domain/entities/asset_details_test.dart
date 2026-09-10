@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_data_status.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/user_position.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/dividend_event.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   DividendEvent buildDividend({required DividendStatus status}) {

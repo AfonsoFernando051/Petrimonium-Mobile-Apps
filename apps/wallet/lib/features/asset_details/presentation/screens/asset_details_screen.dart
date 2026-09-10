@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
+import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_data_status.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/controllers/asset_details_controller.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/allocation_suggestion_card.dart';
@@ -19,7 +20,7 @@ import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/p
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/portfolio_context_card.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/purchase_history_card.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/user_position_card.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Full-screen asset details page — the core of the Real Asset Intelligence
 /// feature. Replaces the previous [AssetDetailsSheet] bottom sheet with a
@@ -28,11 +29,7 @@ import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.da
 /// Opens instantly with cached [Holding] data, then enriches from the backend.
 /// The layout dynamically adapts to the asset type (stock/FII/ETF).
 class AssetDetailsScreen extends StatefulWidget {
-  const AssetDetailsScreen({
-    super.key,
-    required this.ticker,
-    this.holding,
-  });
+  const AssetDetailsScreen({super.key, required this.ticker, this.holding});
 
   final String ticker;
   final Holding? holding;
@@ -47,9 +44,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = AssetDetailsController(
-      repository: DI.assetDetailsRepository,
-    );
+    _controller = AssetDetailsController(repository: DI.assetDetailsRepository);
     _controller.addListener(_onUpdate);
     _controller.loadAssetDetails(widget.ticker, holding: widget.holding);
   }
@@ -108,11 +103,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           Expanded(
             child: Text(
               asset?.ticker ?? widget.ticker,
-              style: TextStyle(
-                color: context.colors.textPrimary,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: TextStyle(color: context.colors.textPrimary, fontWeight: FontWeight.bold, fontSize: 18),
               textAlign: TextAlign.center,
             ),
           ),
@@ -133,7 +124,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
 
     if (_controller.error != null && asset == null) {
       return ErrorStateView(
-            retryLabel: Translator.translate(AppStrings.retryButtonLabel),
+        retryLabel: Translator.translate(AppStrings.retryButtonLabel),
         title: 'Não foi possível carregar este ativo',
         message: _controller.error!,
         onRetry: _controller.refresh,
@@ -142,10 +133,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
 
     if (asset == null) {
       return Center(
-        child: Text(
-          'Ativo não encontrado.',
-          style: TextStyle(color: context.colors.textSecondary),
-        ),
+        child: Text('Ativo não encontrado.', style: TextStyle(color: context.colors.textSecondary)),
       );
     }
 
@@ -163,10 +151,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           const SizedBox(height: 16),
 
           // ── User Position (if owned) ────────────────────────
-          if (asset.isOwned) ...[
-            UserPositionCard(asset: asset),
-            const SizedBox(height: 16),
-          ],
+          if (asset.isOwned) ...[UserPositionCard(asset: asset), const SizedBox(height: 16)],
 
           // ── Valuation chart & purchase history — only available with the
           // real Holding (lots), not the plain backend AssetDetails entity;
@@ -182,10 +167,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           const SizedBox(height: 16),
 
           // ── Portfolio Context (if owned) ─────────────────────
-          if (asset.isOwned) ...[
-            PortfolioContextCard(asset: asset),
-            const SizedBox(height: 16),
-          ],
+          if (asset.isOwned) ...[PortfolioContextCard(asset: asset), const SizedBox(height: 16)],
 
           // ── Concentration Warning (if concentrated) ─────────
           if (asset.isOwned && _isConcentrated(asset)) ...[
@@ -206,10 +188,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           ],
 
           // ── Dividend History ─────────────────────────────────
-          if (asset.recentDividends.isNotEmpty) ...[
-            DividendHistorySection(asset: asset),
-            const SizedBox(height: 16),
-          ],
+          if (asset.recentDividends.isNotEmpty) ...[DividendHistorySection(asset: asset), const SizedBox(height: 16)],
 
           // ── Purchase History (lot by lot) ────────────────────
           if (widget.holding != null && widget.holding!.lots.isNotEmpty) ...[
@@ -233,10 +212,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
                 child: SizedBox(
                   width: 20,
                   height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.neonCyan,
-                  ),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.neonCyan),
                 ),
               ),
             ),
@@ -245,7 +221,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
     );
   }
 
-  bool _isConcentrated(dynamic asset) {
+  bool _isConcentrated(AssetDetails asset) {
     return asset.userPosition != null && asset.userPosition!.portfolioWeight > 20;
   }
 }

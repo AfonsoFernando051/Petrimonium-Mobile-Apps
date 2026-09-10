@@ -27,7 +27,9 @@ void main() {
   Widget buildTestableWidget(List<AppliedConcept> appliedConcepts) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: AppliedLearningCard(asset: _asset, appliedConcepts: appliedConcepts)),
+      home: Scaffold(
+        body: AppliedLearningCard(asset: _asset, appliedConcepts: appliedConcepts),
+      ),
     );
   }
 

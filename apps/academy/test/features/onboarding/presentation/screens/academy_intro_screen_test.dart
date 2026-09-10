@@ -8,9 +8,7 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/data/models/academy_catalog_snapshot.dart';
-import 'package:petrimonium_academy/features/academy/data/repositories/academy_catalog_repository.dart';
-import 'package:petrimonium_academy/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/academy_intro_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/gamification_intro_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/financial_goal_screen.dart';
@@ -28,7 +26,7 @@ const _snapshot = AcademyCatalogSnapshot(
       schoolId: 's1',
       title: 'Fundamentos de Investimento',
       description: 'desc',
-      icon: Icons.school,
+      iconKey: 'savings_outlined',
       order: 1,
       lessonIds: ['l1', 'l2', 'l3', 'l4'],
       contentAvailable: true,
@@ -38,7 +36,7 @@ const _snapshot = AcademyCatalogSnapshot(
       schoolId: 's1',
       title: 'Renda Fixa',
       description: 'desc',
-      icon: Icons.savings,
+      iconKey: 'savings_outlined',
       order: 2,
       lessonIds: ['l5', 'l6', 'l7'],
       prerequisites: ['m1'],
@@ -69,10 +67,7 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const AcademyIntroScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const AcademyIntroScreen());
   }
 
   group('AcademyIntroScreen', () {
@@ -87,7 +82,9 @@ void main() {
       expect(find.text('O resto libera conforme você avança — sem pular etapas.'), findsOneWidget);
     });
 
-    testWidgets('renders a track step for each catalog module, real lesson counts, no fabricated claims', (tester) async {
+    testWidgets('renders a track step for each catalog module, real lesson counts, no fabricated claims', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump();

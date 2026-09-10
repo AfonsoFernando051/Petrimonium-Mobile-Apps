@@ -4,12 +4,7 @@ import 'package:petrimonium_academy/features/mentor/domain/entities/chat_message
 void main() {
   group('ChatMessage', () {
     test('defaults isError to false', () {
-      final message = ChatMessage(
-        id: '1',
-        role: ChatRole.user,
-        text: 'Hello',
-        timestamp: DateTime(2024, 1, 1),
-      );
+      final message = ChatMessage(id: '1', role: ChatRole.user, text: 'Hello', timestamp: DateTime(2024, 1, 1));
 
       expect(message.isError, isFalse);
     });

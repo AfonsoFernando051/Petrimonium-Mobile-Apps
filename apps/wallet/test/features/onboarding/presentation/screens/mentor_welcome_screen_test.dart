@@ -17,10 +17,7 @@ void main() {
   });
 
   Widget buildThemedTestableWidget() {
-    return MaterialApp(
-      theme: AppTheme.dark,
-      home: const MentorWelcomeScreen(),
-    );
+    return MaterialApp(theme: AppTheme.dark, home: const MentorWelcomeScreen());
   }
 
   group('MentorWelcomeScreen', () {
@@ -31,9 +28,7 @@ void main() {
       expect(find.text('Mentor'), findsOneWidget);
       expect(find.text('Aqui é sobre o seu patrimônio real.'), findsOneWidget);
       expect(
-        find.text(
-          'Na Academy você aprendeu. Aqui você organiza, acompanha e entende seu dinheiro de verdade.',
-        ),
+        find.text('Na Academy você aprendeu. Aqui você organiza, acompanha e entende seu dinheiro de verdade.'),
         findsOneWidget,
       );
       expect(

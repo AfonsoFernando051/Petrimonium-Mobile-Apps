@@ -28,9 +28,7 @@ class AuthRepository {
     // "UnimplementedError" text.
     try {
       if (!_googleSignInInitialized) {
-        await GoogleSignIn.instance.initialize(
-          serverClientId: ApiConstants.googleServerClientId,
-        );
+        await GoogleSignIn.instance.initialize(serverClientId: ApiConstants.googleServerClientId);
         _googleSignInInitialized = true;
       }
     } on UnsupportedError {

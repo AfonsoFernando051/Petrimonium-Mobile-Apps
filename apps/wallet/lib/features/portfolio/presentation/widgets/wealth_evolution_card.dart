@@ -5,10 +5,8 @@ import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/enums/history_range.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
@@ -55,10 +53,18 @@ class _WealthEvolutionCardState extends State<WealthEvolutionCard> {
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
-                ChartLegend(items: [
-                  ChartLegendItem(color: AppColors.neonCyan, label: Translator.translate(AppStrings.wealthLegendPatrimony)),
-                  ChartLegendItem(color: tokens.chartNeutral, label: Translator.translate(AppStrings.wealthLegendInvested)),
-                ]),
+                ChartLegend(
+                  items: [
+                    ChartLegendItem(
+                      color: AppColors.neonCyan,
+                      label: Translator.translate(AppStrings.wealthLegendPatrimony),
+                    ),
+                    ChartLegendItem(
+                      color: tokens.chartNeutral,
+                      label: Translator.translate(AppStrings.wealthLegendInvested),
+                    ),
+                  ],
+                ),
               ],
             ),
             const SizedBox(height: AppSpacing.md),
@@ -102,10 +108,7 @@ class _WealthEvolutionCardState extends State<WealthEvolutionCard> {
     return TooltipSummary(
       accentColor: AppColors.neonCyan,
       children: [
-        Text(
-          AppFormatters.date(point.date),
-          style: AppTextStyles.caption.copyWith(color: tokens.textSecondary),
-        ),
+        Text(AppFormatters.date(point.date), style: AppTextStyles.caption.copyWith(color: tokens.textSecondary)),
         Text(
           AppFormatters.currency(point.portfolioValue, showCents: false),
           style: AppTextStyles.label.copyWith(color: tokens.textPrimary, fontWeight: FontWeight.bold),

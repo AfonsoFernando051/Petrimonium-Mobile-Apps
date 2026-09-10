@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
-import 'package:petrimonium_wallet/features/investment/data/models/investment_type_enum.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/history_point.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/investment_type_display.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/enums/history_range.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealth_evolution_card.dart';
 
 import '../controllers/portfolio_controller_test.dart';
-import '../../domain/services/portfolio_test_fixtures.dart';
+import 'package:petrimonium_shared_features/testing.dart';
 
 void main() {
   late FakePortfolioRepository repository;
@@ -74,7 +71,9 @@ void main() {
       expect(find.byType(LineChart), findsOneWidget);
     });
 
-    testWidgets('renders one range chip per HistoryRange, and the selected one reflects the controller', (WidgetTester tester) async {
+    testWidgets('renders one range chip per HistoryRange, and the selected one reflects the controller', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));

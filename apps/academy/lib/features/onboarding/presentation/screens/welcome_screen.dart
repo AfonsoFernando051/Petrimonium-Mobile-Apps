@@ -22,9 +22,7 @@ class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   void _goNext(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const PetConfigurationScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PetConfigurationScreen()));
   }
 
   @override
@@ -45,28 +43,15 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               Text(
                 Translator.translate(AppStrings.welcomeSubheadline),
-                style: TextStyle(
-                  color: tokens.mentor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.5,
-                ),
+                style: TextStyle(color: tokens.mentor, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.5),
               ),
               const SizedBox(height: 24),
-              PetHeroCapsule(
-                size: 180,
-                child: Image.asset(PetAssets.imageFor(null), fit: BoxFit.contain),
-              ),
+              PetHeroCapsule(size: 180, child: Image.asset(PetAssets.imageFor(null), fit: BoxFit.contain)),
               const SizedBox(height: 24),
               Text(
                 Translator.translate(AppStrings.welcomeHeadline),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: tokens.textPrimary,
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  height: 1.2,
-                ),
+                style: TextStyle(color: tokens.textPrimary, fontSize: 26, fontWeight: FontWeight.bold, height: 1.2),
               ),
               const SizedBox(height: 8),
               Text(

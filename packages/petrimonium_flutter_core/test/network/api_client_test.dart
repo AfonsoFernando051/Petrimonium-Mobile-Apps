@@ -35,16 +35,30 @@ void main() {
 
     final response = http.Response('{}', 200);
     when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer((_) async => response);
-    when(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')))
-        .thenAnswer((_) async => response);
-    when(() => httpClient.put(any(), headers: any(named: 'headers'), body: any(named: 'body')))
-        .thenAnswer((_) async => response);
+    when(
+      () => httpClient.post(
+        any(),
+        headers: any(named: 'headers'),
+        body: any(named: 'body'),
+      ),
+    ).thenAnswer((_) async => response);
+    when(
+      () => httpClient.put(
+        any(),
+        headers: any(named: 'headers'),
+        body: any(named: 'body'),
+      ),
+    ).thenAnswer((_) async => response);
   });
 
   group('ApiClient token storage', () {
     test('saveToken writes under the shared auth token key', () async {
-      when(() => secureStorage.write(key: any(named: 'key'), value: any(named: 'value')))
-          .thenAnswer((_) async {});
+      when(
+        () => secureStorage.write(
+          key: any(named: 'key'),
+          value: any(named: 'value'),
+        ),
+      ).thenAnswer((_) async {});
 
       await apiClient.saveToken('token-123');
 
@@ -100,11 +114,13 @@ void main() {
 
       await apiClient.post('/investments', {'ticker': 'PETR4'});
 
-      final captured = verify(() => httpClient.post(
-            captureAny(),
-            headers: captureAny(named: 'headers'),
-            body: captureAny(named: 'body'),
-          )).captured;
+      final captured = verify(
+        () => httpClient.post(
+          captureAny(),
+          headers: captureAny(named: 'headers'),
+          body: captureAny(named: 'body'),
+        ),
+      ).captured;
 
       expect((captured[0] as Uri).toString(), '${PetrimoniumEnvironment.baseUrl}/investments');
       expect((captured[1] as Map<String, String>)['Authorization'], 'Bearer abc123');
@@ -116,11 +132,13 @@ void main() {
 
       await apiClient.put('/settings', {'language': 'en'});
 
-      final captured = verify(() => httpClient.put(
-            captureAny(),
-            headers: captureAny(named: 'headers'),
-            body: captureAny(named: 'body'),
-          )).captured;
+      final captured = verify(
+        () => httpClient.put(
+          captureAny(),
+          headers: captureAny(named: 'headers'),
+          body: captureAny(named: 'body'),
+        ),
+      ).captured;
 
       expect((captured[0] as Uri).toString(), '${PetrimoniumEnvironment.baseUrl}/settings');
       expect(captured[2], '{"language":"en"}');
@@ -131,7 +149,12 @@ void main() {
     void stubTokens({String? accessToken, String? refreshToken}) {
       when(() => secureStorage.read(key: ApiClient.authTokenKey)).thenAnswer((_) async => accessToken);
       when(() => secureStorage.read(key: ApiClient.refreshTokenKey)).thenAnswer((_) async => refreshToken);
-      when(() => secureStorage.write(key: any(named: 'key'), value: any(named: 'value'))).thenAnswer((_) async {});
+      when(
+        () => secureStorage.write(
+          key: any(named: 'key'),
+          value: any(named: 'value'),
+        ),
+      ).thenAnswer((_) async {});
       when(() => secureStorage.delete(key: any(named: 'key'))).thenAnswer((_) async {});
     }
 
@@ -146,9 +169,16 @@ void main() {
         getCallCount++;
         return getCallCount == 1 ? unauthorized : ok;
       });
-      when(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')))
-          .thenAnswer((_) async => http.Response(
-              jsonEncode({'accessToken': 'new-access-token', 'refreshToken': 'new-refresh-token'}), 200));
+      when(
+        () => httpClient.post(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer(
+        (_) async =>
+            http.Response(jsonEncode({'accessToken': 'new-access-token', 'refreshToken': 'new-refresh-token'}), 200),
+      );
 
       final response = await apiClient.get('/portfolio/summary');
 
@@ -157,32 +187,41 @@ void main() {
       verify(() => secureStorage.write(key: ApiClient.authTokenKey, value: 'new-access-token')).called(1);
       verify(() => secureStorage.write(key: ApiClient.refreshTokenKey, value: 'new-refresh-token')).called(1);
 
-      final refreshCall = verify(() => httpClient.post(captureAny(),
-              headers: captureAny(named: 'headers'), body: captureAny(named: 'body')))
-          .captured;
-      expect((refreshCall[0] as Uri).toString(), '${PetrimoniumEnvironment.baseUrl}${PetrimoniumEnvironment.refreshTokenEndpoint}');
+      final refreshCall = verify(
+        () => httpClient.post(
+          captureAny(),
+          headers: captureAny(named: 'headers'),
+          body: captureAny(named: 'body'),
+        ),
+      ).captured;
+      expect(
+        (refreshCall[0] as Uri).toString(),
+        '${PetrimoniumEnvironment.baseUrl}${PetrimoniumEnvironment.refreshTokenEndpoint}',
+      );
       expect(refreshCall[2], jsonEncode({'refreshToken': 'valid-refresh-token'}));
     });
 
     test('concurrent 401s share a single refresh call, not one each', () async {
       stubTokens(accessToken: 'expired-token', refreshToken: 'valid-refresh-token');
 
-      when(() => httpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response('{}', 401));
+      when(
+        () => httpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response('{}', 401));
       // The retry after refresh also gets a fresh 200 in this test — what matters here is
       // how many times the refresh endpoint itself was called, not the retries' outcome.
       var postCallCount = 0;
-      when(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')))
-          .thenAnswer((_) async {
+      when(
+        () => httpClient.post(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async {
         postCallCount++;
         return http.Response(jsonEncode({'accessToken': 'new-token', 'refreshToken': 'new-refresh'}), 200);
       });
 
-      await Future.wait([
-        apiClient.get('/a'),
-        apiClient.get('/b'),
-        apiClient.get('/c'),
-      ]);
+      await Future.wait([apiClient.get('/a'), apiClient.get('/b'), apiClient.get('/c')]);
 
       expect(postCallCount, 1);
     });
@@ -190,10 +229,16 @@ void main() {
     test('refresh failing clears both tokens and reports session expiry, without retrying', () async {
       stubTokens(accessToken: 'expired-token', refreshToken: 'stale-refresh-token');
 
-      when(() => httpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response('{}', 401));
-      when(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')))
-          .thenAnswer((_) async => http.Response('{"code":"INVALID_CREDENTIALS"}', 401));
+      when(
+        () => httpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response('{}', 401));
+      when(
+        () => httpClient.post(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => http.Response('{"code":"INVALID_CREDENTIALS"}', 401));
 
       final response = await apiClient.get('/portfolio/summary');
       await Future<void>.delayed(Duration.zero);
@@ -208,13 +253,20 @@ void main() {
     test('a 401 with no refresh token stored reports session expiry without calling the refresh endpoint', () async {
       stubTokens(accessToken: 'expired-token', refreshToken: null);
 
-      when(() => httpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response('{}', 401));
+      when(
+        () => httpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response('{}', 401));
 
       await apiClient.get('/portfolio/summary');
       await Future<void>.delayed(Duration.zero);
 
-      verifyNever(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')));
+      verifyNever(
+        () => httpClient.post(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      );
       expect(sessionExpiredCount, 1);
     });
   });
@@ -223,11 +275,13 @@ void main() {
     test('sends no Authorization header and does not read the stored token', () async {
       await apiClient.unauthenticatedPost('/auth/login', {'email': 'a@b.com'});
 
-      final captured = verify(() => httpClient.post(
-            captureAny(),
-            headers: captureAny(named: 'headers'),
-            body: captureAny(named: 'body'),
-          )).captured;
+      final captured = verify(
+        () => httpClient.post(
+          captureAny(),
+          headers: captureAny(named: 'headers'),
+          body: captureAny(named: 'body'),
+        ),
+      ).captured;
 
       expect((captured[0] as Uri).toString(), '${PetrimoniumEnvironment.baseUrl}/auth/login');
       expect((captured[1] as Map<String, String>).containsKey('Authorization'), isFalse);
@@ -236,13 +290,24 @@ void main() {
     });
 
     test('does not retry on a 401 the way the authenticated methods do', () async {
-      when(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')))
-          .thenAnswer((_) async => http.Response('{}', 401));
+      when(
+        () => httpClient.post(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => http.Response('{}', 401));
 
       final response = await apiClient.unauthenticatedPost('/auth/login', {});
 
       expect(response.statusCode, 401);
-      verify(() => httpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body'))).called(1);
+      verify(
+        () => httpClient.post(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).called(1);
     });
   });
 
@@ -262,7 +327,12 @@ void main() {
 
   group('ApiClient.tokenStore', () {
     test('exposes the pair-save/read/clear surface for repositories bypassing the auth flow', () async {
-      when(() => secureStorage.write(key: any(named: 'key'), value: any(named: 'value'))).thenAnswer((_) async {});
+      when(
+        () => secureStorage.write(
+          key: any(named: 'key'),
+          value: any(named: 'value'),
+        ),
+      ).thenAnswer((_) async {});
       when(() => secureStorage.read(key: ApiClient.refreshTokenKey)).thenAnswer((_) async => 'refresh-abc');
       when(() => secureStorage.delete(key: any(named: 'key'))).thenAnswer((_) async {});
 

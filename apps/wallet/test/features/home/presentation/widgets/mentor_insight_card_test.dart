@@ -20,9 +20,7 @@ void main() {
   Widget buildTestableWidget({int? Function()? onOpenMentorCapture}) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(
-        body: MentorInsightCard(onOpenMentor: (id) => onOpenMentorCapture?.call()),
-      ),
+      home: Scaffold(body: MentorInsightCard(onOpenMentor: (id) => onOpenMentorCapture?.call())),
     );
   }
 
@@ -35,10 +33,8 @@ void main() {
           currentScreen: any(named: 'currentScreen'),
         ),
       ).thenAnswer(
-        (_) async => const MentorChatResult(
-          reply: 'Seus aportes cobriram a queda de mercado no período.',
-          conversationId: 42,
-        ),
+        (_) async =>
+            const MentorChatResult(reply: 'Seus aportes cobriram a queda de mercado no período.', conversationId: 42),
       );
 
       await tester.pumpWidget(buildTestableWidget());
@@ -70,24 +66,22 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('tapping "Por que estou vendo isto?" opens the Mentor tab with the real conversation id', (tester) async {
+    testWidgets('tapping "Por que estou vendo isto?" opens the Mentor tab with the real conversation id', (
+      tester,
+    ) async {
       when(
         () => mockRepository.sendMessage(
           message: any(named: 'message'),
           conversationId: any(named: 'conversationId'),
           currentScreen: any(named: 'currentScreen'),
         ),
-      ).thenAnswer(
-        (_) async => const MentorChatResult(reply: 'Interpretação.', conversationId: 42),
-      );
+      ).thenAnswer((_) async => const MentorChatResult(reply: 'Interpretação.', conversationId: 42));
 
       int? capturedId;
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.dark,
-          home: Scaffold(
-            body: MentorInsightCard(onOpenMentor: (id) => capturedId = id),
-          ),
+          home: Scaffold(body: MentorInsightCard(onOpenMentor: (id) => capturedId = id)),
         ),
       );
       await tester.pump();

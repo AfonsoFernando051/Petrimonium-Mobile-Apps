@@ -7,9 +7,9 @@ enum CurrencyCode {
   final String code;
 
   static CurrencyCode parse(String value) => values.firstWhere(
-        (currency) => currency.code == value.toUpperCase(),
-        orElse: () => throw FormatException('Unsupported currency: $value'),
-      );
+    (currency) => currency.code == value.toUpperCase(),
+    orElse: () => throw FormatException('Unsupported currency: $value'),
+  );
 }
 
 class CurrencyMismatchException implements Exception {
@@ -19,8 +19,7 @@ class CurrencyMismatchException implements Exception {
   final CurrencyCode actual;
 
   @override
-  String toString() =>
-      'CurrencyMismatchException(expected: ${expected.code}, actual: ${actual.code})';
+  String toString() => 'CurrencyMismatchException(expected: ${expected.code}, actual: ${actual.code})';
 }
 
 /// An exact amount represented as integer minor units. BRL and EUR both use
@@ -77,10 +76,7 @@ final class Money implements Comparable<Money> {
     final remainder = absolute % parts;
     return List.generate(
       parts,
-      (index) => Money.fromMinorUnits(
-        sign * (quotient + (index < remainder ? 1 : 0)),
-        currency,
-      ),
+      (index) => Money.fromMinorUnits(sign * (quotient + (index < remainder ? 1 : 0)), currency),
       growable: false,
     );
   }
@@ -98,10 +94,7 @@ final class Money implements Comparable<Money> {
   }
 
   @override
-  bool operator ==(Object other) =>
-      other is Money &&
-      other.minorUnits == minorUnits &&
-      other.currency == currency;
+  bool operator ==(Object other) => other is Money && other.minorUnits == minorUnits && other.currency == currency;
 
   @override
   int get hashCode => Object.hash(minorUnits, currency);

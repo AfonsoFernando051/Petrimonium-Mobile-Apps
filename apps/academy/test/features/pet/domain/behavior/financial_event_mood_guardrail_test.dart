@@ -3,8 +3,7 @@ import 'package:petrimonium_academy/core/events/app_event.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_pet_behavior.dart';
 import 'package:petrimonium_academy/features/pet/domain/behavior/core_pet_behavior.dart';
 import 'package:petrimonium_academy/features/pet/domain/behavior/pet_behavior.dart';
-import 'package:petrimonium_academy/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium_academy/features/pet/presentation/companion/pet_message.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio_pet_behavior.dart';
 
 /// PRD guardrail (§10.3, §12.2, FR-MEN-002): the Pet's celebratory moods are
@@ -17,17 +16,9 @@ import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio
 /// the chain.
 void main() {
   /// `happy` counts: the PRD names "comemoração/felicidade" together.
-  const celebratory = {
-    PetAnimationState.celebrate,
-    PetAnimationState.victory,
-    PetAnimationState.happy,
-  };
+  const celebratory = {PetAnimationState.celebrate, PetAnimationState.victory, PetAnimationState.happy};
 
-  const behaviors = <PetBehavior>[
-    CorePetBehavior(),
-    AcademyPetBehavior(),
-    PortfolioPetBehavior(),
-  ];
+  const behaviors = <PetBehavior>[CorePetBehavior(), AcademyPetBehavior(), PortfolioPetBehavior()];
 
   const financialEvents = <AppEvent>[
     FirstInvestmentAddedEvent(),
@@ -47,7 +38,8 @@ void main() {
           expect(
             celebratory.contains(message.mood),
             isFalse,
-            reason: '${behavior.runtimeType} answered ${event.runtimeType} with '
+            reason:
+                '${behavior.runtimeType} answered ${event.runtimeType} with '
                 '${message.mood}, which the PRD reserves for educational milestones',
           );
         });
@@ -56,8 +48,11 @@ void main() {
 
     test('every event listed here really is financial', () {
       for (final event in financialEvents) {
-        expect(event.isFinancial, isTrue,
-            reason: '${event.runtimeType} is in the financial list but not marked isFinancial');
+        expect(
+          event.isFinancial,
+          isTrue,
+          reason: '${event.runtimeType} is in the financial list but not marked isFinancial',
+        );
       }
     });
   });
