@@ -1,18 +1,30 @@
-import 'package:flutter/material.dart';
-
 /// Health-score band — presentation reads this instead of embedding its own
 /// `score >= N` thresholds, so the "what counts as strong/moderate/weak"
 /// business rule lives in one place (here) rather than being re-decided by
 /// every widget that renders a score.
 enum HealthTier { strong, moderate, weak }
 
+/// Which facet of portfolio health a [HealthMetric] measures.
+///
+/// The facet is identity; its label and icon are not. Those are product copy
+/// and product branding, so each app maps this enum to its own wording — the
+/// same split `LevelTier` uses. Keeping the enum here is what lets the
+/// scoring live in a package with no Flutter dependency at all.
+enum HealthMetricKind {
+  diversification,
+  growth,
+  incomeStability,
+  dividendStrength,
+  volatilityControl,
+  longTermPotential,
+}
+
 /// One 0-100 facet of portfolio health (shown as a radar axis + progress bar).
 class HealthMetric {
-  final String name;
+  final HealthMetricKind kind;
   final double score;
-  final IconData icon;
 
-  const HealthMetric({required this.name, required this.score, required this.icon});
+  const HealthMetric({required this.kind, required this.score});
 
   /// Per-metric band. Deliberately a lower "moderate" floor (45) than
   /// [PortfolioHealth.tier]'s (50) — a single weak facet shouldn't read as

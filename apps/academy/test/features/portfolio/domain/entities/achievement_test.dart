@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/achievement.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement.dart';
 
 void main() {
   const achievement = Achievement(

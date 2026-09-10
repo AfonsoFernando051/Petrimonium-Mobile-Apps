@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/investment/presentation/widgets/unlockable_rewards_card.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/services/achievement_catalog.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/achievement_catalog.dart';
 
 import 'package:petrimonium_shared_features/testing.dart';
 

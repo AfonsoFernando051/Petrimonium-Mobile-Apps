@@ -4,7 +4,7 @@ import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/services/achievement_catalog.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/achievement_catalog.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// Instant, always-visible feedback after every asset add — reuses the same

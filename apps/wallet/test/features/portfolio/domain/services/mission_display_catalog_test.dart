@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/services/mission_display_catalog.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/mission_display_catalog.dart';
 
 void main() {
   group('MissionDisplayCatalog.forCode', () {

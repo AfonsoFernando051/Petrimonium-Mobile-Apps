@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_health.dart';
+import 'investment_type_enum.dart';
+import 'investment_type_rules.dart';
+import 'portfolio_health.dart';
+import 'portfolio_stats.dart';
 
 /// Pure, explainable heuristic that turns real holdings/allocation data into
 /// the 0-100 "Portfolio Health" score and its six facets. There is no
@@ -30,12 +31,12 @@ class PortfolioHealthCalculator {
     return PortfolioHealth(
       overallScore: overall.clamp(0, 100),
       metrics: [
-        HealthMetric(name: 'Diversificação', score: diversification, icon: Icons.hub),
-        HealthMetric(name: 'Crescimento', score: growth, icon: Icons.trending_up),
-        HealthMetric(name: 'Estab. de Renda', score: incomeStability, icon: Icons.savings),
-        HealthMetric(name: 'Força de Dividendos', score: dividendStrength, icon: Icons.paid),
-        HealthMetric(name: 'Controle de Volatilidade', score: volatilityControl, icon: Icons.shield),
-        HealthMetric(name: 'Potencial Longo Prazo', score: longTermPotential, icon: Icons.rocket_launch),
+        HealthMetric(kind: HealthMetricKind.diversification, score: diversification),
+        HealthMetric(kind: HealthMetricKind.growth, score: growth),
+        HealthMetric(kind: HealthMetricKind.incomeStability, score: incomeStability),
+        HealthMetric(kind: HealthMetricKind.dividendStrength, score: dividendStrength),
+        HealthMetric(kind: HealthMetricKind.volatilityControl, score: volatilityControl),
+        HealthMetric(kind: HealthMetricKind.longTermPotential, score: longTermPotential),
       ],
     );
   }

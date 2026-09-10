@@ -5,11 +5,9 @@ import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_academy/features/portfolio/data/repositories/portfolio_repository.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/achievement.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_health.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/services/achievement_catalog.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/services/mission_display_catalog.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/services/portfolio_health_calculator.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement_catalog.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/mission_display_catalog.dart';
 
 /// Owns all state for the redesigned Portfolio screen: real holdings/
 /// summary/allocation/history from the backend, plus everything derived

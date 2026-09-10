@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/entities/portfolio_health.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 PortfolioHealth _healthWith(double score) => PortfolioHealth(overallScore: score, metrics: const []);
 
@@ -50,7 +49,7 @@ void main() {
   });
 
   group('HealthMetric.tier', () {
-    HealthMetric metricWith(double score) => HealthMetric(name: 'x', score: score, icon: Icons.hub);
+    HealthMetric metricWith(double score) => HealthMetric(kind: HealthMetricKind.diversification, score: score);
 
     test('75 and above is strong', () {
       expect(metricWith(75).tier, HealthTier.strong);

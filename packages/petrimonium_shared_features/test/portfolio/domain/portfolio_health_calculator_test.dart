@@ -1,12 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/portfolio_health.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/services/portfolio_health_calculator.dart';
 
 import 'package:petrimonium_shared_features/testing.dart';
 
-double _metric(PortfolioHealth health, String name) =>
-    health.metrics.firstWhere((m) => m.name == name).score;
+double _metric(PortfolioHealth health, HealthMetricKind kind) =>
+    health.metrics.firstWhere((m) => m.kind == kind).score;
 
 void main() {
   group('PortfolioHealthCalculator.calculate — empty portfolio', () {
@@ -24,15 +22,15 @@ void main() {
     final health = PortfolioHealthCalculator.calculate(stats);
 
     test('a single holding scores 0 on diversification (perfect concentration)', () {
-      expect(_metric(health, 'Diversificação'), closeTo(0, 0.01));
+      expect(_metric(health, HealthMetricKind.diversification), closeTo(0, 0.01));
     });
 
     test('breakeven (0% gain) scores exactly 50 on growth', () {
-      expect(_metric(health, 'Crescimento'), closeTo(50, 0.01));
+      expect(_metric(health, HealthMetricKind.growth), closeTo(50, 0.01));
     });
 
     test('an all-stocks portfolio scores 0 on income stability (no fixed income/REITs)', () {
-      expect(_metric(health, 'Estab. de Renda'), closeTo(0, 0.01));
+      expect(_metric(health, HealthMetricKind.incomeStability), closeTo(0, 0.01));
     });
 
     test('overall score is the documented weighted blend of the six facets', () {
@@ -63,9 +61,9 @@ void main() {
       final concentratedHealth = PortfolioHealthCalculator.calculate(concentrated);
       final diversifiedHealth = PortfolioHealthCalculator.calculate(diversified);
 
-      expect(_metric(diversifiedHealth, 'Diversificação'), greaterThan(_metric(concentratedHealth, 'Diversificação')));
+      expect(_metric(diversifiedHealth, HealthMetricKind.diversification), greaterThan(_metric(concentratedHealth, HealthMetricKind.diversification)));
       // 4 equal 25% slices: HHI = 4 * 0.25^2 = 0.25 -> score = (1 - 0.25) * 100 = 75.
-      expect(_metric(diversifiedHealth, 'Diversificação'), closeTo(75, 0.01));
+      expect(_metric(diversifiedHealth, HealthMetricKind.diversification), closeTo(75, 0.01));
     });
   });
 
@@ -75,7 +73,7 @@ void main() {
         lot(quantity: 100, purchasePrice: 10, currentPrice: 5), // -50%
       ]);
       final health = PortfolioHealthCalculator.calculate(stats);
-      expect(_metric(health, 'Crescimento'), 0);
+      expect(_metric(health, HealthMetricKind.growth), 0);
     });
 
     test('a portfolio up 30% or more scores 100 on growth', () {
@@ -83,13 +81,13 @@ void main() {
         lot(quantity: 100, purchasePrice: 10, currentPrice: 14), // +40%
       ]);
       final health = PortfolioHealthCalculator.calculate(stats);
-      expect(_metric(health, 'Crescimento'), 100);
+      expect(_metric(health, HealthMetricKind.growth), 100);
     });
 
     test('growth score increases monotonically with gain percent', () {
       double growthFor(double currentPrice) {
         final stats = statsFromLots([lot(quantity: 100, purchasePrice: 10, currentPrice: currentPrice)]);
-        return _metric(PortfolioHealthCalculator.calculate(stats), 'Crescimento');
+        return _metric(PortfolioHealthCalculator.calculate(stats), HealthMetricKind.growth);
       }
 
       expect(growthFor(6), lessThan(growthFor(10)));
@@ -106,8 +104,8 @@ void main() {
       final fixedIncomeHealth = PortfolioHealthCalculator.calculate(fixedIncome);
 
       expect(
-        _metric(cryptoHealth, 'Controle de Volatilidade'),
-        lessThan(_metric(fixedIncomeHealth, 'Controle de Volatilidade')),
+        _metric(cryptoHealth, HealthMetricKind.volatilityControl),
+        lessThan(_metric(fixedIncomeHealth, HealthMetricKind.volatilityControl)),
       );
     });
   });

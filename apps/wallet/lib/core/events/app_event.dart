@@ -1,5 +1,5 @@
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/portfolio/domain/entities/achievement.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/models/achievement.dart';
 
 /// Something the Financial Engine or Game Engine did that other systems
 /// (character reactions, notifications, a future AI Mentor) may want to

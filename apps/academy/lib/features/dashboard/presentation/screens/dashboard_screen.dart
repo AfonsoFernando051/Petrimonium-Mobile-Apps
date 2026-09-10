@@ -15,7 +15,7 @@ import '../../../auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../pet/presentation/mascot/controllers/mascot_controller.dart';
-import '../../../portfolio/domain/entities/achievement.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement.dart';
 import '../../../portfolio/presentation/controllers/portfolio_controller.dart';
 import '../../../mentor/presentation/screens/mentor_screen.dart';
 import '../../../pet/presentation/celebration/level_up_celebration_overlay.dart';

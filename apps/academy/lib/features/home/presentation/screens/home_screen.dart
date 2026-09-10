@@ -24,7 +24,7 @@ import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart'
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium_academy/features/portfolio/domain/services/mission_display_catalog.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/mission_display_catalog.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
 /// Home — the app's learning-first orchestration layer
