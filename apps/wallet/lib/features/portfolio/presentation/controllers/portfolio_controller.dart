@@ -57,6 +57,20 @@ class PortfolioController extends ChangeNotifier {
   bool isLoading = true;
   String? error;
 
+  /// When [holdings]/[summary]/[allocation] were last fetched from the
+  /// backend — the real data-provenance timestamp for the "DADO" chip on
+  /// Home/`FirstValueScreen`. Deliberately captured here rather than read as
+  /// `DateTime.now()` at render time: a render-time clock advances on every
+  /// rebuild (a scroll, a theme change) with no new network call behind it,
+  /// which is indistinguishable on screen from an actual refresh (DEM-97).
+  DateTime? lastRefreshedAt;
+
+  /// Whether any current holding's price isn't a live quote (stale
+  /// purchase-price fallback or an unquoted asset class) — the chip must
+  /// say so instead of implying full freshness (DEM-97 point 3; mirrors the
+  /// per-holding badge in `asset_row.dart`).
+  bool get hasStaleQuote => holdings.any((h) => !h.hasLiveQuote);
+
   List<Holding> holdings = [];
   PortfolioSummary summary = PortfolioSummary.empty;
   List<AllocationSlice> allocation = [];
@@ -175,6 +189,7 @@ class PortfolioController extends ChangeNotifier {
       allocation = results[1] as List<AllocationSlice>;
       summary = results[2] as PortfolioSummary;
       _hasLoadedOnce = true;
+      lastRefreshedAt = DateTime.now();
 
       await _loadPerformanceDeltas();
       _recomputeChart();

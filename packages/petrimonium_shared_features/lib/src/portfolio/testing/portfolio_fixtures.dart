@@ -4,6 +4,7 @@ import '../domain/investment_lot.dart';
 import '../domain/investment_type_enum.dart';
 import '../domain/portfolio_stats.dart';
 import '../domain/portfolio_summary.dart';
+import '../domain/price_status.dart';
 
 /// Test-only builder for a single purchase lot, with sensible defaults so
 /// each test only spells out the fields it actually cares about.
@@ -15,6 +16,7 @@ InvestmentLot lot({
   double purchasePrice = 10,
   DateTime? purchaseDate,
   double? currentPrice,
+  PriceStatus priceStatus = PriceStatus.live,
 }) {
   final resolvedCurrentPrice = currentPrice ?? purchasePrice;
   return InvestmentLot(
@@ -27,6 +29,7 @@ InvestmentLot lot({
     currentPrice: resolvedCurrentPrice,
     investedValue: quantity * purchasePrice,
     currentValue: quantity * resolvedCurrentPrice,
+    priceStatus: priceStatus,
   );
 }
 

@@ -105,5 +105,37 @@ void main() {
       expect(find.byType(FirstValueScreen), findsNothing);
       expect(find.text('open'), findsOneWidget);
     });
+
+    testWidgets('the data-provenance chip shows the real fetch time, not the render-time clock', (tester) async {
+      final refreshedAt = controller.lastRefreshedAt!;
+      final expectedTime =
+          '${refreshedAt.hour.toString().padLeft(2, '0')}:${refreshedAt.minute.toString().padLeft(2, '0')}';
+
+      await tester.pumpWidget(buildTestableWidget());
+
+      expect(find.textContaining('brapi.dev, hoje $expectedTime'), findsOneWidget);
+    });
+
+    testWidgets('the data-provenance chip flags stale quotes instead of implying full freshness', (tester) async {
+      portfolioRepository.holdingsToReturn = Holding.fromLots([
+        InvestmentLot(
+          id: 1,
+          ticker: 'PETR4',
+          type: InvestmentTypeEnum.STOCKS,
+          quantity: 10,
+          purchasePrice: 25,
+          purchaseDate: DateTime(2024, 1, 1),
+          currentPrice: 25,
+          investedValue: 250,
+          currentValue: 250,
+          priceStatus: PriceStatus.stalePurchasePrice,
+        ),
+      ]);
+      await controller.refresh();
+
+      await tester.pumpWidget(buildTestableWidget());
+
+      expect(find.textContaining('DADO · brapi.dev, algumas cotações indisponíveis'), findsOneWidget);
+    });
   });
 }

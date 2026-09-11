@@ -149,5 +149,34 @@ void main() {
 
       expect(find.text('Bem-vindo(a) de volta'), findsOneWidget);
     });
+
+    testWidgets('the data-provenance chip shows the real fetch time, not the render-time clock', (tester) async {
+      final holdings = [lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10)];
+      repository.holdingsToReturn = Holding.fromLots(holdings);
+      repository.summaryToReturn = statsFromLots(holdings).summary;
+      await controller.loadAll();
+      final refreshedAt = controller.lastRefreshedAt!;
+      final expectedTime =
+          '${refreshedAt.hour.toString().padLeft(2, '0')}:${refreshedAt.minute.toString().padLeft(2, '0')}';
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.textContaining('brapi.dev, hoje $expectedTime'), findsOneWidget);
+    });
+
+    testWidgets('the data-provenance chip flags stale quotes instead of implying full freshness', (tester) async {
+      repository.holdingsToReturn = Holding.fromLots([
+        lot(ticker: 'PETR4', priceStatus: PriceStatus.stalePurchasePrice),
+      ]);
+      await controller.loadAll();
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.textContaining('DADO · brapi.dev, algumas cotações indisponíveis'), findsOneWidget);
+    });
   });
 }

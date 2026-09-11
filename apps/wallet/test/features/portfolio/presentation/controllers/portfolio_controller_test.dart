@@ -184,6 +184,51 @@ void main() {
     });
   });
 
+  group('lastRefreshedAt', () {
+    test('is null before the first successful load', () {
+      expect(controller.lastRefreshedAt, isNull);
+    });
+
+    test('is set to the real fetch time on a successful load, not a placeholder', () async {
+      final before = DateTime.now();
+      await controller.loadAll();
+      final after = DateTime.now();
+
+      expect(controller.lastRefreshedAt, isNotNull);
+      expect(controller.lastRefreshedAt!.isBefore(before), isFalse);
+      expect(controller.lastRefreshedAt!.isAfter(after), isFalse);
+    });
+
+    test('stays null when the load fails', () async {
+      repository.holdingsError = Exception('network down');
+
+      await controller.loadAll();
+
+      expect(controller.lastRefreshedAt, isNull);
+    });
+  });
+
+  group('hasStaleQuote', () {
+    test('is false with no holdings or all-live holdings', () async {
+      expect(controller.hasStaleQuote, isFalse);
+
+      repository.holdingsToReturn = Holding.fromLots([lot(ticker: 'PETR4', priceStatus: PriceStatus.live)]);
+      await controller.loadAll();
+
+      expect(controller.hasStaleQuote, isFalse);
+    });
+
+    test('is true when any holding has a stale or unquoted price', () async {
+      repository.holdingsToReturn = Holding.fromLots([
+        lot(ticker: 'PETR4', priceStatus: PriceStatus.stalePurchasePrice),
+      ]);
+
+      await controller.loadAll();
+
+      expect(controller.hasStaleQuote, isTrue);
+    });
+  });
+
   group('loadAll — failure', () {
     test('a repository failure is captured as a user-facing error, not an unhandled exception', () async {
       final error = Exception('network down');

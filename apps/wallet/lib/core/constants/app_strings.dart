@@ -67,6 +67,7 @@ class AppStrings {
   static const String homeMentorWhySeeing = SharedStrings.homeMentorWhySeeing;
   static const String homeWealthSectionTitle = 'homeWealthSectionTitle';
   static const String homeWealthDataChipLabel = 'homeWealthDataChipLabel';
+  static const String homeWealthDataStaleSuffix = 'homeWealthDataStaleSuffix';
   static const String homeWealthScopePrefix = 'homeWealthScopePrefix';
   static const String homeChangeSectionTitle = 'homeChangeSectionTitle';
   static const String homeChangeCalcChipLabel = 'homeChangeCalcChipLabel';

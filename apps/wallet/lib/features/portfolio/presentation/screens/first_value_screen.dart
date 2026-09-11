@@ -26,8 +26,14 @@ class FirstValueScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
-    final now = TimeOfDay.now();
-    final time = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+    final refreshedAt = controller.lastRefreshedAt;
+    final time = refreshedAt == null
+        ? '--:--'
+        : '${refreshedAt.hour.toString().padLeft(2, '0')}:${refreshedAt.minute.toString().padLeft(2, '0')}';
+    final dataChipLabel = controller.hasStaleQuote
+        ? '${Translator.translate(AppStrings.homeWealthDataChipLabel)} · brapi.dev, '
+              '${Translator.translate(AppStrings.homeWealthDataStaleSuffix)}'
+        : '${Translator.translate(AppStrings.homeWealthDataChipLabel)} · brapi.dev, hoje $time';
 
     return Scaffold(
       body: CosmicBackground(
@@ -56,10 +62,7 @@ class FirstValueScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      LayerChip(
-                        layer: DataLayer.data,
-                        label: '${Translator.translate(AppStrings.homeWealthDataChipLabel)} · brapi.dev, hoje $time',
-                      ),
+                      LayerChip(layer: DataLayer.data, label: dataChipLabel),
                       const SizedBox(height: 12),
                       Text(
                         AppFormatters.currency(controller.summary.currentValue),
