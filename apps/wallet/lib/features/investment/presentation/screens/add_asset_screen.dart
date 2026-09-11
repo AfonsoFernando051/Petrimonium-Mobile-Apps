@@ -7,6 +7,7 @@ import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/screens/first_value_screen.dart';
 import 'package:petrimonium_wallet/features/investment/data/models/asset_registration_model.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/investment/domain/services/ticker_type_classifier.dart';
@@ -176,6 +177,8 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       type: _selectedType!,
     );
 
+    final wasEmptyPortfolio = widget.controller.holdings.isEmpty;
+
     setState(() => _isLoading = true);
     try {
       if (_isEditing) {
@@ -190,6 +193,16 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
           Translator.translate(_isEditing ? AppStrings.editAssetSuccessSnack : AppStrings.addAssetSuccessSnack),
           isSuccess: true,
         );
+        // The portfolio just went from zero to one holding: this is the
+        // FR-WAL-006/007 "primeiro valor" moment, a one-time guided read —
+        // replace this screen with it instead of popping straight back to
+        // the (still momentarily empty-looking) dashboard.
+        if (!_isEditing && wasEmptyPortfolio && widget.controller.holdings.isNotEmpty) {
+          await Navigator.of(
+            context,
+          ).pushReplacement(MaterialPageRoute(builder: (_) => FirstValueScreen(controller: widget.controller)));
+          return;
+        }
         // Editing pops with `true` so a caller (e.g. the lot tile that opened
         // this screen) can tell a change actually happened and refresh views
         // that hold their own now-stale snapshot of this lot.

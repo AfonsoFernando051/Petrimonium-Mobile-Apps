@@ -9,6 +9,7 @@ import 'package:petrimonium_wallet/features/investment/data/repositories/investm
 import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/screens/first_value_screen.dart';
 
 import '../../../portfolio/presentation/controllers/portfolio_controller_test.dart';
 
@@ -141,6 +142,101 @@ void main() {
         expect(find.byType(AddAssetScreen), findsNothing);
       },
     );
+
+    testWidgets('adding the very first asset to an empty portfolio opens FirstValueScreen instead of popping', (
+      tester,
+    ) async {
+      portfolioRepository.holdingsToReturn = Holding.fromLots([
+        InvestmentLot(
+          id: 1,
+          ticker: 'PETR4',
+          type: InvestmentTypeEnum.STOCKS,
+          quantity: 10,
+          purchasePrice: 25,
+          purchaseDate: DateTime(2024, 1, 1),
+          currentPrice: 25,
+          investedValue: 250,
+          currentValue: 250,
+        ),
+      ]);
+
+      await openScreen(tester);
+
+      await tester.tap(find.text('Ações'));
+      await tester.pump();
+
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.at(0), 'PETR4');
+      await tester.enterText(textFields.at(1), '10');
+      await tester.enterText(textFields.at(2), '25');
+      await tester.pump();
+
+      await tester.ensureVisible(find.text('Data de Compra'));
+      await tester.tap(find.text('Data de Compra'));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('OK'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tester.tap(find.byType(GameButton), warnIfMissed: false);
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+
+      expect(find.byType(FirstValueScreen), findsOneWidget);
+      expect(find.byType(AddAssetScreen), findsNothing);
+    });
+
+    testWidgets('adding another asset to an already non-empty portfolio just pops, no FirstValueScreen', (
+      tester,
+    ) async {
+      // Non-empty from the start: `wasEmptyPortfolio` is false the moment
+      // the screen opens, so this is never a "first value" moment.
+      final existingHolding = Holding.fromLots([
+        InvestmentLot(
+          id: 1,
+          ticker: 'VALE3',
+          type: InvestmentTypeEnum.STOCKS,
+          quantity: 5,
+          purchasePrice: 60,
+          purchaseDate: DateTime(2024, 1, 1),
+          currentPrice: 60,
+          investedValue: 300,
+          currentValue: 300,
+        ),
+      ]).first;
+      portfolioRepository.holdingsToReturn = [existingHolding];
+      // Loaded BEFORE the screen opens, so `controller.holdings` is
+      // genuinely non-empty when `_handleSubmit` checks it — unlike
+      // `holdingsToReturn` alone, which only affects a future refresh().
+      await controller.refresh();
+
+      await openScreen(tester);
+
+      await tester.tap(find.text('Ações'));
+      await tester.pump();
+
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.at(0), 'PETR4');
+      await tester.enterText(textFields.at(1), '10');
+      await tester.enterText(textFields.at(2), '25');
+      await tester.pump();
+
+      await tester.ensureVisible(find.text('Data de Compra'));
+      await tester.tap(find.text('Data de Compra'));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('OK'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tester.tap(find.byType(GameButton), warnIfMissed: false);
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+
+      expect(find.byType(FirstValueScreen), findsNothing);
+      expect(find.byType(AddAssetScreen), findsNothing);
+    });
 
     testWidgets('an addInvestment failure shows a friendly error and does not pop', (tester) async {
       when(() => investmentRepository.addInvestment(any())).thenThrow(Exception('server exploded'));

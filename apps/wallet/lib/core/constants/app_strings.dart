@@ -118,6 +118,16 @@ class AppStrings {
   static const String deleteAssetSuccessSnack = 'deleteAssetSuccessSnack';
   static const String deleteAssetFailedSnack = 'deleteAssetFailedSnack';
 
+  // FirstValueScreen — the one-time guided reading shown right after the
+  // very first asset is registered (FR-WAL-006/007), before the normal
+  // dashboard hierarchy takes over.
+  static const String firstValueTitle = 'firstValueTitle';
+  static const String firstValueIntro = 'firstValueIntro';
+  static const String firstValueCompositionTitle = 'firstValueCompositionTitle';
+  static const String firstValueMethodologyTitle = 'firstValueMethodologyTitle';
+  static const String firstValueMethodologyBody = 'firstValueMethodologyBody';
+  static const String firstValueCta = 'firstValueCta';
+
   // Proventos tab + notification popover.
   static const String proventosTitle = 'proventosTitle';
   static const String proventosSubtitle = 'proventosSubtitle';
