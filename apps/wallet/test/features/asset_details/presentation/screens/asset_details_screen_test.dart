@@ -121,6 +121,7 @@ void main() {
           unrealizedGain: 20,
           unrealizedGainPercent: 10,
           portfolioWeight: 15,
+          priceStatus: PriceStatus.live,
         ),
       );
       when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) async => details);
@@ -149,6 +150,7 @@ void main() {
           unrealizedGain: 20,
           unrealizedGainPercent: 10,
           portfolioWeight: 25,
+          priceStatus: PriceStatus.live,
         ),
       );
       when(() => mockRepository.fetchAssetDetails(any())).thenAnswer((_) async => details);

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/core/constants/app_colors.dart';
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
@@ -19,8 +22,9 @@ class UserPositionCard extends StatelessWidget {
     final pos = asset.userPosition;
     if (pos == null) return const SizedBox.shrink();
 
+    final isLive = pos.priceStatus == PriceStatus.live;
     final isPositive = pos.unrealizedGain >= 0;
-    final plColor = isPositive ? tokens.success : tokens.error;
+    final plColor = isLive ? (isPositive ? tokens.success : tokens.error) : tokens.textTertiary;
 
     return GlassCard(
       backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.55 : 0.94),
@@ -47,21 +51,32 @@ class UserPositionCard extends StatelessWidget {
                         style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 22),
                       ),
                       const SizedBox(height: 2),
-                      Row(
-                        children: [
-                          Icon(isPositive ? Icons.trending_up : Icons.trending_down, color: plColor, size: 16),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${isPositive ? '+' : ''}${AppFormatters.currency(pos.unrealizedGain, showCents: false)}',
-                            style: TextStyle(color: plColor, fontWeight: FontWeight.bold, fontSize: 13),
+                      // A fallback price makes unrealizedGain a meaningless 0% — say the
+                      // quote is missing instead of reporting "no change" as fact.
+                      if (isLive)
+                        Row(
+                          children: [
+                            Icon(isPositive ? Icons.trending_up : Icons.trending_down, color: plColor, size: 16),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${isPositive ? '+' : ''}${AppFormatters.currency(pos.unrealizedGain, showCents: false)}',
+                              style: TextStyle(color: plColor, fontWeight: FontWeight.bold, fontSize: 13),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              '(${AppFormatters.percent(pos.unrealizedGainPercent)})',
+                              style: TextStyle(color: plColor, fontSize: 11),
+                            ),
+                          ],
+                        )
+                      else
+                        UnavailableBadge(
+                          label: Translator.translate(
+                            pos.priceStatus == PriceStatus.notQuoted
+                                ? AppStrings.holdingNotQuoted
+                                : AppStrings.holdingQuoteUnavailable,
                           ),
-                          const SizedBox(width: 6),
-                          Text(
-                            '(${AppFormatters.percent(pos.unrealizedGainPercent)})',
-                            style: TextStyle(color: plColor, fontSize: 11),
-                          ),
-                        ],
-                      ),
+                        ),
                     ],
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/user_position.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/user_position_card.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   Widget buildTestableWidget(AssetDetails asset) {
@@ -33,6 +34,7 @@ void main() {
           unrealizedGain: 500,
           unrealizedGainPercent: 25,
           portfolioWeight: 12.34,
+          priceStatus: PriceStatus.live,
         ),
       );
 
@@ -66,6 +68,7 @@ void main() {
           unrealizedGain: -30,
           unrealizedGainPercent: -14.29,
           portfolioWeight: 5,
+          priceStatus: PriceStatus.live,
         ),
       );
 
@@ -75,6 +78,49 @@ void main() {
       expect(find.text('(-14.29%)'), findsOneWidget);
       expect(find.byIcon(Icons.trending_down), findsOneWidget);
       expect(find.text('10.50'), findsOneWidget);
+    });
+
+    testWidgets('shows an unavailable badge instead of a fake 0% gain when the price is stale', (tester) async {
+      const asset = AssetDetails(
+        ticker: 'PETR4',
+        userPosition: UserPosition(
+          quantity: 10,
+          averagePrice: 20,
+          investedValue: 200,
+          currentValue: 200,
+          unrealizedGain: 0,
+          unrealizedGainPercent: 0,
+          portfolioWeight: 5,
+          priceStatus: PriceStatus.stalePurchasePrice,
+        ),
+      );
+
+      await tester.pumpWidget(buildTestableWidget(asset));
+
+      expect(find.text('SEM COTAÇÃO'), findsOneWidget);
+      expect(find.byIcon(Icons.trending_up), findsNothing);
+      expect(find.byIcon(Icons.trending_down), findsNothing);
+      expect(find.text('(+0.00%)'), findsNothing);
+    });
+
+    testWidgets('shows a not-quoted badge for fixed income lots', (tester) async {
+      const asset = AssetDetails(
+        ticker: 'TESOURO-SELIC',
+        userPosition: UserPosition(
+          quantity: 10,
+          averagePrice: 100,
+          investedValue: 1000,
+          currentValue: 1000,
+          unrealizedGain: 0,
+          unrealizedGainPercent: 0,
+          portfolioWeight: 5,
+          priceStatus: PriceStatus.notQuoted,
+        ),
+      );
+
+      await tester.pumpWidget(buildTestableWidget(asset));
+
+      expect(find.text('NÃO COTADO'), findsOneWidget);
     });
   });
 }

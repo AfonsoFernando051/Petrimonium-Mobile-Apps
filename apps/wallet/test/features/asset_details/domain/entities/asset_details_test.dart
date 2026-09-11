@@ -43,6 +43,7 @@ void main() {
         unrealizedGain: 0,
         unrealizedGainPercent: 0,
         portfolioWeight: 0,
+        priceStatus: PriceStatus.live,
       );
       const zeroQuantity = AssetDetails(ticker: 'PETR4', userPosition: zeroPosition);
       expect(zeroQuantity.isOwned, isFalse);
@@ -55,6 +56,7 @@ void main() {
         unrealizedGain: 55,
         unrealizedGainPercent: 18.3,
         portfolioWeight: 5,
+        priceStatus: PriceStatus.live,
       );
       const owned = AssetDetails(ticker: 'PETR4', userPosition: ownedPosition);
       expect(owned.isOwned, isTrue);

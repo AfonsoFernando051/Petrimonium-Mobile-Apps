@@ -4,6 +4,7 @@ import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/user_position.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/concentration_warning.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   Widget buildTestableWidget(AssetDetails asset) {
@@ -36,6 +37,7 @@ void main() {
           unrealizedGain: 500,
           unrealizedGainPercent: 25,
           portfolioWeight: 34.567,
+          priceStatus: PriceStatus.live,
         ),
       );
 
