@@ -162,7 +162,11 @@ class _OverviewScreenState extends State<OverviewScreen> {
                 ],
               ),
               const SizedBox(height: 8),
-              HoldingsSection(holdings: controller.holdings, totalPortfolioValue: controller.summary.currentValue),
+              HoldingsSection(
+                holdings: controller.holdings,
+                totalPortfolioValue: controller.summary.currentValue,
+                controller: controller,
+              ),
             ],
 
             const SizedBox(height: 32),

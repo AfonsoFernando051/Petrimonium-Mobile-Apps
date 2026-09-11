@@ -231,4 +231,82 @@ void main() {
       },
     );
   });
+
+  group('AddAssetScreen — edit mode', () {
+    final lot = InvestmentLot(
+      id: 7,
+      ticker: 'PETR4',
+      type: InvestmentTypeEnum.STOCKS,
+      quantity: 10,
+      purchasePrice: 25,
+      purchaseDate: DateTime(2024, 1, 1),
+      currentPrice: 30,
+      investedValue: 250,
+      currentValue: 300,
+    );
+
+    Future<void> openEditScreen(WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => AddAssetScreen(controller: controller, editingLot: lot),
+                  ),
+                ),
+                child: const Text('open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+
+    testWidgets('pre-fills every field from the lot being edited and shows edit copy', (tester) async {
+      await openEditScreen(tester);
+
+      expect(find.text('Editar ativo'), findsWidgets);
+      expect(find.text('Salvar alterações'), findsOneWidget);
+
+      final textFields = find.byType(TextFormField);
+      expect(tester.widget<TextFormField>(textFields.at(0)).controller!.text, 'PETR4');
+      expect(tester.widget<TextFormField>(textFields.at(1)).controller!.text, '10');
+      expect(tester.widget<TextFormField>(textFields.at(2)).controller!.text, '25');
+      expect(find.text('01/01/2024'), findsOneWidget);
+
+      final button = tester.widget<GameButton>(find.byType(GameButton));
+      expect(button.onPressed, isNotNull);
+    });
+
+    testWidgets('submitting calls updateInvestment with the lot id, never addInvestment, and pops with true', (
+      tester,
+    ) async {
+      when(() => investmentRepository.updateInvestment(any(), any())).thenAnswer((_) async {});
+
+      await openEditScreen(tester);
+
+      await tester.enterText(find.byType(TextFormField).at(1), '15');
+      await tester.pump();
+
+      await tester.ensureVisible(find.byType(GameButton));
+      await tester.tap(find.byType(GameButton), warnIfMissed: false);
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+
+      final captured = verify(() => investmentRepository.updateInvestment(7, captureAny())).captured;
+      final submitted = captured.single as AssetRegistrationModel;
+      expect(submitted.name, 'PETR4');
+      expect(submitted.quantity, 15);
+
+      verifyNever(() => investmentRepository.addInvestment(any()));
+      expect(find.byType(AddAssetScreen), findsNothing);
+    });
+  });
 }

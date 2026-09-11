@@ -3,12 +3,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/expandable_category.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/holdings_section.dart';
 
 import 'package:petrimonium_shared_features/testing.dart';
 
+import '../controllers/portfolio_controller_test.dart';
+
 void main() {
+  final controller = PortfolioController(
+    repository: FakePortfolioRepository(),
+    achievementsLocalRepository: FakeAchievementsLocalRepository(),
+    achievementsRepository: FakeAchievementsRepository(),
+    gamificationRepository: FakeGamificationRepository(),
+    missionsRepository: FakeMissionsRepository(),
+  );
+
   setUp(() {
     Translator.currentLanguage = 'pt';
   });
@@ -17,7 +28,7 @@ void main() {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: HoldingsSection(holdings: holdings, totalPortfolioValue: totalPortfolioValue),
+        body: HoldingsSection(holdings: holdings, totalPortfolioValue: totalPortfolioValue, controller: controller),
       ),
     );
   }

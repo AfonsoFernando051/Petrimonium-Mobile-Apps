@@ -14,6 +14,14 @@ class InvestmentRepository {
     return remoteDataSource.addInvestment(asset);
   }
 
+  Future<void> updateInvestment(int id, AssetRegistrationModel asset) async {
+    return remoteDataSource.updateInvestment(id, asset);
+  }
+
+  Future<void> deleteInvestment(int id) async {
+    return remoteDataSource.deleteInvestment(id);
+  }
+
   Future<Map<String, dynamic>?> fetchQuote(String ticker) async {
     return remoteDataSource.fetchQuote(ticker);
   }

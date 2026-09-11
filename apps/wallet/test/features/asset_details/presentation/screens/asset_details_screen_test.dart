@@ -22,22 +22,33 @@ import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/p
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/portfolio_context_card.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/purchase_history_card.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/user_position_card.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+
+import '../../../portfolio/presentation/controllers/portfolio_controller_test.dart';
 
 class MockAssetDetailsRepository extends Mock implements AssetDetailsRepository {}
 
 void main() {
   late MockAssetDetailsRepository mockRepository;
+  late PortfolioController controller;
 
   setUp(() {
     mockRepository = MockAssetDetailsRepository();
     DI.assetDetailsRepository = mockRepository;
+    controller = PortfolioController(
+      repository: FakePortfolioRepository(),
+      achievementsLocalRepository: FakeAchievementsLocalRepository(),
+      achievementsRepository: FakeAchievementsRepository(),
+      gamificationRepository: FakeGamificationRepository(),
+      missionsRepository: FakeMissionsRepository(),
+    );
   });
 
   Widget buildTestableWidget({String ticker = 'PETR4'}) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: AssetDetailsScreen(ticker: ticker),
+      home: AssetDetailsScreen(ticker: ticker, controller: controller),
     );
   }
 
@@ -168,9 +179,11 @@ void main() {
             builder: (context) => Scaffold(
               body: Center(
                 child: ElevatedButton(
-                  onPressed: () => Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (_) => const AssetDetailsScreen(ticker: 'PETR4'))),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => AssetDetailsScreen(ticker: 'PETR4', controller: controller),
+                    ),
+                  ),
                   child: const Text('open'),
                 ),
               ),
@@ -231,7 +244,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             theme: AppTheme.dark,
-            home: AssetDetailsScreen(ticker: 'PETR4', holding: buildHolding()),
+            home: AssetDetailsScreen(ticker: 'PETR4', holding: buildHolding(), controller: controller),
           ),
         );
         await tester.pump();
@@ -256,7 +269,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             theme: AppTheme.dark,
-            home: AssetDetailsScreen(ticker: 'PETR4', holding: buildHolding()),
+            home: AssetDetailsScreen(ticker: 'PETR4', holding: buildHolding(), controller: controller),
           ),
         );
         await tester.pump();

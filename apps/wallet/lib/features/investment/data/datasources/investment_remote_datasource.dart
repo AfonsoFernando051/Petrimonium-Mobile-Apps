@@ -39,6 +39,28 @@ class InvestmentRemoteDataSource {
     }
   }
 
+  /// Edits [id] in place — never touches any other lot.
+  Future<void> updateInvestment(int id, AssetRegistrationModel asset) async {
+    final response = await apiClient.put('/api/investments/$id', asset.toJson());
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to update investment. Status Code: ${response.statusCode}'),
+      );
+    }
+  }
+
+  /// Removes [id] — never touches any other lot.
+  Future<void> deleteInvestment(int id) async {
+    final response = await apiClient.delete('/api/investments/$id');
+
+    if (response.statusCode != 204) {
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to delete investment. Status Code: ${response.statusCode}'),
+      );
+    }
+  }
+
   Future<Map<String, dynamic>?> fetchQuote(String ticker) async {
     try {
       final response = await apiClient.get('/api/investments/quote/$ticker');
