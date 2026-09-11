@@ -104,6 +104,9 @@ class AppStrings {
   static const String addAssetFailedSnack = 'addAssetFailedSnack';
   static const String addAssetSelectTypeError = 'addAssetSelectTypeError';
   static const String addAssetSelectDateError = 'addAssetSelectDateError';
+  static const String addAssetPriceSuggestionTodayLabel = 'addAssetPriceSuggestionTodayLabel';
+  static const String addAssetPriceSuggestionDatePrefix = 'addAssetPriceSuggestionDatePrefix';
+  static const String addAssetNoHistoricalPriceWarning = 'addAssetNoHistoricalPriceWarning';
 
   // AddAssetScreen in edit mode (editing an existing lot) + the per-lot
   // edit/delete actions in PurchaseHistoryCard.

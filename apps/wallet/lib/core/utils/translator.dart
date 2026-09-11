@@ -128,6 +128,10 @@ class Translator {
       AppStrings.addAssetFailedSnack: 'Não foi possível adicionar o ativo.',
       AppStrings.addAssetSelectTypeError: 'Selecione um tipo de ativo.',
       AppStrings.addAssetSelectDateError: 'Selecione uma data de compra.',
+      AppStrings.addAssetPriceSuggestionTodayLabel: 'Sugestão: cotação de hoje',
+      AppStrings.addAssetPriceSuggestionDatePrefix: 'Sugestão: cotação de',
+      AppStrings.addAssetNoHistoricalPriceWarning:
+          'Não encontramos uma cotação para essa data. Informe o preço de compra manualmente.',
       AppStrings.editAssetTitle: 'Editar ativo',
       AppStrings.editAssetCta: 'Salvar alterações',
       AppStrings.editAssetSuccessSnack: 'Ativo atualizado.',
@@ -272,6 +276,10 @@ class Translator {
       AppStrings.addAssetFailedSnack: "Couldn't add the asset.",
       AppStrings.addAssetSelectTypeError: 'Select an asset type.',
       AppStrings.addAssetSelectDateError: 'Select a purchase date.',
+      AppStrings.addAssetPriceSuggestionTodayLabel: "Suggestion: today's quote",
+      AppStrings.addAssetPriceSuggestionDatePrefix: 'Suggestion: quote from',
+      AppStrings.addAssetNoHistoricalPriceWarning:
+          "We couldn't find a quote for that date. Enter the purchase price manually.",
       AppStrings.editAssetTitle: 'Edit asset',
       AppStrings.editAssetCta: 'Save changes',
       AppStrings.editAssetSuccessSnack: 'Asset updated.',
@@ -406,6 +414,10 @@ class Translator {
       AppStrings.addAssetFailedSnack: 'No se pudo agregar el activo.',
       AppStrings.addAssetSelectTypeError: 'Selecciona un tipo de activo.',
       AppStrings.addAssetSelectDateError: 'Selecciona una fecha de compra.',
+      AppStrings.addAssetPriceSuggestionTodayLabel: 'Sugerencia: cotización de hoy',
+      AppStrings.addAssetPriceSuggestionDatePrefix: 'Sugerencia: cotización del',
+      AppStrings.addAssetNoHistoricalPriceWarning:
+          'No encontramos una cotización para esa fecha. Ingresa el precio de compra manualmente.',
       AppStrings.editAssetTitle: 'Editar activo',
       AppStrings.editAssetCta: 'Guardar cambios',
       AppStrings.editAssetSuccessSnack: 'Activo actualizado.',

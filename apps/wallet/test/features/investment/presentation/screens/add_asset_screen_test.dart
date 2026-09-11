@@ -324,8 +324,66 @@ void main() {
 
         final priceField = tester.widget<TextFormField>(find.byType(TextFormField).at(2));
         expect(priceField.controller!.text, '18.5');
+
+        // AC3 (DEM-54): the suggestion's origin/date must be shown, not just
+        // silently filled in.
+        final now = DateTime.now();
+        final expectedDate =
+            '${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}';
+        expect(find.textContaining('Sugestão: cotação de $expectedDate'), findsOneWidget);
       },
     );
+
+    testWidgets('selecting a ticker before any date shows a "today\'s quote" suggestion caption', (tester) async {
+      when(() => investmentRepository.searchQuotes(any())).thenAnswer(
+        (_) async => [
+          {'symbol': 'PETR4', 'shortName': 'Petrobras', 'regularMarketPrice': 25.0},
+        ],
+      );
+
+      await openScreen(tester);
+
+      await tester.enterText(find.byType(TextFormField).at(0), 'PE');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('PETR4'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Sugestão: cotação de hoje'), findsOneWidget);
+    });
+
+    testWidgets('no historical quote for the picked date clears the live-quote price instead of silently keeping it', (
+      tester,
+    ) async {
+      when(() => investmentRepository.searchQuotes(any())).thenAnswer(
+        (_) async => [
+          {'symbol': 'PETR4', 'shortName': 'Petrobras', 'regularMarketPrice': 25.0},
+        ],
+      );
+      // Default stub from setUp already returns null for fetchQuoteAtDate.
+
+      await openScreen(tester);
+
+      // Ticker first — fills the live quote and its "hoje" caption.
+      await tester.enterText(find.byType(TextFormField).at(0), 'PE');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('PETR4'));
+      await tester.pumpAndSettle();
+      expect(find.text('Sugestão: cotação de hoje'), findsOneWidget);
+
+      // Now pick a date — the historical lookup (stubbed to return null)
+      // must never leave today's live price looking verified for it.
+      await tester.ensureVisible(find.text('Data de Compra'));
+      await tester.tap(find.text('Data de Compra'));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('OK'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      final priceField = tester.widget<TextFormField>(find.byType(TextFormField).at(2));
+      expect(priceField.controller!.text, isEmpty);
+      expect(find.text('Sugestão: cotação de hoje'), findsNothing);
+      expect(find.textContaining('Não encontramos uma cotação para essa data'), findsOneWidget);
+    });
   });
 
   group('AddAssetScreen — edit mode', () {
@@ -375,6 +433,10 @@ void main() {
       expect(tester.widget<TextFormField>(textFields.at(1)).controller!.text, '10');
       expect(tester.widget<TextFormField>(textFields.at(2)).controller!.text, '25');
       expect(find.text('01/01/2024'), findsOneWidget);
+
+      // The pre-filled price is the lot's real saved purchase price, not a
+      // quote suggestion — no "Sugestão" caption should appear for it.
+      expect(find.textContaining('Sugestão'), findsNothing);
 
       final button = tester.widget<GameButton>(find.byType(GameButton));
       expect(button.onPressed, isNotNull);

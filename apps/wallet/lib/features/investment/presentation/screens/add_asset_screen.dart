@@ -53,6 +53,26 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   DateTime? _selectedDate;
   bool _isLoading = false;
 
+  /// The exact price text this screen last set programmatically from a
+  /// quote — live or historical — and the date it's confirmed for (`null`
+  /// means "today's live quote", not yet verified against a purchase date).
+  /// Used to (a) show a "Sugestão" caption only while the field still holds
+  /// that exact suggestion, and (b) tell a live-quote guess apart from an
+  /// already-confirmed historical price so a failed historical lookup never
+  /// leaves an unrelated live number looking as if it were verified for the
+  /// newly picked date (DEM-54).
+  String? _priceSuggestionText;
+  DateTime? _priceSuggestionDate;
+
+  bool get _showsPriceSuggestion => _priceSuggestionText != null && _priceController.text == _priceSuggestionText;
+
+  String _priceSuggestionCaption() {
+    final date = _priceSuggestionDate;
+    if (date == null) return Translator.translate(AppStrings.addAssetPriceSuggestionTodayLabel);
+    final formatted = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+    return '${Translator.translate(AppStrings.addAssetPriceSuggestionDatePrefix)} $formatted';
+  }
+
   bool get _isEditing => widget.editingLot != null;
 
   @override
@@ -147,10 +167,30 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
     final ticker = _nameController.text.trim();
     if (ticker.isEmpty || _selectedDate == null) return;
 
+    // Captured before the await: does the field currently hold an
+    // unverified live-quote suggestion from before this date was picked?
+    final hadUnverifiedLiveQuote = _priceSuggestionDate == null && _priceController.text == _priceSuggestionText;
+
     final quote = await DI.investmentRepository.fetchQuoteAtDate(ticker, _formatDate(_selectedDate!));
     final price = quote?['regularMarketPrice'];
-    if (price != null && mounted) {
-      setState(() => _priceController.text = price.toString());
+    if (!mounted) return;
+
+    if (price != null) {
+      setState(() {
+        _priceController.text = price.toString();
+        _priceSuggestionText = price.toString();
+        _priceSuggestionDate = _selectedDate;
+      });
+    } else if (hadUnverifiedLiveQuote) {
+      // No historical quote exists for this date. Keeping today's live
+      // number here would silently present it as verified for a date it has
+      // nothing to do with — clear it and ask for a manual entry instead.
+      setState(() {
+        _priceController.text = '';
+        _priceSuggestionText = null;
+        _priceSuggestionDate = null;
+      });
+      GameSnack.show(context, Translator.translate(AppStrings.addAssetNoHistoricalPriceWarning), isError: true);
     }
   }
 
@@ -251,8 +291,11 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
           // that date instead of overwriting it with today's live quote.
           _refreshPriceForSelectedDate();
         } else {
+          final liveQuote = selection['regularMarketPrice']?.toString() ?? selection['close']?.toString() ?? '';
           setState(() {
-            _priceController.text = selection['regularMarketPrice']?.toString() ?? selection['close']?.toString() ?? '';
+            _priceController.text = liveQuote;
+            _priceSuggestionText = liveQuote.isEmpty ? null : liveQuote;
+            _priceSuggestionDate = null;
           });
         }
         _formKey.currentState?.validate();
@@ -404,15 +447,28 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                       ),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: TextFormField(
-                          controller: _priceController,
-                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                          style: TextStyle(color: tokens.textPrimary),
-                          decoration: _fieldDecoration(
-                            tokens,
-                            hint: Translator.translate(AppStrings.addAssetPriceHint),
-                          ),
-                          validator: FinancialInputValidators.price,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              controller: _priceController,
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                              style: TextStyle(color: tokens.textPrimary),
+                              decoration: _fieldDecoration(
+                                tokens,
+                                hint: Translator.translate(AppStrings.addAssetPriceHint),
+                              ),
+                              validator: FinancialInputValidators.price,
+                            ),
+                            if (_showsPriceSuggestion)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4, left: 2),
+                                child: Text(
+                                  _priceSuggestionCaption(),
+                                  style: TextStyle(color: tokens.textTertiary, fontSize: 11),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                     ],
