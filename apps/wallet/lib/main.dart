@@ -15,6 +15,7 @@ import 'package:petrimonium_wallet/core/navigation/start_route_resolver.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_wallet/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/screens/investor_profile_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/pet_setup_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/quick_setup_screen.dart';
@@ -123,6 +124,8 @@ class _MyAppState extends State<MyApp> {
               switch (snapshot.data) {
                 case StartRoute.home:
                   return const DashboardScreen();
+                case StartRoute.investorProfile:
+                  return const InvestorProfileScreen();
                 case StartRoute.quickSetup:
                   return const QuickSetupScreen();
                 case StartRoute.mentorWelcome:

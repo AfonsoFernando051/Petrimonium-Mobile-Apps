@@ -162,6 +162,17 @@ class AppStrings {
   static const String privacyMemoryConversationsButton = 'privacyMemoryConversationsButton';
   static const String quickSetupSettingsSubtitle = 'quickSetupSettingsSubtitle';
   static const String quickSetupSaveCta = 'quickSetupSaveCta';
+
+  // InvestorProfileScreen — Wallet's own investor-profile step (goal/horizon/
+  // experience), shown once after quick setup only when the account has no
+  // answer yet (possibly already given via Academy).
+  static const String investorProfileTitle = 'investorProfileTitle';
+  static const String investorProfileSubtitle = 'investorProfileSubtitle';
+  static const String investorProfileGoalLabel = 'investorProfileGoalLabel';
+  static const String investorProfileHorizonLabel = 'investorProfileHorizonLabel';
+  static const String investorProfileExperienceLabel = 'investorProfileExperienceLabel';
+  static const String investorProfileCta = 'investorProfileCta';
+  static const String investorProfileFailedSnack = 'investorProfileFailedSnack';
   static const String quickSetupSavedSnack = 'quickSetupSavedSnack';
 
   // Signup

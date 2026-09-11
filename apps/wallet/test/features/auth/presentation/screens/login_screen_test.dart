@@ -30,8 +30,6 @@ void main() {
     when(
       () => mockOnboardingRepository.getStatus(),
     ).thenAnswer((_) async => const OnboardingStatusModel(hasAnswered: false, profile: null));
-
-    when(() => mockOnboardingRepository.getQuestions()).thenAnswer((_) async => <QuestionModel>[]);
   });
 
   Widget buildTestableWidget() {

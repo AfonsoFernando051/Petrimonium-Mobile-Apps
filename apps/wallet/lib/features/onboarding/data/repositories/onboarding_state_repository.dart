@@ -34,6 +34,7 @@ class OnboardingStateRepository {
   static const _portfolioActivationSeenKey = 'portfolio_activation_seen';
   static const _mentorWelcomeSeenKey = 'onboarding_mentor_welcome_seen';
   static const _quickSetupDoneKey = 'onboarding_quick_setup_done';
+  static const _investorProfileSkippedKey = 'onboarding_investor_profile_skipped';
 
   /// Wallet's 2-screen mini-onboarding gate — see `MentorWelcomeScreen`.
   /// Unlike [hasSetGoal]/[isTutorialCompleted] (still defined below for the
@@ -58,6 +59,21 @@ class OnboardingStateRepository {
   Future<void> markQuickSetupDone() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(await UserScopedPrefs.key(_quickSetupDoneKey), true);
+  }
+
+  /// Whether the user explicitly dismissed the investor-profile step
+  /// (`InvestorProfileScreen`) via "Agora não" — separate from the backend's
+  /// own `hasAnswered` truth (`OnboardingRepository.getStatus`), since a skip
+  /// must stop `StartRouteResolver` from re-prompting every login without
+  /// ever telling the backend anything was answered.
+  Future<bool> hasSkippedInvestorProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(await _migrateBool(prefs, _investorProfileSkippedKey)) ?? false;
+  }
+
+  Future<void> markInvestorProfileSkipped() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(await UserScopedPrefs.key(_investorProfileSkippedKey), true);
   }
 
   Future<bool> hasSetGoal() async {

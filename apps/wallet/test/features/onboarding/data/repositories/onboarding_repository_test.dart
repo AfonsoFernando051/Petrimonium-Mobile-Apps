@@ -15,16 +15,6 @@ void main() {
     repository = OnboardingRepository(remoteDataSource: mockDataSource);
   });
 
-  group('getQuestions', () {
-    test('delegates to the data source and returns its result unchanged', () async {
-      final questions = <QuestionModel>[];
-      when(() => mockDataSource.getQuestions()).thenAnswer((_) async => questions);
-
-      expect(await repository.getQuestions(), same(questions));
-      verify(() => mockDataSource.getQuestions()).called(1);
-    });
-  });
-
   group('getStatus', () {
     test('delegates to the data source and returns its result unchanged', () async {
       const status = OnboardingStatusModel(hasAnswered: true, profile: 'moderate');
@@ -41,13 +31,29 @@ void main() {
   });
 
   group('submitAssessment', () {
-    test('passes the selected option ids straight through', () async {
-      when(() => mockDataSource.submitAssessment(any())).thenAnswer((_) async => 'moderate');
+    test('passes the three answers straight through', () async {
+      when(
+        () => mockDataSource.submitAssessment(
+          goal: any(named: 'goal'),
+          investmentHorizon: any(named: 'investmentHorizon'),
+          experienceLevel: any(named: 'experienceLevel'),
+        ),
+      ).thenAnswer((_) async => 'TACTICIAN');
 
-      final result = await repository.submitAssessment(['q1_a', 'q2_b']);
+      final result = await repository.submitAssessment(
+        goal: 'INVEST_WITH_CONFIDENCE',
+        investmentHorizon: 'MORE_THAN_FIVE_YEARS',
+        experienceLevel: 'PRACTITIONER',
+      );
 
-      expect(result, 'moderate');
-      verify(() => mockDataSource.submitAssessment(['q1_a', 'q2_b'])).called(1);
+      expect(result, 'TACTICIAN');
+      verify(
+        () => mockDataSource.submitAssessment(
+          goal: 'INVEST_WITH_CONFIDENCE',
+          investmentHorizon: 'MORE_THAN_FIVE_YEARS',
+          experienceLevel: 'PRACTITIONER',
+        ),
+      ).called(1);
     });
   });
 }

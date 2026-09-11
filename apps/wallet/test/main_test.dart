@@ -9,7 +9,9 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_wallet/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_wallet/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_state_repository.dart';
+import 'package:petrimonium_wallet/features/onboarding/presentation/screens/investor_profile_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/mentor_welcome_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/pet_setup_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/quick_setup_screen.dart';
@@ -28,6 +30,8 @@ import 'package:petrimonium_wallet/main.dart';
 class MockAuthRepository extends Mock implements AuthRepository {}
 
 class MockPetRepository extends Mock implements PetRepository {}
+
+class MockOnboardingRepository extends Mock implements OnboardingRepository {}
 
 class FakeMascotRepository implements MascotRepository {
   // CAT rather than the default DOG: DOG now ships a real `dog.riv`, and
@@ -235,6 +239,11 @@ void main() {
       final onboardingState = OnboardingStateRepository();
       await onboardingState.markMentorWelcomeSeen();
       await onboardingState.markQuickSetupDone();
+      // Skips the investor-profile step locally rather than mocking
+      // DI.onboardingRepository's real, network-backed getStatus() — same
+      // "use the real, SharedPreferences-backed repository" style already
+      // used above for the other onboarding flags.
+      await onboardingState.markInvestorProfileSkipped();
       DI.onboardingStateRepository = onboardingState;
 
       // DashboardScreen's IndexedStack mounts all 4 tabs at once (Home,
@@ -268,6 +277,38 @@ void main() {
 
       expect(find.byType(DashboardScreen), findsOneWidget);
     });
+
+    testWidgets(
+      'routes to InvestorProfileScreen once quick setup is done but the investor profile is neither answered nor skipped',
+      (tester) async {
+        final authRepository = MockAuthRepository();
+        when(() => authRepository.isLoggedIn()).thenAnswer((_) async => true);
+        DI.authRepository = authRepository;
+
+        final petRepository = MockPetRepository();
+        when(() => petRepository.getPetStatus()).thenAnswer((_) async => true);
+        DI.petRepository = petRepository;
+
+        DI.mascotRepository = _NamedFakeMascotRepository();
+        final onboardingState = OnboardingStateRepository();
+        await onboardingState.markMentorWelcomeSeen();
+        await onboardingState.markQuickSetupDone();
+        DI.onboardingStateRepository = onboardingState;
+
+        final onboardingRepository = MockOnboardingRepository();
+        when(
+          () => onboardingRepository.getStatus(),
+        ).thenAnswer((_) async => const OnboardingStatusModel(hasAnswered: false, profile: null));
+        DI.onboardingRepository = onboardingRepository;
+
+        await tester.pumpWidget(buildTestable());
+        await tester.pump();
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
+
+        expect(find.byType(InvestorProfileScreen), findsOneWidget);
+      },
+    );
   });
 }
 

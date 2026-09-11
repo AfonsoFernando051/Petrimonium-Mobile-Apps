@@ -45,6 +45,17 @@ void main() {
     });
   });
 
+  group('hasSkippedInvestorProfile / markInvestorProfileSkipped', () {
+    test('defaults to false', () async {
+      expect(await repository.hasSkippedInvestorProfile(), isFalse);
+    });
+
+    test('becomes true after markInvestorProfileSkipped', () async {
+      await repository.markInvestorProfileSkipped();
+      expect(await repository.hasSkippedInvestorProfile(), isTrue);
+    });
+  });
+
   group('hasCompletedQuickSetup / markQuickSetupDone', () {
     test('defaults to false', () async {
       expect(await repository.hasCompletedQuickSetup(), isFalse);

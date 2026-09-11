@@ -6,10 +6,15 @@ class OnboardingRepository {
 
   OnboardingRepository({required this.remoteDataSource});
 
-  Future<List<QuestionModel>> getQuestions() => remoteDataSource.getQuestions();
-
   Future<OnboardingStatusModel> getStatus() => remoteDataSource.getStatus();
 
-  Future<String> submitAssessment(List<String> selectedOptionIds) =>
-      remoteDataSource.submitAssessment(selectedOptionIds);
+  Future<String> submitAssessment({
+    required String goal,
+    required String investmentHorizon,
+    required String experienceLevel,
+  }) => remoteDataSource.submitAssessment(
+    goal: goal,
+    investmentHorizon: investmentHorizon,
+    experienceLevel: experienceLevel,
+  );
 }

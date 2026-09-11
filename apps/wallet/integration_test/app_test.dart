@@ -105,7 +105,6 @@ void main() {
     when(
       () => mockOnboardingRepository.getStatus(),
     ).thenAnswer((_) async => const OnboardingStatusModel(hasAnswered: true, profile: 'moderate'));
-    when(() => mockOnboardingRepository.getQuestions()).thenAnswer((_) async => <QuestionModel>[]);
 
     // Fully onboarded: every StartRouteResolver gate before StartRoute.home
     // resolves as already-done.

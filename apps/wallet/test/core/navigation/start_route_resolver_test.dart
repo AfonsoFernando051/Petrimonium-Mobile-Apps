@@ -5,6 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/navigation/start_route_resolver.dart';
 import 'package:petrimonium_wallet/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/datasources/onboarding_remote_datasource.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_state_repository.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
@@ -102,11 +104,35 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveLastActiveAt(DateTime lastActiveAt) async {}
 }
 
+/// In-memory [OnboardingRepository] double — the real one calls the backend's
+/// `/api/onboarding/status`.
+class FakeOnboardingRepository implements OnboardingRepository {
+  bool hasAnsweredInvestorProfile = true;
+  Object? statusError;
+
+  @override
+  Future<OnboardingStatusModel> getStatus() async {
+    if (statusError != null) throw statusError!;
+    return OnboardingStatusModel(hasAnswered: hasAnsweredInvestorProfile, profile: null);
+  }
+
+  @override
+  Future<String> submitAssessment({
+    required String goal,
+    required String investmentHorizon,
+    required String experienceLevel,
+  }) async => 'TACTICIAN';
+
+  @override
+  OnboardingRemoteDataSource get remoteDataSource => throw UnimplementedError();
+}
+
 /// In-memory [OnboardingStateRepository] double for the fields
 /// [StartRouteResolver] actually reads.
 class FakeOnboardingStateRepository implements OnboardingStateRepository {
   bool mentorWelcomeSeen = true;
   bool quickSetupDone = true;
+  bool investorProfileSkipped = false;
 
   @override
   Future<bool> hasSeenMentorWelcome() async => mentorWelcomeSeen;
@@ -122,6 +148,14 @@ class FakeOnboardingStateRepository implements OnboardingStateRepository {
   @override
   Future<void> markQuickSetupDone() async {
     quickSetupDone = true;
+  }
+
+  @override
+  Future<bool> hasSkippedInvestorProfile() async => investorProfileSkipped;
+
+  @override
+  Future<void> markInvestorProfileSkipped() async {
+    investorProfileSkipped = true;
   }
 
   @override
@@ -172,6 +206,7 @@ void main() {
   late FakePetRepository petRepository;
   late FakeMascotRepository mascotRepository;
   late FakeOnboardingStateRepository onboardingStateRepository;
+  late FakeOnboardingRepository onboardingRepository;
   late StartRouteResolver resolver;
 
   setUp(() {
@@ -179,11 +214,13 @@ void main() {
     petRepository = FakePetRepository();
     mascotRepository = FakeMascotRepository();
     onboardingStateRepository = FakeOnboardingStateRepository();
+    onboardingRepository = FakeOnboardingRepository();
     resolver = StartRouteResolver(
       authRepository: authRepository,
       petRepository: petRepository,
       mascotRepository: mascotRepository,
       onboardingStateRepository: onboardingStateRepository,
+      onboardingRepository: onboardingRepository,
     );
   });
 
@@ -209,6 +246,32 @@ void main() {
     final route = await resolver.resolve();
 
     expect(route, StartRoute.quickSetup);
+  });
+
+  test('quick setup done but investor profile not answered nor skipped routes to investorProfile', () async {
+    onboardingRepository.hasAnsweredInvestorProfile = false;
+
+    final route = await resolver.resolve();
+
+    expect(route, StartRoute.investorProfile);
+  });
+
+  test('investor profile already answered (e.g. via Academy) routes home, real network truth wins', () async {
+    onboardingRepository.hasAnsweredInvestorProfile = true;
+
+    final route = await resolver.resolve();
+
+    expect(route, StartRoute.home);
+  });
+
+  test('investor profile locally skipped routes home without even checking the backend', () async {
+    onboardingStateRepository.investorProfileSkipped = true;
+    onboardingRepository.hasAnsweredInvestorProfile = false;
+    onboardingRepository.statusError = Exception('should never be called');
+
+    final route = await resolver.resolve();
+
+    expect(route, StartRoute.home);
   });
 
   test('everything resolved routes home', () async {
@@ -278,6 +341,24 @@ void main() {
 
   test('no connectivity (SocketException) preserves the session and routes home, not login', () async {
     petRepository.statusError = const SocketException('Failed host lookup');
+
+    final route = await resolver.resolve();
+
+    expect(route, StartRoute.home);
+    expect(authRepository.logoutCalled, isFalse);
+  });
+
+  test('a failure reading investor-profile status logs the user out and routes to login', () async {
+    onboardingRepository.statusError = Exception('boom');
+
+    final route = await resolver.resolve();
+
+    expect(route, StartRoute.login);
+    expect(authRepository.logoutCalled, isTrue);
+  });
+
+  test('a network timeout reading investor-profile status preserves the session and routes home', () async {
+    onboardingRepository.statusError = TimeoutException('boom');
 
     final route = await resolver.resolve();
 

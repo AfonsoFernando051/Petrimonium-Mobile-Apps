@@ -4,12 +4,13 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_wallet/features/auth/data/repositories/auth_repository.dart';
+import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboarding_state_repository.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 
 /// Where `MyApp` should route the user on cold start.
-enum StartRoute { login, petSetup, mentorWelcome, quickSetup, home }
+enum StartRoute { login, petSetup, mentorWelcome, quickSetup, investorProfile, home }
 
 /// A pet that already exists server-side (e.g. from the Academy) but has no
 /// name cached on this device yet — first login on a new device — falls
@@ -28,6 +29,7 @@ const String kDefaultWalletPetName = 'Nino';
 /// authenticated, no Pet on the account yet -> [StartRoute.petSetup]
 /// has a Pet, mentor welcome not seen yet -> [StartRoute.mentorWelcome]
 /// welcome seen, quick setup (market/currency) not done -> [StartRoute.quickSetup]
+/// quick setup done, investor profile neither answered nor skipped -> [StartRoute.investorProfile]
 /// everything resolved -> [StartRoute.home]
 ///
 /// A returning Academy user already has a Pet ("mesma conta Petrimonium da
@@ -47,15 +49,18 @@ class StartRouteResolver {
     PetRepository? petRepository,
     MascotRepository? mascotRepository,
     OnboardingStateRepository? onboardingStateRepository,
+    OnboardingRepository? onboardingRepository,
   }) : _authRepository = authRepository ?? DI.authRepository,
        _petRepository = petRepository ?? DI.petRepository,
        _mascotRepository = mascotRepository ?? DI.mascotRepository,
-       _onboardingStateRepository = onboardingStateRepository ?? DI.onboardingStateRepository;
+       _onboardingStateRepository = onboardingStateRepository ?? DI.onboardingStateRepository,
+       _onboardingRepository = onboardingRepository ?? DI.onboardingRepository;
 
   final AuthRepository _authRepository;
   final PetRepository _petRepository;
   final MascotRepository _mascotRepository;
   final OnboardingStateRepository _onboardingStateRepository;
+  final OnboardingRepository _onboardingRepository;
 
   Future<StartRoute> resolve() async {
     final loggedIn = await _authRepository.isLoggedIn();
@@ -72,6 +77,8 @@ class StartRouteResolver {
 
       final quickSetupDone = await _onboardingStateRepository.hasCompletedQuickSetup();
       if (!quickSetupDone) return StartRoute.quickSetup;
+
+      if (!await _hasInvestorProfileOrSkipped()) return StartRoute.investorProfile;
 
       return StartRoute.home;
     } catch (error) {
@@ -101,6 +108,18 @@ class StartRouteResolver {
 
   bool _isNetworkFailure(Object error) {
     return error is TimeoutException || error is SocketException || error is http.ClientException;
+  }
+
+  /// A local skip is checked first — it's the cheap, offline-safe case, and
+  /// it must win even if the backend would otherwise still say "not
+  /// answered" (skipping never tells the backend anything). Only the "not
+  /// skipped yet" case needs the real network truth: `hasAnswered` may
+  /// already be true from a different client (e.g. Academy) on the same
+  /// account, which a purely local flag could never know.
+  Future<bool> _hasInvestorProfileOrSkipped() async {
+    if (await _onboardingStateRepository.hasSkippedInvestorProfile()) return true;
+    final status = await _onboardingRepository.getStatus();
+    return status.hasAnswered;
   }
 
   Future<void> _ensureLocalPetName() async {

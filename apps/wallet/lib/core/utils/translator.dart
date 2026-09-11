@@ -177,6 +177,14 @@ class Translator {
       AppStrings.privacyMemoryConversationsButton: 'Ver conversas salvas',
       AppStrings.quickSetupSettingsSubtitle: 'Você pode ajustar isso quando quiser.',
       AppStrings.quickSetupSaveCta: 'Salvar',
+      AppStrings.investorProfileTitle: 'Só mais um pouco de contexto',
+      AppStrings.investorProfileSubtitle:
+          'Isso ajuda o Mentor a personalizar o que ele te mostra. Nada aqui muda como sua carteira é calculada.',
+      AppStrings.investorProfileGoalLabel: 'Qual é o seu objetivo agora?',
+      AppStrings.investorProfileHorizonLabel: 'Por quanto tempo pretende investir?',
+      AppStrings.investorProfileExperienceLabel: 'Qual sua experiência com investimentos?',
+      AppStrings.investorProfileCta: 'Concluir',
+      AppStrings.investorProfileFailedSnack: 'Não foi possível salvar suas respostas.',
       AppStrings.quickSetupSavedSnack: 'Preferências salvas',
       AppStrings.meetPetTitle: 'Conheça seu Companheiro',
       AppStrings.meetPetIntro:
@@ -325,6 +333,14 @@ class Translator {
       AppStrings.quickSetupSettingsSubtitle: 'You can adjust this whenever you want.',
       AppStrings.quickSetupSaveCta: 'Save',
       AppStrings.quickSetupSavedSnack: 'Preferences saved',
+      AppStrings.investorProfileTitle: 'Just a bit more context',
+      AppStrings.investorProfileSubtitle:
+          'This helps the Mentor personalize what it shows you. Nothing here changes how your portfolio is calculated.',
+      AppStrings.investorProfileGoalLabel: "What's your goal right now?",
+      AppStrings.investorProfileHorizonLabel: 'How long do you plan to keep investing?',
+      AppStrings.investorProfileExperienceLabel: 'How experienced are you with investing?',
+      AppStrings.investorProfileCta: 'Finish',
+      AppStrings.investorProfileFailedSnack: "Couldn't save your answers.",
       AppStrings.meetPetTitle: 'Meet Your Companion',
       AppStrings.meetPetIntro:
           "I'm your financial companion. I'll help you learn about investing, stay disciplined and celebrate every achievement along your journey.",
@@ -464,6 +480,14 @@ class Translator {
       AppStrings.quickSetupSettingsSubtitle: 'Puedes ajustar esto cuando quieras.',
       AppStrings.quickSetupSaveCta: 'Guardar',
       AppStrings.quickSetupSavedSnack: 'Preferencias guardadas',
+      AppStrings.investorProfileTitle: 'Solo un poco más de contexto',
+      AppStrings.investorProfileSubtitle:
+          'Esto ayuda al Mentor a personalizar lo que te muestra. Nada aquí cambia cómo se calcula tu cartera.',
+      AppStrings.investorProfileGoalLabel: '¿Cuál es tu objetivo ahora?',
+      AppStrings.investorProfileHorizonLabel: '¿Por cuánto tiempo planeas invertir?',
+      AppStrings.investorProfileExperienceLabel: '¿Cuál es tu experiencia con inversiones?',
+      AppStrings.investorProfileCta: 'Finalizar',
+      AppStrings.investorProfileFailedSnack: 'No pudimos guardar tus respuestas.',
       AppStrings.meetPetTitle: 'Conoce a tu Compañero',
       AppStrings.meetPetIntro:
           'Soy tu compañero financiero. Te ayudaré a aprender sobre inversiones, mantener la disciplina y celebrar cada logro en tu camino.',
