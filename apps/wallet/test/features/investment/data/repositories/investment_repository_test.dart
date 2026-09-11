@@ -80,6 +80,44 @@ void main() {
     });
   });
 
+  group('updateInvestment', () {
+    final asset = AssetRegistrationModel(
+      name: 'PETR4',
+      quantity: 15,
+      purchasePrice: 22,
+      purchaseDate: '2024-02-01',
+      type: InvestmentTypeEnum.STOCKS,
+    );
+
+    test('forwards the id and asset to the data source unchanged', () async {
+      when(() => mockDataSource.updateInvestment(any(), any())).thenAnswer((_) async {});
+
+      await repository.updateInvestment(42, asset);
+
+      verify(() => mockDataSource.updateInvestment(42, asset)).called(1);
+    });
+
+    test('propagates a failure', () async {
+      when(() => mockDataSource.updateInvestment(any(), any())).thenThrow(Exception('update failed'));
+      expect(() => repository.updateInvestment(42, asset), throwsException);
+    });
+  });
+
+  group('deleteInvestment', () {
+    test('forwards the id to the data source', () async {
+      when(() => mockDataSource.deleteInvestment(any())).thenAnswer((_) async {});
+
+      await repository.deleteInvestment(42);
+
+      verify(() => mockDataSource.deleteInvestment(42)).called(1);
+    });
+
+    test('propagates a failure', () async {
+      when(() => mockDataSource.deleteInvestment(any())).thenThrow(Exception('delete failed'));
+      expect(() => repository.deleteInvestment(42), throwsException);
+    });
+  });
+
   group('fetchQuote', () {
     test('returns null when the data source finds no match', () async {
       when(() => mockDataSource.fetchQuote(any())).thenAnswer((_) async => null);

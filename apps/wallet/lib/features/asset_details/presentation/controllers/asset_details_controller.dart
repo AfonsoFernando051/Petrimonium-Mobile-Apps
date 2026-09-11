@@ -106,6 +106,7 @@ class AssetDetailsController extends ChangeNotifier {
         unrealizedGain: holding.gainValue,
         unrealizedGainPercent: holding.gainPercent,
         portfolioWeight: holding.portfolioPercent,
+        priceStatus: holding.priceStatus,
       ),
       dataStatus: AssetDataStatus.cached,
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/asset_row.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/performance_badge.dart';
@@ -14,12 +15,14 @@ class ExpandableCategory extends StatefulWidget {
     required this.type,
     required this.holdings,
     required this.totalPortfolioValue,
+    required this.controller,
     this.initiallyExpanded = false,
   });
 
   final InvestmentTypeEnum type;
   final List<Holding> holdings;
   final double totalPortfolioValue;
+  final PortfolioController controller;
   final bool initiallyExpanded;
 
   @override
@@ -111,7 +114,7 @@ class _ExpandableCategoryState extends State<ExpandableCategory> {
               child: Column(
                 children: [
                   Divider(color: tokens.divider),
-                  for (final holding in widget.holdings) AssetRow(holding: holding),
+                  for (final holding in widget.holdings) AssetRow(holding: holding, controller: widget.controller),
                 ],
               ),
             ),

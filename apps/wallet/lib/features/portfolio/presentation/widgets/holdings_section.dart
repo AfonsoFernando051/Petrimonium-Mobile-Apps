@@ -4,16 +4,23 @@ import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/expandable_category.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/section_label.dart';
 
 /// Groups holdings by category (Investidor10-inspired usability): each
 /// category is collapsible and shows aggregate stats in its header.
 class HoldingsSection extends StatelessWidget {
-  const HoldingsSection({super.key, required this.holdings, required this.totalPortfolioValue});
+  const HoldingsSection({
+    super.key,
+    required this.holdings,
+    required this.totalPortfolioValue,
+    required this.controller,
+  });
 
   final List<Holding> holdings;
   final double totalPortfolioValue;
+  final PortfolioController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +59,7 @@ class HoldingsSection extends StatelessWidget {
                   type: sortedTypes[i],
                   holdings: byType[sortedTypes[i]]!,
                   totalPortfolioValue: totalPortfolioValue,
+                  controller: controller,
                   initiallyExpanded: i == 0,
                 ),
           ],

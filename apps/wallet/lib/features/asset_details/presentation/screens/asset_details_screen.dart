@@ -20,6 +20,7 @@ import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/p
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/portfolio_context_card.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/purchase_history_card.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/user_position_card.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// Full-screen asset details page — the core of the Real Asset Intelligence
@@ -29,9 +30,10 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// Opens instantly with cached [Holding] data, then enriches from the backend.
 /// The layout dynamically adapts to the asset type (stock/FII/ETF).
 class AssetDetailsScreen extends StatefulWidget {
-  const AssetDetailsScreen({super.key, required this.ticker, this.holding});
+  const AssetDetailsScreen({super.key, required this.ticker, required this.controller, this.holding});
 
   final String ticker;
+  final PortfolioController controller;
   final Holding? holding;
 
   @override
@@ -192,7 +194,17 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
 
           // ── Purchase History (lot by lot) ────────────────────
           if (widget.holding != null && widget.holding!.lots.isNotEmpty) ...[
-            PurchaseHistoryCard(holding: widget.holding!),
+            PurchaseHistoryCard(
+              holding: widget.holding!,
+              controller: widget.controller,
+              // The holding snapshot passed into this screen goes stale the
+              // moment a lot is edited or deleted (its lots/quantity/id set
+              // may no longer match reality) — popping back to the holdings
+              // list, which reflects the just-refreshed controller, is
+              // simpler and safer than trying to patch this screen's own
+              // state in place.
+              onLotChanged: () => Navigator.of(context).pop(),
+            ),
             const SizedBox(height: 16),
           ],
 

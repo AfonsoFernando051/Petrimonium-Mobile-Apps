@@ -54,6 +54,23 @@ void main() {
 
       await expectLater(() => dataSource.configureInvestments([investment]), throwsA(isA<Exception>()));
     });
+
+    test('surfaces the backend\'s detail message instead of a generic string', () async {
+      when(() => mockApiClient.post(any(), any())).thenAnswer(
+        (_) async => http.Response(jsonEncode({'detail': 'Removing a holding requires confirmReplace=true.'}), 409),
+      );
+
+      await expectLater(
+        () => dataSource.configureInvestments([investment]),
+        throwsA(
+          isA<Exception>().having(
+            (e) => e.toString(),
+            'message',
+            contains('Removing a holding requires confirmReplace=true.'),
+          ),
+        ),
+      );
+    });
   });
 
   group('addInvestment', () {
@@ -77,6 +94,81 @@ void main() {
       when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 400));
 
       await expectLater(() => dataSource.addInvestment(investment), throwsA(isA<Exception>()));
+    });
+
+    test('surfaces the backend\'s detail message instead of a generic string', () async {
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'purchaseDate must not be in the future.'}), 400));
+
+      await expectLater(
+        () => dataSource.addInvestment(investment),
+        throwsA(
+          isA<Exception>().having((e) => e.toString(), 'message', contains('purchaseDate must not be in the future.')),
+        ),
+      );
+    });
+  });
+
+  group('updateInvestment', () {
+    final investment = AssetRegistrationModel(
+      name: 'PETR4',
+      quantity: 15,
+      purchasePrice: 22.0,
+      purchaseDate: '2024-02-01',
+      type: InvestmentTypeEnum.STOCKS,
+    );
+
+    test('puts the asset to the lot endpoint and completes on 200', () async {
+      when(() => mockApiClient.put(any(), any())).thenAnswer((_) async => http.Response('', 200));
+
+      await dataSource.updateInvestment(42, investment);
+
+      verify(() => mockApiClient.put('/api/investments/42', investment.toJson())).called(1);
+    });
+
+    test('throws an Exception on a non-200 response', () async {
+      when(() => mockApiClient.put(any(), any())).thenAnswer((_) async => http.Response('', 404));
+
+      await expectLater(() => dataSource.updateInvestment(42, investment), throwsA(isA<Exception>()));
+    });
+
+    test('surfaces the backend\'s detail message instead of a generic string', () async {
+      when(
+        () => mockApiClient.put(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'This item was changed elsewhere.'}), 409));
+
+      await expectLater(
+        () => dataSource.updateInvestment(42, investment),
+        throwsA(isA<Exception>().having((e) => e.toString(), 'message', contains('This item was changed elsewhere.'))),
+      );
+    });
+  });
+
+  group('deleteInvestment', () {
+    test('deletes the lot endpoint and completes on 204', () async {
+      when(() => mockApiClient.delete(any())).thenAnswer((_) async => http.Response('', 204));
+
+      await dataSource.deleteInvestment(42);
+
+      verify(() => mockApiClient.delete('/api/investments/42')).called(1);
+    });
+
+    test('throws an Exception on a non-204 response', () async {
+      when(() => mockApiClient.delete(any())).thenAnswer((_) async => http.Response('', 404));
+
+      await expectLater(() => dataSource.deleteInvestment(42), throwsA(isA<Exception>()));
+    });
+
+    test('surfaces the backend\'s detail message instead of a generic string', () async {
+      when(
+        () => mockApiClient.delete(any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'Investment not found: 42'}), 404));
+
+      await expectLater(
+        () => dataSource.deleteInvestment(42),
+        throwsA(isA<Exception>().having((e) => e.toString(), 'message', contains('Investment not found: 42'))),
+      );
     });
   });
 

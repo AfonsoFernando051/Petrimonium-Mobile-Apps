@@ -7,6 +7,7 @@ import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/screens/first_value_screen.dart';
 import 'package:petrimonium_wallet/features/investment/data/models/asset_registration_model.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/investment/domain/services/ticker_type_classifier.dart';
@@ -27,10 +28,16 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/p
 /// the form comes from `widget.controller.summary`, already loaded by
 /// whichever screen opened this one, so no extra fetch is needed just to
 /// display it.
+///
+/// Passing [editingLot] switches the same form into edit mode for that lot
+/// (`PUT /api/investments/{id}` instead of the create endpoint) rather than
+/// duplicating this screen — the fields, validation and layout are identical,
+/// only the submit target and copy change.
 class AddAssetScreen extends StatefulWidget {
-  const AddAssetScreen({super.key, required this.controller});
+  const AddAssetScreen({super.key, required this.controller, this.editingLot});
 
   final PortfolioController controller;
+  final InvestmentLot? editingLot;
 
   @override
   State<AddAssetScreen> createState() => _AddAssetScreenState();
@@ -46,12 +53,26 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   DateTime? _selectedDate;
   bool _isLoading = false;
 
+  bool get _isEditing => widget.editingLot != null;
+
   @override
   void initState() {
     super.initState();
+    final lot = widget.editingLot;
+    if (lot != null) {
+      _nameController.text = lot.ticker;
+      _quantityController.text = _trimTrailingZeros(lot.quantity);
+      _priceController.text = _trimTrailingZeros(lot.purchasePrice);
+      _selectedType = lot.type;
+      _selectedDate = lot.purchaseDate;
+    }
     _nameController.addListener(_onFieldChanged);
     _quantityController.addListener(_onFieldChanged);
     _priceController.addListener(_onFieldChanged);
+  }
+
+  String _trimTrailingZeros(double value) {
+    return value.truncateToDouble() == value ? value.toStringAsFixed(0) : value.toString();
   }
 
   void _onFieldChanged() => setState(() {});
@@ -68,17 +89,27 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
 
-  double get _estimatedValue {
-    final quantity = FinancialInputValidators.parsePositiveDecimal(_quantityController.text) ?? 0;
-    final price = FinancialInputValidators.parsePositiveDecimal(_priceController.text) ?? 0;
-    return quantity * price;
-  }
+  // `parsePositiveDecimal` only parses — it deliberately still returns a
+  // negative number so callers can decide how to report that. The button
+  // state and the preview must instead go through the real field validators
+  // (`FinancialInputValidators.quantity`/`.price`, which do reject <= 0), or
+  // a value like "-10" would parse fine and enable a submission the form's
+  // own validators would then reject.
+  double? get _validQuantity => FinancialInputValidators.quantity(_quantityController.text) == null
+      ? FinancialInputValidators.parsePositiveDecimal(_quantityController.text)
+      : null;
+
+  double? get _validPrice => FinancialInputValidators.price(_priceController.text) == null
+      ? FinancialInputValidators.parsePositiveDecimal(_priceController.text)
+      : null;
+
+  double get _estimatedValue => (_validQuantity ?? 0) * (_validPrice ?? 0);
 
   bool get _canSubmit =>
       !_isLoading &&
       _nameController.text.trim().isNotEmpty &&
-      FinancialInputValidators.parsePositiveDecimal(_quantityController.text) != null &&
-      FinancialInputValidators.parsePositiveDecimal(_priceController.text) != null &&
+      _validQuantity != null &&
+      _validPrice != null &&
       _selectedType != null &&
       _selectedDate != null;
 
@@ -123,7 +154,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
     }
   }
 
-  Future<void> _handleAdd() async {
+  Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedType == null) {
       GameSnack.show(context, Translator.translate(AppStrings.addAssetSelectTypeError), isError: true);
@@ -138,7 +169,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
     final price = FinancialInputValidators.parsePositiveDecimal(_priceController.text);
     if (quantity == null || price == null) return;
 
-    final newAsset = AssetRegistrationModel(
+    final asset = AssetRegistrationModel(
       name: _nameController.text.trim(),
       quantity: quantity,
       purchasePrice: price,
@@ -146,19 +177,42 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       type: _selectedType!,
     );
 
+    final wasEmptyPortfolio = widget.controller.holdings.isEmpty;
+
     setState(() => _isLoading = true);
     try {
-      await DI.investmentRepository.addInvestment(newAsset);
+      if (_isEditing) {
+        await DI.investmentRepository.updateInvestment(widget.editingLot!.id, asset);
+      } else {
+        await DI.investmentRepository.addInvestment(asset);
+      }
       await widget.controller.refresh();
       if (mounted) {
-        GameSnack.showWithHaptic(context, Translator.translate(AppStrings.addAssetSuccessSnack), isSuccess: true);
-        Navigator.of(context).pop();
+        GameSnack.showWithHaptic(
+          context,
+          Translator.translate(_isEditing ? AppStrings.editAssetSuccessSnack : AppStrings.addAssetSuccessSnack),
+          isSuccess: true,
+        );
+        // The portfolio just went from zero to one holding: this is the
+        // FR-WAL-006/007 "primeiro valor" moment, a one-time guided read —
+        // replace this screen with it instead of popping straight back to
+        // the (still momentarily empty-looking) dashboard.
+        if (!_isEditing && wasEmptyPortfolio && widget.controller.holdings.isNotEmpty) {
+          await Navigator.of(
+            context,
+          ).pushReplacement(MaterialPageRoute(builder: (_) => FirstValueScreen(controller: widget.controller)));
+          return;
+        }
+        // Editing pops with `true` so a caller (e.g. the lot tile that opened
+        // this screen) can tell a change actually happened and refresh views
+        // that hold their own now-stale snapshot of this lot.
+        Navigator.of(context).pop(_isEditing ? true : null);
       }
     } catch (e) {
       if (mounted) {
         GameSnack.show(
           context,
-          '${Translator.translate(AppStrings.addAssetFailedSnack)} ${friendlyErrorMessage(e)}',
+          '${Translator.translate(_isEditing ? AppStrings.editAssetFailedSnack : AppStrings.addAssetFailedSnack)} ${friendlyErrorMessage(e)}',
           isError: true,
         );
       }
@@ -169,6 +223,12 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
 
   Widget _buildAutocompleteField(AppColorTokens tokens) {
     return Autocomplete<Map<String, dynamic>>(
+      // `fieldViewBuilder`'s TextEditingController is owned internally by
+      // Autocomplete, separate from `_nameController` (which only tracks its
+      // *value* via the listener below) — pre-filling for edit mode has to go
+      // through `initialValue`, setting `_nameController.text` alone never
+      // reaches the visible field.
+      initialValue: widget.editingLot != null ? TextEditingValue(text: widget.editingLot!.ticker) : null,
       optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.length < 2) return const Iterable<Map<String, dynamic>>.empty();
         final results = await DI.investmentRepository.searchQuotes(textEditingValue.text);
@@ -184,10 +244,18 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
         final symbol = selection['symbol']?.toString() ?? selection['stock']?.toString() ?? '';
         setState(() {
           _nameController.text = symbol;
-          _priceController.text = selection['regularMarketPrice']?.toString() ?? selection['close']?.toString() ?? '';
           _selectedType ??= TickerTypeClassifier.classify(symbol);
-          _formKey.currentState?.validate();
         });
+        if (_selectedDate != null) {
+          // A purchase date was already chosen — keep the price truthful to
+          // that date instead of overwriting it with today's live quote.
+          _refreshPriceForSelectedDate();
+        } else {
+          setState(() {
+            _priceController.text = selection['regularMarketPrice']?.toString() ?? selection['close']?.toString() ?? '';
+          });
+        }
+        _formKey.currentState?.validate();
       },
       fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
         controller.addListener(() => _nameController.text = controller.text);
@@ -287,7 +355,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
           },
         ),
         title: Text(
-          Translator.translate(AppStrings.addAssetTitle),
+          Translator.translate(_isEditing ? AppStrings.editAssetTitle : AppStrings.addAssetTitle),
           style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
@@ -369,10 +437,10 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                   ),
                   const SizedBox(height: 24),
                   GameButton(
-                    label: Translator.translate(AppStrings.addAssetCta),
-                    icon: Icons.add,
+                    label: Translator.translate(_isEditing ? AppStrings.editAssetCta : AppStrings.addAssetCta),
+                    icon: _isEditing ? Icons.check : Icons.add,
                     isLoading: _isLoading,
-                    onPressed: _canSubmit ? _handleAdd : null,
+                    onPressed: _canSubmit ? _handleSubmit : null,
                   ),
                 ],
               ),

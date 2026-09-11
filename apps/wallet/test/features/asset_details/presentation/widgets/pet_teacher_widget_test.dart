@@ -5,6 +5,7 @@ import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/user_position.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/widgets/pet_teacher_widget.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 void main() {
   setUp(() {
@@ -31,6 +32,7 @@ void main() {
       unrealizedGain: 20,
       unrealizedGainPercent: 10,
       portfolioWeight: 50,
+      priceStatus: PriceStatus.live,
     ),
   );
   const fii = AssetDetails(ticker: 'HGLG11', shortName: 'CSHG Logística', assetType: 'fii');

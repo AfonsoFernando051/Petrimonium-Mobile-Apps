@@ -7,15 +7,28 @@ import 'package:petrimonium_wallet/features/asset_details/data/repositories/asse
 import 'package:petrimonium_wallet/features/asset_details/domain/entities/asset_details.dart';
 import 'package:petrimonium_wallet/features/asset_details/presentation/screens/asset_details_screen.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/asset_row.dart';
+
+import '../controllers/portfolio_controller_test.dart';
 
 class MockAssetDetailsRepository extends Mock implements AssetDetailsRepository {}
 
 void main() {
+  final controller = PortfolioController(
+    repository: FakePortfolioRepository(),
+    achievementsLocalRepository: FakeAchievementsLocalRepository(),
+    achievementsRepository: FakeAchievementsRepository(),
+    gamificationRepository: FakeGamificationRepository(),
+    missionsRepository: FakeMissionsRepository(),
+  );
+
   Widget buildTestableWidget(Holding holding) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: AssetRow(holding: holding)),
+      home: Scaffold(
+        body: AssetRow(holding: holding, controller: controller),
+      ),
     );
   }
 

@@ -7,6 +7,7 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/models/invest
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/shared/performance_badge.dart';
 
 /// One holding row inside an [ExpandableCategory]. There's no logo CDN or
@@ -14,9 +15,10 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/share
 /// only persists a ticker string per lot), so the "logo" is a generated
 /// ticker-initial avatar rather than a fabricated brand image.
 class AssetRow extends StatelessWidget {
-  const AssetRow({super.key, required this.holding});
+  const AssetRow({super.key, required this.holding, required this.controller});
 
   final Holding holding;
+  final PortfolioController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class AssetRow extends StatelessWidget {
           HapticFeedback.selectionClick();
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => AssetDetailsScreen(ticker: holding.ticker, holding: holding),
+              builder: (_) => AssetDetailsScreen(ticker: holding.ticker, holding: holding, controller: controller),
             ),
           );
         },

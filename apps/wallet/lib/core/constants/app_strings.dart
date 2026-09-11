@@ -104,6 +104,30 @@ class AppStrings {
   static const String addAssetSelectTypeError = 'addAssetSelectTypeError';
   static const String addAssetSelectDateError = 'addAssetSelectDateError';
 
+  // AddAssetScreen in edit mode (editing an existing lot) + the per-lot
+  // edit/delete actions in PurchaseHistoryCard.
+  static const String editAssetTitle = 'editAssetTitle';
+  static const String editAssetCta = 'editAssetCta';
+  static const String editAssetSuccessSnack = 'editAssetSuccessSnack';
+  static const String editAssetFailedSnack = 'editAssetFailedSnack';
+  static const String editAssetAction = 'editAssetAction';
+  static const String deleteAssetAction = 'deleteAssetAction';
+  static const String deleteAssetConfirmTitle = 'deleteAssetConfirmTitle';
+  static const String deleteAssetConfirmMessage = 'deleteAssetConfirmMessage';
+  static const String deleteAssetConfirmCta = 'deleteAssetConfirmCta';
+  static const String deleteAssetSuccessSnack = 'deleteAssetSuccessSnack';
+  static const String deleteAssetFailedSnack = 'deleteAssetFailedSnack';
+
+  // FirstValueScreen — the one-time guided reading shown right after the
+  // very first asset is registered (FR-WAL-006/007), before the normal
+  // dashboard hierarchy takes over.
+  static const String firstValueTitle = 'firstValueTitle';
+  static const String firstValueIntro = 'firstValueIntro';
+  static const String firstValueCompositionTitle = 'firstValueCompositionTitle';
+  static const String firstValueMethodologyTitle = 'firstValueMethodologyTitle';
+  static const String firstValueMethodologyBody = 'firstValueMethodologyBody';
+  static const String firstValueCta = 'firstValueCta';
+
   // Proventos tab + notification popover.
   static const String proventosTitle = 'proventosTitle';
   static const String proventosSubtitle = 'proventosSubtitle';

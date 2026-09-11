@@ -2,10 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/asset_row.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/expandable_category.dart';
 
+import '../controllers/portfolio_controller_test.dart';
+
 void main() {
+  final controller = PortfolioController(
+    repository: FakePortfolioRepository(),
+    achievementsLocalRepository: FakeAchievementsLocalRepository(),
+    achievementsRepository: FakeAchievementsRepository(),
+    gamificationRepository: FakeGamificationRepository(),
+    missionsRepository: FakeMissionsRepository(),
+  );
+
   Widget buildTestableWidget(List<Holding> holdings, {bool initiallyExpanded = false}) {
     return MaterialApp(
       theme: AppTheme.dark,
@@ -14,6 +25,7 @@ void main() {
           type: InvestmentTypeEnum.STOCKS,
           holdings: holdings,
           totalPortfolioValue: 10000,
+          controller: controller,
           initiallyExpanded: initiallyExpanded,
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+
 /// The authenticated user's aggregated position in a specific asset.
 ///
 /// This is distinct from market-wide data — it represents what the user
@@ -12,6 +14,12 @@ class UserPosition {
   final double unrealizedGainPercent;
   final double portfolioWeight;
 
+  /// Where [currentValue]/[unrealizedGain] actually came from — mirrors
+  /// [Holding.priceStatus]. Without this, a fallback-to-purchase-price
+  /// position is indistinguishable from a real quote that happens to match
+  /// it: both compute to a 0% gain.
+  final PriceStatus priceStatus;
+
   const UserPosition({
     required this.quantity,
     required this.averagePrice,
@@ -20,6 +28,7 @@ class UserPosition {
     required this.unrealizedGain,
     required this.unrealizedGainPercent,
     required this.portfolioWeight,
+    required this.priceStatus,
   });
 
   factory UserPosition.fromJson(Map<String, dynamic> json) {
@@ -31,6 +40,7 @@ class UserPosition {
       unrealizedGain: (json['unrealizedGain'] as num?)?.toDouble() ?? 0,
       unrealizedGainPercent: (json['unrealizedGainPercent'] as num?)?.toDouble() ?? 0,
       portfolioWeight: (json['portfolioWeight'] as num?)?.toDouble() ?? 0,
+      priceStatus: PriceStatus.fromWire(json['priceStatus'] as String?),
     );
   }
 }
