@@ -68,17 +68,27 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
 
-  double get _estimatedValue {
-    final quantity = FinancialInputValidators.parsePositiveDecimal(_quantityController.text) ?? 0;
-    final price = FinancialInputValidators.parsePositiveDecimal(_priceController.text) ?? 0;
-    return quantity * price;
-  }
+  // `parsePositiveDecimal` only parses — it deliberately still returns a
+  // negative number so callers can decide how to report that. The button
+  // state and the preview must instead go through the real field validators
+  // (`FinancialInputValidators.quantity`/`.price`, which do reject <= 0), or
+  // a value like "-10" would parse fine and enable a submission the form's
+  // own validators would then reject.
+  double? get _validQuantity => FinancialInputValidators.quantity(_quantityController.text) == null
+      ? FinancialInputValidators.parsePositiveDecimal(_quantityController.text)
+      : null;
+
+  double? get _validPrice => FinancialInputValidators.price(_priceController.text) == null
+      ? FinancialInputValidators.parsePositiveDecimal(_priceController.text)
+      : null;
+
+  double get _estimatedValue => (_validQuantity ?? 0) * (_validPrice ?? 0);
 
   bool get _canSubmit =>
       !_isLoading &&
       _nameController.text.trim().isNotEmpty &&
-      FinancialInputValidators.parsePositiveDecimal(_quantityController.text) != null &&
-      FinancialInputValidators.parsePositiveDecimal(_priceController.text) != null &&
+      _validQuantity != null &&
+      _validPrice != null &&
       _selectedType != null &&
       _selectedDate != null;
 
@@ -184,10 +194,18 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
         final symbol = selection['symbol']?.toString() ?? selection['stock']?.toString() ?? '';
         setState(() {
           _nameController.text = symbol;
-          _priceController.text = selection['regularMarketPrice']?.toString() ?? selection['close']?.toString() ?? '';
           _selectedType ??= TickerTypeClassifier.classify(symbol);
-          _formKey.currentState?.validate();
         });
+        if (_selectedDate != null) {
+          // A purchase date was already chosen — keep the price truthful to
+          // that date instead of overwriting it with today's live quote.
+          _refreshPriceForSelectedDate();
+        } else {
+          setState(() {
+            _priceController.text = selection['regularMarketPrice']?.toString() ?? selection['close']?.toString() ?? '';
+          });
+        }
+        _formKey.currentState?.validate();
       },
       fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
         controller.addListener(() => _nameController.text = controller.text);

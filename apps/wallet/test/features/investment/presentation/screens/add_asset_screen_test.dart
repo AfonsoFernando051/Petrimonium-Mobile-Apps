@@ -170,5 +170,65 @@ void main() {
       expect(find.textContaining('Não foi possível adicionar o ativo'), findsOneWidget);
       expect(find.byType(AddAssetScreen), findsOneWidget);
     });
+
+    testWidgets('a negative quantity keeps the CTA disabled despite parsing as a number', (tester) async {
+      await openScreen(tester);
+
+      await tester.tap(find.text('Ações'));
+      await tester.pump();
+
+      final textFields = find.byType(TextFormField);
+      await tester.enterText(textFields.at(0), 'PETR4');
+      await tester.enterText(textFields.at(1), '-10');
+      await tester.enterText(textFields.at(2), '25');
+      await tester.pump();
+
+      await tester.ensureVisible(find.text('Data de Compra'));
+      await tester.tap(find.text('Data de Compra'));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('OK'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // -10 parses fine as a double, but it's not a valid quantity — the CTA
+      // must stay disabled rather than let the user submit a negative lot.
+      final button = tester.widget<GameButton>(find.byType(GameButton));
+      expect(button.onPressed, isNull);
+    });
+
+    testWidgets(
+      'selecting a ticker after already picking the purchase date fetches the historical price, not the live quote',
+      (tester) async {
+        when(() => investmentRepository.searchQuotes(any())).thenAnswer(
+          (_) async => [
+            {'symbol': 'PETR4', 'shortName': 'Petrobras', 'regularMarketPrice': 25.0},
+          ],
+        );
+        when(
+          () => investmentRepository.fetchQuoteAtDate('PETR4', any()),
+        ).thenAnswer((_) async => {'regularMarketPrice': 18.5});
+
+        await openScreen(tester);
+
+        // Pick the purchase date BEFORE the ticker is known.
+        await tester.ensureVisible(find.text('Data de Compra'));
+        await tester.tap(find.text('Data de Compra'));
+        await tester.pump(const Duration(milliseconds: 300));
+        await tester.tap(find.text('OK'));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
+
+        // Now pick the ticker from the autocomplete.
+        await tester.enterText(find.byType(TextFormField).at(0), 'PE');
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('PETR4'));
+        await tester.pumpAndSettle();
+
+        verify(() => investmentRepository.fetchQuoteAtDate('PETR4', any())).called(1);
+
+        final priceField = tester.widget<TextFormField>(find.byType(TextFormField).at(2));
+        expect(priceField.controller!.text, '18.5');
+      },
+    );
   });
 }

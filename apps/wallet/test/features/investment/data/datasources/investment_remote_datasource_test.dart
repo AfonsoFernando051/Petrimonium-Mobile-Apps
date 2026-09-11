@@ -54,6 +54,23 @@ void main() {
 
       await expectLater(() => dataSource.configureInvestments([investment]), throwsA(isA<Exception>()));
     });
+
+    test('surfaces the backend\'s detail message instead of a generic string', () async {
+      when(() => mockApiClient.post(any(), any())).thenAnswer(
+        (_) async => http.Response(jsonEncode({'detail': 'Removing a holding requires confirmReplace=true.'}), 409),
+      );
+
+      await expectLater(
+        () => dataSource.configureInvestments([investment]),
+        throwsA(
+          isA<Exception>().having(
+            (e) => e.toString(),
+            'message',
+            contains('Removing a holding requires confirmReplace=true.'),
+          ),
+        ),
+      );
+    });
   });
 
   group('addInvestment', () {
@@ -77,6 +94,19 @@ void main() {
       when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 400));
 
       await expectLater(() => dataSource.addInvestment(investment), throwsA(isA<Exception>()));
+    });
+
+    test('surfaces the backend\'s detail message instead of a generic string', () async {
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'detail': 'purchaseDate must not be in the future.'}), 400));
+
+      await expectLater(
+        () => dataSource.addInvestment(investment),
+        throwsA(
+          isA<Exception>().having((e) => e.toString(), 'message', contains('purchaseDate must not be in the future.')),
+        ),
+      );
     });
   });
 

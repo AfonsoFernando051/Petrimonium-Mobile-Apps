@@ -20,7 +20,9 @@ class InvestmentRemoteDataSource {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to configure investments');
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to configure investments. Status Code: ${response.statusCode}'),
+      );
     }
   }
 
@@ -31,7 +33,9 @@ class InvestmentRemoteDataSource {
     final response = await apiClient.post('/api/investments', asset.toJson());
 
     if (response.statusCode != 201) {
-      throw Exception('Failed to add investment');
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to add investment. Status Code: ${response.statusCode}'),
+      );
     }
   }
 
