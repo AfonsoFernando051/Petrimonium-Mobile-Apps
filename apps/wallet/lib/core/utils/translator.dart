@@ -256,7 +256,7 @@ class Translator {
       AppStrings.homeHoldingsSectionTitle: 'My assets',
       AppStrings.homeAddAssetLabel: 'Add',
       AppStrings.portfolioNotConnectedPetCaption:
-          "Shall we build your portfolio together? Add your first asset — it takes less than a minute.",
+          'Shall we build your portfolio together? Add your first asset — it takes less than a minute.',
       AppStrings.connectAssetsManualCta: 'Add an asset manually',
       AppStrings.connectAssetsB3Cta: 'Connect with B3',
       AppStrings.connectAssetsB3Badge: 'COMING SOON',
