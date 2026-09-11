@@ -38,4 +38,16 @@ extension PetGoalEnumDisplay on PetGoalEnum {
   static PetGoalEnum fromName(String? name) {
     return PetGoalEnum.values.firstWhere((g) => g.name == name, orElse: () => PetGoalEnum.investWithConfidence);
   }
+
+  /// The backend's `FinancialGoal` enum constant this maps to — see
+  /// `core/domain/assessment/FinancialGoal.java`. Used only when submitting
+  /// onboarding's real answers for investor-profile classification; local
+  /// persistence still uses [name] via [fromName] above.
+  String get wireValue => switch (this) {
+    PetGoalEnum.emergencyFund => 'EMERGENCY_FUND',
+    PetGoalEnum.getOutOfDebt => 'GET_OUT_OF_DEBT',
+    PetGoalEnum.buyImportantThing => 'BUY_IMPORTANT_THING',
+    PetGoalEnum.investWithConfidence => 'INVEST_WITH_CONFIDENCE',
+    PetGoalEnum.justWantToLearn => 'JUST_WANT_TO_LEARN',
+  };
 }

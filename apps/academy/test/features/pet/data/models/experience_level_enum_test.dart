@@ -30,4 +30,17 @@ void main() {
       expect(ExperienceLevelEnumDisplay.fromName(null), ExperienceLevelEnum.novice);
     });
   });
+
+  group('ExperienceLevelEnumDisplay.wireValue', () {
+    test('matches the backend ExperienceLevel enum constant for every value', () {
+      expect(ExperienceLevelEnum.novice.wireValue, 'NOVICE');
+      expect(ExperienceLevelEnum.curious.wireValue, 'CURIOUS');
+      expect(ExperienceLevelEnum.practitioner.wireValue, 'PRACTITIONER');
+    });
+
+    test('every value has a unique wire value', () {
+      final wireValues = ExperienceLevelEnum.values.map((e) => e.wireValue).toSet();
+      expect(wireValues.length, ExperienceLevelEnum.values.length);
+    });
+  });
 }

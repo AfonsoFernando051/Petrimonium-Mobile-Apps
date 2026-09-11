@@ -9,6 +9,8 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/journey_ready_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium_academy/features/pet/data/models/experience_level_enum.dart';
+import 'package:petrimonium_academy/features/pet/data/models/investment_horizon_enum.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
 
 /// Onboarding's "Como está sua experiência hoje?" step — lets the Academy
 /// skip content the user already knows instead of a one-size-fits-all
@@ -38,11 +40,33 @@ class _ExperienceLevelScreenState extends State<ExperienceLevelScreen> {
     setState(() => _isSaving = true);
     try {
       await DI.petPreferencesRepository.saveExperienceLevel(_selected);
+      unawaited(_submitInvestorProfile());
       if (mounted) {
         unawaited(Navigator.of(context).push(MaterialPageRoute(builder: (_) => const JourneyReadyScreen())));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
+    }
+  }
+
+  /// All three onboarding signals (goal, horizon, experience) are known the
+  /// moment this screen's answer is saved — submits them so the backend can
+  /// classify a real InvestorProfile instead of the old separate
+  /// questionnaire no client UI ever reached. Best-effort and detached from
+  /// navigation: a network hiccup here must never stall onboarding, and this
+  /// touches no widget state, so it's safe to let run after the screen moves
+  /// on.
+  Future<void> _submitInvestorProfile() async {
+    try {
+      final goal = await DI.petPreferencesRepository.loadGoal();
+      final horizon = await DI.petPreferencesRepository.loadHorizon();
+      await DI.onboardingRepository.submitAssessment(
+        goal: goal.wireValue,
+        investmentHorizon: horizon.wireValue,
+        experienceLevel: _selected.wireValue,
+      );
+    } catch (_) {
+      // Best-effort — see doc comment above.
     }
   }
 

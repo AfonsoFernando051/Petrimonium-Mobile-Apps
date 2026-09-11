@@ -18,4 +18,15 @@ extension InvestmentHorizonEnumDisplay on InvestmentHorizonEnum {
       orElse: () => InvestmentHorizonEnum.oneToFiveYears,
     );
   }
+
+  /// The backend's `InvestmentHorizon` enum constant this maps to — see
+  /// `core/domain/assessment/InvestmentHorizon.java`. Used only when
+  /// submitting onboarding's real answers for investor-profile
+  /// classification; local persistence still uses [name] via [fromName].
+  String get wireValue => switch (this) {
+    InvestmentHorizonEnum.upToOneYear => 'UP_TO_ONE_YEAR',
+    InvestmentHorizonEnum.oneToFiveYears => 'ONE_TO_FIVE_YEARS',
+    InvestmentHorizonEnum.moreThanFiveYears => 'MORE_THAN_FIVE_YEARS',
+    InvestmentHorizonEnum.notSureYet => 'NOT_SURE_YET',
+  };
 }

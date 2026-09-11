@@ -29,4 +29,19 @@ void main() {
       expect(PetGoalEnumDisplay.fromName(null), PetGoalEnum.investWithConfidence);
     });
   });
+
+  group('PetGoalEnumDisplay.wireValue', () {
+    test('matches the backend FinancialGoal enum constant for every value', () {
+      expect(PetGoalEnum.emergencyFund.wireValue, 'EMERGENCY_FUND');
+      expect(PetGoalEnum.getOutOfDebt.wireValue, 'GET_OUT_OF_DEBT');
+      expect(PetGoalEnum.buyImportantThing.wireValue, 'BUY_IMPORTANT_THING');
+      expect(PetGoalEnum.investWithConfidence.wireValue, 'INVEST_WITH_CONFIDENCE');
+      expect(PetGoalEnum.justWantToLearn.wireValue, 'JUST_WANT_TO_LEARN');
+    });
+
+    test('every value has a unique wire value', () {
+      final wireValues = PetGoalEnum.values.map((g) => g.wireValue).toSet();
+      expect(wireValues.length, PetGoalEnum.values.length);
+    });
+  });
 }

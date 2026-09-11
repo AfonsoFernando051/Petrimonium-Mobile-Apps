@@ -26,4 +26,14 @@ extension ExperienceLevelEnumDisplay on ExperienceLevelEnum {
   static ExperienceLevelEnum fromName(String? name) {
     return ExperienceLevelEnum.values.firstWhere((e) => e.name == name, orElse: () => ExperienceLevelEnum.novice);
   }
+
+  /// The backend's `ExperienceLevel` enum constant this maps to — see
+  /// `core/domain/assessment/ExperienceLevel.java`. Used only when
+  /// submitting onboarding's real answers for investor-profile
+  /// classification; local persistence still uses [name] via [fromName].
+  String get wireValue => switch (this) {
+    ExperienceLevelEnum.novice => 'NOVICE',
+    ExperienceLevelEnum.curious => 'CURIOUS',
+    ExperienceLevelEnum.practitioner => 'PRACTITIONER',
+  };
 }

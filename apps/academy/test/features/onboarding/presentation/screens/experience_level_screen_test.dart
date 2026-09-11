@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/onboarding/data/repositories/onboarding_repository.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/experience_level_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/journey_ready_screen.dart';
 import 'package:petrimonium_academy/features/pet/data/models/experience_level_enum.dart';
+import 'package:petrimonium_academy/features/pet/data/models/investment_horizon_enum.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
 import 'package:petrimonium_academy/features/pet/data/repositories/pet_preferences_repository.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+
+class MockOnboardingRepository extends Mock implements OnboardingRepository {}
 
 /// Minimal in-memory MascotRepository double — further down the onboarding
 /// chain, JourneyReadyScreen calls `loadProfile` in its own initState, and
@@ -37,11 +43,27 @@ class FakeMascotRepository implements MascotRepository {
 }
 
 void main() {
+  late MockOnboardingRepository mockOnboardingRepository;
+
+  setUpAll(() {
+    registerFallbackValue('');
+  });
+
   setUp(() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     DI.petPreferencesRepository = PetPreferencesRepository();
     DI.mascotRepository = FakeMascotRepository();
+
+    mockOnboardingRepository = MockOnboardingRepository();
+    when(
+      () => mockOnboardingRepository.submitAssessment(
+        goal: any(named: 'goal'),
+        investmentHorizon: any(named: 'investmentHorizon'),
+        experienceLevel: any(named: 'experienceLevel'),
+      ),
+    ).thenAnswer((_) async => 'TACTICIAN');
+    DI.onboardingRepository = mockOnboardingRepository;
   });
 
   Widget buildTestableWidget() {
@@ -92,6 +114,54 @@ void main() {
       await tester.pump(const Duration(milliseconds: 350));
 
       expect(await DI.petPreferencesRepository.loadExperienceLevel(), ExperienceLevelEnum.curious);
+      expect(find.byType(JourneyReadyScreen), findsOneWidget);
+    });
+
+    testWidgets('tapping Next submits the three real onboarding answers for investor-profile classification', (
+      tester,
+    ) async {
+      // Goal/horizon were chosen on earlier onboarding screens; this
+      // screen only knows/saves the experience level itself.
+      await DI.petPreferencesRepository.saveGoal(PetGoalEnum.investWithConfidence);
+      await DI.petPreferencesRepository.saveHorizon(InvestmentHorizonEnum.moreThanFiveYears);
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      await tester.tap(find.text(ExperienceLevelEnum.practitioner.label));
+      await tester.pump(const Duration(milliseconds: 200));
+
+      await tester.tap(find.text('Próximo'));
+      await tester.pump();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 350));
+
+      verify(
+        () => mockOnboardingRepository.submitAssessment(
+          goal: 'INVEST_WITH_CONFIDENCE',
+          investmentHorizon: 'MORE_THAN_FIVE_YEARS',
+          experienceLevel: 'PRACTITIONER',
+        ),
+      ).called(1);
+    });
+
+    testWidgets('a failed submission never blocks navigation to JourneyReadyScreen', (tester) async {
+      when(
+        () => mockOnboardingRepository.submitAssessment(
+          goal: any(named: 'goal'),
+          investmentHorizon: any(named: 'investmentHorizon'),
+          experienceLevel: any(named: 'experienceLevel'),
+        ),
+      ).thenThrow(Exception('network down'));
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      await tester.tap(find.text('Próximo'));
+      await tester.pump();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 350));
+
       expect(find.byType(JourneyReadyScreen), findsOneWidget);
     });
   });

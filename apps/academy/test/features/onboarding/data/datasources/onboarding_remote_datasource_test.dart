@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_academy/core/constants/api_constants.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
-import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/onboarding/data/datasources/onboarding_remote_datasource.dart';
 
 class MockApiClient extends Mock implements ApiClient {}
@@ -16,41 +15,6 @@ void main() {
   setUp(() {
     mockApiClient = MockApiClient();
     dataSource = OnboardingRemoteDataSource(apiClient: mockApiClient);
-    Translator.currentLanguage = 'pt';
-  });
-
-  group('getQuestions', () {
-    test('requests with the current language and parses the question list on 200', () async {
-      when(() => mockApiClient.get(any())).thenAnswer(
-        (_) async => http.Response(
-          jsonEncode([
-            {
-              'id': 'q1',
-              'text': 'What is your goal?',
-              'options': [
-                {'id': 'o1', 'text': 'Grow wealth'},
-              ],
-            },
-          ]),
-          200,
-        ),
-      );
-
-      final result = await dataSource.getQuestions();
-
-      expect(result.single.id, 'q1');
-      expect(result.single.options.single.text, 'Grow wealth');
-      verify(() => mockApiClient.get('${ApiConstants.onboardingQuestionsEndpoint}?lang=pt')).called(1);
-    });
-
-    test('throws an Exception on a non-200 response', () async {
-      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response('', 500));
-
-      await expectLater(
-        () => dataSource.getQuestions(),
-        throwsA(predicate((e) => e is Exception && e.toString().contains('500'))),
-      );
-    });
   });
 
   group('getStatus', () {
@@ -77,17 +41,23 @@ void main() {
   });
 
   group('submitAssessment', () {
-    test('posts the selected option ids and returns the resulting profile on 200', () async {
+    test('posts the three wire-value answers and returns the resulting profile on 200', () async {
       when(
         () => mockApiClient.post(any(), any()),
-      ).thenAnswer((_) async => http.Response(jsonEncode({'profile': 'aggressive'}), 200));
+      ).thenAnswer((_) async => http.Response(jsonEncode({'profile': 'ADVENTURER'}), 200));
 
-      final result = await dataSource.submitAssessment(['o1', 'o2']);
+      final result = await dataSource.submitAssessment(
+        goal: 'INVEST_WITH_CONFIDENCE',
+        investmentHorizon: 'MORE_THAN_FIVE_YEARS',
+        experienceLevel: 'PRACTITIONER',
+      );
 
-      expect(result, 'aggressive');
+      expect(result, 'ADVENTURER');
       verify(
         () => mockApiClient.post(ApiConstants.onboardingSubmitEndpoint, {
-          'selectedOptionIds': ['o1', 'o2'],
+          'goal': 'INVEST_WITH_CONFIDENCE',
+          'investmentHorizon': 'MORE_THAN_FIVE_YEARS',
+          'experienceLevel': 'PRACTITIONER',
         }),
       ).called(1);
     });
@@ -96,7 +66,7 @@ void main() {
       when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 400));
 
       await expectLater(
-        () => dataSource.submitAssessment(['o1']),
+        () => dataSource.submitAssessment(goal: 'X', investmentHorizon: 'Y', experienceLevel: 'Z'),
         throwsA(predicate((e) => e is Exception && e.toString().contains('400'))),
       );
     });

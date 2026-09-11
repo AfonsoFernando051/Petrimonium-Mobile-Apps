@@ -29,4 +29,18 @@ void main() {
       expect(InvestmentHorizonEnumDisplay.fromName(null), InvestmentHorizonEnum.oneToFiveYears);
     });
   });
+
+  group('InvestmentHorizonEnumDisplay.wireValue', () {
+    test('matches the backend InvestmentHorizon enum constant for every value', () {
+      expect(InvestmentHorizonEnum.upToOneYear.wireValue, 'UP_TO_ONE_YEAR');
+      expect(InvestmentHorizonEnum.oneToFiveYears.wireValue, 'ONE_TO_FIVE_YEARS');
+      expect(InvestmentHorizonEnum.moreThanFiveYears.wireValue, 'MORE_THAN_FIVE_YEARS');
+      expect(InvestmentHorizonEnum.notSureYet.wireValue, 'NOT_SURE_YET');
+    });
+
+    test('every value has a unique wire value', () {
+      final wireValues = InvestmentHorizonEnum.values.map((h) => h.wireValue).toSet();
+      expect(wireValues.length, InvestmentHorizonEnum.values.length);
+    });
+  });
 }
