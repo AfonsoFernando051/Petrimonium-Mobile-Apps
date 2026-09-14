@@ -89,6 +89,11 @@ arquivo por arquivo — um teste novo vai no caminho espelhado, não solto em
 outro lugar. Sem golden tests hoje; não introduza sem alinhar antes, é
 mudança de convenção.
 
+Ao rodar testes durante o trabalho, rode só o arquivo/diretório que você
+está editando (`flutter test test/features/<feature>/...`), não a suíte do
+app inteiro a cada iteração — veja "Antes de considerar qualquer tarefa
+concluída" abaixo para o que rodar ao final.
+
 ## Lint e formatação
 
 `analysis_options.yaml` na raiz é o único baseline (estende
@@ -100,11 +105,22 @@ código não estiver formatado.
 
 ## Antes de considerar qualquer tarefa concluída
 
+**Nunca rode `melos run verify` (analyze + test nos três apps e pacotes)
+como parte de uma tarefa comum** — a suíte completa é pesada o bastante
+para travar o app/ambiente, e isso já aconteceu. Rode apenas o teste
+escopado ao que você tocou:
+
 ```
-melos run verify   # analyze + test em tudo — o mínimo antes de terminar
+melos exec --scope=<nome> -- flutter test              # um app/pacote inteiro
+melos exec --scope=<nome> -- flutter test <arquivo>     # um teste específico
 ```
 
-Para escopo isolado a um pacote/app:
-`melos exec --scope=<nome> -- flutter test`. Se tocou `packages/**` ou
-`apps/**`, rode também `tooling/check_dependency_direction.sh` e
-`tooling/check_layering.sh`.
+`<nome>` é o app/pacote que você editou (ex.: `petrimonium_wallet`,
+`petrimonium_shared_features`). Se tocou `packages/**` ou `apps/**`, rode
+também `tooling/check_dependency_direction.sh` e `tooling/check_layering.sh`
+(são scripts rápidos, não a suíte de testes).
+
+`melos run verify` só faz sentido em dois casos, e mesmo assim avise antes
+de rodar: (1) o usuário pede explicitamente uma verificação completa, ou
+(2) a mudança é ampla o bastante para atravessar múltiplos
+apps/pacotes e não dá para saber o escopo certo de antemão.
