@@ -12,21 +12,24 @@ import 'package:petrimonium_wallet/features/home/presentation/widgets/portfolio_
 import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_wallet/features/portfolio/domain/entities/wealth_change_breakdown.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/allocation_donut_card.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/holdings_section.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealth_evolution_card.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/portfolio_kpi_grid.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealth_evolution_bar_card.dart';
 
 /// Wallet's "Início" — the unified patrimônio + Mentor screen, absorbing
 /// what used to be a separate Carteira tab ("Home unifica patrimônio
 /// total... sem uma aba 'Carteira' redundante" per the Wallet design
-/// system). Shows: a greeting, the Mentor's one interpretation for the
-/// session, total wealth (labeled as data — source/timestamp always shown),
-/// a real valorização/aportes/rendimentos breakdown for the trailing 30
-/// days (`PortfolioController.wealthChange30d`, computed client-side from
-/// real lot/dividend data), and holdings grouped by category.
+/// system). In the reference design's order: a greeting, the Mentor's one
+/// interpretation for the session, the four headline KPIs
+/// ([PortfolioKpiGrid] — patrimônio, lucro, proventos, rentabilidade, with
+/// the source/timestamp stated once for the whole block), the trailing-12-
+/// month wealth bars, the allocation donut, a real valorização/aportes/
+/// rendimentos breakdown for the trailing 30 days
+/// (`PortfolioController.wealthChange30d`, computed client-side from real
+/// lot/dividend data), and holdings grouped by category.
 ///
 /// No own `Scaffold`/`AppBar`/background — embedded directly in
 /// `DashboardScreen`'s shared chrome.
@@ -138,11 +141,11 @@ class _OverviewScreenState extends State<OverviewScreen> {
                 anchor: widget.heroAnchor,
               )
             else ...[
-              _WealthHeroCard(controller: controller),
+              PortfolioKpiGrid(controller: controller),
+              const SizedBox(height: 16),
+              WealthEvolutionBarCard(series: controller.monthlyWealth12m),
               const SizedBox(height: 16),
               AllocationDonutCard(allocation: controller.allocation, totalValue: controller.summary.currentValue),
-              const SizedBox(height: 16),
-              WealthEvolutionCard(controller: controller),
               const SizedBox(height: 16),
               _WealthChangeCard(breakdown: controller.wealthChange30d),
               const SizedBox(height: 20),
@@ -200,62 +203,6 @@ class _Greeting extends StatelessWidget {
           ),
         ],
       ],
-    );
-  }
-}
-
-class _WealthHeroCard extends StatelessWidget {
-  const _WealthHeroCard({required this.controller});
-
-  final PortfolioController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.colors;
-    final refreshedAt = controller.lastRefreshedAt;
-    final time = refreshedAt == null
-        ? '--:--'
-        : '${refreshedAt.hour.toString().padLeft(2, '0')}:${refreshedAt.minute.toString().padLeft(2, '0')}';
-    final dataChipLabel = controller.hasStaleQuote
-        ? '${Translator.translate(AppStrings.homeWealthDataChipLabel)} · brapi.dev, '
-              '${Translator.translate(AppStrings.homeWealthDataStaleSuffix)}'
-        : '${Translator.translate(AppStrings.homeWealthDataChipLabel)} · brapi.dev, hoje $time';
-    final types = controller.holdings.map((Holding h) => h.type).toSet().map((type) => type.label).join(', ');
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: tokens.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: tokens.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            Translator.translate(AppStrings.homeWealthSectionTitle),
-            style: TextStyle(color: tokens.textTertiary, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.6),
-          ),
-          const SizedBox(height: 12),
-          LayerChip(layer: DataLayer.data, label: dataChipLabel),
-          const SizedBox(height: 12),
-          Text(
-            AppFormatters.currency(controller.summary.currentValue),
-            style: TextStyle(
-              color: tokens.textPrimary,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              fontFeatures: const [FontFeature.tabularFigures()],
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'BRL · ${Translator.translate(AppStrings.homeWealthScopePrefix)}: $types',
-            style: TextStyle(color: tokens.textSecondary, fontSize: 12),
-          ),
-        ],
-      ),
     );
   }
 }

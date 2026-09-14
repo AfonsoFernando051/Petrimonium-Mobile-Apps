@@ -6,6 +6,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/models/achievement.dart';
 import 'package:petrimonium_wallet/features/portfolio/domain/entities/wealth_change_breakdown.dart';
+import 'package:petrimonium_wallet/features/portfolio/domain/services/monthly_wealth_series.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/models/achievement_catalog.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/models/mission_display_catalog.dart';
 
@@ -127,6 +128,33 @@ class PortfolioController extends ChangeNotifier {
   String? dividendRadarError;
   DividendRadar dividendRadar = DividendRadar.empty;
   bool _dividendRadarLoaded = false;
+
+  /// Whether the real dividend radar has actually been fetched this session.
+  /// The dashboard's Proventos/Lucro KPIs must tell "we haven't fetched it
+  /// yet" apart from "you really received R$ 0" — [DividendRadar.empty] is
+  /// indistinguishable from a genuinely empty radar on its own, and showing
+  /// a placeholder zero as if it were real is exactly the fabrication the
+  /// three-layer guardrail exists to prevent.
+  bool get isDividendRadarLoaded => _dividendRadarLoaded;
+
+  /// Real proventos (dividendos/JCP/rendimentos) actually received over the
+  /// trailing 12 months — `null` until the radar has been fetched, so the
+  /// dashboard can show "--" rather than a fabricated zero.
+  double? get proventos12m => _dividendRadarLoaded ? dividendRadar.receivedInLast12Months() : null;
+
+  /// Total profit = realised proventos + unrealised capital gain. `null`
+  /// while [proventos12m] is still unknown, for the same reason.
+  double? get totalProfit {
+    final proventos = proventos12m;
+    if (proventos == null) return null;
+    return summary.totalGain + proventos;
+  }
+
+  /// The trailing-12-month series behind the dashboard's "Evolução do
+  /// patrimônio" bars, one sample per calendar month. Empty until the 1Y
+  /// history has been fetched (see [_loadPerformanceDeltas]).
+  List<MonthlyWealthPoint> get monthlyWealth12m =>
+      MonthlyWealthSeries.fromHistory(_backendHistoryCache[HistoryRange.y1] ?? const []);
 
   PortfolioStats get stats => PortfolioStats(summary: summary, holdings: holdings, allocation: allocation);
 

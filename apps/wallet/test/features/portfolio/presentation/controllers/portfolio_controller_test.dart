@@ -637,4 +637,84 @@ void main() {
       expect(events.whereType<HighConcentrationDetectedEvent>(), isEmpty);
     });
   });
+
+  group('PortfolioController — dashboard KPIs', () {
+    DividendEvent paid(double amount, DateTime date) => DividendEvent(
+      ticker: 'PETR4',
+      type: DividendType.DIVIDENDO,
+      rawLabel: 'Dividendo',
+      ratePerShare: 1,
+      dataCom: date,
+      paymentDate: date,
+      approvedOn: date,
+      userQuantity: 1,
+      estimatedGrossAmount: amount,
+      status: DividendStatus.PAID,
+    );
+
+    test('proventos12m and totalProfit are null until the radar has actually been fetched', () async {
+      repository.summaryToReturn = const PortfolioSummary(
+        investedCapital: 1000,
+        currentValue: 1200,
+        totalGain: 200,
+        totalGainPercent: 20,
+        totalAssets: 1,
+      );
+      await controller.loadAll();
+
+      expect(controller.isDividendRadarLoaded, isFalse);
+      expect(controller.proventos12m, isNull);
+      expect(controller.totalProfit, isNull);
+    });
+
+    test('proventos12m is a real zero once a genuinely empty radar has been fetched', () async {
+      await controller.loadAll();
+      await controller.loadDividendRadarIfNeeded();
+
+      expect(controller.isDividendRadarLoaded, isTrue);
+      expect(controller.proventos12m, 0);
+    });
+
+    test('totalProfit sums the capital gain and the real proventos received', () async {
+      repository.summaryToReturn = const PortfolioSummary(
+        investedCapital: 44890,
+        currentValue: 47320.18,
+        totalGain: 1145.28,
+        totalGainPercent: 15.7,
+        totalAssets: 1,
+      );
+      repository.dividendRadarToReturn = DividendRadar(
+        upcoming: const [],
+        history: [paid(1284.90, DateTime.now().subtract(const Duration(days: 30)))],
+      );
+      await controller.loadAll();
+      await controller.loadDividendRadarIfNeeded();
+
+      expect(controller.proventos12m, closeTo(1284.90, 0.001));
+      expect(controller.totalProfit, closeTo(2430.18, 0.001));
+    });
+
+    test('monthlyWealth12m is empty until the 1Y history is available', () async {
+      await controller.loadAll();
+      expect(controller.monthlyWealth12m, isEmpty);
+    });
+
+    test('monthlyWealth12m collapses the fetched 1Y history into one sample per month', () async {
+      final now = DateTime.now();
+      repository.historyByRange = {
+        HistoryRange.y1: [
+          HistoryPoint(date: DateTime(now.year, now.month - 1, 3), investedCapital: 100, portfolioValue: 110),
+          HistoryPoint(date: DateTime(now.year, now.month - 1, 27), investedCapital: 150, portfolioValue: 170),
+          HistoryPoint(date: DateTime(now.year, now.month, 2), investedCapital: 150, portfolioValue: 180),
+        ],
+      };
+      repository.holdingsToReturn = Holding.fromLots([lot(ticker: 'PETR4')]);
+      await controller.loadAll();
+
+      final series = controller.monthlyWealth12m;
+      expect(series, hasLength(2));
+      expect(series.first.portfolioValue, 170);
+      expect(series.last.portfolioValue, 180);
+    });
+  });
 }

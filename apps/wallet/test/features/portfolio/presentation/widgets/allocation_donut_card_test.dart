@@ -20,7 +20,7 @@ void main() {
       await tester.pumpWidget(buildTestableWidget(allocation: const []));
       await tester.pump();
 
-      expect(find.text('Alocação por Categoria'), findsOneWidget);
+      expect(find.text('Ativos na carteira'), findsOneWidget);
       expect(find.text('Sem dados suficientes para calcular sua alocação.'), findsOneWidget);
       expect(find.byType(PieChart), findsNothing);
     });
@@ -36,9 +36,13 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
 
       expect(find.byType(PieChart), findsOneWidget);
+      expect(find.text('TOTAL'), findsOneWidget);
       expect(find.textContaining('R\$'), findsOneWidget);
-      expect(find.text('Ações · 60%'), findsOneWidget);
-      expect(find.text('R. Fixa · 40%'), findsOneWidget);
+      // One legend row per slice: category on the left, its share right-aligned.
+      expect(find.text('Ações'), findsOneWidget);
+      expect(find.text('60%'), findsOneWidget);
+      expect(find.text('R. Fixa'), findsOneWidget);
+      expect(find.text('40%'), findsOneWidget);
     });
   });
 }

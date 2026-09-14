@@ -56,6 +56,14 @@ void main() {
       expect(find.textContaining('1 ativo(s)'), findsOneWidget);
     });
 
+    testWidgets('shows the category total in full, not rounded to thousands', (WidgetTester tester) async {
+      await tester.pumpWidget(buildTestableWidget(buildHoldings()));
+
+      // The reference design spells the value out ("R$ 27.420,50"); the old
+      // "R$ 1.2K" shorthand hid the cents the user is looking for.
+      expect(find.text('R\$ 1.200,00'), findsOneWidget);
+    });
+
     // AnimatedCrossFade always builds both firstChild and secondChild (it
     // needs both mounted to animate between them), so AssetRow is present
     // in the tree regardless of expansion — find.byType(AssetRow) can't

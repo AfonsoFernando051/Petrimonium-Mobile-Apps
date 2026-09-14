@@ -76,6 +76,27 @@ class AppStrings {
   static const String homeChangeValorizacaoLabel = 'homeChangeValorizacaoLabel';
   static const String homeChangeAportesLabel = 'homeChangeAportesLabel';
   static const String homeChangeRendimentosLabel = 'homeChangeRendimentosLabel';
+  static const String homeKpiTotalWealthLabel = 'homeKpiTotalWealthLabel';
+  static const String homeKpiTotalWealthTodaySuffix = 'homeKpiTotalWealthTodaySuffix';
+  static const String homeKpiInvestedPrefix = 'homeKpiInvestedPrefix';
+  static const String homeKpiTotalProfitLabel = 'homeKpiTotalProfitLabel';
+  static const String homeKpiProfitCapitalPrefix = 'homeKpiProfitCapitalPrefix';
+  static const String homeKpiProfitProventosPrefix = 'homeKpiProfitProventosPrefix';
+  static const String homeKpiProventosLabel = 'homeKpiProventosLabel';
+  static const String homeKpiProventosCaption = 'homeKpiProventosCaption';
+  static const String homeKpiReturnLabel = 'homeKpiReturnLabel';
+  static const String homeKpiReturn12mPrefix = 'homeKpiReturn12mPrefix';
+  static const String homeKpiReturnTotalPrefix = 'homeKpiReturnTotalPrefix';
+  static const String homeKpiAwaitingData = 'homeKpiAwaitingData';
+  static const String homeWealthBarsTitle = 'homeWealthBarsTitle';
+  static const String homeWealthBarsRangeChip = 'homeWealthBarsRangeChip';
+  static const String homeWealthBarsLegendInvested = 'homeWealthBarsLegendInvested';
+  static const String homeWealthBarsLegendGain = 'homeWealthBarsLegendGain';
+  static const String homeWealthBarsLegendShortfall = 'homeWealthBarsLegendShortfall';
+  static const String homeWealthBarsEmpty = 'homeWealthBarsEmpty';
+  static const String homeAllocationTitle = 'homeAllocationTitle';
+  static const String homeAllocationCenterLabel = 'homeAllocationCenterLabel';
+  static const String homeAllocationEmpty = 'homeAllocationEmpty';
   static const String homeHoldingsSectionTitle = 'homeHoldingsSectionTitle';
   static const String homeAddAssetLabel = 'homeAddAssetLabel';
 

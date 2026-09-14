@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
@@ -90,7 +91,7 @@ class _ExpandableCategoryState extends State<ExpandableCategory> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          _compact(categoryValue),
+                          AppFormatters.currency(categoryValue),
                           style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
                         ),
                         PerformanceBadge(percent: gainPercent, compact: true),
@@ -123,10 +124,5 @@ class _ExpandableCategoryState extends State<ExpandableCategory> {
         ],
       ),
     );
-  }
-
-  String _compact(double value) {
-    if (value.abs() >= 1000) return 'R\$ ${(value / 1000).toStringAsFixed(1)}K';
-    return 'R\$ ${value.toStringAsFixed(0)}';
   }
 }

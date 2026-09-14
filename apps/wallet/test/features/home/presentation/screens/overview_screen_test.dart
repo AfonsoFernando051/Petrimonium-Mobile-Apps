@@ -11,7 +11,8 @@ import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/allocation_donut_card.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/holdings_section.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealth_evolution_card.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/portfolio_kpi_grid.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealth_evolution_bar_card.dart';
 
 import '../../../portfolio/presentation/controllers/portfolio_controller_test.dart';
 import 'package:petrimonium_shared_features/testing.dart';
@@ -92,7 +93,7 @@ void main() {
       expect(find.byType(HoldingsSection), findsNothing);
     });
 
-    testWidgets('shows the wealth hero, real change breakdown and holdings when holdings exist', (tester) async {
+    testWidgets('shows the KPI grid, real change breakdown and holdings when holdings exist', (tester) async {
       // Purchased well before the 30-day window, no price movement — the
       // real breakdown is all zeros, not the old "coming soon" placeholder.
       final holdings = [lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10)];
@@ -105,7 +106,8 @@ void main() {
       await tester.pump();
 
       expect(find.byType(PortfolioNotConnectedCard), findsNothing);
-      expect(find.text('Como está meu patrimônio?'), findsOneWidget);
+      expect(find.byType(PortfolioKpiGrid), findsOneWidget);
+      expect(find.text('PATRIMÔNIO TOTAL'), findsOneWidget);
       expect(find.text('O que mudou (últimos 30 dias)'), findsOneWidget);
       expect(find.text('Valorização'), findsOneWidget);
       expect(find.text('Aportes'), findsOneWidget);
@@ -113,7 +115,7 @@ void main() {
       expect(find.text('+R\$ 0,00'), findsNWidgets(3));
       expect(find.byType(HoldingsSection), findsOneWidget);
       expect(find.byType(AllocationDonutCard), findsOneWidget);
-      expect(find.byType(WealthEvolutionCard), findsOneWidget);
+      expect(find.byType(WealthEvolutionBarCard), findsOneWidget);
     });
 
     testWidgets('tapping "Adicionar" next to Meus ativos opens AddAssetScreen', (tester) async {
@@ -140,6 +142,56 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
 
       expect(find.byType(AddAssetScreen), findsOneWidget);
+    });
+
+    testWidgets('the populated dashboard lays out without overflowing a 390x844 phone', (tester) async {
+      // The width the reference design is drawn at. Worth an explicit test:
+      // the chart legends and the 2x2 KPI tiles are the parts most likely to
+      // overflow, and a fixed legend Row really did overflow here by 56px
+      // before it was allowed to wrap. Widget tests render in Ahem, whose
+      // glyphs are square and therefore *wider* than Outfit's at the same
+      // size — so this is a conservative check, not a flattering one.
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      final now = DateTime.now();
+      repository.holdingsToReturn = Holding.fromLots([
+        lot(ticker: 'PETR4', quantity: 320, purchasePrice: 28.4),
+        lot(ticker: 'HGLG11', type: InvestmentTypeEnum.REAL_ESTATE, quantity: 45, purchasePrice: 155),
+      ]);
+      repository.summaryToReturn = const PortfolioSummary(
+        investedCapital: 44890,
+        currentValue: 47320.18,
+        totalGain: 1145.28,
+        totalGainPercent: 15.7,
+        totalAssets: 2,
+      );
+      repository.allocationToReturn = const [
+        AllocationSlice(type: InvestmentTypeEnum.FIXED_INCOME, currentValue: 27420.5, portfolioPercent: 58),
+        AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 12770, portfolioPercent: 27),
+        AllocationSlice(type: InvestmentTypeEnum.REAL_ESTATE, currentValue: 7129.68, portfolioPercent: 15),
+      ];
+      repository.historyByRange = {
+        HistoryRange.y1: [
+          for (var i = 11; i >= 0; i--)
+            HistoryPoint(
+              date: DateTime(now.year, now.month - i, 15),
+              investedCapital: 30000.0 + (11 - i) * 1300,
+              portfolioValue: 31000.0 + (11 - i) * 1450,
+            ),
+        ],
+      };
+      await controller.loadAll();
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('R\$ 47.320,18'), findsOneWidget);
+      expect(find.byType(WealthEvolutionBarCard), findsOneWidget);
+      expect(find.text('58%'), findsOneWidget);
     });
 
     testWidgets('shows the "Bem-vindo(a) de volta" greeting', (tester) async {
