@@ -12,6 +12,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_wallet/core/navigation/start_route_resolver.dart';
+import 'package:petrimonium_wallet/core/utils/pet_assets.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/auth/presentation/screens/login_screen.dart';
 import 'package:petrimonium_wallet/features/dashboard/presentation/screens/dashboard_screen.dart';
@@ -167,7 +168,7 @@ class _SplashScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/images/generated_dog.png',
+                PetAssets.imageFor(null),
                 height: 120,
                 errorBuilder: (context, error, stackTrace) => Icon(Icons.pets, size: 80, color: tokens.primary),
               ),

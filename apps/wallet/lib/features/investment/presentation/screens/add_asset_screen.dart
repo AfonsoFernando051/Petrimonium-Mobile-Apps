@@ -5,6 +5,7 @@ import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/financial_input_validators.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
+import 'package:petrimonium_wallet/core/utils/pet_assets.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/screens/first_value_screen.dart';
@@ -534,7 +535,7 @@ class _MentorTipCard extends StatelessWidget {
             ),
             child: ClipOval(
               child: Image.asset(
-                'assets/images/generated_fox.png',
+                PetAssets.imageFor(null),
                 width: 36,
                 height: 36,
                 fit: BoxFit.cover,

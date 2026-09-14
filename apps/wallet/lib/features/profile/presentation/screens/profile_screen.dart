@@ -3,6 +3,7 @@ import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_wallet/core/utils/display_name.dart';
+import 'package:petrimonium_wallet/core/utils/pet_assets.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/screens/quick_setup_screen.dart';
@@ -148,7 +149,7 @@ class _IdentityRow extends StatelessWidget {
       children: [
         ClipOval(
           child: Image.asset(
-            'assets/images/generated_fox.png',
+            PetAssets.imageFor(null),
             width: 48,
             height: 48,
             fit: BoxFit.cover,

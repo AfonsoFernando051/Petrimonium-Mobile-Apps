@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
+import 'package:petrimonium_wallet/core/utils/pet_assets.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/mentor/domain/services/wallet_mentor_reply_layers.dart';
 import 'package:petrimonium_wallet/features/mentor/presentation/widgets/mentor_reply_layers_view.dart';
@@ -74,7 +75,7 @@ class _MentorInsightCardState extends State<MentorInsightCard> {
             children: [
               ClipOval(
                 child: Image.asset(
-                  'assets/images/generated_fox.png',
+                  PetAssets.imageFor(null),
                   // 52px per the Wallet design system's "avatar menor" rule
                   // — never the Academy's larger, animated hero treatment.
                   width: 24,
