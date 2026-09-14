@@ -167,7 +167,7 @@ class _SplashScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/images/generated_fox.png',
+                'assets/images/generated_dog.png',
                 height: 120,
                 errorBuilder: (context, error, stackTrace) => Icon(Icons.pets, size: 80, color: tokens.primary),
               ),
