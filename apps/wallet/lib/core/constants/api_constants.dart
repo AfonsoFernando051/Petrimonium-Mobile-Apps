@@ -1,14 +1,13 @@
-import 'package:flutter/foundation.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 class ApiConstants {
-  // Overridable per build without editing source, e.g.:
-  //   flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8081   (Android emulator)
-  //   flutter build apk --dart-define=API_BASE_URL=https://api.example.com  (prod)
-  // Defaults to http://localhost:8081, which works for iOS Simulator/Web but
-  // NOT the Android emulator (use 10.0.2.2 there) — see README.md.
-  static const String baseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: 'http://localhost:8081');
-
-  static const String _devDefaultBaseUrl = 'http://localhost:8081';
+  // Base URL and the release-build guard now live in PetrimoniumEnvironment
+  // (petrimonium_flutter_core) — all three products resolve the same
+  // API_BASE_URL define against the same localhost default, so keeping two
+  // copies of this logic in sync was pure duplication risk. ApiConstants
+  // stays as the public surface the rest of Wallet already imports; it just
+  // delegates instead of reimplementing.
+  static const String baseUrl = PetrimoniumEnvironment.baseUrl;
 
   // The Web OAuth 2.0 Client ID from Google Cloud Console, passed to
   // GoogleSignIn as serverClientId so the ID token it returns is valid for
@@ -21,14 +20,7 @@ class ApiConstants {
   /// silently ship pointed at a developer's own machine — fail loudly and immediately
   /// instead, rather than have every request quietly fail (or worse, quietly succeed against
   /// the wrong backend) in front of a real user.
-  static void assertConfiguredForRelease() {
-    if (kReleaseMode && baseUrl == _devDefaultBaseUrl) {
-      throw StateError(
-        'API_BASE_URL was not set for this release build — it would point at '
-        'localhost. Build with --dart-define=API_BASE_URL=<real backend URL>.',
-      );
-    }
-  }
+  static void assertConfiguredForRelease() => PetrimoniumEnvironment.assertConfiguredForRelease();
 
   // Identifies this app to the backend at login so the issued JWT carries the
   // matching `app_context` claim — required as of backend commit 7b51782,
