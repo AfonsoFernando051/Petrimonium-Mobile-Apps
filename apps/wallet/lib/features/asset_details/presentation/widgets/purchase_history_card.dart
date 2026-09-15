@@ -135,6 +135,7 @@ class _LotTile extends StatelessWidget {
           PopupMenuButton<String>(
             padding: EdgeInsets.zero,
             icon: Icon(Icons.more_vert, size: 16, color: tokens.textSecondary),
+            tooltip: Translator.translate(AppStrings.lotActionsMenuTooltip),
             onSelected: (value) {
               if (value == 'edit') _handleEdit(context);
               if (value == 'delete') _handleDelete(context);

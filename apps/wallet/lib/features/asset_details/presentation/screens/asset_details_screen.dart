@@ -101,6 +101,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
               Navigator.of(context).pop();
             },
             icon: Icon(Icons.arrow_back_ios_new, color: context.colors.textPrimary, size: 20),
+            tooltip: Translator.translate(AppStrings.backTooltip),
           ),
           Expanded(
             child: Text(

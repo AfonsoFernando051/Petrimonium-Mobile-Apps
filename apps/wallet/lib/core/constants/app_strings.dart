@@ -731,4 +731,12 @@ class AppStrings {
   static const String petTeacherAskMentor = SharedStrings.petTeacherAskMentor;
   static const String petTeacherOwnedGreeting = SharedStrings.petTeacherOwnedGreeting;
   static const String petTeacherNotOwnedGreeting = SharedStrings.petTeacherNotOwnedGreeting;
+
+  // Common icon-only controls repeated across several screens (every
+  // AppBar's back arrow, the purchase lot's actions menu). Wallet-local
+  // literals rather than SharedStrings aliases: nothing in shared_copy
+  // covers these yet, and it's not established that Academy/Health need the
+  // identical fix right now.
+  static const String backTooltip = 'backTooltip';
+  static const String lotActionsMenuTooltip = 'lotActionsMenuTooltip';
 }

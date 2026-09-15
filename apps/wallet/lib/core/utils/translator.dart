@@ -220,6 +220,8 @@ class Translator {
       AppStrings.academyBridgeComingSoon: 'Em breve: link para o Academy',
       AppStrings.homeKnowledgeMapLabel: 'SUA TRILHA DE CONHECIMENTO',
       AppStrings.homeViewFullAcademyCta: 'Ver trilha completa',
+      AppStrings.backTooltip: 'Voltar',
+      AppStrings.lotActionsMenuTooltip: 'Mais ações do lote',
     },
     // Português europeu. Deliberadamente esparso: só as entradas que diferem
     // do pt-BR. Todo o resto resolve pelo fallback de [translate] para o bloco
@@ -390,6 +392,8 @@ class Translator {
       AppStrings.academyBridgeComingSoon: 'Coming soon: link to Academy',
       AppStrings.homeKnowledgeMapLabel: 'YOUR KNOWLEDGE MAP',
       AppStrings.homeViewFullAcademyCta: 'View full path',
+      AppStrings.backTooltip: 'Back',
+      AppStrings.lotActionsMenuTooltip: 'More lot actions',
     },
     'es': {
       AppStrings.brandTitle: 'Petrimonium Wallet',
@@ -550,6 +554,8 @@ class Translator {
       AppStrings.academyBridgeComingSoon: 'Próximamente: enlace a Academy',
       AppStrings.homeKnowledgeMapLabel: 'TU RUTA DE CONOCIMIENTO',
       AppStrings.homeViewFullAcademyCta: 'Ver ruta completa',
+      AppStrings.backTooltip: 'Atrás',
+      AppStrings.lotActionsMenuTooltip: 'Más acciones del lote',
     },
   };
 }

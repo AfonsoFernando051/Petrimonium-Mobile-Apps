@@ -146,6 +146,7 @@ class _RadarErrorState extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.refresh, color: tokens.error, size: 18),
+            tooltip: Translator.translate(AppStrings.retryButtonLabel),
             onPressed: onRetry,
           ),
         ],

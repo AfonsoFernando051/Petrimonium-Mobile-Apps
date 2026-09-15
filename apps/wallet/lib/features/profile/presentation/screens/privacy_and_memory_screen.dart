@@ -27,6 +27,7 @@ class PrivacyAndMemoryScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: tokens.textPrimary),
+          tooltip: Translator.translate(AppStrings.backTooltip),
           onPressed: () {
             if (Navigator.canPop(context)) Navigator.pop(context);
           },
