@@ -4,44 +4,35 @@ import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/events/app_event_bus.dart';
 import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/models/achievement.dart';
+import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/gamification_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/domain/entities/wealth_change_breakdown.dart';
 import 'package:petrimonium_wallet/features/portfolio/domain/services/monthly_wealth_series.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/models/achievement_catalog.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/models/mission_display_catalog.dart';
 
 /// Owns all state for the redesigned Portfolio screen: real holdings/
 /// summary/allocation/history from the backend, plus everything derived
 /// client-side from that real data (health score, insights, estimated
-/// passive income) and everything the backend now owns authoritatively
-/// (achievement unlocks, total XP/level, engagement streak — see
-/// [_evaluateGamification]). When [mascotController] is supplied, every
-/// successful load feeds the user's real net worth and real backend-granted
-/// XP into `MascotController.evaluateEvolution`.
+/// passive income). Achievement unlocks, missions and XP/level are a
+/// separate concern owned by [GamificationController] — when one is
+/// supplied, every successful [loadAll] also re-evaluates it with the
+/// portfolio's current net worth, the same "optional injected collaborator"
+/// shape this class already used for `MascotController` before the two
+/// concerns were split. Keeping the call inside [loadAll] (rather than
+/// requiring every caller to separately drive gamification) means every
+/// existing entry point that reloads the portfolio — the dashboard's
+/// initial load, adding an asset, editing/deleting a lot, pulling to
+/// refresh Proventos — keeps re-evaluating gamification exactly as before
+/// the split, with no changes needed at those call sites.
 class PortfolioController extends ChangeNotifier with SafeChangeNotifier {
   PortfolioController({
     required PortfolioRepository repository,
-    required AchievementsLocalRepository achievementsLocalRepository,
-    required AchievementsRepository achievementsRepository,
-    required GamificationRepository gamificationRepository,
-    required MissionsRepository missionsRepository,
-    MascotController? mascotController,
+    GamificationController? gamificationController,
     AppEventBus? eventBus,
   }) : _repository = repository,
-       _achievementsLocalRepository = achievementsLocalRepository,
-       _achievementsRepository = achievementsRepository,
-       _gamificationRepository = gamificationRepository,
-       _missionsRepository = missionsRepository,
-       _mascotController = mascotController,
+       _gamificationController = gamificationController,
        _eventBus = eventBus ?? AppEventBus.instance;
 
   final PortfolioRepository _repository;
-  final AchievementsLocalRepository _achievementsLocalRepository;
-  final AchievementsRepository _achievementsRepository;
-  final GamificationRepository _gamificationRepository;
-  final MissionsRepository _missionsRepository;
-  final MascotController? _mascotController;
+  final GamificationController? _gamificationController;
   final AppEventBus _eventBus;
 
   /// Whether a `loadAll()` has ever completed successfully this session —
@@ -76,36 +67,6 @@ class PortfolioController extends ChangeNotifier with SafeChangeNotifier {
   List<Holding> holdings = [];
   PortfolioSummary summary = PortfolioSummary.empty;
   List<AllocationSlice> allocation = [];
-  Map<String, DateTime> _unlockedAchievements = {};
-
-  /// The backend's real XP/level/streak, refreshed on every [loadAll] (see
-  /// [_evaluateGamification]). Null until the first successful fetch —
-  /// callers must not fabricate a placeholder value while it's null.
-  GamificationSummary? gamificationSummary;
-
-  /// Achievements that became unlocked on the *most recent* `loadAll()` call
-  /// — i.e. genuinely new this session, not just "unlocked at some point in
-  /// the past" (see `_evaluateGamification`, which diffs against what was
-  /// already persisted before recomputing). The UI shows a celebration for
-  /// these, then calls [clearNewlyUnlocked].
-  List<Achievement> newlyUnlocked = [];
-
-  void clearNewlyUnlocked() {
-    newlyUnlocked = [];
-  }
-
-  /// The current period's real status for every mission
-  /// (`GET /api/v1/missions`), refreshed on every [loadAll] — see
-  /// [_evaluateGamification]. Empty until the first successful fetch.
-  List<MissionStatus> missions = [];
-
-  /// Mission codes newly completed on the *most recent* `loadAll()` call —
-  /// same "genuinely new this session" contract as [newlyUnlocked].
-  Set<String> newlyCompletedMissions = {};
-
-  void clearNewlyCompletedMissions() {
-    newlyCompletedMissions = {};
-  }
 
   HistoryRange selectedRange = HistoryRange.m3;
   InvestmentTypeEnum? selectedAssetFilter;
@@ -160,8 +121,6 @@ class PortfolioController extends ChangeNotifier with SafeChangeNotifier {
   PortfolioStats get stats => PortfolioStats(summary: summary, holdings: holdings, allocation: allocation);
 
   PortfolioHealth get health => PortfolioHealthCalculator.calculate(stats);
-
-  List<Achievement> get achievements => AchievementCatalog.resolve(_unlockedAchievements);
 
   /// Whether the wallet currently holds any asset type that pays out
   /// dividends/proventos (ações, FIIs, ETFs/fundos) — the Proventos tab is
@@ -222,7 +181,7 @@ class PortfolioController extends ChangeNotifier with SafeChangeNotifier {
 
       await _loadPerformanceDeltas();
       _recomputeChart();
-      await _evaluateGamification();
+      await _gamificationController?.evaluate(currentNetWorth: summary.currentValue);
 
       if (hadNoHoldingsBefore && holdings.isNotEmpty) {
         _eventBus.emit(const FirstInvestmentAddedEvent());
@@ -352,64 +311,6 @@ class PortfolioController extends ChangeNotifier with SafeChangeNotifier {
         .catchError((_) {
           // Keep the locally-computed series if the backend call fails.
         });
-  }
-
-  /// The backend is the sole authority on achievement unlocks, mission
-  /// progress, and XP. [AchievementsRepository.evaluate] re-checks every
-  /// achievement condition against the user's real, server-side portfolio
-  /// and persists any new unlock; [MissionsRepository.evaluate] does the
-  /// same for every mission's current daily/weekly period, purely from real
-  /// lesson/module completion history; [GamificationRepository.fetchSummary]
-  /// returns the real total XP (learning + achievements + missions) and
-  /// level. All three calls are independently best-effort — offline, the
-  /// achievement path falls back to the last-known-real cache rather than
-  /// fabricating a number; missions have no such cache (each period resets
-  /// anyway) and simply keep whatever was last successfully fetched.
-  Future<void> _evaluateGamification() async {
-    try {
-      final result = await _achievementsRepository.evaluate();
-      _unlockedAchievements = result.unlockedAt;
-      await _achievementsLocalRepository.cacheUnlocked(result.unlockedAt);
-
-      if (result.newlyUnlockedCodes.isNotEmpty) {
-        newlyUnlocked = AchievementCatalog.resolve(
-          _unlockedAchievements,
-        ).where((a) => result.newlyUnlockedCodes.contains(a.id)).toList();
-        // The in-screen celebration overlay (`newlyUnlocked` above) already
-        // shows these; the bus emission is for other, decoupled listeners
-        // (e.g. a future Character Engine reaction) rather than a second UI.
-        for (final achievement in newlyUnlocked) {
-          _eventBus.emit(AchievementUnlockedEvent(achievement));
-        }
-      }
-    } catch (_) {
-      // Offline or backend unavailable — fall back to the last-known-real
-      // cached unlock state rather than showing nothing or fabricating one.
-      _unlockedAchievements = await _achievementsLocalRepository.loadUnlocked();
-    }
-
-    try {
-      final result = await _missionsRepository.evaluate();
-      missions = result.missions;
-      newlyCompletedMissions = result.newlyCompletedCodes;
-      // Mirrors the achievement-unlock loop above: the in-screen celebration
-      // (`newlyCompletedMissions`) already shows these on the Portfolio tab;
-      // the bus emission is for decoupled listeners like the pet companion.
-      for (final code in result.newlyCompletedCodes) {
-        _eventBus.emit(MissionCompletedEvent(MissionDisplayCatalog.forCode(code).title));
-      }
-    } catch (_) {
-      // Offline or backend unavailable — keep whatever mission state was
-      // last successfully fetched rather than showing nothing.
-    }
-
-    try {
-      gamificationSummary = await _gamificationRepository.fetchSummary();
-      await _mascotController?.evaluateEvolution(summary.currentValue, gamificationSummary!.totalXp);
-    } catch (_) {
-      // Offline or backend unavailable — keep whatever XP/level the mascot
-      // already had rather than overwriting it with a guess.
-    }
   }
 
   /// Mirrors `InsightGenerator`'s existing "Concentração elevada" rule

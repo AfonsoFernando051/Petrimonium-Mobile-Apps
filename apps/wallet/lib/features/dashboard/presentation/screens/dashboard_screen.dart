@@ -11,6 +11,7 @@ import '../../../../core/di/dependency_injection.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../home/presentation/screens/overview_screen.dart';
 import '../../../pet/presentation/mascot/controllers/mascot_controller.dart';
+import '../../../portfolio/presentation/controllers/gamification_controller.dart';
 import '../../../portfolio/presentation/controllers/portfolio_controller.dart';
 import '../../../portfolio/presentation/screens/passive_income_screen.dart';
 import '../../../portfolio/presentation/widgets/dividend_notifications_sheet.dart';
@@ -36,6 +37,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // shared with whatever else in this screen still touches portfolio data.
   late final MascotController _mascotController;
   late final PortfolioController _portfolioController;
+
+  // Achievement unlocks, missions and XP/level — a separate concern from
+  // portfolio data (see `GamificationController`'s class doc). Injected into
+  // `_portfolioController` below so every place that already reloads the
+  // portfolio keeps re-evaluating gamification too, without each of them
+  // needing to know this controller exists.
+  late final GamificationController _gamificationController;
 
   // The persistent pet companion's speech-bubble/interaction state — one
   // instance shared by every tab and by `ProfileScreen` (pushed with it),
@@ -69,13 +77,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       mascotController: _mascotController,
       preferencesRepository: DI.petCompanionPreferencesRepository,
     );
-    _portfolioController = PortfolioController(
-      repository: DI.portfolioRepository,
+    _gamificationController = GamificationController(
       achievementsLocalRepository: DI.achievementsLocalRepository,
       achievementsRepository: DI.achievementsRepository,
       gamificationRepository: DI.gamificationRepository,
       missionsRepository: DI.missionsRepository,
       mascotController: _mascotController,
+    );
+    _portfolioController = PortfolioController(
+      repository: DI.portfolioRepository,
+      gamificationController: _gamificationController,
     );
     _initCompanionGreeting();
     _portfolioController.addListener(_onPortfolioChanged);
@@ -119,6 +130,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void dispose() {
     _portfolioController.removeListener(_onPortfolioChanged);
     _portfolioController.dispose();
+    _gamificationController.dispose();
     _companionController.dispose();
     _mascotController.dispose();
     super.dispose();

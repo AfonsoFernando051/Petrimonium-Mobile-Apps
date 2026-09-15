@@ -25,13 +25,14 @@ import 'package:petrimonium_wallet/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../test/features/academy/academy_test_fixtures.dart';
-import '../test/features/portfolio/presentation/controllers/portfolio_controller_test.dart'
+import '../test/features/portfolio/presentation/controllers/gamification_controller_test.dart'
     show
-        FakePortfolioRepository,
         FakeAchievementsLocalRepository,
         FakeAchievementsRepository,
         FakeGamificationRepository,
         FakeMissionsRepository;
+import '../test/features/portfolio/presentation/controllers/portfolio_controller_test.dart'
+    show FakePortfolioRepository;
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 

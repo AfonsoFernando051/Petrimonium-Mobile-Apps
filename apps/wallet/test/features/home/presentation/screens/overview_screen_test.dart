@@ -59,13 +59,7 @@ void main() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     repository = FakePortfolioRepository();
-    controller = PortfolioController(
-      repository: repository,
-      achievementsLocalRepository: FakeAchievementsLocalRepository(),
-      achievementsRepository: FakeAchievementsRepository(),
-      gamificationRepository: FakeGamificationRepository(),
-      missionsRepository: FakeMissionsRepository(),
-    );
+    controller = PortfolioController(repository: repository);
     mascotController = MascotController(repository: FakeMascotRepository());
   });
 

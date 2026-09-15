@@ -12,25 +12,11 @@ import 'package:petrimonium_shared_features/testing.dart';
 
 void main() {
   late FakePortfolioRepository repository;
-  late FakeAchievementsLocalRepository achievementsLocalRepository;
-  late FakeAchievementsRepository achievementsRepository;
-  late FakeGamificationRepository gamificationRepository;
-  late FakeMissionsRepository missionsRepository;
   late PortfolioController controller;
 
   setUp(() {
     repository = FakePortfolioRepository();
-    achievementsLocalRepository = FakeAchievementsLocalRepository();
-    achievementsRepository = FakeAchievementsRepository();
-    gamificationRepository = FakeGamificationRepository();
-    missionsRepository = FakeMissionsRepository();
-    controller = PortfolioController(
-      repository: repository,
-      achievementsLocalRepository: achievementsLocalRepository,
-      achievementsRepository: achievementsRepository,
-      gamificationRepository: gamificationRepository,
-      missionsRepository: missionsRepository,
-    );
+    controller = PortfolioController(repository: repository);
   });
 
   tearDown(() => controller.dispose());

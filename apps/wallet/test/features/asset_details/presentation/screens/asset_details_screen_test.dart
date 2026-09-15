@@ -36,13 +36,7 @@ void main() {
   setUp(() {
     mockRepository = MockAssetDetailsRepository();
     DI.assetDetailsRepository = mockRepository;
-    controller = PortfolioController(
-      repository: FakePortfolioRepository(),
-      achievementsLocalRepository: FakeAchievementsLocalRepository(),
-      achievementsRepository: FakeAchievementsRepository(),
-      gamificationRepository: FakeGamificationRepository(),
-      missionsRepository: FakeMissionsRepository(),
-    );
+    controller = PortfolioController(repository: FakePortfolioRepository());
   });
 
   Widget buildTestableWidget({String ticker = 'PETR4'}) {

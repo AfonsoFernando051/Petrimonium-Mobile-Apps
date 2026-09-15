@@ -12,13 +12,7 @@ import 'package:petrimonium_shared_features/testing.dart';
 import '../controllers/portfolio_controller_test.dart';
 
 void main() {
-  final controller = PortfolioController(
-    repository: FakePortfolioRepository(),
-    achievementsLocalRepository: FakeAchievementsLocalRepository(),
-    achievementsRepository: FakeAchievementsRepository(),
-    gamificationRepository: FakeGamificationRepository(),
-    missionsRepository: FakeMissionsRepository(),
-  );
+  final controller = PortfolioController(repository: FakePortfolioRepository());
 
   setUp(() {
     Translator.currentLanguage = 'pt';

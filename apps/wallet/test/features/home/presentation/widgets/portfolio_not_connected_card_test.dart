@@ -60,13 +60,7 @@ void main() {
     mascotController = MascotController(repository: FakeMascotRepository());
     portfolioRepository = FakePortfolioRepository();
     investmentRepository = MockInvestmentRepository();
-    controller = PortfolioController(
-      repository: portfolioRepository,
-      achievementsLocalRepository: FakeAchievementsLocalRepository(),
-      achievementsRepository: FakeAchievementsRepository(),
-      gamificationRepository: FakeGamificationRepository(),
-      missionsRepository: FakeMissionsRepository(),
-    );
+    controller = PortfolioController(repository: portfolioRepository);
 
     when(() => investmentRepository.searchQuotes(any())).thenAnswer((_) async => <Map<String, dynamic>>[]);
     when(() => investmentRepository.fetchQuoteAtDate(any(), any())).thenAnswer((_) async => null);

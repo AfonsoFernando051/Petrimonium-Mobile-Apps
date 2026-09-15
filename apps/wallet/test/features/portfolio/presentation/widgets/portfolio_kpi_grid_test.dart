@@ -30,13 +30,7 @@ void main() {
   setUp(() {
     Translator.currentLanguage = 'pt';
     repository = FakePortfolioRepository();
-    controller = PortfolioController(
-      repository: repository,
-      achievementsLocalRepository: FakeAchievementsLocalRepository(),
-      achievementsRepository: FakeAchievementsRepository(),
-      gamificationRepository: FakeGamificationRepository(),
-      missionsRepository: FakeMissionsRepository(),
-    );
+    controller = PortfolioController(repository: repository);
   });
 
   tearDown(() => controller.dispose());

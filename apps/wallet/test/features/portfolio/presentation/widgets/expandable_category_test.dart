@@ -9,13 +9,7 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/expan
 import '../controllers/portfolio_controller_test.dart';
 
 void main() {
-  final controller = PortfolioController(
-    repository: FakePortfolioRepository(),
-    achievementsLocalRepository: FakeAchievementsLocalRepository(),
-    achievementsRepository: FakeAchievementsRepository(),
-    gamificationRepository: FakeGamificationRepository(),
-    missionsRepository: FakeMissionsRepository(),
-  );
+  final controller = PortfolioController(repository: FakePortfolioRepository());
 
   Widget buildTestableWidget(List<Holding> holdings, {bool initiallyExpanded = false}) {
     return MaterialApp(

@@ -47,66 +47,6 @@ class FakePortfolioRepository implements PortfolioRepository {
   PortfolioRemoteDataSource get remoteDataSource => throw UnimplementedError();
 }
 
-/// In-memory [AchievementsLocalRepository] double — the real one persists to
-/// `SharedPreferences`, unavailable in a plain unit test.
-class FakeAchievementsLocalRepository implements AchievementsLocalRepository {
-  Map<String, DateTime> _unlocked = {};
-
-  @override
-  Future<Map<String, DateTime>> loadUnlocked() async => _unlocked;
-
-  @override
-  Future<void> cacheUnlocked(Map<String, DateTime> unlockedAt) async {
-    _unlocked = unlockedAt;
-  }
-}
-
-/// In-memory [AchievementsRepository] double standing in for the real
-/// backend call — the achievement-*qualification* logic itself now lives
-/// server-side (see `EvaluateAchievementsUseCaseImplTest.java`), so this
-/// test only verifies `PortfolioController` correctly orchestrates whatever
-/// the backend reports.
-class FakeAchievementsRepository implements AchievementsRepository {
-  AchievementEvaluationResult resultToReturn = AchievementEvaluationResult.empty;
-
-  @override
-  Future<AchievementEvaluationResult> evaluate() async => resultToReturn;
-
-  @override
-  AchievementsRemoteDataSource get remoteDataSource => throw UnimplementedError();
-}
-
-/// In-memory [GamificationRepository] double — the real one calls the
-/// backend's `/api/v1/gamification/summary` endpoint.
-class FakeGamificationRepository implements GamificationRepository {
-  GamificationSummary summaryToReturn = GamificationSummary.empty;
-
-  @override
-  Future<GamificationSummary> fetchSummary() async => summaryToReturn;
-
-  @override
-  GamificationRemoteDataSource get remoteDataSource => throw UnimplementedError();
-}
-
-/// In-memory [MissionsRepository] double standing in for the real backend
-/// call — mission progress/completion logic itself now lives server-side
-/// (see `EvaluateMissionsUseCaseImplTest.java`), so this only verifies
-/// `PortfolioController` correctly orchestrates whatever the backend
-/// reports.
-class FakeMissionsRepository implements MissionsRepository {
-  MissionEvaluationResult resultToReturn = MissionEvaluationResult.empty;
-  Object? evaluateError;
-
-  @override
-  Future<MissionEvaluationResult> evaluate() async {
-    if (evaluateError != null) throw evaluateError!;
-    return resultToReturn;
-  }
-
-  @override
-  MissionsRemoteDataSource get remoteDataSource => throw UnimplementedError();
-}
-
 /// A single-lot [Holding] built the same way the real pipeline does
 /// (`Holding.fromLots`), so `firstPurchaseDate` and other lot-derived
 /// getters behave exactly as they would for real data.
@@ -129,25 +69,11 @@ Future<void> flushMicrotasks() => Future<void>.delayed(Duration.zero);
 
 void main() {
   late FakePortfolioRepository repository;
-  late FakeAchievementsLocalRepository achievementsLocalRepository;
-  late FakeAchievementsRepository achievementsRepository;
-  late FakeGamificationRepository gamificationRepository;
-  late FakeMissionsRepository missionsRepository;
   late PortfolioController controller;
 
   setUp(() {
     repository = FakePortfolioRepository();
-    achievementsLocalRepository = FakeAchievementsLocalRepository();
-    achievementsRepository = FakeAchievementsRepository();
-    gamificationRepository = FakeGamificationRepository();
-    missionsRepository = FakeMissionsRepository();
-    controller = PortfolioController(
-      repository: repository,
-      achievementsLocalRepository: achievementsLocalRepository,
-      achievementsRepository: achievementsRepository,
-      gamificationRepository: gamificationRepository,
-      missionsRepository: missionsRepository,
-    );
+    controller = PortfolioController(repository: repository);
   });
 
   tearDown(() {
@@ -246,15 +172,6 @@ void main() {
       // friendly copy via friendlyErrorMessage (see friendlyErrorMessage.dart).
       expect(controller.error, friendlyErrorMessage(error));
     });
-
-    test('a failed load does not crash gamification evaluation', () async {
-      repository.holdingsError = Exception('network down');
-
-      await controller.loadAll();
-
-      // No exception propagated out of loadAll — reaching this line is the assertion.
-      expect(controller.newlyUnlocked, isEmpty);
-    });
   });
 
   group('loadAll — empty portfolio', () {
@@ -292,167 +209,6 @@ void main() {
       ];
       await controller.loadAll();
       expect(controller.hasDividendPayingHoldings, isFalse);
-    });
-  });
-
-  group('loadAll — gamification', () {
-    // Achievement *qualification* is now real, server-side logic (see
-    // EvaluateAchievementsUseCaseImplTest.java) — this only verifies
-    // PortfolioController correctly orchestrates whatever the backend
-    // reports: caching it locally, reporting newly-unlocked ones exactly
-    // once, and feeding real XP into the mascot.
-    test('reports newly-unlocked achievements from the backend and caches them locally', () async {
-      achievementsRepository.resultToReturn = AchievementEvaluationResult(
-        unlockedAt: {'first_investment': DateTime(2026, 1, 1)},
-        newlyUnlockedCodes: {'first_investment'},
-        achievementXpTotal: 50,
-      );
-
-      await controller.loadAll();
-
-      expect(controller.newlyUnlocked.any((a) => a.id == 'first_investment'), isTrue);
-      expect(controller.achievements.firstWhere((a) => a.id == 'first_investment').unlocked, isTrue);
-      expect((await achievementsLocalRepository.loadUnlocked()).containsKey('first_investment'), isTrue);
-
-      controller.clearNewlyUnlocked();
-      expect(controller.newlyUnlocked, isEmpty);
-
-      // A second load where the backend reports no *new* unlocks (already
-      // persisted server-side) must not re-report it as "newly" unlocked.
-      achievementsRepository.resultToReturn = AchievementEvaluationResult(
-        unlockedAt: {'first_investment': DateTime(2026, 1, 1)},
-        newlyUnlockedCodes: {},
-        achievementXpTotal: 50,
-      );
-      await controller.loadAll();
-      expect(controller.newlyUnlocked, isEmpty);
-    });
-
-    test('feeds the backend\'s real total XP into the mascot controller', () async {
-      gamificationRepository.summaryToReturn = const GamificationSummary(
-        totalXp: 275,
-        level: 3,
-        xpIntoLevel: 25,
-        xpForNextLevel: 100,
-        currentStreak: 2,
-        longestStreak: 5,
-      );
-
-      await controller.loadAll();
-
-      expect(controller.gamificationSummary?.totalXp, 275);
-      expect(controller.gamificationSummary?.currentStreak, 2);
-    });
-  });
-
-  group('loadAll — missions', () {
-    test('populates missions and newly-completed codes from the backend', () async {
-      missionsRepository.resultToReturn = const MissionEvaluationResult(
-        missions: [
-          MissionStatus(
-            code: 'daily_complete_lesson',
-            period: MissionPeriod.daily,
-            periodKey: '2026-08-19',
-            progress: 1,
-            target: 1,
-            xpReward: 30,
-            completed: true,
-          ),
-        ],
-        newlyCompletedCodes: {'daily_complete_lesson'},
-        missionXpTotal: 30,
-      );
-
-      await controller.loadAll();
-
-      expect(controller.missions, hasLength(1));
-      expect(controller.missions.first.code, 'daily_complete_lesson');
-      expect(controller.newlyCompletedMissions, contains('daily_complete_lesson'));
-
-      controller.clearNewlyCompletedMissions();
-      expect(controller.newlyCompletedMissions, isEmpty);
-    });
-
-    test('emits a MissionCompletedEvent with the resolved title for each newly-completed mission', () async {
-      final events = <AppEvent>[];
-      final sub = AppEventBus.instance.stream.listen(events.add);
-      addTearDown(sub.cancel);
-
-      missionsRepository.resultToReturn = const MissionEvaluationResult(
-        missions: [
-          MissionStatus(
-            code: 'daily_complete_lesson',
-            period: MissionPeriod.daily,
-            periodKey: '2026-08-19',
-            progress: 1,
-            target: 1,
-            xpReward: 30,
-            completed: true,
-          ),
-        ],
-        newlyCompletedCodes: {'daily_complete_lesson'},
-        missionXpTotal: 30,
-      );
-
-      await controller.loadAll();
-      await flushMicrotasks();
-
-      final missionEvents = events.whereType<MissionCompletedEvent>().toList();
-      expect(missionEvents, hasLength(1));
-      expect(missionEvents.single.missionTitle, 'Aula do Dia');
-    });
-
-    test('does not emit MissionCompletedEvent when nothing newly completed', () async {
-      final events = <AppEvent>[];
-      final sub = AppEventBus.instance.stream.listen(events.add);
-      addTearDown(sub.cancel);
-
-      missionsRepository.resultToReturn = const MissionEvaluationResult(
-        missions: [
-          MissionStatus(
-            code: 'daily_complete_lesson',
-            period: MissionPeriod.daily,
-            periodKey: '2026-08-19',
-            progress: 0,
-            target: 1,
-            xpReward: 30,
-            completed: false,
-          ),
-        ],
-        newlyCompletedCodes: {},
-        missionXpTotal: 0,
-      );
-
-      await controller.loadAll();
-      await flushMicrotasks();
-
-      expect(events.whereType<MissionCompletedEvent>(), isEmpty);
-    });
-
-    test('a missions backend failure does not crash loadAll or clear prior mission state', () async {
-      missionsRepository.resultToReturn = const MissionEvaluationResult(
-        missions: [
-          MissionStatus(
-            code: 'daily_complete_lesson',
-            period: MissionPeriod.daily,
-            periodKey: '2026-08-19',
-            progress: 0,
-            target: 1,
-            xpReward: 30,
-            completed: false,
-          ),
-        ],
-        newlyCompletedCodes: {},
-        missionXpTotal: 0,
-      );
-      await controller.loadAll();
-      expect(controller.missions, hasLength(1));
-
-      missionsRepository.evaluateError = Exception('network down');
-      await controller.loadAll();
-
-      expect(controller.error, isNull);
-      expect(controller.missions, hasLength(1));
     });
   });
 

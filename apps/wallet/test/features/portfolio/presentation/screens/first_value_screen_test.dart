@@ -36,13 +36,7 @@ void main() {
     portfolioRepository.allocationToReturn = const [
       AllocationSlice(type: InvestmentTypeEnum.STOCKS, currentValue: 300, portfolioPercent: 100),
     ];
-    controller = PortfolioController(
-      repository: portfolioRepository,
-      achievementsLocalRepository: FakeAchievementsLocalRepository(),
-      achievementsRepository: FakeAchievementsRepository(),
-      gamificationRepository: FakeGamificationRepository(),
-      missionsRepository: FakeMissionsRepository(),
-    );
+    controller = PortfolioController(repository: portfolioRepository);
     await controller.refresh();
   });
 

@@ -15,13 +15,7 @@ import '../controllers/portfolio_controller_test.dart';
 class MockAssetDetailsRepository extends Mock implements AssetDetailsRepository {}
 
 void main() {
-  final controller = PortfolioController(
-    repository: FakePortfolioRepository(),
-    achievementsLocalRepository: FakeAchievementsLocalRepository(),
-    achievementsRepository: FakeAchievementsRepository(),
-    gamificationRepository: FakeGamificationRepository(),
-    missionsRepository: FakeMissionsRepository(),
-  );
+  final controller = PortfolioController(repository: FakePortfolioRepository());
 
   Widget buildTestableWidget(Holding holding) {
     return MaterialApp(

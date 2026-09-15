@@ -48,13 +48,7 @@ void main() {
   setUp(() {
     investmentRepository = MockInvestmentRepository();
     lotChangedCalled = false;
-    controller = PortfolioController(
-      repository: FakePortfolioRepository(),
-      achievementsLocalRepository: FakeAchievementsLocalRepository(),
-      achievementsRepository: FakeAchievementsRepository(),
-      gamificationRepository: FakeGamificationRepository(),
-      missionsRepository: FakeMissionsRepository(),
-    );
+    controller = PortfolioController(repository: FakePortfolioRepository());
     DI.investmentRepository = investmentRepository;
   });
 
