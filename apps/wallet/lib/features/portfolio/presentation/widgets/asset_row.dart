@@ -23,7 +23,6 @@ class AssetRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
-    final isPositive = holding.gainValue >= 0;
 
     return Material(
       color: Colors.transparent,
@@ -90,7 +89,7 @@ class AssetRow extends StatelessWidget {
                   ),
                 ),
               const SizedBox(width: 2),
-              Icon(isPositive ? Icons.chevron_right : Icons.chevron_right, color: tokens.textTertiary, size: 16),
+              Icon(Icons.chevron_right, color: tokens.textTertiary, size: 16),
             ],
           ),
         ),
