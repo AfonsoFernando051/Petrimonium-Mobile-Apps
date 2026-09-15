@@ -302,11 +302,18 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
         _formKey.currentState?.validate();
       },
       fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
-        controller.addListener(() => _nameController.text = controller.text);
+        // `fieldViewBuilder` re-runs on every rebuild of this screen (every
+        // keystroke in any field, via `_onFieldChanged`'s setState), so a
+        // `controller.addListener(...)` here attached a new closure each time
+        // and never removed the old ones — an unbounded, ever-growing listener
+        // list on the Autocomplete's internal controller. `onChanged` has no
+        // such accumulation problem: the framework calls it once per keystroke
+        // regardless of how many times this builder itself has re-run.
         return TextFormField(
           controller: controller,
           focusNode: focusNode,
           onEditingComplete: onEditingComplete,
+          onChanged: (value) => _nameController.text = value,
           style: TextStyle(color: tokens.textPrimary),
           decoration: _fieldDecoration(tokens, hint: Translator.translate(AppStrings.addAssetTickerHint)),
           validator: (value) {
