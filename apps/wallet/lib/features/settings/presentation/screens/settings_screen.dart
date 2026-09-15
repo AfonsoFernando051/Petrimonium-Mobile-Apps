@@ -79,38 +79,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _handleRenamePet() async {
-    final tokens = context.colors;
-    final controller = TextEditingController(text: _petName);
+    // The dialog's content is its own StatefulWidget (_RenamePetDialog)
+    // rather than an inline TextEditingController owned by this State: a
+    // dialog route stays mounted through its exit transition after
+    // Navigator.pop, so disposing the controller the instant showDialog's
+    // future resolves disposed it while the closing TextField was still
+    // attached to the tree ("A TextEditingController was used after being
+    // disposed"). Letting the dialog's own State own and dispose its
+    // controller means Flutter disposes it at the right point in that
+    // lifecycle automatically, with no manual timing to get right.
     final newName = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: tokens.surfaceElevated,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(
-          Translator.translate(AppStrings.renamePetDialogTitle),
-          style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold),
-        ),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          textCapitalization: TextCapitalization.words,
-          style: TextStyle(color: tokens.textPrimary),
-          decoration: InputDecoration(
-            hintText: Translator.translate(AppStrings.namePetHint),
-            hintStyle: TextStyle(color: tokens.textTertiary),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(Translator.translate(AppStrings.cancelButton), style: TextStyle(color: tokens.primary)),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, controller.text.trim()),
-            child: Text(Translator.translate(AppStrings.renamePetButton), style: TextStyle(color: tokens.primary)),
-          ),
-        ],
-      ),
+      builder: (context) => _RenamePetDialog(initialName: _petName),
     );
 
     if (newName == null || newName.isEmpty || !mounted) return;
@@ -354,6 +334,64 @@ class _SettingsScreenState extends State<SettingsScreen> {
           letterSpacing: 1.5,
         ),
       ),
+    );
+  }
+}
+
+/// Content of the "rename pet" dialog. Owns its own `TextEditingController`
+/// so it's disposed by this widget's own `State.dispose()` — called by
+/// Flutter exactly when the dialog is actually removed from the tree, i.e.
+/// after its exit transition finishes, not the instant `showDialog`'s
+/// future resolves (see `_handleRenamePet`'s comment for why that distinction
+/// matters here).
+class _RenamePetDialog extends StatefulWidget {
+  const _RenamePetDialog({required this.initialName});
+
+  final String? initialName;
+
+  @override
+  State<_RenamePetDialog> createState() => _RenamePetDialogState();
+}
+
+class _RenamePetDialogState extends State<_RenamePetDialog> {
+  late final TextEditingController _controller = TextEditingController(text: widget.initialName);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.colors;
+    return AlertDialog(
+      backgroundColor: tokens.surfaceElevated,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: Text(
+        Translator.translate(AppStrings.renamePetDialogTitle),
+        style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold),
+      ),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        textCapitalization: TextCapitalization.words,
+        style: TextStyle(color: tokens.textPrimary),
+        decoration: InputDecoration(
+          hintText: Translator.translate(AppStrings.namePetHint),
+          hintStyle: TextStyle(color: tokens.textTertiary),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(Translator.translate(AppStrings.cancelButton), style: TextStyle(color: tokens.primary)),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, _controller.text.trim()),
+          child: Text(Translator.translate(AppStrings.renamePetButton), style: TextStyle(color: tokens.primary)),
+        ),
+      ],
     );
   }
 }
