@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_wallet/core/constants/app_colors.dart';
 import 'package:petrimonium_wallet/core/constants/app_strings.dart';
@@ -39,9 +40,16 @@ String _sourceLabel(String key) {
 /// complementary guardrail (why this reply exists at all, vs. what each
 /// part of it is).
 class ChatBubble extends StatefulWidget {
-  const ChatBubble({super.key, required this.message});
+  const ChatBubble({super.key, required this.message, this.revealingText});
 
   final ChatMessage message;
+
+  /// Non-null only for the one mentor message currently mid-typewriter-reveal
+  /// (see `MentorChatController.revealingMessageId`). When set, the bubble's
+  /// text tracks this notifier via a `ValueListenableBuilder` scoped to just
+  /// the text content, instead of `message.text` — so a reveal tick rebuilds
+  /// only this bubble's inner content, not the whole chat timeline.
+  final ValueListenable<String>? revealingText;
 
   @override
   State<ChatBubble> createState() => _ChatBubbleState();
@@ -85,27 +93,41 @@ class _ChatBubbleState extends State<ChatBubble> {
   }
 
   Widget _buildMentorBubble(BuildContext context) {
+    final revealingText = widget.revealingText;
+    if (revealingText == null) {
+      return _mentorBubbleCard(context, widget.message.text);
+    }
+    // Scoped to just the text-dependent content below, so a reveal tick
+    // rebuilds this ValueListenableBuilder alone rather than the ChatBubble's
+    // StatefulWidget (and, transitively, its ancestors in the list).
+    return ValueListenableBuilder<String>(
+      valueListenable: revealingText,
+      builder: (context, text, _) => _mentorBubbleCard(context, text),
+    );
+  }
+
+  Widget _mentorBubbleCard(BuildContext context, String text) {
     final tokens = context.colors;
     final message = widget.message;
     final borderColor = message.isError
         ? AppColors.warningAmber.withValues(alpha: 0.5)
         : AppColors.neonCyan.withValues(alpha: 0.35);
 
-    final layers = message.isError ? null : WalletMentorReplyLayers.tryParse(message.text);
+    final layers = message.isError ? null : WalletMentorReplyLayers.tryParse(text);
 
     return GlassCard(
       borderColor: borderColor,
       borderRadius: 18,
       borderWidth: 1,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: message.text.isEmpty
+      child: text.isEmpty
           ? const SizedBox(height: 4)
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (layers == null)
-                  _markdown(context, message.text)
+                  _markdown(context, text)
                 else
                   MentorReplyLayersView(layers: layers, timestamp: message.timestamp),
                 if (message.sources.isNotEmpty) ...[

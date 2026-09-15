@@ -128,13 +128,7 @@ class _MentorScreenState extends State<MentorScreen> {
     super.dispose();
   }
 
-  bool get _showTypingIndicator {
-    if (!_controller.isSending) return false;
-    final messages = _controller.messages;
-    if (messages.isEmpty) return true;
-    final last = messages.last;
-    return last.role != ChatRole.mentor || last.text.isEmpty;
-  }
+  bool get _showTypingIndicator => _controller.isSending;
 
   @override
   Widget build(BuildContext context) {
@@ -267,11 +261,30 @@ class _MentorScreenState extends State<MentorScreen> {
       itemCount: items.length + (_showTypingIndicator ? 1 : 0),
       itemBuilder: (context, index) {
         if (index >= items.length) {
-          return const TypingIndicator();
+          return _buildTrailingTypingSlot();
         }
         final item = items[index];
-        return item is DateTime ? _DateSeparator(date: item) : ChatBubble(message: item as ChatMessage);
+        if (item is DateTime) return _DateSeparator(date: item);
+        final message = item as ChatMessage;
+        return ChatBubble(
+          message: message,
+          revealingText: message.id == _controller.revealingMessageId ? _controller.revealingText : null,
+        );
       },
+    );
+  }
+
+  /// The trailing "typing" slot shown while a reply is in flight or being
+  /// revealed. Wrapped in its own `ValueListenableBuilder` (rather than
+  /// reacting to `notifyListeners()`) so the three dots can hide the instant
+  /// text starts appearing without forcing the whole timeline to rebuild on
+  /// every typewriter tick.
+  Widget _buildTrailingTypingSlot() {
+    final revealingId = _controller.revealingMessageId;
+    if (revealingId == null) return const TypingIndicator();
+    return ValueListenableBuilder<String>(
+      valueListenable: _controller.revealingText,
+      builder: (context, text, _) => text.isEmpty ? const TypingIndicator() : const SizedBox.shrink(),
     );
   }
 

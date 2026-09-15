@@ -25,12 +25,28 @@ class MentorChatController extends ChangeNotifier {
   bool _isLoadingHistory = true;
   List<String> _suggestedPrompts = const [];
   Timer? _revealTimer;
+  String? _revealingMessageId;
 
   int? get conversationId => _conversationId;
   List<ChatMessage> get messages => List.unmodifiable(_messages);
   bool get isSending => _isSending;
   bool get isLoadingHistory => _isLoadingHistory;
   List<String> get suggestedPrompts => List.unmodifiable(_suggestedPrompts);
+
+  /// The id of the message currently mid-typewriter-reveal, or `null` when
+  /// none is revealing. `MentorScreen` uses this to decide which single
+  /// `ChatBubble` should track [revealingText] instead of its (still empty)
+  /// stored text.
+  String? get revealingMessageId => _revealingMessageId;
+
+  /// The text revealed so far for [revealingMessageId], updated on every
+  /// typewriter tick. Exposed as a `ValueListenable` rather than through
+  /// `notifyListeners()` so only the one widget that cares about the
+  /// in-progress text rebuilds each tick — the previous approach called
+  /// `notifyListeners()` every 16ms, forcing the entire chat screen
+  /// (including re-flattening the whole message timeline) to rebuild for
+  /// every few characters revealed.
+  final ValueNotifier<String> revealingText = ValueNotifier<String>('');
 
   /// Set when loading a past conversation's history fails — `MentorScreen`
   /// shows a retry state instead of an indefinite loading spinner.
@@ -40,6 +56,7 @@ class MentorChatController extends ChangeNotifier {
   /// [conversationId] is `null`.
   Future<void> loadConversation(int? conversationId) async {
     _revealTimer?.cancel();
+    _revealingMessageId = null;
     _conversationId = conversationId;
     _messages.clear();
     _isLoadingHistory = conversationId != null;
@@ -120,6 +137,9 @@ class MentorChatController extends ChangeNotifier {
 
     if (fullText.isEmpty) return;
 
+    _revealingMessageId = messageId;
+    revealingText.value = '';
+
     final completer = Completer<void>();
     var charIndex = 0;
     const chunkSize = 3;
@@ -128,13 +148,20 @@ class MentorChatController extends ChangeNotifier {
     _revealTimer?.cancel();
     _revealTimer = Timer.periodic(tickDuration, (timer) {
       charIndex = min(charIndex + chunkSize, fullText.length);
-      final index = _messages.indexWhere((m) => m.id == messageId);
-      if (index != -1) {
-        _messages[index] = _messages[index].copyWith(text: fullText.substring(0, charIndex));
-        notifyListeners();
-      }
+      // Ticks update only this notifier, not notifyListeners() — the whole
+      // chat screen must not rebuild (and re-flatten the message timeline)
+      // on every character chunk. Only the ValueListenableBuilder tracking
+      // revealingText, plus the typing-indicator slot, react per tick.
+      revealingText.value = fullText.substring(0, charIndex);
+
       if (charIndex >= fullText.length) {
         timer.cancel();
+        final index = _messages.indexWhere((m) => m.id == messageId);
+        if (index != -1) {
+          _messages[index] = _messages[index].copyWith(text: fullText);
+        }
+        _revealingMessageId = null;
+        notifyListeners();
         if (!completer.isCompleted) completer.complete();
       }
     });
@@ -148,6 +175,7 @@ class MentorChatController extends ChangeNotifier {
   /// separate conversation history screen.
   void startNewChat() {
     _revealTimer?.cancel();
+    _revealingMessageId = null;
     _conversationId = null;
     _messages.clear();
     unawaited(loadSuggestedPrompts());
@@ -159,6 +187,7 @@ class MentorChatController extends ChangeNotifier {
   @override
   void dispose() {
     _revealTimer?.cancel();
+    revealingText.dispose();
     super.dispose();
   }
 }

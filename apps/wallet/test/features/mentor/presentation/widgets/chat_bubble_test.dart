@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,10 +12,12 @@ void main() {
     Translator.currentLanguage = 'pt';
   });
 
-  Widget buildTestableWidget(ChatMessage message) {
+  Widget buildTestableWidget(ChatMessage message, {ValueListenable<String>? revealingText}) {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: ChatBubble(message: message)),
+      home: Scaffold(
+        body: ChatBubble(message: message, revealingText: revealingText),
+      ),
     );
   }
 
@@ -178,6 +181,31 @@ void main() {
 
       expect(find.textContaining('DADO'), findsNothing);
       expect(find.textContaining('[[DATA]]'), findsOneWidget);
+    });
+
+    group('revealingText (typewriter reveal)', () {
+      testWidgets('renders the notifier value instead of the (still empty) stored message text', (tester) async {
+        final message = ChatMessage(id: '11', role: ChatRole.mentor, text: '', timestamp: DateTime(2024, 1, 1));
+        final revealingText = ValueNotifier<String>('Olá');
+
+        await tester.pumpWidget(buildTestableWidget(message, revealingText: revealingText));
+
+        expect(find.text('Olá'), findsOneWidget);
+      });
+
+      testWidgets('updates when the notifier changes, without needing a new widget instance', (tester) async {
+        final message = ChatMessage(id: '12', role: ChatRole.mentor, text: '', timestamp: DateTime(2024, 1, 1));
+        final revealingText = ValueNotifier<String>('Ol');
+
+        await tester.pumpWidget(buildTestableWidget(message, revealingText: revealingText));
+        expect(find.text('Ol'), findsOneWidget);
+
+        revealingText.value = 'Olá!';
+        await tester.pump();
+
+        expect(find.text('Olá!'), findsOneWidget);
+        expect(find.text('Ol'), findsNothing);
+      });
     });
   });
 }
