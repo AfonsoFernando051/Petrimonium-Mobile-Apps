@@ -28,11 +28,33 @@ abstract final class PetrimoniumEnvironment {
   /// fail (or worse, quietly succeed against the wrong backend) in front of a
   /// real user.
   static void assertConfiguredForRelease() {
-    if (kReleaseMode && baseUrl == devDefaultBaseUrl) {
-      throw StateError(
+    final error = releaseConfigurationError(baseUrl: baseUrl, isRelease: kReleaseMode);
+    if (error != null) throw error;
+  }
+
+  /// Pure guard logic behind [assertConfiguredForRelease], taking [isRelease]
+  /// explicitly instead of reading [kReleaseMode] directly. `kReleaseMode` is
+  /// a compile-time constant that `flutter test` always builds as `false`, so
+  /// this seam is what lets a test simulate a release build shipping an
+  /// unconfigured or non-HTTPS `baseUrl` — otherwise the release-only
+  /// branches would be unreachable from any test.
+  static StateError? releaseConfigurationError({required String baseUrl, required bool isRelease}) {
+    if (!isRelease) return null;
+
+    if (baseUrl == devDefaultBaseUrl) {
+      return StateError(
         'API_BASE_URL must be provided for release builds '
         '(--dart-define=API_BASE_URL=https://...).',
       );
     }
+
+    if (!baseUrl.startsWith('https://')) {
+      return StateError(
+        'API_BASE_URL must use https:// for release builds — got "$baseUrl". '
+        'Sending real user data over plain HTTP is not acceptable in production.',
+      );
+    }
+
+    return null;
   }
 }
