@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/core/di/dependency_injection.dart';
 import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
@@ -18,7 +19,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// [Holding] for instant cached display, then enriches from the backend.
 /// This means the screen opens immediately with user-known data, and
 /// progressively enhances with real market data.
-class AssetDetailsController extends ChangeNotifier {
+class AssetDetailsController extends ChangeNotifier with SafeChangeNotifier {
   AssetDetailsController({required AssetDetailsRepository repository}) : _repository = repository;
 
   final AssetDetailsRepository _repository;
@@ -45,7 +46,7 @@ class AssetDetailsController extends ChangeNotifier {
     // If we have a holding, create an immediate preview from it
     if (holding != null && assetDetails == null) {
       assetDetails = _previewFromHolding(ticker, holding);
-      notifyListeners();
+      notifySafely();
     }
 
     try {
@@ -57,7 +58,7 @@ class AssetDetailsController extends ChangeNotifier {
     }
 
     isLoading = false;
-    notifyListeners();
+    notifySafely();
 
     unawaited(_loadAppliedConcepts());
   }
@@ -78,7 +79,7 @@ class AssetDetailsController extends ChangeNotifier {
         completedLessonIds: completedLessonIds,
         asset: asset,
       );
-      notifyListeners();
+      notifySafely();
     } catch (_) {
       // Best-effort only — the asset details screen works fine without this.
     }

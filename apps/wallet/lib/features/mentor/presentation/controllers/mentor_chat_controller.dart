@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.dart';
@@ -14,7 +15,7 @@ const String _fallbackErrorReply = 'Hmm, algo deu errado ao pensar na resposta �
 /// documented future step, not implemented in Phase 1 — see
 /// docs/AI_MENTOR.md). `conversationId` is `null` for a fresh/unsaved chat —
 /// the backend creates the conversation lazily on the first sent message.
-class MentorChatController extends ChangeNotifier {
+class MentorChatController extends ChangeNotifier with SafeChangeNotifier {
   MentorChatController({required MentorChatRepository repository}) : _repository = repository;
 
   final MentorChatRepository _repository;
@@ -61,11 +62,11 @@ class MentorChatController extends ChangeNotifier {
     _messages.clear();
     _isLoadingHistory = conversationId != null;
     historyError = null;
-    notifyListeners();
+    notifySafely();
 
     if (conversationId == null) {
       _isLoadingHistory = false;
-      notifyListeners();
+      notifySafely();
       return;
     }
 
@@ -77,7 +78,7 @@ class MentorChatController extends ChangeNotifier {
     }
 
     _isLoadingHistory = false;
-    notifyListeners();
+    notifySafely();
   }
 
   Future<void> sendMessage(String text, {String? currentScreen}) async {
@@ -86,7 +87,7 @@ class MentorChatController extends ChangeNotifier {
 
     _messages.add(ChatMessage(id: _newId(), role: ChatRole.user, text: trimmed, timestamp: DateTime.now()));
     _isSending = true;
-    notifyListeners();
+    notifySafely();
 
     try {
       final result = await _repository.sendMessage(
@@ -105,14 +106,14 @@ class MentorChatController extends ChangeNotifier {
       await _revealReply(_fallbackErrorReply, isError: true);
     } finally {
       _isSending = false;
-      notifyListeners();
+      notifySafely();
     }
   }
 
   Future<void> loadSuggestedPrompts() async {
     try {
       _suggestedPrompts = await _repository.loadSuggestedPrompts();
-      notifyListeners();
+      notifySafely();
     } catch (e) {
       debugPrint('Mentor suggestions unavailable: $e');
     }
@@ -133,7 +134,7 @@ class MentorChatController extends ChangeNotifier {
         sources: sources,
       ),
     );
-    notifyListeners();
+    notifySafely();
 
     if (fullText.isEmpty) return;
 
@@ -161,7 +162,7 @@ class MentorChatController extends ChangeNotifier {
           _messages[index] = _messages[index].copyWith(text: fullText);
         }
         _revealingMessageId = null;
-        notifyListeners();
+        notifySafely();
         if (!completer.isCompleted) completer.complete();
       }
     });
@@ -179,7 +180,7 @@ class MentorChatController extends ChangeNotifier {
     _conversationId = null;
     _messages.clear();
     unawaited(loadSuggestedPrompts());
-    notifyListeners();
+    notifySafely();
   }
 
   String _newId() => '${DateTime.now().microsecondsSinceEpoch}-${_messages.length}';

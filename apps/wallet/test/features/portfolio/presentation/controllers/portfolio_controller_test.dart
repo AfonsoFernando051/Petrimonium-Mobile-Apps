@@ -150,7 +150,12 @@ void main() {
     );
   });
 
-  tearDown(() => controller.dispose());
+  tearDown(() {
+    // A few tests below deliberately dispose early to exercise the
+    // dispose-safety fix — guard against Flutter's own "disposed more than
+    // once" assertion rather than skip the shared teardown for everyone else.
+    if (!controller.disposed) controller.dispose();
+  });
 
   group('loadAll — happy path', () {
     test('populates holdings/summary/allocation and clears the loading flag', () async {
@@ -715,6 +720,23 @@ void main() {
       expect(series, hasLength(2));
       expect(series.first.portfolioValue, 170);
       expect(series.last.portfolioValue, 180);
+    });
+  });
+
+  group('dispose safety', () {
+    // DashboardScreen (and others) call loadAll() from initState() without
+    // awaiting it — a real fire-and-forget. If the user navigates away
+    // before the backend responds, the screen (and this controller) gets
+    // disposed while the Future.wait([...]) below is still pending; the
+    // notifySafely() calls loadAll() makes when it resumes must not throw
+    // the way notifyListeners() would.
+    test('a pending loadAll() completing after dispose() does not throw', () async {
+      repository.holdingsToReturn = _holdingList();
+
+      final pendingLoad = controller.loadAll();
+      controller.dispose();
+
+      await expectLater(pendingLoad, completes);
     });
   });
 }

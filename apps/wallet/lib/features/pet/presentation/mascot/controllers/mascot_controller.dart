@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/events/app_event_bus.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
@@ -17,7 +18,7 @@ const int kNightEndHour = 6;
 /// Reactive state holder for the pet mascot: current [PetProfile], transient
 /// event-driven animation overrides, and the financial-progress → evolution
 /// mapping.
-class MascotController extends ChangeNotifier {
+class MascotController extends ChangeNotifier with SafeChangeNotifier {
   MascotController({
     required MascotRepository repository,
     List<PetEvolutionRule> evolutionRules = PetEvolutionRule.defaultRules,
@@ -72,7 +73,7 @@ class MascotController extends ChangeNotifier {
   /// this session as "now".
   Future<void> loadProfile({DateTime? now}) async {
     _loading = true;
-    notifyListeners();
+    notifySafely();
 
     final loaded = await _repository.loadProfile();
     final currentTime = now ?? DateTime.now();
@@ -82,7 +83,7 @@ class MascotController extends ChangeNotifier {
     _profile = loaded.copyWith(animationState: restingState, lastActiveAt: currentTime);
     _loading = false;
     _hasLoaded = true;
-    notifyListeners();
+    notifySafely();
 
     await _repository.saveLastActiveAt(currentTime);
   }
@@ -106,13 +107,13 @@ class MascotController extends ChangeNotifier {
   void triggerEventAnimation(PetAnimationState state, {Duration duration = const Duration(seconds: 3)}) {
     _revertTimer?.cancel();
     _profile = _profile.copyWith(animationState: state);
-    notifyListeners();
+    notifySafely();
 
     _revertTimer = Timer(duration, () {
       _profile = _profile.copyWith(
         animationState: restingStateFor(lastActiveAt: _profile.lastActiveAt, now: DateTime.now()),
       );
-      notifyListeners();
+      notifySafely();
     });
   }
 
@@ -153,7 +154,7 @@ class MascotController extends ChangeNotifier {
     final xpDelta = userXp - _profile.xp;
 
     _profile = _profile.copyWith(stage: targetStage, netWorth: currentNetWorth, xp: userXp);
-    notifyListeners();
+    notifySafely();
 
     await _repository.saveNetWorth(currentNetWorth);
     await _repository.saveXp(userXp);
@@ -174,7 +175,7 @@ class MascotController extends ChangeNotifier {
     if (_profile.unlockedAccessories.contains(id)) return;
     final unlocked = {..._profile.unlockedAccessories, id};
     _profile = _profile.copyWith(unlockedAccessories: unlocked);
-    notifyListeners();
+    notifySafely();
     await _repository.saveUnlockedAccessories(unlocked);
   }
 
@@ -188,7 +189,7 @@ class MascotController extends ChangeNotifier {
     final equipped = {..._profile.equippedAccessories};
     equipped[accessory.type] = accessory.id;
     _profile = _profile.copyWith(equippedAccessories: equipped);
-    notifyListeners();
+    notifySafely();
 
     await _repository.saveEquippedAccessories(equipped);
   }
@@ -198,7 +199,7 @@ class MascotController extends ChangeNotifier {
 
     final equipped = {..._profile.equippedAccessories}..remove(type);
     _profile = _profile.copyWith(equippedAccessories: equipped);
-    notifyListeners();
+    notifySafely();
 
     await _repository.saveEquippedAccessories(equipped);
   }

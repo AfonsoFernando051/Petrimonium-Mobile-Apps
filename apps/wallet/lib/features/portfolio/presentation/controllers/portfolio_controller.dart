@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_wallet/core/events/app_event.dart';
 import 'package:petrimonium_wallet/core/events/app_event_bus.dart';
 import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
@@ -18,7 +19,7 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/models/missio
 /// [_evaluateGamification]). When [mascotController] is supplied, every
 /// successful load feeds the user's real net worth and real backend-granted
 /// XP into `MascotController.evaluateEvolution`.
-class PortfolioController extends ChangeNotifier {
+class PortfolioController extends ChangeNotifier with SafeChangeNotifier {
   PortfolioController({
     required PortfolioRepository repository,
     required AchievementsLocalRepository achievementsLocalRepository,
@@ -200,7 +201,7 @@ class PortfolioController extends ChangeNotifier {
   Future<void> loadAll() async {
     isLoading = true;
     error = null;
-    notifyListeners();
+    notifySafely();
 
     try {
       final results = await Future.wait([
@@ -232,7 +233,7 @@ class PortfolioController extends ChangeNotifier {
     }
 
     isLoading = false;
-    notifyListeners();
+    notifySafely();
   }
 
   Future<void> refresh() => loadAll();
@@ -250,7 +251,7 @@ class PortfolioController extends ChangeNotifier {
   Future<void> _fetchDividendRadar() async {
     isDividendRadarLoading = true;
     dividendRadarError = null;
-    notifyListeners();
+    notifySafely();
 
     try {
       dividendRadar = await _repository.fetchDividendRadar();
@@ -260,21 +261,21 @@ class PortfolioController extends ChangeNotifier {
     }
 
     isDividendRadarLoading = false;
-    notifyListeners();
+    notifySafely();
   }
 
   void setRange(HistoryRange range) {
     if (range == selectedRange) return;
     selectedRange = range;
     _recomputeChart();
-    notifyListeners();
+    notifySafely();
   }
 
   void setAssetFilter(InvestmentTypeEnum? type) {
     if (type == selectedAssetFilter) return;
     selectedAssetFilter = type;
     _recomputeChart();
-    notifyListeners();
+    notifySafely();
   }
 
   Future<void> _loadPerformanceDeltas() async {
@@ -345,7 +346,7 @@ class PortfolioController extends ChangeNotifier {
           _backendHistoryCache[selectedRange] = points;
           if (selectedAssetFilter == null) {
             chartPoints = points;
-            notifyListeners();
+            notifySafely();
           }
         })
         .catchError((_) {
