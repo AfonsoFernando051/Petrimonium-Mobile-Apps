@@ -321,7 +321,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Petrimonium Academy',
+                Translator.translate(AppStrings.inAppBrandName),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.bodyEmphasis.copyWith(

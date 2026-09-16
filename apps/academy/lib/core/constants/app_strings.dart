@@ -446,6 +446,7 @@ class AppStrings {
   static const String labPortfolioAnswerExplanation = SharedStrings.labPortfolioAnswerExplanation;
 
   // Dashboard — AppBar / bottom navigation shell
+  static const String inAppBrandName = 'inAppBrandName';
   static const String appBarPlayerNamedGreeting = SharedStrings.appBarPlayerNamedGreeting;
   static const String appBarPlayerGenericGreeting = SharedStrings.appBarPlayerGenericGreeting;
   static const String profileTooltip = SharedStrings.profileTooltip;
