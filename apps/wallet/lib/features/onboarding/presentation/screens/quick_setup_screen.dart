@@ -6,8 +6,8 @@ import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/core/widgets/cosmic_background.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_base_currency_enum.dart';
 import 'package:petrimonium_wallet/features/onboarding/data/models/wallet_market_enum.dart';
+import 'package:petrimonium_wallet/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:petrimonium_wallet/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium_wallet/main.dart';
 
 /// Screen 2 of 2 in the Wallet's mini-onboarding: country/market and
 /// base-currency, the only setup this app asks for before Home. Both
@@ -79,9 +79,17 @@ class _QuickSetupScreenState extends State<QuickSetupScreen> {
 
     await DI.onboardingStateRepository.markQuickSetupDone();
     if (mounted) {
+      // Straight to Dashboard, not a `MyApp()` restart: by this point we
+      // already know — locally, with no network round-trip — that the user
+      // is logged in, has a Pet, has seen the Mentor welcome and just
+      // finished this step. Re-resolving all of that from scratch through
+      // `StartRouteResolver` right after onboarding gains nothing and adds
+      // a real failure mode: any non-network hiccup from its `getPetStatus`
+      // call reads as "invalid session" there and force-logs the user out,
+      // bouncing them straight back to the login screen they just left.
       await Navigator.of(
         context,
-      ).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const MyApp()), (route) => false);
+      ).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const DashboardScreen()), (route) => false);
     }
   }
 
