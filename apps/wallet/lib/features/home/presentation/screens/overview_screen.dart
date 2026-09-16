@@ -16,12 +16,16 @@ import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/p
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/allocation_donut_card.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/portfolio_kpi_grid.dart';
 
-/// Wallet's "Início" — the condensed patrimônio + Mentor dashboard. In the
-/// reference design's order: a greeting, the Mentor's one interpretation for
-/// the session, the four headline KPIs ([PortfolioKpiGrid] — patrimônio,
-/// lucro, proventos, rentabilidade, with the source/timestamp stated once
-/// for the whole block), a real valorização/aportes/rendimentos breakdown
-/// for the trailing 30 days (`PortfolioController.wealthChange30d`, computed
+/// Wallet's "Início" — the condensed patrimônio + Mentor dashboard. With no
+/// holdings yet, this is just [PortfolioNotConnectedCard]'s empty state —
+/// Mentor and Carteira both stay locked behind a first asset
+/// (`DashboardScreen._visibleTabIndices`), since neither has a real
+/// portfolio to work with. Once a portfolio exists, in the reference
+/// design's order: a greeting, the Mentor's one interpretation for the
+/// session, the four headline KPIs ([PortfolioKpiGrid] — patrimônio, lucro,
+/// proventos, rentabilidade, with the source/timestamp stated once for the
+/// whole block), a real valorização/aportes/rendimentos breakdown for the
+/// trailing 30 days (`PortfolioController.wealthChange30d`, computed
 /// client-side from real lot/dividend data), and a compact "Sua carteira"
 /// composition preview linking into the full Carteira tab — the trailing-12-
 /// month wealth-evolution chart and the complete holdings list live there
@@ -125,8 +129,6 @@ class _OverviewScreenState extends State<OverviewScreen> {
             ),
             const SizedBox(height: 16),
 
-            MentorInsightCard(onOpenMentor: widget.onOpenMentor),
-
             if (controller.error != null) ...[
               ErrorBanner(
                 message: 'Não foi possível atualizar seus dados. Puxe para atualizar.',
@@ -142,6 +144,12 @@ class _OverviewScreenState extends State<OverviewScreen> {
                 anchor: widget.heroAnchor,
               )
             else ...[
+              // The Mentor tab (and this preview of it) only unlock once a
+              // first asset exists — with no holdings there's no real
+              // portfolio for the Mentor to talk about yet (see
+              // `DashboardScreen._visibleTabIndices`).
+              MentorInsightCard(onOpenMentor: widget.onOpenMentor),
+              const SizedBox(height: 16),
               PortfolioKpiGrid(controller: controller),
               const SizedBox(height: 16),
               _WealthChangeCard(breakdown: controller.wealthChange30d),

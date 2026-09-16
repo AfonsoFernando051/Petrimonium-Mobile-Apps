@@ -118,20 +118,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  // ── Carteira/Proventos tab visibility ────────────────────────────────────
-  // Carteira only earns its own tab once the user has registered a first
-  // asset — with an empty portfolio there is nothing to show beyond what
-  // Início's own empty state already covers, so surfacing an empty Carteira
-  // tab would just be a second, redundant empty state. Proventos is shown
-  // only once the wallet actually holds an asset type that pays out
+  // ── Carteira/Proventos/Mentor tab visibility ─────────────────────────────
+  // Carteira and Mentor only earn their own tab once the user has
+  // registered a first asset: with an empty portfolio there is nothing for
+  // Carteira to show beyond what Início's own empty state already covers,
+  // and the Mentor has no real portfolio to talk about yet either — both
+  // would just be a second, redundant empty state. Proventos is shown only
+  // once the wallet actually holds an asset type that pays out
   // dividends/proventos (ações, FIIs, ETFs/fundos) — see
   // `InvestmentTypePayout.paysDividends` and
   // `PortfolioController.hasDividendPayingHoldings`.
   List<int> get _visibleTabIndices => [
     DashboardTabRouter.homeTab,
-    if (_portfolioController.holdings.isNotEmpty) DashboardTabRouter.carteiraTab,
-    if (_portfolioController.hasDividendPayingHoldings) DashboardTabRouter.passiveIncomeTab,
-    DashboardTabRouter.mentorTab,
+    if (_portfolioController.holdings.isNotEmpty) ...[
+      DashboardTabRouter.carteiraTab,
+      if (_portfolioController.hasDividendPayingHoldings) DashboardTabRouter.passiveIncomeTab,
+      DashboardTabRouter.mentorTab,
+    ],
   ];
 
   @override
@@ -296,7 +299,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      // `BottomNavigationBar` requires at least 2 items — with an empty
+      // portfolio, Carteira and Mentor are both locked behind a first asset
+      // (see `_visibleTabIndices`'s doc comment) and Início is the only
+      // destination, so there is nothing to navigate between yet.
+      bottomNavigationBar: _visibleTabIndices.length > 1 ? _buildBottomNav() : null,
     );
   }
 

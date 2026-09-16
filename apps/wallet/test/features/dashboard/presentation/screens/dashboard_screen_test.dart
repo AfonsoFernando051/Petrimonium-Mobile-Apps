@@ -180,6 +180,10 @@ void main() {
 
   group('DashboardScreen', () {
     testWidgets('renders the Home tab by default without crashing', (tester) async {
+      final holdings = [lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10)];
+      portfolioRepository.holdingsToReturn = Holding.fromLots(holdings);
+      portfolioRepository.summaryToReturn = statsFromLots(holdings).summary;
+
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
 
@@ -188,24 +192,21 @@ void main() {
       expect(navIcon(Icons.home), findsOneWidget); // active Home nav icon
     });
 
-    testWidgets('switching to the Mentor tab shows Mentor nav as active', (tester) async {
+    testWidgets('hides Carteira, Mentor and the bottom nav itself while the portfolio has no holdings', (tester) async {
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
 
-      await tester.tap(navIcon(Icons.auto_awesome_outlined));
-      await pumpUntilLoaded(tester);
-
-      expect(navIcon(Icons.auto_awesome), findsOneWidget); // active Mentor nav icon
-    });
-
-    testWidgets('hides the Carteira tab while the portfolio has no holdings', (tester) async {
-      await tester.pumpWidget(buildTestable());
-      await pumpUntilLoaded(tester);
-
+      // Only Início is a valid destination with an empty portfolio — there
+      // is nothing to navigate between yet, so the whole bottom nav (not
+      // just its Carteira/Mentor items) stays hidden. `BottomNavigationBar`
+      // also asserts on fewer than 2 items, so this is a real crash guard,
+      // not just cosmetic (see `DashboardScreen._buildScaffold`).
+      expect(find.byType(BottomNavigationBar), findsNothing);
       expect(navIcon(Icons.account_balance_wallet_outlined), findsNothing);
+      expect(navIcon(Icons.auto_awesome_outlined), findsNothing);
     });
 
-    testWidgets('shows and switches to the Carteira tab once the user has registered a first asset', (tester) async {
+    testWidgets('shows and switches to Carteira and Mentor once the user has registered a first asset', (tester) async {
       final holdings = [lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10)];
       portfolioRepository.holdingsToReturn = Holding.fromLots(holdings);
       portfolioRepository.summaryToReturn = statsFromLots(holdings).summary;
@@ -215,8 +216,11 @@ void main() {
 
       await tester.tap(navIcon(Icons.account_balance_wallet_outlined));
       await pumpUntilLoaded(tester);
-
       expect(navIcon(Icons.account_balance_wallet), findsOneWidget); // active Carteira nav icon
+
+      await tester.tap(navIcon(Icons.auto_awesome_outlined));
+      await pumpUntilLoaded(tester);
+      expect(navIcon(Icons.auto_awesome), findsOneWidget); // active Mentor nav icon
     });
   });
 }

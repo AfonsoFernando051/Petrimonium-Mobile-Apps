@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/home/presentation/screens/overview_screen.dart';
+import 'package:petrimonium_wallet/features/home/presentation/widgets/mentor_insight_card.dart';
 import 'package:petrimonium_wallet/features/home/presentation/widgets/portfolio_not_connected_card.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
@@ -87,6 +88,9 @@ void main() {
 
       expect(find.byType(PortfolioNotConnectedCard), findsOneWidget);
       expect(find.byType(AllocationDonutCard), findsNothing);
+      // Mentor stays locked behind a first asset — see
+      // `DashboardScreen._visibleTabIndices`.
+      expect(find.byType(MentorInsightCard), findsNothing);
     });
 
     testWidgets('shows the KPI grid, real change breakdown and a link into the Carteira tab when holdings exist', (
@@ -104,6 +108,7 @@ void main() {
       await tester.pump();
 
       expect(find.byType(PortfolioNotConnectedCard), findsNothing);
+      expect(find.byType(MentorInsightCard), findsOneWidget);
       expect(find.byType(PortfolioKpiGrid), findsOneWidget);
       expect(find.text('PATRIMÔNIO TOTAL'), findsOneWidget);
       expect(find.text('O que mudou (últimos 30 dias)'), findsOneWidget);
