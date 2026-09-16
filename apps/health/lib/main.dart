@@ -70,7 +70,7 @@ class _PetrimoniumHealthAppState extends State<PetrimoniumHealthApp> {
       animation: _appListenable,
       builder: (context, _) {
         return MaterialApp(
-          title: 'Petrimonium Health',
+          onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
           debugShowCheckedModeBanner: false,
           theme: buildHealthTheme(),
           locale: _localeController.current.locale,
