@@ -23,6 +23,7 @@ import 'package:petrimonium_wallet/features/onboarding/data/repositories/onboard
 import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_repository.dart';
 import 'package:petrimonium_wallet/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:petrimonium_shared_features/testing.dart';
 
 import '../test/features/academy/academy_test_fixtures.dart';
 import '../test/features/portfolio/presentation/controllers/gamification_controller_test.dart'
@@ -80,6 +81,7 @@ void main() {
   late MockOnboardingStateRepository mockOnboardingStateRepository;
   late MockPetCompanionPreferencesRepository mockPetCompanionPreferencesRepository;
   late MockMentorChatRepository mockMentorChatRepository;
+  late FakePortfolioRepository portfolioRepository;
 
   setUp(() {
     Translator.currentLanguage = 'pt';
@@ -134,9 +136,16 @@ void main() {
 
     mockMascotRepository = MockMascotRepository();
     DI.mascotRepository = mockMascotRepository;
+    // CAT rather than DOG: DOG now ships a real `dog.riv`, and this
+    // project's pinned `rive`/`rive_common` versions hit a native-symbol
+    // lookup failure once `flutter_tester` actually parses `.riv` bytes on
+    // this toolchain (see `dashboard_screen_test.dart`'s
+    // `FakeMascotRepository` for the same fix). CAT has no bundled asset,
+    // so DashboardScreen's embedded PetCompanionHeader keeps exercising the
+    // real, always-reachable fallback path deterministically.
     when(
       () => mockMascotRepository.loadProfile(),
-    ).thenAnswer((_) async => PetProfile(specie: PetSpecieEnum.DOG, name: 'Rex', stage: PetEvolutionStage.babyDog));
+    ).thenAnswer((_) async => PetProfile(specie: PetSpecieEnum.CAT, name: 'Rex', stage: PetEvolutionStage.babyDog));
     when(() => mockMascotRepository.saveLastActiveAt(any())).thenAnswer((_) async {});
     when(() => mockMascotRepository.saveNetWorth(any())).thenAnswer((_) async {});
     when(() => mockMascotRepository.saveXp(any())).thenAnswer((_) async {});
@@ -176,10 +185,14 @@ void main() {
     ).thenAnswer((_) async => buildAcademyCatalogSnapshot());
     DI.academyCatalogRepository = mockAcademyCatalogRepository;
 
-    // DashboardScreen's own dependencies — an empty-but-valid portfolio so
-    // the screen renders without error (its content is exercised in detail
-    // by the feature-level widget tests, not this flow).
-    DI.portfolioRepository = FakePortfolioRepository();
+    // DashboardScreen's own dependencies — an empty-but-valid portfolio by
+    // default so the screen renders without error (its content is
+    // exercised in detail by the feature-level widget tests, not this
+    // flow). Carteira/Proventos/Mentor all stay locked behind a first asset
+    // (`DashboardTabRouter`/`DashboardScreen._visibleTabIndices`), so a
+    // scenario that needs one of those tabs seeds `holdingsToReturn` itself.
+    portfolioRepository = FakePortfolioRepository();
+    DI.portfolioRepository = portfolioRepository;
     DI.achievementsLocalRepository = FakeAchievementsLocalRepository();
     DI.achievementsRepository = FakeAchievementsRepository();
     DI.gamificationRepository = FakeGamificationRepository();
@@ -278,6 +291,12 @@ void main() {
   });
 
   testWidgets('mentor displays the suggestions returned by the backend', (tester) async {
+    // Mentor is locked behind a first asset (see `_visibleTabIndices`'s doc
+    // comment) — without a holding, its bottom-nav item never renders.
+    final holdings = [lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10)];
+    portfolioRepository.holdingsToReturn = Holding.fromLots(holdings);
+    portfolioRepository.summaryToReturn = statsFromLots(holdings).summary;
+
     await tester.pumpWidget(const MyApp());
     await tester.pump();
     await tester.pump();
