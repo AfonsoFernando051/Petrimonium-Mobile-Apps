@@ -87,7 +87,11 @@ class CarteiraScreen extends StatelessWidget {
             ],
 
             if (!hasPortfolio)
-              PortfolioNotConnectedCard(mascotController: mascotController, controller: controller)
+              PortfolioNotConnectedCard(
+                mascotController: mascotController,
+                controller: controller,
+                variant: PortfolioEmptyStateVariant.carteira,
+              )
             else ...[
               _CarteiraSummaryHeader(controller: controller),
               const SizedBox(height: 16),

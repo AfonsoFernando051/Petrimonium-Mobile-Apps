@@ -74,35 +74,59 @@ void main() {
     controller.dispose();
   });
 
-  Widget buildTestableWidget() {
+  // Wrapped in a SingleChildScrollView, matching how both real hosts
+  // (OverviewScreen, CarteiraScreen) always render this card — the Início
+  // variant's companion bubble + KPI placeholders make it taller than the
+  // default 600px test viewport.
+  Widget buildTestableWidget({PortfolioEmptyStateVariant variant = PortfolioEmptyStateVariant.home}) {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: PortfolioNotConnectedCard(mascotController: mascotController, controller: controller),
+        body: SingleChildScrollView(
+          child: PortfolioNotConnectedCard(
+            mascotController: mascotController,
+            controller: controller,
+            variant: variant,
+          ),
+        ),
       ),
     );
   }
 
-  group('PortfolioNotConnectedCard', () {
-    testWidgets('renders the companion caption, title, body and both connect CTAs', (tester) async {
+  group('PortfolioNotConnectedCard — Início (home) variant', () {
+    testWidgets('renders the companion badge/caption, title, body, KPI placeholders and both connect CTAs', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
+      expect(find.text('COMPANION'), findsOneWidget);
       expect(
-        find.text('Vamos montar sua carteira juntos? Cadastre seu primeiro ativo — leva menos de um minuto.'),
+        find.text(
+          'Sua jornada começa pela carteira. Adicione seu primeiro investimento e eu te acompanho a partir daí.',
+        ),
         findsOneWidget,
       );
-      expect(find.text('Portfólio ainda não conectado'), findsOneWidget);
-      expect(find.text('Conecte seus investimentos quando estiver pronto — sem pressa.'), findsOneWidget);
-      expect(find.text('Cadastrar ativo manualmente'), findsOneWidget);
+      expect(find.text('Sua jornada começa pela carteira'), findsOneWidget);
+      expect(
+        find.text('Adicione seu primeiro investimento para acompanhar como seu patrimônio evolui.'),
+        findsOneWidget,
+      );
+      expect(find.text('Patrimônio'), findsOneWidget);
+      expect(find.text('Rentabilidade'), findsOneWidget);
+      expect(find.text('Proventos'), findsOneWidget);
+      expect(find.text('Insights'), findsOneWidget);
+      expect(find.text('Adicionar primeiro investimento'), findsOneWidget);
       expect(find.text('Conectar com a B3'), findsOneWidget);
       expect(find.text('EM BREVE'), findsOneWidget);
     });
 
-    testWidgets('tapping the manual CTA navigates to AddAssetScreen', (tester) async {
+    testWidgets('tapping the CTA navigates to AddAssetScreen', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
+      await tester.ensureVisible(find.byType(GameButton));
+      await tester.pump();
       await tester.tap(find.byType(GameButton));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 350));
@@ -114,11 +138,31 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
+      await tester.ensureVisible(find.text('Conectar com a B3'));
+      await tester.pump();
       await tester.tap(find.text('Conectar com a B3'));
       await tester.pump();
 
       expect(find.byType(AddAssetScreen), findsNothing);
       expect(find.text('Em construção — em breve!'), findsOneWidget);
+    });
+  });
+
+  group('PortfolioNotConnectedCard — Carteira variant', () {
+    testWidgets('has its own simpler title/body, no companion badge and no KPI placeholders', (tester) async {
+      await tester.pumpWidget(buildTestableWidget(variant: PortfolioEmptyStateVariant.carteira));
+      await tester.pump();
+
+      expect(find.text('Monte sua carteira'), findsOneWidget);
+      expect(
+        find.text('Adicione seus investimentos para acompanhar patrimônio, rentabilidade e proventos em um só lugar.'),
+        findsOneWidget,
+      );
+      expect(find.text('COMPANION'), findsNothing);
+      expect(find.text('Insights'), findsNothing);
+      // The CTA into AddAssetScreen and the B3 row are still shared.
+      expect(find.text('Adicionar primeiro investimento'), findsOneWidget);
+      expect(find.text('Conectar com a B3'), findsOneWidget);
     });
   });
 }

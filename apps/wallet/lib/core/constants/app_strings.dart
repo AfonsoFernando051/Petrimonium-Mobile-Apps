@@ -106,11 +106,22 @@ class AppStrings {
   static const String carteiraScreenTitle = 'carteiraScreenTitle';
   static const String carteiraScreenSubtitle = 'carteiraScreenSubtitle';
 
-  // Home — empty-portfolio state: the Pet's speech-bubble caption above its
-  // big hero treatment, and the two ways to bring assets in (manual entry
-  // works today, B3 sync doesn't exist yet).
+  // Início/Carteira — empty-portfolio state (`PortfolioNotConnectedCard`):
+  // the Pet's speech-bubble caption and its "COMPANION" badge (Início only),
+  // each screen's own title/subtitle, the shared CTA into `AddAssetScreen`,
+  // Início's four locked KPI-placeholder labels, and the two ways to bring
+  // assets in (manual entry works today, B3 sync doesn't exist yet).
   static const String portfolioNotConnectedPetCaption = 'portfolioNotConnectedPetCaption';
-  static const String connectAssetsManualCta = 'connectAssetsManualCta';
+  static const String companionBadgeLabel = 'companionBadgeLabel';
+  static const String homeEmptyStateTitle = 'homeEmptyStateTitle';
+  static const String homeEmptyStateBody = 'homeEmptyStateBody';
+  static const String carteiraEmptyStateTitle = 'carteiraEmptyStateTitle';
+  static const String carteiraEmptyStateBody = 'carteiraEmptyStateBody';
+  static const String portfolioEmptyStateCta = 'portfolioEmptyStateCta';
+  static const String homeEmptyKpiWealthLabel = 'homeEmptyKpiWealthLabel';
+  static const String homeEmptyKpiReturnLabel = 'homeEmptyKpiReturnLabel';
+  static const String homeEmptyKpiProventosLabel = 'homeEmptyKpiProventosLabel';
+  static const String homeEmptyKpiInsightsLabel = 'homeEmptyKpiInsightsLabel';
   static const String connectAssetsB3Cta = 'connectAssetsB3Cta';
   static const String connectAssetsB3Badge = 'connectAssetsB3Badge';
 
