@@ -65,6 +65,7 @@ class Translator {
     'pt': {
       AppStrings.brandTitle: 'Petrimonium Wallet',
       AppStrings.brandTagline: 'Seu patrimônio, com clareza',
+      AppStrings.logoutConfirmTitle: 'Sair do Petrimonium Wallet?',
       AppStrings.authTabLoginLabel: 'Entrar',
       AppStrings.authTabSignupLabel: 'Criar Conta',
       AppStrings.petSetupTitle: 'Crie seu Pet',
@@ -240,6 +241,7 @@ class Translator {
     'en': {
       AppStrings.brandTitle: 'Petrimonium Wallet',
       AppStrings.brandTagline: 'Your wealth, made clear',
+      AppStrings.logoutConfirmTitle: 'Leave Petrimonium Wallet?',
       AppStrings.authTabLoginLabel: 'Login',
       AppStrings.authTabSignupLabel: 'Create Account',
       AppStrings.petSetupTitle: 'Create your Pet',
@@ -398,6 +400,7 @@ class Translator {
     'es': {
       AppStrings.brandTitle: 'Petrimonium Wallet',
       AppStrings.brandTagline: 'Tu patrimonio, con claridad',
+      AppStrings.logoutConfirmTitle: '¿Salir de Petrimonium Wallet?',
       AppStrings.authTabLoginLabel: 'Entrar',
       AppStrings.authTabSignupLabel: 'Crear Cuenta',
       AppStrings.petSetupTitle: 'Crea tu Pet',

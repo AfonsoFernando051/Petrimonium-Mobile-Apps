@@ -65,6 +65,7 @@ class Translator {
     'pt': {
       AppStrings.brandTitle: 'Petrimonium',
       AppStrings.brandTagline: 'Aprenda a investir jogando',
+      AppStrings.logoutConfirmTitle: 'Sair do Petrimonium Academy?',
       AppStrings.createAccount: 'Criar Conta',
       AppStrings.fillDetails: 'Preencha seus dados',
       AppStrings.alreadyHaveAccount: 'Já tem conta? Entrar',
@@ -166,6 +167,7 @@ class Translator {
     'en': {
       AppStrings.brandTitle: 'Petrimonium',
       AppStrings.brandTagline: 'Learn investing by playing',
+      AppStrings.logoutConfirmTitle: 'Leave Petrimonium Academy?',
       AppStrings.createAccount: 'Create Account',
       AppStrings.fillDetails: 'Fill in your details',
       AppStrings.alreadyHaveAccount: 'Already have an account? Login',
@@ -258,6 +260,7 @@ class Translator {
     'es': {
       AppStrings.brandTitle: 'Petrimonium',
       AppStrings.brandTagline: 'Aprende a invertir jugando',
+      AppStrings.logoutConfirmTitle: '¿Salir de Petrimonium Academy?',
       AppStrings.createAccount: 'Crear Cuenta',
       AppStrings.fillDetails: 'Completa tus datos',
       AppStrings.alreadyHaveAccount: '¿Ya tienes cuenta? Entrar',

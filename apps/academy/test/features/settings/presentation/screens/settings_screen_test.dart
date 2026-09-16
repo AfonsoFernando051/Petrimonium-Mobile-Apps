@@ -138,7 +138,7 @@ void main() {
       await tapVisible(tester, find.text('Sair'));
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.text('Sair do Invest Game?'), findsOneWidget);
+      expect(find.text('Sair do Petrimonium Academy?'), findsOneWidget);
 
       await tester.tap(find.text('Cancelar'));
       await tester.pump();
