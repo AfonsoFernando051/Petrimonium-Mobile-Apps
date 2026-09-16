@@ -195,7 +195,7 @@ void main() {
       await pumpUntilLoaded(tester);
 
       expect(find.byType(DashboardScreen), findsOneWidget);
-      expect(find.text('Invest Game'), findsOneWidget);
+      expect(find.text('Petrimonium Academy'), findsOneWidget);
       expect(navIcon(Icons.rocket_launch), findsOneWidget); // active Home nav icon
     });
 

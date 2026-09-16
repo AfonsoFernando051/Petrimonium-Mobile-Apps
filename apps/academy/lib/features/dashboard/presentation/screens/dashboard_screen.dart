@@ -321,7 +321,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Invest Game',
+                'Petrimonium Academy',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.bodyEmphasis.copyWith(

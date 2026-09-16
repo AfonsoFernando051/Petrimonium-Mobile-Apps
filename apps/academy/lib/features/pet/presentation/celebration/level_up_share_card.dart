@@ -107,7 +107,7 @@ class _Header extends StatelessWidget {
       children: [
         const Icon(Icons.rocket_launch, color: AppColors.neonCyan, size: 22),
         const SizedBox(width: 8),
-        Text('Invest Game', style: AppTextStyles.title.copyWith(color: Colors.white, letterSpacing: 0.5)),
+        Text('Petrimonium Academy', style: AppTextStyles.title.copyWith(color: Colors.white, letterSpacing: 0.5)),
       ],
     );
   }
