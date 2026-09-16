@@ -5,14 +5,11 @@ import 'package:petrimonium_wallet/core/theme/app_theme.dart';
 import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:petrimonium_wallet/features/home/presentation/screens/overview_screen.dart';
 import 'package:petrimonium_wallet/features/home/presentation/widgets/portfolio_not_connected_card.dart';
-import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/allocation_donut_card.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/holdings_section.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/portfolio_kpi_grid.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealth_evolution_bar_card.dart';
 
 import '../../../portfolio/presentation/controllers/portfolio_controller_test.dart';
 import 'package:petrimonium_shared_features/testing.dart';
@@ -68,11 +65,16 @@ void main() {
     mascotController.dispose();
   });
 
-  Widget buildTestableWidget() {
+  Widget buildTestableWidget({ValueChanged<int?>? onOpenMentor, VoidCallback? onOpenCarteira}) {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
-        body: OverviewScreen(controller: controller, onOpenMentor: (_) {}, mascotController: mascotController),
+        body: OverviewScreen(
+          controller: controller,
+          onOpenMentor: onOpenMentor ?? (_) {},
+          onOpenCarteira: onOpenCarteira ?? () {},
+          mascotController: mascotController,
+        ),
       ),
     );
   }
@@ -84,10 +86,12 @@ void main() {
       await tester.pump();
 
       expect(find.byType(PortfolioNotConnectedCard), findsOneWidget);
-      expect(find.byType(HoldingsSection), findsNothing);
+      expect(find.byType(AllocationDonutCard), findsNothing);
     });
 
-    testWidgets('shows the KPI grid, real change breakdown and holdings when holdings exist', (tester) async {
+    testWidgets('shows the KPI grid, real change breakdown and a link into the Carteira tab when holdings exist', (
+      tester,
+    ) async {
       // Purchased well before the 30-day window, no price movement — the
       // real breakdown is all zeros, not the old "coming soon" placeholder.
       final holdings = [lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10)];
@@ -107,35 +111,30 @@ void main() {
       expect(find.text('Aportes'), findsOneWidget);
       expect(find.text('Rendimentos'), findsOneWidget);
       expect(find.text('+R\$ 0,00'), findsNWidgets(3));
-      expect(find.byType(HoldingsSection), findsOneWidget);
+      // The full wealth-evolution chart and holdings list now live on the
+      // dedicated Carteira tab (`CarteiraScreen`), not here — Início only
+      // keeps the compact allocation preview + a link into that tab.
       expect(find.byType(AllocationDonutCard), findsOneWidget);
-      expect(find.byType(WealthEvolutionBarCard), findsOneWidget);
+      expect(find.text('Ver carteira completa'), findsOneWidget);
     });
 
-    testWidgets('tapping "Adicionar" next to Meus ativos opens AddAssetScreen', (tester) async {
+    testWidgets('tapping "Ver carteira completa" invokes onOpenCarteira', (tester) async {
       final holdings = [lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10)];
       repository.holdingsToReturn = Holding.fromLots(holdings);
       repository.summaryToReturn = statsFromLots(holdings).summary;
       await controller.loadAll();
 
-      await tester.pumpWidget(buildTestableWidget());
+      var opened = false;
+      await tester.pumpWidget(buildTestableWidget(onOpenCarteira: () => opened = true));
       await tester.pump();
       await tester.pump();
 
-      // The button sits below the new chart cards, off the default test
-      // viewport — scroll it into view first, same as other CTAs further
-      // down a scrollable form elsewhere in this codebase.
-      await tester.ensureVisible(find.text('Adicionar'));
+      await tester.ensureVisible(find.text('Ver carteira completa'));
+      await tester.pump();
+      await tester.tap(find.text('Ver carteira completa'));
       await tester.pump();
 
-      // Not pumpAndSettle(): AddAssetScreen kicks off a real (unmocked,
-      // DI-backed) network call in initState to seed existing holdings —
-      // bounded pumps only, same pattern as main_test.dart.
-      await tester.tap(find.text('Adicionar'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-
-      expect(find.byType(AddAssetScreen), findsOneWidget);
+      expect(opened, isTrue);
     });
 
     testWidgets('the populated dashboard lays out without overflowing a 390x844 phone', (tester) async {
@@ -184,7 +183,6 @@ void main() {
 
       expect(tester.takeException(), isNull);
       expect(find.text('R\$ 47.320,18'), findsOneWidget);
-      expect(find.byType(WealthEvolutionBarCard), findsOneWidget);
       expect(find.text('58%'), findsOneWidget);
     });
 

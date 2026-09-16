@@ -129,6 +129,9 @@ class Translator {
       AppStrings.homeAllocationEmpty: 'Sem dados suficientes para calcular sua alocação.',
       AppStrings.homeHoldingsSectionTitle: 'Meus ativos',
       AppStrings.homeAddAssetLabel: 'Adicionar',
+      AppStrings.homeViewFullCarteiraCta: 'Ver carteira completa',
+      AppStrings.carteiraScreenTitle: 'Carteira',
+      AppStrings.carteiraScreenSubtitle: 'Onde seu dinheiro está investido',
       AppStrings.portfolioNotConnectedPetCaption:
           'Vamos montar sua carteira juntos? Cadastre seu primeiro ativo — leva menos de um minuto.',
       AppStrings.connectAssetsManualCta: 'Cadastrar ativo manualmente',
@@ -303,6 +306,9 @@ class Translator {
       AppStrings.homeAllocationEmpty: "There isn't enough data to work out your allocation.",
       AppStrings.homeHoldingsSectionTitle: 'My assets',
       AppStrings.homeAddAssetLabel: 'Add',
+      AppStrings.homeViewFullCarteiraCta: 'View full portfolio',
+      AppStrings.carteiraScreenTitle: 'Wallet',
+      AppStrings.carteiraScreenSubtitle: 'Where your money is invested',
       AppStrings.portfolioNotConnectedPetCaption:
           'Shall we build your portfolio together? Add your first asset — it takes less than a minute.',
       AppStrings.connectAssetsManualCta: 'Add an asset manually',
@@ -465,6 +471,9 @@ class Translator {
       AppStrings.homeAllocationEmpty: 'No hay datos suficientes para calcular tu asignación.',
       AppStrings.homeHoldingsSectionTitle: 'Mis activos',
       AppStrings.homeAddAssetLabel: 'Agregar',
+      AppStrings.homeViewFullCarteiraCta: 'Ver cartera completa',
+      AppStrings.carteiraScreenTitle: 'Cartera',
+      AppStrings.carteiraScreenSubtitle: 'Dónde está invertido tu dinero',
       AppStrings.portfolioNotConnectedPetCaption:
           '¿Armamos tu cartera juntos? Registra tu primer activo — toma menos de un minuto.',
       AppStrings.connectAssetsManualCta: 'Registrar activo manualmente',

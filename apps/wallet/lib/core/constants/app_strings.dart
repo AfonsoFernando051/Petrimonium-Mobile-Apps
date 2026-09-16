@@ -99,6 +99,12 @@ class AppStrings {
   static const String homeAllocationEmpty = 'homeAllocationEmpty';
   static const String homeHoldingsSectionTitle = 'homeHoldingsSectionTitle';
   static const String homeAddAssetLabel = 'homeAddAssetLabel';
+  static const String homeViewFullCarteiraCta = 'homeViewFullCarteiraCta';
+
+  // Carteira — the full portfolio detail screen (evolution chart, allocation,
+  // complete holdings list), reached from Início's "Ver carteira completa".
+  static const String carteiraScreenTitle = 'carteiraScreenTitle';
+  static const String carteiraScreenSubtitle = 'carteiraScreenSubtitle';
 
   // Home — empty-portfolio state: the Pet's speech-bubble caption above its
   // big hero treatment, and the two ways to bring assets in (manual entry

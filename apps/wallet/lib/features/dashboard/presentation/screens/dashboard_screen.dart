@@ -16,6 +16,7 @@ import '../../../portfolio/presentation/controllers/portfolio_controller.dart';
 import '../../../portfolio/presentation/screens/passive_income_screen.dart';
 import '../../../portfolio/presentation/widgets/dividend_notifications_sheet.dart';
 import '../../../mentor/presentation/screens/mentor_screen.dart';
+import '../../../portfolio/presentation/screens/carteira_screen.dart';
 import '../../../pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import '../../../pet/presentation/companion/widgets/pet_companion_header.dart';
@@ -105,23 +106,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _onPortfolioChanged() {
     setState(() {
-      // The Proventos tab can disappear if the holdings that justified it
-      // (ações/FIIs/fundos) get sold off mid-session — bounce back to
+      // Carteira/Proventos can both disappear mid-session — Carteira once
+      // the last holding is deleted, Proventos if the holdings that
+      // justified it (ações/FIIs/fundos) get sold off — bounce back to
       // Início rather than leaving the user stranded on a tab with no nav
-      // item pointing at it.
-      if (_selectedIndex == DashboardTabRouter.passiveIncomeTab && !_visibleTabIndices.contains(_selectedIndex)) {
+      // item pointing at it. Never trips for Início/Mentor, which are
+      // always visible.
+      if (_selectedIndex != DashboardTabRouter.homeTab && !_visibleTabIndices.contains(_selectedIndex)) {
         _selectedIndex = DashboardTabRouter.homeTab;
       }
     });
   }
 
-  // ── Proventos tab visibility ─────────────────────────────────────────────
-  // Only shown when the wallet actually holds an asset type that pays out
+  // ── Carteira/Proventos tab visibility ────────────────────────────────────
+  // Carteira only earns its own tab once the user has registered a first
+  // asset — with an empty portfolio there is nothing to show beyond what
+  // Início's own empty state already covers, so surfacing an empty Carteira
+  // tab would just be a second, redundant empty state. Proventos is shown
+  // only once the wallet actually holds an asset type that pays out
   // dividends/proventos (ações, FIIs, ETFs/fundos) — see
   // `InvestmentTypePayout.paysDividends` and
   // `PortfolioController.hasDividendPayingHoldings`.
   List<int> get _visibleTabIndices => [
     DashboardTabRouter.homeTab,
+    if (_portfolioController.holdings.isNotEmpty) DashboardTabRouter.carteiraTab,
     if (_portfolioController.hasDividendPayingHoldings) DashboardTabRouter.passiveIncomeTab,
     DashboardTabRouter.mentorTab,
   ];
@@ -270,7 +278,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: SafeArea(
               child: IndexedStack(
                 index: _selectedIndex,
-                children: [_buildHomeContent(), _buildPassiveIncomeContent(), _buildMentorContent()],
+                children: [
+                  _buildHomeContent(),
+                  _buildCarteiraContent(),
+                  _buildPassiveIncomeContent(),
+                  _buildMentorContent(),
+                ],
               ),
             ),
           ),
@@ -400,12 +413,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // ── Início: unified patrimônio + Mentor dashboard, absorbing what used to
-  // be a separate Carteira tab (see `DashboardTabRouter`'s class doc). ─────
+  // ── Início: condensed patrimônio + Mentor dashboard ──────────────────────
   Widget _buildHomeContent() {
     return OverviewScreen(
       controller: _portfolioController,
       onOpenMentor: _openMentorFromHome,
+      onOpenCarteira: _openCarteira,
       mascotController: _mascotController,
       heroAnchor: _heroAnchor,
     );
@@ -417,6 +430,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _selectedIndex = DashboardTabRouter.mentorTab;
     });
   }
+
+  // ── Carteira: full portfolio detail (evolution, allocation, holdings) ───
+  Widget _buildCarteiraContent() {
+    return CarteiraScreen(controller: _portfolioController, mascotController: _mascotController);
+  }
+
+  void _openCarteira() => _onTabSelected(DashboardTabRouter.carteiraTab);
 
   // ── Proventos / Passive Income ────────────────────────────────────────────
   Widget _buildPassiveIncomeContent() {
@@ -438,6 +458,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         icon: const Icon(Icons.home_outlined),
         activeIcon: const Icon(Icons.home),
         label: Translator.translate(AppStrings.navHome),
+      ),
+      DashboardTabRouter.carteiraTab => BottomNavigationBarItem(
+        icon: const Icon(Icons.account_balance_wallet_outlined),
+        activeIcon: const Icon(Icons.account_balance_wallet),
+        label: Translator.translate(AppStrings.navWallet),
       ),
       DashboardTabRouter.passiveIncomeTab => BottomNavigationBarItem(
         icon: const Icon(Icons.payments_outlined),

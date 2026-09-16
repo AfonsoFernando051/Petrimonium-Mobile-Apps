@@ -9,27 +9,23 @@ import 'package:petrimonium_wallet/core/widgets/layer_chip.dart';
 import 'package:petrimonium_wallet/features/home/presentation/widgets/home_pet_hero.dart';
 import 'package:petrimonium_wallet/features/home/presentation/widgets/mentor_insight_card.dart';
 import 'package:petrimonium_wallet/features/home/presentation/widgets/portfolio_not_connected_card.dart';
-import 'package:petrimonium_wallet/features/investment/presentation/screens/add_asset_screen.dart';
 import 'package:petrimonium_wallet/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_wallet/features/portfolio/domain/entities/wealth_change_breakdown.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/controllers/portfolio_controller.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/allocation_donut_card.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/holdings_section.dart';
 import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/portfolio_kpi_grid.dart';
-import 'package:petrimonium_wallet/features/portfolio/presentation/widgets/wealth_evolution_bar_card.dart';
 
-/// Wallet's "Início" — the unified patrimônio + Mentor screen, absorbing
-/// what used to be a separate Carteira tab ("Home unifica patrimônio
-/// total... sem uma aba 'Carteira' redundante" per the Wallet design
-/// system). In the reference design's order: a greeting, the Mentor's one
-/// interpretation for the session, the four headline KPIs
-/// ([PortfolioKpiGrid] — patrimônio, lucro, proventos, rentabilidade, with
-/// the source/timestamp stated once for the whole block), the trailing-12-
-/// month wealth bars, the allocation donut, a real valorização/aportes/
-/// rendimentos breakdown for the trailing 30 days
-/// (`PortfolioController.wealthChange30d`, computed client-side from real
-/// lot/dividend data), and holdings grouped by category.
+/// Wallet's "Início" — the condensed patrimônio + Mentor dashboard. In the
+/// reference design's order: a greeting, the Mentor's one interpretation for
+/// the session, the four headline KPIs ([PortfolioKpiGrid] — patrimônio,
+/// lucro, proventos, rentabilidade, with the source/timestamp stated once
+/// for the whole block), a real valorização/aportes/rendimentos breakdown
+/// for the trailing 30 days (`PortfolioController.wealthChange30d`, computed
+/// client-side from real lot/dividend data), and a compact "Sua carteira"
+/// composition preview linking into the full Carteira tab — the trailing-12-
+/// month wealth-evolution chart and the complete holdings list live there
+/// instead (`CarteiraScreen`), not here.
 ///
 /// No own `Scaffold`/`AppBar`/background — embedded directly in
 /// `DashboardScreen`'s shared chrome.
@@ -38,6 +34,7 @@ class OverviewScreen extends StatefulWidget {
     super.key,
     required this.controller,
     required this.onOpenMentor,
+    required this.onOpenCarteira,
     required this.mascotController,
     this.heroAnchor,
   });
@@ -48,6 +45,10 @@ class OverviewScreen extends StatefulWidget {
   /// (Home's Mentor card's "Por que estou vendo isto?") — `null` opens a
   /// blank chat.
   final ValueChanged<int?> onOpenMentor;
+
+  /// Opens the Carteira tab — the "Sua carteira" preview card's
+  /// "Ver carteira completa" link.
+  final VoidCallback onOpenCarteira;
 
   /// Drives the big [HomePetHero] treatment — shown large in the
   /// empty-portfolio state and smaller alongside the greeting once a
@@ -143,33 +144,11 @@ class _OverviewScreenState extends State<OverviewScreen> {
             else ...[
               PortfolioKpiGrid(controller: controller),
               const SizedBox(height: 16),
-              WealthEvolutionBarCard(series: controller.monthlyWealth12m),
+              _WealthChangeCard(breakdown: controller.wealthChange30d),
               const SizedBox(height: 16),
               AllocationDonutCard(allocation: controller.allocation, totalValue: controller.summary.currentValue),
-              const SizedBox(height: 16),
-              _WealthChangeCard(breakdown: controller.wealthChange30d),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    Translator.translate(AppStrings.homeHoldingsSectionTitle),
-                    style: TextStyle(
-                      color: context.colors.textTertiary,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.6,
-                    ),
-                  ),
-                  _AddAssetButton(controller: controller),
-                ],
-              ),
-              const SizedBox(height: 8),
-              HoldingsSection(
-                holdings: controller.holdings,
-                totalPortfolioValue: controller.summary.currentValue,
-                controller: controller,
-              ),
+              const SizedBox(height: 10),
+              _ViewFullCarteiraLink(onTap: widget.onOpenCarteira),
             ],
 
             const SizedBox(height: 32),
@@ -266,35 +245,24 @@ class _WealthChangeCard extends StatelessWidget {
   }
 }
 
-/// Opens [AddAssetScreen] to add another asset once the portfolio already
-/// has at least one — [PortfolioNotConnectedCard] covers the zero-holdings
-/// case with its own full-width CTA into that same [AddAssetScreen], so
-/// this only needs to exist here in the "Meus ativos" section header.
-class _AddAssetButton extends StatelessWidget {
-  const _AddAssetButton({required this.controller});
+/// "Ver carteira completa →" — Início's "Sua carteira" preview card's link
+/// into the full Carteira tab (evolution chart, filters, complete holdings
+/// list), mirroring the same pattern Home's Mentor/Academy cards use for
+/// their own "ver mais" links.
+class _ViewFullCarteiraLink extends StatelessWidget {
+  const _ViewFullCarteiraLink({required this.onTap});
 
-  final PortfolioController controller;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final tokens = context.colors;
     return InkWell(
-      borderRadius: BorderRadius.circular(999),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => AddAssetScreen(controller: controller)));
-      },
+      onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.add_circle_outline, size: 15, color: tokens.primary),
-            const SizedBox(width: 4),
-            Text(
-              Translator.translate(AppStrings.homeAddAssetLabel),
-              style: TextStyle(color: tokens.primary, fontSize: 11, fontWeight: FontWeight.w700),
-            ),
-          ],
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Text(
+          Translator.translate(AppStrings.homeViewFullCarteiraCta),
+          style: TextStyle(color: context.colors.primary, fontSize: 12.5, fontWeight: FontWeight.w700),
         ),
       ),
     );

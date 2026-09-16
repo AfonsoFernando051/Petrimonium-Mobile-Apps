@@ -8,6 +8,10 @@ void main() {
       expect(DashboardTabRouter.petContextFor(DashboardTabRouter.homeTab), PetContext.home);
     });
 
+    test('Carteira tab maps to PetContext.portfolio', () {
+      expect(DashboardTabRouter.petContextFor(DashboardTabRouter.carteiraTab), PetContext.portfolio);
+    });
+
     test('Passive Income tab maps to PetContext.portfolio', () {
       expect(DashboardTabRouter.petContextFor(DashboardTabRouter.passiveIncomeTab), PetContext.portfolio);
     });
@@ -19,6 +23,7 @@ void main() {
     test('never maps any tab index to PetContext.academy — Wallet has no Academy tab', () {
       for (final tab in [
         DashboardTabRouter.homeTab,
+        DashboardTabRouter.carteiraTab,
         DashboardTabRouter.passiveIncomeTab,
         DashboardTabRouter.mentorTab,
       ]) {
@@ -28,8 +33,9 @@ void main() {
   });
 
   group('DashboardTabRouter.showsHoldingsCount', () {
-    test('true for Home/Passive Income, false for Mentor', () {
+    test('true for Home/Carteira/Passive Income, false for Mentor', () {
       expect(DashboardTabRouter.showsHoldingsCount(DashboardTabRouter.homeTab), isTrue);
+      expect(DashboardTabRouter.showsHoldingsCount(DashboardTabRouter.carteiraTab), isTrue);
       expect(DashboardTabRouter.showsHoldingsCount(DashboardTabRouter.passiveIncomeTab), isTrue);
       expect(DashboardTabRouter.showsHoldingsCount(DashboardTabRouter.mentorTab), isFalse);
     });

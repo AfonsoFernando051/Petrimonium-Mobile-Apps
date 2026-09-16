@@ -12,6 +12,7 @@ import 'package:petrimonium_wallet/features/pet/domain/repositories/pet_reposito
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../academy/academy_test_fixtures.dart';
+import 'package:petrimonium_shared_features/testing.dart';
 
 // ── Fakes/mocks mirroring test/features/portfolio/presentation/controllers/
 // portfolio_controller_test.dart's doubles, plus the academy/mascot ones
@@ -123,12 +124,15 @@ class MockOnboardingRepository extends Mock implements OnboardingRepository {}
 class MockPetRepository extends Mock implements PetRepository {}
 
 void main() {
+  late FakePortfolioRepository portfolioRepository;
+
   setUp(() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
 
     DI.mascotRepository = FakeMascotRepository();
-    DI.portfolioRepository = FakePortfolioRepository();
+    portfolioRepository = FakePortfolioRepository();
+    DI.portfolioRepository = portfolioRepository;
     DI.achievementsLocalRepository = FakeAchievementsLocalRepository();
     DI.achievementsRepository = FakeAchievementsRepository();
     DI.gamificationRepository = FakeGamificationRepository();
@@ -192,6 +196,27 @@ void main() {
       await pumpUntilLoaded(tester);
 
       expect(navIcon(Icons.auto_awesome), findsOneWidget); // active Mentor nav icon
+    });
+
+    testWidgets('hides the Carteira tab while the portfolio has no holdings', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await pumpUntilLoaded(tester);
+
+      expect(navIcon(Icons.account_balance_wallet_outlined), findsNothing);
+    });
+
+    testWidgets('shows and switches to the Carteira tab once the user has registered a first asset', (tester) async {
+      final holdings = [lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10)];
+      portfolioRepository.holdingsToReturn = Holding.fromLots(holdings);
+      portfolioRepository.summaryToReturn = statsFromLots(holdings).summary;
+
+      await tester.pumpWidget(buildTestable());
+      await pumpUntilLoaded(tester);
+
+      await tester.tap(navIcon(Icons.account_balance_wallet_outlined));
+      await pumpUntilLoaded(tester);
+
+      expect(navIcon(Icons.account_balance_wallet), findsOneWidget); // active Carteira nav icon
     });
   });
 }
