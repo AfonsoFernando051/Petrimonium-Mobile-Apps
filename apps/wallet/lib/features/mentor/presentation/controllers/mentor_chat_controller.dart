@@ -7,6 +7,11 @@ import 'package:petrimonium_wallet/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_wallet/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_wallet/features/mentor/domain/entities/chat_message.dart';
 
+/// Which moment of the Mentor stage is on screen. The Mentor tab shows one
+/// exchange at a time around the pet instead of a scrolling timeline, so the
+/// screen needs "where are we" rather than the raw message list.
+enum MentorStagePhase { welcome, thinking, talking }
+
 const String _fallbackErrorReply = 'Hmm, algo deu errado ao pensar na resposta 🐾 Vamos tentar de novo daqui a pouco?';
 
 /// Drives the Mentor chat: which conversation is open, its message list,
@@ -25,6 +30,7 @@ class MentorChatController extends ChangeNotifier with SafeChangeNotifier {
   bool _isSending = false;
   bool _isLoadingHistory = true;
   List<String> _suggestedPrompts = const [];
+  String? _topic;
   Timer? _revealTimer;
   String? _revealingMessageId;
 
@@ -34,9 +40,32 @@ class MentorChatController extends ChangeNotifier with SafeChangeNotifier {
   bool get isLoadingHistory => _isLoadingHistory;
   List<String> get suggestedPrompts => List.unmodifiable(_suggestedPrompts);
 
+  /// The backend's title for the open conversation, shown as the stage card's
+  /// topic pill. Only a send returns it — a resumed conversation has none, and
+  /// the pill is hidden rather than invented.
+  String? get topic => _topic;
+
+  MentorStagePhase get stagePhase {
+    if (_messages.isEmpty) return MentorStagePhase.welcome;
+    return _messages.last.role == ChatRole.user ? MentorStagePhase.thinking : MentorStagePhase.talking;
+  }
+
+  String? get currentQuestion => _lastOf(ChatRole.user)?.text;
+
+  /// `null` while thinking: the reply to the question on stage has not arrived
+  /// yet, and an older reply must not stand in for it.
+  ChatMessage? get currentReply => stagePhase == MentorStagePhase.talking ? _messages.last : null;
+
+  ChatMessage? _lastOf(ChatRole role) {
+    for (final message in _messages.reversed) {
+      if (message.role == role) return message;
+    }
+    return null;
+  }
+
   /// The id of the message currently mid-typewriter-reveal, or `null` when
-  /// none is revealing. `MentorScreen` uses this to decide which single
-  /// `ChatBubble` should track [revealingText] instead of its (still empty)
+  /// none is revealing. `MentorScreen` uses this to decide whether the reply
+  /// on stage should track [revealingText] instead of its (still empty)
   /// stored text.
   String? get revealingMessageId => _revealingMessageId;
 
@@ -44,9 +73,8 @@ class MentorChatController extends ChangeNotifier with SafeChangeNotifier {
   /// typewriter tick. Exposed as a `ValueListenable` rather than through
   /// `notifyListeners()` so only the one widget that cares about the
   /// in-progress text rebuilds each tick — the previous approach called
-  /// `notifyListeners()` every 16ms, forcing the entire chat screen
-  /// (including re-flattening the whole message timeline) to rebuild for
-  /// every few characters revealed.
+  /// `notifyListeners()` every 16ms, forcing the entire Mentor screen (pet
+  /// stage animations included) to rebuild for every few characters revealed.
   final ValueNotifier<String> revealingText = ValueNotifier<String>('');
 
   /// Set when loading a past conversation's history fails — `MentorScreen`
@@ -59,6 +87,7 @@ class MentorChatController extends ChangeNotifier with SafeChangeNotifier {
     _revealTimer?.cancel();
     _revealingMessageId = null;
     _conversationId = conversationId;
+    _topic = null;
     _messages.clear();
     _isLoadingHistory = conversationId != null;
     historyError = null;
@@ -96,6 +125,7 @@ class MentorChatController extends ChangeNotifier with SafeChangeNotifier {
         currentScreen: currentScreen,
       );
       _conversationId = result.conversationId;
+      _topic = result.title ?? _topic;
       await _revealReply(result.reply, isError: false, sources: result.sources);
     } catch (e, stackTrace) {
       // Logged rather than silently discarded — a swallowed exception here
@@ -150,9 +180,8 @@ class MentorChatController extends ChangeNotifier with SafeChangeNotifier {
     _revealTimer = Timer.periodic(tickDuration, (timer) {
       charIndex = min(charIndex + chunkSize, fullText.length);
       // Ticks update only this notifier, not notifyListeners() — the whole
-      // chat screen must not rebuild (and re-flatten the message timeline)
-      // on every character chunk. Only the ValueListenableBuilder tracking
-      // revealingText, plus the typing-indicator slot, react per tick.
+      // Mentor screen must not rebuild on every character chunk. Only the
+      // ValueListenableBuilder tracking revealingText reacts per tick.
       revealingText.value = fullText.substring(0, charIndex);
 
       if (charIndex >= fullText.length) {
@@ -178,6 +207,7 @@ class MentorChatController extends ChangeNotifier with SafeChangeNotifier {
     _revealTimer?.cancel();
     _revealingMessageId = null;
     _conversationId = null;
+    _topic = null;
     _messages.clear();
     unawaited(loadSuggestedPrompts());
     notifySafely();

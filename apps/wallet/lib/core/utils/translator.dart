@@ -236,6 +236,17 @@ class Translator {
       AppStrings.homeViewFullAcademyCta: 'Ver trilha completa',
       AppStrings.backTooltip: 'Voltar',
       AppStrings.lotActionsMenuTooltip: 'Mais ações do lote',
+      AppStrings.mentorStageSubtitle: 'Seu companheiro financeiro',
+      AppStrings.mentorStageInfoTooltip: 'Sobre o Mentor',
+      AppStrings.mentorStageDisclaimer:
+          'Não executa transações. Não substitui consultoria financeira regulada — apenas ajuda a interpretar seus dados.',
+      AppStrings.mentorStageGreeting: 'Oi, {name} 👋',
+      AppStrings.mentorStageGreetingNoName: 'Oi 👋',
+      AppStrings.mentorStageGreetingPrompt: 'O que vamos descobrir hoje?',
+      AppStrings.mentorStageThinkingTitle: 'Deixa eu ver isso pra você...',
+      AppStrings.mentorStageThinkingSubtitle: 'Só um segundo.',
+      AppStrings.mentorStageAskSomethingElse: 'Perguntar outra coisa',
+      AppStrings.mentorStageInputHint: 'Pergunte algo ao seu mentor...',
     },
     // Português europeu. Deliberadamente esparso: só as entradas que diferem
     // do pt-BR. Todo o resto resolve pelo fallback de [translate] para o bloco
@@ -250,6 +261,12 @@ class Translator {
       AppStrings.homeWealthSectionTitle: 'Como está o meu património?',
       AppStrings.homeKpiTotalWealthLabel: 'PATRIMÓNIO TOTAL',
       AppStrings.homeWealthBarsTitle: 'Evolução do património',
+      AppStrings.mentorStageSubtitle: 'O seu companheiro financeiro',
+      AppStrings.mentorStageDisclaimer:
+          'Não executa transações. Não substitui consultoria financeira regulada — apenas ajuda a interpretar os seus dados.',
+      AppStrings.mentorStageGreeting: 'Olá, {name} 👋',
+      AppStrings.mentorStageGreetingNoName: 'Olá 👋',
+      AppStrings.mentorStageThinkingTitle: 'Deixe-me ver isso por si...',
     },
     'en': {
       AppStrings.brandTitle: 'Petrimonium Wallet',
@@ -421,6 +438,17 @@ class Translator {
       AppStrings.homeViewFullAcademyCta: 'View full path',
       AppStrings.backTooltip: 'Back',
       AppStrings.lotActionsMenuTooltip: 'More lot actions',
+      AppStrings.mentorStageSubtitle: 'Your financial companion',
+      AppStrings.mentorStageInfoTooltip: 'About the Mentor',
+      AppStrings.mentorStageDisclaimer:
+          'Never executes transactions. Not a substitute for regulated financial advice — it only helps you read your own data.',
+      AppStrings.mentorStageGreeting: 'Hi, {name} 👋',
+      AppStrings.mentorStageGreetingNoName: 'Hi 👋',
+      AppStrings.mentorStageGreetingPrompt: 'What shall we find out today?',
+      AppStrings.mentorStageThinkingTitle: 'Let me look into that for you...',
+      AppStrings.mentorStageThinkingSubtitle: 'Just a second.',
+      AppStrings.mentorStageAskSomethingElse: 'Ask something else',
+      AppStrings.mentorStageInputHint: 'Ask your mentor something...',
     },
     'es': {
       AppStrings.brandTitle: 'Petrimonium Wallet',
@@ -597,6 +625,17 @@ class Translator {
       AppStrings.homeViewFullAcademyCta: 'Ver ruta completa',
       AppStrings.backTooltip: 'Atrás',
       AppStrings.lotActionsMenuTooltip: 'Más acciones del lote',
+      AppStrings.mentorStageSubtitle: 'Tu compañero financiero',
+      AppStrings.mentorStageInfoTooltip: 'Sobre el Mentor',
+      AppStrings.mentorStageDisclaimer:
+          'No ejecuta transacciones. No sustituye la asesoría financiera regulada — solo te ayuda a interpretar tus datos.',
+      AppStrings.mentorStageGreeting: 'Hola, {name} 👋',
+      AppStrings.mentorStageGreetingNoName: 'Hola 👋',
+      AppStrings.mentorStageGreetingPrompt: '¿Qué vamos a descubrir hoy?',
+      AppStrings.mentorStageThinkingTitle: 'Déjame revisar eso para ti...',
+      AppStrings.mentorStageThinkingSubtitle: 'Solo un segundo.',
+      AppStrings.mentorStageAskSomethingElse: 'Preguntar otra cosa',
+      AppStrings.mentorStageInputHint: 'Pregúntale algo a tu mentor...',
     },
   };
 }

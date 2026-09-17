@@ -196,6 +196,18 @@ class AppStrings {
   static const String mentorSourceClientHorizon = 'mentorSourceClientHorizon';
   static const String mentorSourceClientScreen = 'mentorSourceClientScreen';
   static const String mentorInterpretationLabel = SharedStrings.mentorInterpretationLabel;
+
+  // Mentor tab — the pet stage (welcome, thinking, talking).
+  static const String mentorStageSubtitle = 'mentorStageSubtitle';
+  static const String mentorStageInfoTooltip = 'mentorStageInfoTooltip';
+  static const String mentorStageDisclaimer = 'mentorStageDisclaimer';
+  static const String mentorStageGreeting = 'mentorStageGreeting';
+  static const String mentorStageGreetingNoName = 'mentorStageGreetingNoName';
+  static const String mentorStageGreetingPrompt = 'mentorStageGreetingPrompt';
+  static const String mentorStageThinkingTitle = 'mentorStageThinkingTitle';
+  static const String mentorStageThinkingSubtitle = 'mentorStageThinkingSubtitle';
+  static const String mentorStageAskSomethingElse = 'mentorStageAskSomethingElse';
+  static const String mentorStageInputHint = 'mentorStageInputHint';
   static const String privacyMemoryBody = 'privacyMemoryBody';
   static const String privacyMemoryConversationsButton = 'privacyMemoryConversationsButton';
   static const String quickSetupSettingsSubtitle = 'quickSetupSettingsSubtitle';
