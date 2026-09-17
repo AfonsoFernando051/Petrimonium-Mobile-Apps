@@ -5,6 +5,7 @@ import '../../../../core/di/dependency_injection.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import '../../../../core/utils/friendly_error_message.dart';
+import '../../../../core/utils/pet_assets.dart';
 import '../../../../core/utils/translator.dart';
 import '../../../../main.dart';
 import '../password_recovery_routes.dart';
@@ -46,7 +47,7 @@ class _LoginCardState extends State<LoginCard> {
               // Sem recorte circular: a arte do mascote já vem com fundo
               // transparente e assenta direto sobre o fundo da tela.
               Image.asset(
-                'assets/images/generated_wolf.png',
+                PetAssets.imageFor(null),
                 height: 96,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {

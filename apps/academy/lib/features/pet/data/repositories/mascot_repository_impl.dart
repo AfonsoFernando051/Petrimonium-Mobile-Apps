@@ -41,7 +41,10 @@ class MascotRepositoryImpl implements MascotRepository {
 
     var xp = prefs.getInt(_xpKey) ?? 0;
     final specieName = prefs.getString(_specieKey);
-    var specie = PetSpecieEnum.values.firstWhere((s) => s.name == specieName, orElse: () => PetSpecieEnum.DOG);
+    // Academy's brand pet is the wolf (PetAssets.defaultSpecie) — a first-launch/
+    // corrupted-cache fallback to DOG would flash the wrong species before the
+    // backend value loads.
+    var specie = PetSpecieEnum.values.firstWhere((s) => s.name == specieName, orElse: () => PetSpecieEnum.WOLF);
     final netWorth = prefs.getDouble(_netWorthKey) ?? 0;
 
     final unlockedNames = prefs.getStringList(_unlockedKey) ?? const [];

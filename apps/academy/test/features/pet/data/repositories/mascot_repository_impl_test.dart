@@ -84,13 +84,13 @@ void main() {
       expect(profile.specie, PetSpecieEnum.WOLF);
     });
 
-    test('defaults to DOG/babyDog/xp 0 when nothing is cached and the backend has no data', () async {
+    test('defaults to WOLF/babyDog/xp 0 when nothing is cached and the backend has no data', () async {
       when(() => mockGamificationDataSource.fetchSummary()).thenThrow(Exception('offline'));
       when(() => mockPetDataSource.getMyPet()).thenAnswer((_) async => null);
 
       final profile = await repository.loadProfile();
 
-      expect(profile.specie, PetSpecieEnum.DOG);
+      expect(profile.specie, PetSpecieEnum.WOLF);
       expect(profile.stage, PetEvolutionStage.babyDog);
       expect(profile.xp, 0);
       expect(profile.name, isNull);
