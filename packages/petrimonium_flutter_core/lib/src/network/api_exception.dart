@@ -15,6 +15,20 @@ final class ApiException implements Exception {
   String toString() => 'ApiException($statusCode, $code, $message)';
 }
 
+/// A 401 that means "the credential you just supplied is wrong", as opposed to "your session
+/// expired" — [ApiClient] has already tried to refresh and replayed the request by the time a
+/// 401 reaches a caller, so what is left is the credential itself.
+///
+/// Its own type, not an [ApiException] the caller has to pattern-match on a status code, because
+/// it is the one failure in a re-authentication flow the user can fix on the spot: the UI needs
+/// to tell "wrong password, try again" apart from "something went wrong".
+final class InvalidCredentialsException implements Exception {
+  const InvalidCredentialsException();
+
+  @override
+  String toString() => 'InvalidCredentialsException';
+}
+
 /// Decodes a JSON object body, or an empty map for an empty body (e.g. a
 /// 204 No Content).
 Map<String, dynamic> decodeObject(http.Response response) {

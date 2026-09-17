@@ -35,5 +35,6 @@ class SettingsRepository {
 
   /// Ao contrário das preferências, uma falha aqui NÃO é engolida: se a
   /// conta não foi apagada, o utilizador tem de saber.
-  Future<void> deleteAccount() => remoteDataSource.deleteAccount();
+  Future<void> deleteAccount({String? password, String? googleIdToken}) =>
+      remoteDataSource.deleteAccount(password: password, googleIdToken: googleIdToken);
 }

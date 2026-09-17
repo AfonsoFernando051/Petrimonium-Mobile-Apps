@@ -63,28 +63,8 @@ final class RemoteHealthRepository implements HealthRepository {
 
   @override
   Future<void> loginWithGoogle() async {
-    // O plugin só tem implementação real em Android/iOS/macOS/Web; noutras
-    // plataformas lança UnsupportedError em qualquer chamada. Traduz-se isso
-    // numa mensagem legível em vez do "UnimplementedError" cru.
-    try {
-      if (!_googleSignInInitialized) {
-        await GoogleSignIn.instance.initialize(serverClientId: ApiConfig.googleServerClientId);
-        _googleSignInInitialized = true;
-      }
-    } on UnsupportedError {
-      throw Exception('Login com Google não está disponível neste dispositivo.');
-    }
-
-    final GoogleSignInAccount account;
-    try {
-      account = await GoogleSignIn.instance.authenticate();
-    } on GoogleSignInException catch (e) {
-      // Cancelar não é erro: sai em silêncio e a tela fica como estava.
-      if (e.code == GoogleSignInExceptionCode.canceled) return;
-      rethrow;
-    } on UnsupportedError {
-      throw Exception('Login com Google não está disponível neste dispositivo.');
-    }
+    final account = await _authenticateWithGoogle();
+    if (account == null) return;
 
     final idToken = account.authentication.idToken;
     if (idToken == null) {
@@ -116,8 +96,48 @@ final class RemoteHealthRepository implements HealthRepository {
   }
 
   @override
-  Future<void> deleteAccount() async {
-    final response = await _api.delete('/api/settings/account');
+  Future<String?> obtainGoogleIdToken() async {
+    final account = await _authenticateWithGoogle();
+    return account?.authentication.idToken;
+  }
+
+  /// Devolve null quando o utilizador cancela o diálogo do Google.
+  Future<GoogleSignInAccount?> _authenticateWithGoogle() async {
+    // O plugin só tem implementação real em Android/iOS/macOS/Web; noutras
+    // plataformas lança UnsupportedError em qualquer chamada. Traduz-se isso
+    // numa mensagem legível em vez do "UnimplementedError" cru.
+    try {
+      if (!_googleSignInInitialized) {
+        await GoogleSignIn.instance.initialize(serverClientId: ApiConfig.googleServerClientId);
+        _googleSignInInitialized = true;
+      }
+    } on UnsupportedError {
+      throw Exception('Login com Google não está disponível neste dispositivo.');
+    }
+
+    try {
+      return await GoogleSignIn.instance.authenticate();
+    } on GoogleSignInException catch (e) {
+      // Cancelar não é erro: sai em silêncio e a tela fica como estava.
+      if (e.code == GoogleSignInExceptionCode.canceled) return null;
+      rethrow;
+    } on UnsupportedError {
+      throw Exception('Login com Google não está disponível neste dispositivo.');
+    }
+  }
+
+  @override
+  Future<void> deleteAccount({String? password, String? googleIdToken}) async {
+    final response = await _api.delete(
+      '/api/settings/account',
+      body: {'password': ?password, 'googleIdToken': ?googleIdToken},
+    );
+    // 401 aqui é a credencial errada, não a sessão expirada: o ApiClient já tentou renovar e
+    // repetiu o pedido antes de chegar cá. Sai como tipo próprio para o ecrã poder dizer
+    // "senha incorreta" em vez do erro genérico.
+    if (response.statusCode == 401) {
+      throw const InvalidCredentialsException();
+    }
     if (response.statusCode != 204 && response.statusCode != 200) {
       throwApiError(response);
     }

@@ -21,6 +21,32 @@ class AuthRepository {
   /// token for our own JWT via [remoteDataSource]. Returns normally without
   /// signing the user in if they cancel the Google flow.
   Future<void> loginWithGoogle() async {
+    final account = await _authenticateWithGoogle();
+    if (account == null) return;
+
+    final idToken = account.authentication.idToken;
+    if (idToken == null) {
+      throw Exception('Google did not return an ID token.');
+    }
+
+    final user = await remoteDataSource.loginWithGoogle(idToken);
+    await _saveTokens(user);
+    // /auth/google's response carries the token pair (like /auth/login), so
+    // the email comes from the Google account itself, not the backend reply.
+    await _saveEmail(account.email);
+  }
+
+  /// Runs the Google flow purely to obtain a fresh ID token, without exchanging it for a
+  /// session. Used to re-prove identity before an irreversible action on an account that has no
+  /// local password to ask for — the backend checks the token belongs to *this* account, so
+  /// signing in as someone else here proves nothing. Returns null if the user cancels.
+  Future<String?> obtainGoogleIdToken() async {
+    final account = await _authenticateWithGoogle();
+    return account?.authentication.idToken;
+  }
+
+  /// Returns null when the user cancels the Google flow.
+  Future<GoogleSignInAccount?> _authenticateWithGoogle() async {
     // google_sign_in only ships a real platform implementation for
     // Android/iOS/macOS/Web (see its pubspec.yaml). On Linux/Windows the
     // plugin falls back to a placeholder that throws UnsupportedError from
@@ -35,26 +61,14 @@ class AuthRepository {
       throw Exception('Login com Google não está disponível neste dispositivo.');
     }
 
-    final GoogleSignInAccount account;
     try {
-      account = await GoogleSignIn.instance.authenticate();
+      return await GoogleSignIn.instance.authenticate();
     } on GoogleSignInException catch (e) {
-      if (e.code == GoogleSignInExceptionCode.canceled) return;
+      if (e.code == GoogleSignInExceptionCode.canceled) return null;
       rethrow;
     } on UnsupportedError {
       throw Exception('Login com Google não está disponível neste dispositivo.');
     }
-
-    final idToken = account.authentication.idToken;
-    if (idToken == null) {
-      throw Exception('Google did not return an ID token.');
-    }
-
-    final user = await remoteDataSource.loginWithGoogle(idToken);
-    await _saveTokens(user);
-    // /auth/google's response carries the token pair (like /auth/login), so
-    // the email comes from the Google account itself, not the backend reply.
-    await _saveEmail(account.email);
   }
 
   Future<void> register(String name, String email, String password) async {

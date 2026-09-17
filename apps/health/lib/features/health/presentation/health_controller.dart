@@ -171,12 +171,16 @@ final class HealthController extends ChangeNotifier {
   /// Apaga a conta e a seguir limpa o estado local. O logout remoto que
   /// [logout] faz vai responder 401 — a conta já não existe — mas ele engole
   /// essa falha e limpa os tokens de qualquer forma, que é o que falta aqui.
-  Future<void> deleteAccount() async {
+  Future<void> deleteAccount({String? password, String? googleIdToken}) async {
     await _withBusy(() async {
-      await _repository.deleteAccount();
+      await _repository.deleteAccount(password: password, googleIdToken: googleIdToken);
     });
     await logout();
   }
+
+  /// Só o fluxo nativo do Google, sem trocar por sessão — o ecrã precisa do ID token para
+  /// reprovar a identidade de uma conta que não tem senha local. Devolve null se cancelar.
+  Future<String?> obtainGoogleIdToken() => _repository.obtainGoogleIdToken();
 
   Future<void> logout() async {
     await _repository.logout();

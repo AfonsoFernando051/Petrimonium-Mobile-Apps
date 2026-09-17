@@ -37,7 +37,13 @@ void main() {
     when(() => mockMascotRepository.loadProfile()).thenAnswer((_) async => PetProfile(name: 'Rex'));
     when(() => mockMascotRepository.saveName(any())).thenAnswer((_) async {});
     when(() => mockSettingsRepository.syncLanguage(any())).thenAnswer((_) async {});
-    when(() => mockSettingsRepository.deleteAccount()).thenAnswer((_) async {});
+    when(
+      () => mockSettingsRepository.deleteAccount(
+        password: any(named: 'password'),
+        googleIdToken: any(named: 'googleIdToken'),
+      ),
+    ).thenAnswer((_) async {});
+    when(() => mockAuthRepository.obtainGoogleIdToken()).thenAnswer((_) async => null);
 
     DI.authRepository = mockAuthRepository;
     DI.mascotRepository = mockMascotRepository;
@@ -46,6 +52,16 @@ void main() {
 
   Widget buildTestableWidget() {
     return MaterialApp(theme: AppTheme.dark, home: const SettingsScreen());
+  }
+
+  /// Confirming intent no longer deletes anything on its own — a second dialog asks the user
+  /// to re-prove who they are, because holding a session is exactly what a stolen token does.
+  Future<void> supplyPassword(WidgetTester tester, {String password = 'senha-certa'}) async {
+    await tester.enterText(find.byType(TextField), password);
+    await tester.tap(find.text('Excluir minha conta').last);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump(const Duration(milliseconds: 500));
   }
 
   // The Settings body is taller than the default 800x600 test viewport, so
@@ -183,7 +199,12 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      verifyNever(() => mockSettingsRepository.deleteAccount());
+      verifyNever(
+        () => mockSettingsRepository.deleteAccount(
+          password: any(named: 'password'),
+          googleIdToken: any(named: 'googleIdToken'),
+        ),
+      );
       verifyNever(() => mockAuthRepository.logout());
       expect(find.byType(SettingsScreen), findsOneWidget);
     });
@@ -203,9 +224,15 @@ void main() {
         await tester.tap(find.text('Excluir minha conta').last);
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 300));
-        await tester.pump(const Duration(milliseconds: 500));
 
-        verify(() => mockSettingsRepository.deleteAccount()).called(1);
+        await supplyPassword(tester);
+
+        verify(
+          () => mockSettingsRepository.deleteAccount(
+            password: any(named: 'password'),
+            googleIdToken: any(named: 'googleIdToken'),
+          ),
+        ).called(1);
         // The local session has to be cleared too, otherwise the device keeps
         // tokens for an account that no longer exists.
         verify(() => mockAuthRepository.logout()).called(1);
@@ -215,7 +242,12 @@ void main() {
     );
 
     testWidgets('a failed deletion reports the error and leaves the user signed in', (WidgetTester tester) async {
-      when(() => mockSettingsRepository.deleteAccount()).thenThrow(Exception('Não foi possível excluir a conta'));
+      when(
+        () => mockSettingsRepository.deleteAccount(
+          password: any(named: 'password'),
+          googleIdToken: any(named: 'googleIdToken'),
+        ),
+      ).thenThrow(Exception('Não foi possível excluir a conta'));
 
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
@@ -227,7 +259,8 @@ void main() {
       await tester.tap(find.text('Excluir minha conta').last);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
-      await tester.pump(const Duration(milliseconds: 500));
+
+      await supplyPassword(tester);
 
       expect(find.text('Não foi possível excluir a conta'), findsOneWidget);
       // The account still exists, so the session must survive: no logout, no
@@ -253,9 +286,15 @@ void main() {
       await tester.tap(find.text('Excluir minha conta').last);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
-      await tester.pump(const Duration(milliseconds: 500));
 
-      verify(() => mockSettingsRepository.deleteAccount()).called(1);
+      await supplyPassword(tester);
+
+      verify(
+        () => mockSettingsRepository.deleteAccount(
+          password: any(named: 'password'),
+          googleIdToken: any(named: 'googleIdToken'),
+        ),
+      ).called(1);
       expect(find.byType(LoginScreen), findsOneWidget);
       expect(find.byType(SettingsScreen), findsNothing);
     });

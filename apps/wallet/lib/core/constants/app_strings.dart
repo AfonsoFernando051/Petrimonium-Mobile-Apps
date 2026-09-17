@@ -368,6 +368,11 @@ class AppStrings {
   static const String deleteAccountButton = SharedStrings.deleteAccountButton;
   static const String deleteAccountConfirmTitle = SharedStrings.deleteAccountConfirmTitle;
   static const String deleteAccountConfirmMessage = SharedStrings.deleteAccountConfirmMessage;
+  static const String deleteAccountReauthTitle = SharedStrings.deleteAccountReauthTitle;
+  static const String deleteAccountReauthMessage = SharedStrings.deleteAccountReauthMessage;
+  static const String deleteAccountPasswordLabel = SharedStrings.deleteAccountPasswordLabel;
+  static const String deleteAccountGoogleButton = SharedStrings.deleteAccountGoogleButton;
+  static const String deleteAccountWrongCredential = SharedStrings.deleteAccountWrongCredential;
   static const String countryBrazil = SharedStrings.countryBrazil;
   static const String countryPortugal = SharedStrings.countryPortugal;
   static const String languagePtPt = SharedStrings.languagePtPt;

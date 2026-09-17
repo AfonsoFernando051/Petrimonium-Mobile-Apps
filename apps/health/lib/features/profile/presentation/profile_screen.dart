@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 import '../../../core/app/health_scope.dart';
 import '../../../core/theme/health_theme.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../health/presentation/health_controller.dart';
 
 /// `subIsProfile`. Regional settings persist in the Health profile while the
 /// account identity and Pet remain shared with the other Petrimonium apps.
@@ -136,15 +138,127 @@ Future<void> _confirmDeleteAccount(BuildContext context, AppLocalizations l10n) 
       ],
     ),
   );
-  if (confirmed != true) return;
+  if (confirmed != true || !context.mounted) return;
+
+  // Confirmar a intenção e provar a identidade são duas perguntas diferentes, e é a segunda
+  // que uma sessão roubada não sabe responder. O backend recusa esta chamada sem credencial.
+  final credential = await _askForCredential(context, l10n, controller);
+  if (credential == null) return;
+
   try {
-    await controller.deleteAccount();
+    await controller.deleteAccount(password: credential.password, googleIdToken: credential.googleIdToken);
+  } on InvalidCredentialsException {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.deleteAccountWrongCredential)));
   } catch (_) {
     // A conta continua a existir. Sem isto o erro só chegava ao handler da
     // zone e o ecrã ficava igual, com o utilizador a achar que foi apagada —
     // `controller.error` só é lido pela HomeScreen, nunca aqui.
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+  }
+}
+
+/// O que o utilizador apresentou para se reautenticar. Exatamente um dos campos vem preenchido.
+class _Credential {
+  const _Credential.password(String this.password) : googleIdToken = null;
+  const _Credential.google(String this.googleIdToken) : password = null;
+
+  final String? password;
+  final String? googleIdToken;
+}
+
+/// Oferece as duas vias porque uma conta tem uma ou outra: a local tem senha, a criada pelo
+/// Google não tem nenhuma, e uma local mais tarde ligada ao Google tem as duas. O cliente não
+/// tem registo fiável do provedor da conta, por isso não adivinha — quem decide se a credencial
+/// serve é o backend.
+Future<_Credential?> _askForCredential(BuildContext context, AppLocalizations l10n, HealthController controller) {
+  return showDialog<_Credential>(
+    context: context,
+    builder: (dialogContext) => _ReauthenticateDialog(l10n: l10n, controller: controller),
+  );
+}
+
+class _ReauthenticateDialog extends StatefulWidget {
+  const _ReauthenticateDialog({required this.l10n, required this.controller});
+
+  final AppLocalizations l10n;
+  final HealthController controller;
+
+  @override
+  State<_ReauthenticateDialog> createState() => _ReauthenticateDialogState();
+}
+
+class _ReauthenticateDialogState extends State<_ReauthenticateDialog> {
+  final TextEditingController _password = TextEditingController();
+  bool _busy = false;
+
+  @override
+  void dispose() {
+    _password.dispose();
+    super.dispose();
+  }
+
+  void _submitPassword() {
+    if (_password.text.isEmpty) return;
+    Navigator.of(context).pop(_Credential.password(_password.text));
+  }
+
+  Future<void> _submitGoogle() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    String? idToken;
+    try {
+      idToken = await widget.controller.obtainGoogleIdToken();
+    } catch (_) {
+      // Um fluxo do Google falhado ou cancelado deixa o diálogo aberto, para o utilizador
+      // ainda poder usar o campo da senha em vez de voltar ao perfil sem explicação.
+      idToken = null;
+    }
+    if (!mounted) return;
+    setState(() => _busy = false);
+    if (idToken == null || idToken.isEmpty) return;
+    Navigator.of(context).pop(_Credential.google(idToken));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = widget.l10n;
+    return AlertDialog(
+      backgroundColor: HealthColors.card,
+      title: Text(l10n.deleteAccountReauthTitle),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l10n.deleteAccountReauthMessage,
+            style: const TextStyle(fontSize: 13.5, height: 1.4, color: HealthColors.textSecondary),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _password,
+            obscureText: true,
+            autofocus: true,
+            enabled: !_busy,
+            decoration: InputDecoration(labelText: l10n.deleteAccountPasswordLabel),
+            onSubmitted: (_) => _submitPassword(),
+          ),
+          const SizedBox(height: 8),
+          TextButton(onPressed: _busy ? null : _submitGoogle, child: Text(l10n.deleteAccountGoogleButton)),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: _busy ? null : () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel, style: const TextStyle(color: HealthColors.textSecondary)),
+        ),
+        TextButton(
+          onPressed: _busy ? null : _submitPassword,
+          child: Text(l10n.deleteAccount, style: const TextStyle(color: HealthColors.negative)),
+        ),
+      ],
+    );
   }
 }
 

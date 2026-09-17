@@ -138,9 +138,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
     if (!confirmed || !mounted) return;
 
+    // Confirming intent and proving identity are two different questions, and the second one
+    // is what a stolen session cannot answer. The backend refuses this call without a
+    // credential, so skipping the dialog would just produce a 401.
+    final credential = await ReauthenticateDialog.show(
+      context,
+      title: Translator.translate(AppStrings.deleteAccountReauthTitle),
+      message: Translator.translate(AppStrings.deleteAccountReauthMessage),
+      passwordLabel: Translator.translate(AppStrings.deleteAccountPasswordLabel),
+      cancelLabel: Translator.translate(AppStrings.cancelButton),
+      confirmLabel: Translator.translate(AppStrings.deleteAccountButton),
+      googleLabel: Translator.translate(AppStrings.deleteAccountGoogleButton),
+      onGoogleReauth: DI.authRepository.obtainGoogleIdToken,
+    );
+    if (credential == null || !mounted) return;
+
     unawaited(HapticFeedback.heavyImpact());
     try {
-      await DI.settingsRepository.deleteAccount();
+      await DI.settingsRepository.deleteAccount(password: credential.password, googleIdToken: credential.googleIdToken);
+    } on InvalidCredentialsException {
+      if (!mounted) return;
+      GameSnack.show(context, Translator.translate(AppStrings.deleteAccountWrongCredential), isError: true);
+      return;
     } catch (e) {
       if (!mounted) return;
       GameSnack.show(context, friendlyErrorMessage(e), isError: true);

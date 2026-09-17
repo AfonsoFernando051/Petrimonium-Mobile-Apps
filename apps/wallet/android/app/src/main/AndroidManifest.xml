@@ -1,8 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- allowBackup defaults to true, which hands shared_prefs/ (last-used account email,
+         onboarding state, locally cached progress and preferences) to Android Auto Backup and
+         from there to the user's Google Drive - a copy this app neither controls nor can wipe.
+         The tokens themselves are in the platform keystore and were never at risk, but the
+         rest has no business leaving the device for a product built around someone's money.
+         fullBackupContent/dataExtractionRules cover the pre-31 and 31+ backup paths
+         respectively; both are set so the answer is the same on every supported API level. -->
     <application
         android:label="Petrimonium Wallet"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules">
         <activity
             android:name=".MainActivity"
             android:exported="true"

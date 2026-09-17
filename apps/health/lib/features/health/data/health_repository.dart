@@ -10,8 +10,19 @@ abstract interface class HealthRepository {
   /// Devolve sem fazer nada se o utilizador cancelar o diálogo do Google.
   Future<void> loginWithGoogle();
 
+  /// Corre o fluxo do Google só para obter um ID token fresco, sem trocar por sessão. Serve
+  /// para reprovar a identidade antes de uma acção sem volta numa conta que não tem senha
+  /// local para pedir. Devolve null se o utilizador cancelar.
+  Future<String?> obtainGoogleIdToken();
+
   /// Apaga a conta e todos os dados dela, nos três apps. Irreversível.
-  Future<void> deleteAccount();
+  ///
+  /// Exige que o pedido reprove a identidade: [password] para uma conta com senha local, ou
+  /// [googleIdToken] para uma conta criada pelo Google. O bearer token da sessão já não basta
+  /// no backend — um access token roubado vale uma hora e isto não tem volta.
+  ///
+  /// Lança [InvalidCredentialsException] se a credencial não conferir.
+  Future<void> deleteAccount({String? password, String? googleIdToken});
   Future<void> register(String name, String email, String password);
   Future<void> logout();
 

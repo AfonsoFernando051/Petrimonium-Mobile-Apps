@@ -28,6 +28,9 @@ class FakeAuthRepository implements AuthRepository {
   Future<void> loginWithGoogle() async {}
 
   @override
+  Future<String?> obtainGoogleIdToken() async => null;
+
+  @override
   Future<void> register(String name, String email, String password) async {}
 
   @override

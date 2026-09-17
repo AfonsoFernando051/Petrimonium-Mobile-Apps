@@ -39,6 +39,7 @@ export 'src/widgets/mentor_input_bar.dart';
 export 'src/widgets/option_pill.dart';
 export 'src/widgets/option_row.dart';
 export 'src/widgets/or_divider.dart';
+export 'src/widgets/reauthenticate_dialog.dart';
 export 'src/widgets/settings_toggle_card.dart';
 export 'src/widgets/shared_account_notice.dart';
 export 'src/widgets/suggested_prompt_chip.dart';

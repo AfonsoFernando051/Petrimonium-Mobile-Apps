@@ -142,6 +142,12 @@ const Map<String, Map<String, String>> sharedCopy = {
     SharedStrings.deleteAccountConfirmTitle: 'Excluir a conta?',
     SharedStrings.deleteAccountConfirmMessage:
         'Isto apaga definitivamente a sua conta Petrimonium e tudo o que está nela — Wallet, Academy e Health, incluindo o seu Pet. Não há como desfazer.',
+    SharedStrings.deleteAccountReauthTitle: 'Confirme que é você',
+    SharedStrings.deleteAccountReauthMessage:
+        'Digite sua senha para concluir a exclusão. Se você entra com o Google, use o botão abaixo.',
+    SharedStrings.deleteAccountPasswordLabel: 'Senha atual',
+    SharedStrings.deleteAccountGoogleButton: 'Confirmar com o Google',
+    SharedStrings.deleteAccountWrongCredential: 'Senha incorreta. A conta não foi excluída.',
     SharedStrings.countryBrazil: 'Brasil',
     SharedStrings.countryPortugal: 'Portugal',
     SharedStrings.languagePt: 'Português (Brasil)',
@@ -675,6 +681,12 @@ const Map<String, Map<String, String>> sharedCopy = {
     SharedStrings.deleteAccountConfirmTitle: 'Delete account?',
     SharedStrings.deleteAccountConfirmMessage:
         'This permanently deletes your Petrimonium account and everything in it — Wallet, Academy and Health, including your Pet. This cannot be undone.',
+    SharedStrings.deleteAccountReauthTitle: 'Confirm it is you',
+    SharedStrings.deleteAccountReauthMessage:
+        'Enter your password to finish deleting the account. If you sign in with Google, use the button below.',
+    SharedStrings.deleteAccountPasswordLabel: 'Current password',
+    SharedStrings.deleteAccountGoogleButton: 'Confirm with Google',
+    SharedStrings.deleteAccountWrongCredential: 'Wrong password. The account was not deleted.',
     SharedStrings.countryBrazil: 'Brazil',
     SharedStrings.countryPortugal: 'Portugal',
     SharedStrings.languagePt: 'Português (Brasil)',
@@ -1174,6 +1186,12 @@ const Map<String, Map<String, String>> sharedCopy = {
     SharedStrings.deleteAccountConfirmTitle: '¿Eliminar la cuenta?',
     SharedStrings.deleteAccountConfirmMessage:
         'Esto elimina definitivamente tu cuenta Petrimonium y todo lo que contiene — Wallet, Academy y Health, incluido tu Pet. No se puede deshacer.',
+    SharedStrings.deleteAccountReauthTitle: 'Confirma que eres tú',
+    SharedStrings.deleteAccountReauthMessage:
+        'Escribe tu contraseña para completar la eliminación. Si entras con Google, usa el botón de abajo.',
+    SharedStrings.deleteAccountPasswordLabel: 'Contraseña actual',
+    SharedStrings.deleteAccountGoogleButton: 'Confirmar con Google',
+    SharedStrings.deleteAccountWrongCredential: 'Contraseña incorrecta. La cuenta no se eliminó.',
     SharedStrings.countryBrazil: 'Brasil',
     SharedStrings.countryPortugal: 'Portugal',
     SharedStrings.languagePt: 'Português (Brasil)',

@@ -142,6 +142,11 @@ class SharedStrings {
   static const String deleteAccountButton = 'deleteAccountButton';
   static const String deleteAccountConfirmTitle = 'deleteAccountConfirmTitle';
   static const String deleteAccountConfirmMessage = 'deleteAccountConfirmMessage';
+  static const String deleteAccountReauthTitle = 'deleteAccountReauthTitle';
+  static const String deleteAccountReauthMessage = 'deleteAccountReauthMessage';
+  static const String deleteAccountPasswordLabel = 'deleteAccountPasswordLabel';
+  static const String deleteAccountGoogleButton = 'deleteAccountGoogleButton';
+  static const String deleteAccountWrongCredential = 'deleteAccountWrongCredential';
   static const String countryBrazil = 'countryBrazil';
   static const String countryPortugal = 'countryPortugal';
   static const String languagePt = 'languagePt';

@@ -162,9 +162,17 @@ class ApiClient {
     );
   }
 
-  Future<http.Response> delete(String endpoint) {
+  /// [body] is optional because most deletes identify their target entirely
+  /// by URL. It exists for the one case that cannot: an operation that must
+  /// re-prove the caller's identity (account deletion sends the current
+  /// password or a fresh Google ID token), where the credential belongs in
+  /// the body rather than the path or a query string — a URL is logged by
+  /// proxies and kept in history in a way a request body is not.
+  Future<http.Response> delete(String endpoint, {dynamic body}) {
     return _sendWithAuth(
-      (headers) => _client.delete(Uri.parse('$_baseUrl$endpoint'), headers: headers).timeout(_requestTimeout),
+      (headers) => _client
+          .delete(Uri.parse('$_baseUrl$endpoint'), headers: headers, body: body == null ? null : jsonEncode(body))
+          .timeout(_requestTimeout),
     );
   }
 
