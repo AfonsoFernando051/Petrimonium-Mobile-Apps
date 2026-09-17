@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../features/health/domain/pet_species.dart';
 import '../../features/health/presentation/health_controller.dart';
 import '../../features/mentor/presentation/mentor_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
@@ -89,7 +90,7 @@ class _TopBar extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.all(3),
-                child: ClipOval(child: Image.asset('assets/pets/fox.png', fit: BoxFit.contain)),
+                child: ClipOval(child: Image.asset(PetSpecies.fox.assetPath, fit: BoxFit.contain)),
               ),
               const SizedBox(width: 8),
               Expanded(

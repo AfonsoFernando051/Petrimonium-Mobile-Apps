@@ -5,6 +5,7 @@ import '../../../core/theme/health_theme.dart';
 import '../../../core/widgets/health_widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../health/domain/mentor_models.dart';
+import '../../health/domain/pet_species.dart';
 import '../../health/presentation/health_controller.dart';
 
 /// `tabIsMentor` — the shared Mentor, wired to the real `POST /api/mentor/chat`
@@ -108,7 +109,7 @@ class _MentorHeader extends StatelessWidget {
               gradient: RadialGradient(colors: [Color(0x38C5ABFF), Color(0x14C1502E), Colors.transparent]),
             ),
             alignment: Alignment.center,
-            child: ClipOval(child: Image.asset('assets/pets/fox.png', width: 40, height: 40, fit: BoxFit.contain)),
+            child: ClipOval(child: Image.asset(PetSpecies.fox.assetPath, width: 40, height: 40, fit: BoxFit.contain)),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -156,7 +157,7 @@ class _EmptyState extends StatelessWidget {
               gradient: RadialGradient(colors: [Color(0x38C5ABFF), Color(0x14C1502E), Colors.transparent]),
             ),
             alignment: Alignment.center,
-            child: ClipOval(child: Image.asset('assets/pets/fox.png', width: 40, height: 40, fit: BoxFit.contain)),
+            child: ClipOval(child: Image.asset(PetSpecies.fox.assetPath, width: 40, height: 40, fit: BoxFit.contain)),
           ),
           const SizedBox(height: 16),
           Text(

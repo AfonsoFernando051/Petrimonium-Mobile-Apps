@@ -4,6 +4,7 @@ import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import '../../../core/app/health_scope.dart';
 import '../../../core/theme/health_theme.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../health/domain/pet_species.dart';
 import '../../health/presentation/health_controller.dart';
 
 /// `subIsProfile`. Regional settings persist in the Health profile while the
@@ -36,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  ClipOval(child: Image.asset('assets/pets/fox.png', width: 26, height: 26, fit: BoxFit.contain)),
+                  ClipOval(child: Image.asset(PetSpecies.fox.assetPath, width: 26, height: 26, fit: BoxFit.contain)),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -59,7 +60,7 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        ClipOval(child: Image.asset('assets/pets/fox.png', width: 48, height: 48, fit: BoxFit.contain)),
+                        ClipOval(child: Image.asset(PetSpecies.fox.assetPath, width: 48, height: 48, fit: BoxFit.contain)),
                         const SizedBox(width: 14),
                         Expanded(
                           child: Column(

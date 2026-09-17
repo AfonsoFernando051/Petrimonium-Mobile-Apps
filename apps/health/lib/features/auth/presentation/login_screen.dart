@@ -4,6 +4,7 @@ import '../../../core/app/health_scope.dart';
 import '../../../core/theme/health_theme.dart';
 import '../../../core/widgets/health_widgets.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../health/domain/pet_species.dart';
 import '../../health/presentation/health_controller.dart';
 
 /// Login/cadastro screen — `Petrimonium Health.dc.html`'s `screenIsLogin`.
@@ -80,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       // Sem recorte circular: a arte do mascote já vem com
                       // fundo transparente e assenta direto sobre o fundo.
-                      Image.asset('assets/pets/fox.png', height: 96, fit: BoxFit.contain),
+                      Image.asset(PetSpecies.fox.assetPath, height: 96, fit: BoxFit.contain),
                       const SizedBox(height: 14),
                       Text(
                         'PETRIMONIUM HEALTH',

@@ -8,6 +8,7 @@ import '../../../core/widgets/health_widgets.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../health/domain/category_catalog.dart';
 import '../../health/domain/health_models.dart';
+import '../../health/domain/pet_species.dart';
 import '../../health/presentation/health_controller.dart';
 
 /// `tabIsHome` — the Health dashboard. Every figure comes straight from
@@ -149,7 +150,7 @@ class _MentorInsightCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              ClipOval(child: Image.asset('assets/pets/fox.png', width: 24, height: 24, fit: BoxFit.contain)),
+              ClipOval(child: Image.asset(PetSpecies.fox.assetPath, width: 24, height: 24, fit: BoxFit.contain)),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
