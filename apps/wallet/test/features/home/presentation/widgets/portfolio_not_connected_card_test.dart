@@ -94,9 +94,7 @@ void main() {
   }
 
   group('PortfolioNotConnectedCard — Início (home) variant', () {
-    testWidgets('renders the companion badge/caption, title, body, KPI placeholders and both connect CTAs', (
-      tester,
-    ) async {
+    testWidgets('renders the companion badge/caption, title, body and KPI placeholders', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
@@ -117,8 +115,11 @@ void main() {
       expect(find.text('Proventos'), findsOneWidget);
       expect(find.text('Insights'), findsOneWidget);
       expect(find.text('Adicionar primeiro investimento'), findsOneWidget);
-      expect(find.text('Conectar com a B3'), findsOneWidget);
-      expect(find.text('EM BREVE'), findsOneWidget);
+      // B3 sync is intentionally hidden behind kShowB3ConnectRow until the
+      // app has revenue to justify an Open Finance aggregator's cost — see
+      // that flag's doc comment.
+      expect(find.text('Conectar com a B3'), findsNothing);
+      expect(find.text('EM BREVE'), findsNothing);
     });
 
     testWidgets('tapping the CTA navigates to AddAssetScreen', (tester) async {
@@ -134,7 +135,12 @@ void main() {
       expect(find.byType(AddAssetScreen), findsOneWidget);
     });
 
-    testWidgets('tapping the B3 row shows a coming-soon snack instead of navigating', (tester) async {
+    testWidgets('tapping the B3 row shows a coming-soon snack instead of navigating, once re-enabled', (tester) async {
+      // Row is hidden by default (see kShowB3ConnectRow's doc comment); flip it
+      // on here to keep the real tap behavior covered while it's dormant.
+      kShowB3ConnectRow = true;
+      addTearDown(() => kShowB3ConnectRow = false);
+
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
@@ -160,9 +166,9 @@ void main() {
       );
       expect(find.text('COMPANION'), findsNothing);
       expect(find.text('Insights'), findsNothing);
-      // The CTA into AddAssetScreen and the B3 row are still shared.
+      // The CTA into AddAssetScreen is shared; the B3 row is hidden (kShowB3ConnectRow).
       expect(find.text('Adicionar primeiro investimento'), findsOneWidget);
-      expect(find.text('Conectar com a B3'), findsOneWidget);
+      expect(find.text('Conectar com a B3'), findsNothing);
     });
   });
 }

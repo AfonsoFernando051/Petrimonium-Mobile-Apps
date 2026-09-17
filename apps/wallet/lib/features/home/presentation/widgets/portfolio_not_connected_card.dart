@@ -101,8 +101,7 @@ class PortfolioNotConnectedCard extends StatelessWidget {
             Navigator.of(context).push(MaterialPageRoute(builder: (_) => AddAssetScreen(controller: controller)));
           },
         ),
-        const SizedBox(height: 10),
-        _B3ConnectRow(tokens: tokens),
+        if (kShowB3ConnectRow) ...[const SizedBox(height: 10), _B3ConnectRow(tokens: tokens)],
       ],
     );
   }
@@ -217,10 +216,23 @@ class _EmptyKpiPlaceholderGrid extends StatelessWidget {
   }
 }
 
-/// The B3-sync option — always visible so the user knows a second, automatic
-/// way of bringing in assets is planned, but there is no real integration to
-/// open yet (see class doc), so tapping only acknowledges that with a
-/// "coming soon" snack instead of navigating anywhere.
+/// Kept off for now: a real B3 sync (via an Open Finance aggregator like
+/// Pluggy) costs real money per connected account, and there's no revenue
+/// yet to justify that spend — see the backend's `B3RealPortfolioSyncAdapter`
+/// doc for the matching decision on that side. Flip this back to `true`
+/// once the app is generating revenue and B3 sync becomes worth building;
+/// the row itself, its strings, and the "coming soon" copy all stay intact
+/// so re-enabling is a one-line change, not a rebuild. Deliberately a
+/// mutable top-level var, not `const` — `portfolio_not_connected_card_test.dart`
+/// flips it on to keep exercising the real tap-to-snack behavior while it's
+/// hidden from production users.
+bool kShowB3ConnectRow = false;
+
+/// The B3-sync option — when [kShowB3ConnectRow] is on, always visible so
+/// the user knows a second, automatic way of bringing in assets is planned,
+/// but there is no real integration to open yet (see class doc), so tapping
+/// only acknowledges that with a "coming soon" snack instead of navigating
+/// anywhere.
 class _B3ConnectRow extends StatelessWidget {
   const _B3ConnectRow({required this.tokens});
 
