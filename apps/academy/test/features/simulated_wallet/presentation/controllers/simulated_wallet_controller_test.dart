@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/data/datasources/simulated_wallet_remote_datasource.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/asset_quote.dart';
@@ -36,10 +38,19 @@ class FakeSimulatedWalletRepository extends SimulatedWalletRepository {
   Map<String, AssetQuote?> quotesByTicker = {};
   Set<String> quoteErrorTickers = {};
 
+  List<SimulatedOrder> ordersToReturn = [];
+  Object? fetchOrdersError;
+
   @override
   Future<SimulatedPortfolioSummary> fetchPortfolio() async {
     if (fetchError != null) throw fetchError!;
     return portfolioToReturn;
+  }
+
+  @override
+  Future<List<SimulatedOrder>> fetchOrders() async {
+    if (fetchOrdersError != null) throw fetchOrdersError!;
+    return ordersToReturn;
   }
 
   @override
@@ -91,6 +102,7 @@ void main() {
   late SimulatedWalletController controller;
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
     repository = FakeSimulatedWalletRepository();
     controller = SimulatedWalletController(repository: repository);
   });
@@ -211,7 +223,7 @@ void main() {
     });
   });
 
-  group('loadPortfolio — position quotes and totals', () {
+  group('loadPortfolio — position quotes, holdings and totals', () {
     SimulatedPosition position({required String ticker, double quantity = 10, double costBasis = 300}) {
       return SimulatedPosition(
         ticker: ticker,
@@ -266,6 +278,8 @@ void main() {
       await controller.loadPortfolio();
 
       expect(controller.positionQuotes, isEmpty);
+      expect(controller.holdings, isEmpty);
+      expect(controller.allocation, isEmpty);
       expect(controller.totalPatrimony, 0);
       expect(controller.totalProfitPercent, 0);
     });
@@ -286,6 +300,76 @@ void main() {
       await controller.placeOrder(ticker: 'PETR4', side: SimulatedOrderSide.buy, quantity: 10);
 
       expect(controller.positionQuotes.single.currentValue, 400);
+    });
+
+    test('builds holdings and an allocation slice per B3-classified type, from real ticker positions', () async {
+      repository.portfolioToReturn = SimulatedPortfolioSummary(
+        virtualBalance: 0,
+        initialBalance: 10000,
+        currency: 'BRL',
+        resetAt: null,
+        positions: [
+          position(ticker: 'PETR4', quantity: 10, costBasis: 300), // STOCKS
+          position(ticker: 'HGLG11', quantity: 2, costBasis: 200), // REAL_ESTATE
+        ],
+      );
+
+      await controller.loadPortfolio();
+
+      expect(controller.holdings, hasLength(2));
+      expect(
+        controller.allocation.map((s) => s.type),
+        containsAll([InvestmentTypeEnum.STOCKS, InvestmentTypeEnum.REAL_ESTATE]),
+      );
+    });
+
+    test('a ticker with a stored type override uses it over the B3 classifier', () async {
+      repository.portfolioToReturn = SimulatedPortfolioSummary(
+        virtualBalance: 0,
+        initialBalance: 10000,
+        currency: 'BRL',
+        resetAt: null,
+        positions: [position(ticker: 'PETR4', quantity: 10, costBasis: 300)],
+      );
+      await controller.setTickerType('PETR4', InvestmentTypeEnum.OTHERS);
+
+      await controller.loadPortfolio();
+
+      expect(controller.holdings.single.type, InvestmentTypeEnum.OTHERS);
+    });
+
+    test('an order-history fetch failure never breaks the portfolio load', () async {
+      repository.portfolioToReturn = SimulatedPortfolioSummary(
+        virtualBalance: 0,
+        initialBalance: 10000,
+        currency: 'BRL',
+        resetAt: null,
+        positions: [position(ticker: 'PETR4', quantity: 10, costBasis: 300)],
+      );
+      repository.fetchOrdersError = Exception('network down');
+
+      await controller.loadPortfolio();
+
+      expect(controller.error, isNull);
+      expect(controller.holdings, hasLength(1));
+    });
+
+    test('monthlyWealth12m has a bar for the current month, ending at today\'s real value', () async {
+      repository.portfolioToReturn = SimulatedPortfolioSummary(
+        virtualBalance: 0,
+        initialBalance: 10000,
+        currency: 'BRL',
+        resetAt: DateTime.now().subtract(const Duration(days: 10)),
+        positions: [position(ticker: 'PETR4', quantity: 10, costBasis: 300)],
+      );
+      repository.quotesByTicker = {
+        'PETR4': const AssetQuote(symbol: 'PETR4', shortName: null, regularMarketPrice: 35, currency: 'BRL'),
+      };
+
+      await controller.loadPortfolio();
+
+      expect(controller.monthlyWealth12m, isNotEmpty);
+      expect(controller.monthlyWealth12m.last.portfolioValue, 350);
     });
   });
 }

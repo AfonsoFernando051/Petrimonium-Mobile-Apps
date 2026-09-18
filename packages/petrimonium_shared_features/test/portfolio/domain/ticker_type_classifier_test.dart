@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_wallet/features/investment/domain/services/ticker_type_classifier.dart';
 
 void main() {
   group('TickerTypeClassifier.classify', () {

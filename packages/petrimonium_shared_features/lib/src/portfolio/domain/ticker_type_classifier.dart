@@ -1,4 +1,4 @@
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'investment_type_enum.dart';
 
 /// Best-effort classification of a B3 ticker's asset type from its suffix,
 /// mirroring the backend heuristic in `AssetDetailsResponseMapper
@@ -10,6 +10,9 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// code (free text like "Tesouro Selic 2029" or "CDB Banco X", crypto
 /// symbols, BDRs, ETFs/units with ambiguous suffixes) — those types are
 /// never second-guessed by this heuristic.
+///
+/// Shared between Wallet's real `AddAssetScreen` and Academy's simulated
+/// order screen — the same B3 ticker syntax rule holds for both.
 class TickerTypeClassifier {
   TickerTypeClassifier._();
 

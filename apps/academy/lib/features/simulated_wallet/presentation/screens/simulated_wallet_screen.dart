@@ -8,15 +8,24 @@ import 'package:petrimonium_academy/features/simulated_wallet/presentation/contr
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/screens/place_simulated_order_screen.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/reset_simulated_wallet_dialog.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_allocation_donut_card.dart';
-import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_position_tile.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_holdings_section.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_wallet_kpi_header.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulation_disclaimer_banner.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/wealth_evolution_bar_card.dart';
 
 /// Academy's "Carteira" tab — a fictitious wallet with a virtual starting
 /// balance, entirely separate from any real investment account. Never
 /// imports from `features/portfolio` or `features/investment` (Wallet's real
 /// domain); talks only to `SimulatedWalletController`/`SimulatedWalletRepository`
 /// (backend `simulated_portfolio` context).
+///
+/// Mirrors Wallet's real `CarteiraScreen` layout — patrimônio header, wealth
+/// evolution chart, allocation donut, holdings grouped by investment type —
+/// so a student building a simulated portfolio "however they see fit" (any
+/// ticker, any asset type) sees the same shape they'd get with a real one.
+/// Like `CarteiraScreen`, it owns no `Scaffold`/`AppBar` of its own — this is
+/// embedded directly in `DashboardScreen`'s shared chrome; its own in-body
+/// header row carries the title/reset/add-asset actions instead.
 class SimulatedWalletScreen extends StatefulWidget {
   const SimulatedWalletScreen({super.key, required this.controller});
 
@@ -71,91 +80,117 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
   @override
   Widget build(BuildContext context) {
     final controller = widget.controller;
-    final tokens = context.colors;
 
-    Widget body;
     if (controller.isLoading && controller.portfolio.positions.isEmpty && controller.error == null) {
-      body = const AppLoadingIndicator();
-    } else if (controller.error != null) {
-      body = ErrorStateView(
+      return const AppLoadingIndicator();
+    }
+
+    if (controller.error != null) {
+      return ErrorStateView(
         retryLabel: Translator.translate(AppStrings.retryButtonLabel),
         title: Translator.translate(AppStrings.simulatedWalletTitle),
         message: controller.error!,
         onRetry: controller.loadPortfolio,
         style: ErrorStateStyle.card,
       );
-    } else {
-      final hasPositions = controller.portfolio.positions.isNotEmpty;
-      body = RefreshIndicator(
-        onRefresh: controller.refresh,
-        child: ListView(
-          padding: const EdgeInsets.all(AppSpacing.md),
+    }
+
+    final tokens = context.colors;
+
+    return RefreshIndicator(
+      color: tokens.primary,
+      backgroundColor: tokens.surfaceElevated,
+      onRefresh: controller.refresh,
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            _buildHeader(),
+            const SizedBox(height: 16),
             const SimulationDisclaimerBanner(),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: 16),
             SimulatedWalletKpiHeader(
               totalPatrimony: controller.totalPatrimony,
               totalProfit: controller.totalProfit,
               totalProfitPercent: controller.totalProfitPercent,
               virtualBalance: controller.portfolio.virtualBalance,
             ),
-            const SizedBox(height: AppSpacing.md),
-            if (hasPositions) ...[
-              SimulatedAllocationDonutCard(
-                positionQuotes: controller.positionQuotes,
-                totalValue: controller.totalPositionsValue,
-              ),
-              const SizedBox(height: AppSpacing.md),
-            ],
-            GlassCard(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Translator.translate(AppStrings.simulatedWalletPositionsTitle),
-                    style: AppTextStyles.title.copyWith(color: tokens.textPrimary),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  if (!hasPositions)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-                      child: Text(
-                        Translator.translate(AppStrings.simulatedWalletNoPositions),
-                        style: AppTextStyles.body.copyWith(color: tokens.textSecondary),
-                      ),
-                    )
-                  else
-                    for (final quote in controller.positionQuotes) SimulatedPositionTile(quote: quote),
-                ],
-              ),
+            const SizedBox(height: 16),
+            WealthEvolutionBarCard(series: controller.monthlyWealth12m),
+            const SizedBox(height: 16),
+            SimulatedAllocationDonutCard(allocation: controller.allocation, totalValue: controller.totalPositionsValue),
+            const SizedBox(height: 16),
+            SimulatedHoldingsSection(
+              holdings: controller.holdings,
+              totalPortfolioValue: controller.totalPositionsValue,
             ),
-            const SizedBox(height: AppSpacing.xxxl),
+            const SizedBox(height: 32),
           ],
         ),
-      );
-    }
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Text(Translator.translate(AppStrings.simulatedWalletTitle)),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.restart_alt, color: tokens.textSecondary),
-            tooltip: Translator.translate(AppStrings.simulatedWalletResetAction),
-            onPressed: controller.isResetting ? null : _confirmReset,
-          ),
-        ],
       ),
-      body: body,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _openNewOrder,
-        icon: const Icon(Icons.swap_horiz),
-        label: Text(Translator.translate(AppStrings.simulatedWalletNewOrderAction)),
+    );
+  }
+
+  Widget _buildHeader() {
+    final tokens = context.colors;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                Translator.translate(AppStrings.simulatedWalletTitle),
+                style: TextStyle(color: tokens.textPrimary, fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                Translator.translate(AppStrings.simulatedWalletHeaderSubtitle),
+                style: TextStyle(color: tokens.textSecondary, fontSize: 12.5),
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.restart_alt, color: tokens.textSecondary),
+          tooltip: Translator.translate(AppStrings.simulatedWalletResetAction),
+          onPressed: widget.controller.isResetting ? null : _confirmReset,
+        ),
+        _AddAssetIconButton(onTap: _openNewOrder),
+      ],
+    );
+  }
+}
+
+/// The small "+ Adicionar" link that opens [PlaceSimulatedOrderScreen] —
+/// mirrors Wallet's real `AddAssetIconButton` spot in the header row.
+class _AddAssetIconButton extends StatelessWidget {
+  const _AddAssetIconButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.colors;
+    return InkWell(
+      borderRadius: BorderRadius.circular(999),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.add_circle_outline, size: 18, color: tokens.primary),
+            const SizedBox(width: 4),
+            Text(
+              Translator.translate(AppStrings.simulatedWalletAddAssetLabel),
+              style: TextStyle(color: tokens.primary, fontSize: 12, fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
       ),
     );
   }

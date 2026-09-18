@@ -2,31 +2,23 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_position_quote.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/models/investment_type_display.dart';
 
-/// "Alocação simulada" — a donut by *ticker*, not by asset category like
-/// Wallet's real `AllocationDonutCard`: the simulated portfolio has no
-/// asset-type classification for its tickers (see `SimulatedPosition`'s
-/// fields), so inventing one here would fabricate a category the backend
-/// never reported. A fixed, rotating palette stands in for the per-category
-/// color Wallet uses.
+/// "Ativos na carteira simulada" — a donut by [InvestmentTypeEnum]/
+/// [AllocationSlice], patrimônio in the hole, legend beside it. Ported from
+/// Wallet's real `AllocationDonutCard` — same layout, same category-color
+/// legend, fed by `SimulatedWalletController.allocation` (computed
+/// client-side from the reconstructed holdings, since the simulated backend
+/// has no dedicated allocation endpoint).
 class SimulatedAllocationDonutCard extends StatelessWidget {
-  const SimulatedAllocationDonutCard({super.key, required this.positionQuotes, required this.totalValue});
+  const SimulatedAllocationDonutCard({super.key, required this.allocation, required this.totalValue});
 
-  final List<SimulatedPositionQuote> positionQuotes;
+  final List<AllocationSlice> allocation;
   final double totalValue;
-
-  static const List<Color> _palette = [
-    AppColors.neonCyan,
-    AppColors.neonViolet,
-    AppColors.neonPink,
-    AppColors.goldenBorder,
-    AppColors.neonBlue,
-    AppColors.positiveGreen,
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -47,26 +39,28 @@ class SimulatedAllocationDonutCard extends StatelessWidget {
               style: AppTextStyles.bodyEmphasis.copyWith(color: tokens.textPrimary, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: AppSpacing.lg),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _Donut(positionQuotes: positionQuotes, totalValue: totalValue, palette: _palette),
-                const SizedBox(width: AppSpacing.lg),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (var i = 0; i < positionQuotes.length; i++)
-                        _LegendRow(
-                          quote: positionQuotes[i],
-                          totalValue: totalValue,
-                          color: _palette[i % _palette.length],
-                        ),
-                    ],
-                  ),
+            if (allocation.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+                child: Text(
+                  Translator.translate(AppStrings.simulatedWalletAllocationEmpty),
+                  style: AppTextStyles.label.copyWith(color: tokens.textSecondary),
                 ),
-              ],
-            ),
+              )
+            else
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _Donut(allocation: allocation, totalValue: totalValue),
+                  const SizedBox(width: AppSpacing.lg),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [for (final slice in allocation) _LegendRow(slice: slice)],
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
@@ -75,11 +69,10 @@ class SimulatedAllocationDonutCard extends StatelessWidget {
 }
 
 class _Donut extends StatelessWidget {
-  const _Donut({required this.positionQuotes, required this.totalValue, required this.palette});
+  const _Donut({required this.allocation, required this.totalValue});
 
-  final List<SimulatedPositionQuote> positionQuotes;
+  final List<AllocationSlice> allocation;
   final double totalValue;
-  final List<Color> palette;
 
   @override
   Widget build(BuildContext context) {
@@ -93,10 +86,10 @@ class _Donut extends StatelessWidget {
           PieChart(
             PieChartData(
               sections: [
-                for (var i = 0; i < positionQuotes.length; i++)
+                for (final slice in allocation)
                   PieChartSectionData(
-                    value: positionQuotes[i].valueOrCostBasis,
-                    color: palette[i % palette.length],
+                    value: slice.portfolioPercent,
+                    color: slice.type.color,
                     radius: 22,
                     showTitle: false,
                   ),
@@ -107,20 +100,35 @@ class _Donut extends StatelessWidget {
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeOutCubic,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                AppFormatters.currency(totalValue, showCents: false),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                Translator.translate(AppStrings.simulatedWalletAllocationCenterLabel),
                 style: TextStyle(
-                  color: tokens.textPrimary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  fontFeatures: const [FontFeature.tabularFigures()],
+                  color: tokens.textSecondary,
+                  fontSize: 9,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.5,
                 ),
               ),
-            ),
+              const SizedBox(height: 2),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    AppFormatters.currency(totalValue, showCents: false),
+                    style: TextStyle(
+                      color: tokens.textPrimary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -129,16 +137,13 @@ class _Donut extends StatelessWidget {
 }
 
 class _LegendRow extends StatelessWidget {
-  const _LegendRow({required this.quote, required this.totalValue, required this.color});
+  const _LegendRow({required this.slice});
 
-  final SimulatedPositionQuote quote;
-  final double totalValue;
-  final Color color;
+  final AllocationSlice slice;
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
-    final percent = totalValue == 0 ? 0.0 : (quote.valueOrCostBasis / totalValue) * 100;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.5),
       child: Row(
@@ -146,12 +151,12 @@ class _LegendRow extends StatelessWidget {
           Container(
             width: 8,
             height: 8,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            decoration: BoxDecoration(color: slice.type.color, shape: BoxShape.circle),
           ),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
-              quote.position.ticker,
+              slice.type.shortLabel,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: tokens.textSecondary, fontSize: 12),
@@ -159,7 +164,7 @@ class _LegendRow extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.xs),
           Text(
-            '${percent.toStringAsFixed(0)}%',
+            '${slice.portfolioPercent.toStringAsFixed(0)}%',
             style: TextStyle(
               color: tokens.textPrimary,
               fontSize: 12,

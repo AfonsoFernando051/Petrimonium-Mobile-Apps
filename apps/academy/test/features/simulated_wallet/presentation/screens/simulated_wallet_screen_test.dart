@@ -6,8 +6,11 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/screens/place_simulated_order_screen.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/screens/simulated_wallet_screen.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulation_disclaimer_banner.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/wealth_evolution_bar_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/simulated_wallet_repository_test.dart';
 
@@ -16,6 +19,7 @@ void main() {
   late SimulatedWalletController controller;
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
     remoteDataSource = FakeSimulatedWalletRemoteDataSource();
     controller = SimulatedWalletController(repository: SimulatedWalletRepository(remoteDataSource: remoteDataSource));
   });
@@ -25,7 +29,7 @@ void main() {
   Widget buildTestableWidget() {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: SimulatedWalletScreen(controller: controller),
+      home: Scaffold(body: SimulatedWalletScreen(controller: controller)),
     );
   }
 
@@ -37,7 +41,7 @@ void main() {
       expect(find.byType(AppLoadingIndicator), findsOneWidget);
     });
 
-    testWidgets('always shows the simulation disclaimer once loaded, on every load state', (tester) async {
+    testWidgets('shows the title/subtitle header and the simulation disclaimer once loaded', (tester) async {
       remoteDataSource.portfolioToReturn = {
         'virtualBalance': 10000.0,
         'initialBalance': 10000.0,
@@ -50,6 +54,8 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
+      expect(find.text(Translator.translate(AppStrings.simulatedWalletTitle)), findsOneWidget);
+      expect(find.text(Translator.translate(AppStrings.simulatedWalletHeaderSubtitle)), findsOneWidget);
       expect(find.byType(SimulationDisclaimerBanner), findsOneWidget);
       expect(find.text(Translator.translate(AppStrings.simulatedWalletDisclaimer)), findsOneWidget);
     });
@@ -70,13 +76,13 @@ void main() {
       await tester.pump();
 
       expect(find.textContaining('9.695,00'), findsOneWidget);
-      // Appears twice once positions exist: once in the allocation donut's
-      // legend, once in the holdings list below it.
-      expect(find.text('PETR4'), findsWidgets);
+      // Grouped by type now (STOCKS/"Ações"), not by ticker — the ticker
+      // itself only shows on its own row inside the expanded category.
+      expect(find.text('PETR4'), findsOneWidget);
       expect(find.byType(AppLoadingIndicator), findsNothing);
     });
 
-    testWidgets('shows the total patrimony and the allocation donut once positions exist', (tester) async {
+    testWidgets('shows the total patrimony, wealth chart and allocation donut once positions exist', (tester) async {
       remoteDataSource.portfolioToReturn = {
         'virtualBalance': 1000.0,
         'initialBalance': 10000.0,
@@ -95,8 +101,9 @@ void main() {
       // Patrimônio total: 1000 cash + 350 current value = 1350.
       expect(find.textContaining('1.350,00'), findsOneWidget);
       expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationTitle)), findsOneWidget);
-      // Unrealized gain shown both on the KPI pill and the position row:
-      // 350 - 300 = +50, +16.67%.
+      expect(find.byType(WealthEvolutionBarCard), findsOneWidget);
+      // Unrealized gain shown on the KPI pill, the category header and the
+      // asset row: 350 - 300 = +50, +16.67%.
       expect(find.textContaining('+16.67%'), findsWidgets);
     });
 
@@ -116,13 +123,12 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      // 250 current value - 300 cost basis = -50, -16.67%. Shown on both the
-      // KPI pill and the position row.
+      // 250 current value - 300 cost basis = -50, -16.67%.
       expect(find.textContaining('-R\$ 50,00'), findsWidgets);
       expect(find.textContaining('-16.67%'), findsWidgets);
     });
 
-    testWidgets('shows no allocation donut and no KPI crash when there are no positions', (tester) async {
+    testWidgets('shows the empty states of the donut/chart/holdings when there are no positions', (tester) async {
       remoteDataSource.portfolioToReturn = {
         'virtualBalance': 10000.0,
         'initialBalance': 10000.0,
@@ -135,19 +141,49 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationTitle)), findsNothing);
+      expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationTitle)), findsOneWidget);
+      expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationEmpty)), findsOneWidget);
       expect(find.text(Translator.translate(AppStrings.simulatedWalletNoPositions)), findsOneWidget);
     });
 
-    testWidgets('the FAB never labels itself as a real order', (tester) async {
+    testWidgets('the "add asset" action never labels itself as a real order, and opens the order screen', (
+      tester,
+    ) async {
+      remoteDataSource.portfolioToReturn = {
+        'virtualBalance': 10000.0,
+        'initialBalance': 10000.0,
+        'currency': 'BRL',
+        'resetAt': null,
+        'positions': <Map<String, dynamic>>[],
+      };
       await controller.loadPortfolio();
 
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      final fabLabel = Translator.translate(AppStrings.simulatedWalletNewOrderAction).toLowerCase();
-      expect(fabLabel, isNot(contains('real')));
-      expect(find.text(Translator.translate(AppStrings.simulatedWalletNewOrderAction)), findsOneWidget);
+      final addLabel = Translator.translate(AppStrings.simulatedWalletAddAssetLabel);
+      expect(addLabel.toLowerCase(), isNot(contains('real')));
+
+      await tester.tap(find.text(addLabel));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(PlaceSimulatedOrderScreen), findsOneWidget);
+    });
+
+    testWidgets('the reset icon is present and disabled while a reset is in flight', (tester) async {
+      remoteDataSource.portfolioToReturn = {
+        'virtualBalance': 10000.0,
+        'initialBalance': 10000.0,
+        'currency': 'BRL',
+        'resetAt': null,
+        'positions': <Map<String, dynamic>>[],
+      };
+      await controller.loadPortfolio();
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      expect(find.byTooltip(Translator.translate(AppStrings.simulatedWalletResetAction)), findsOneWidget);
     });
   });
 }

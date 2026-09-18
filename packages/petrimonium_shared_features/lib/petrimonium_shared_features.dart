@@ -89,6 +89,7 @@ export 'src/portfolio/domain/portfolio_health_calculator.dart';
 export 'src/portfolio/domain/portfolio_stats.dart';
 export 'src/portfolio/domain/portfolio_summary.dart';
 export 'src/portfolio/domain/price_status.dart';
+export 'src/portfolio/domain/ticker_type_classifier.dart';
 export 'src/portfolio/domain/wealth_history_calculator.dart';
 export 'src/settings/data/settings_remote_datasource.dart';
 export 'src/settings/presentation/account_section.dart';

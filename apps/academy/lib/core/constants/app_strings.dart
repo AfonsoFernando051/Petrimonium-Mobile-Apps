@@ -468,9 +468,7 @@ class AppStrings {
   static const String simulatedWalletTitle = 'simulatedWalletTitle';
   static const String simulatedWalletDisclaimer = 'simulatedWalletDisclaimer';
   static const String simulatedWalletVirtualBalanceLabel = 'simulatedWalletVirtualBalanceLabel';
-  static const String simulatedWalletPositionsTitle = 'simulatedWalletPositionsTitle';
   static const String simulatedWalletNoPositions = 'simulatedWalletNoPositions';
-  static const String simulatedWalletNewOrderAction = 'simulatedWalletNewOrderAction';
   static const String simulatedWalletResetAction = 'simulatedWalletResetAction';
   static const String simulatedWalletResetConfirmTitle = 'simulatedWalletResetConfirmTitle';
   static const String simulatedWalletResetConfirmMessage = 'simulatedWalletResetConfirmMessage';
@@ -490,6 +488,21 @@ class AppStrings {
   static const String simulatedWalletResultLabel = 'simulatedWalletResultLabel';
   static const String simulatedWalletReturnLabel = 'simulatedWalletReturnLabel';
   static const String simulatedWalletPriceUnavailable = 'simulatedWalletPriceUnavailable';
+  static const String simulatedWalletHeaderSubtitle = 'simulatedWalletHeaderSubtitle';
+  static const String simulatedWalletAddAssetLabel = 'simulatedWalletAddAssetLabel';
+  static const String simulatedWalletMyAssetsLabel = 'simulatedWalletMyAssetsLabel';
+  static const String simulatedWalletAllocationEmpty = 'simulatedWalletAllocationEmpty';
+  static const String simulatedWalletAllocationCenterLabel = 'simulatedWalletAllocationCenterLabel';
+  static const String simulatedWalletWealthBarsTitle = 'simulatedWalletWealthBarsTitle';
+  static const String simulatedWalletWealthBarsRangeChip = 'simulatedWalletWealthBarsRangeChip';
+  static const String simulatedWalletWealthBarsLegendInvested = 'simulatedWalletWealthBarsLegendInvested';
+  static const String simulatedWalletWealthBarsLegendGain = 'simulatedWalletWealthBarsLegendGain';
+  static const String simulatedWalletWealthBarsLegendShortfall = 'simulatedWalletWealthBarsLegendShortfall';
+  static const String simulatedWalletWealthBarsEmpty = 'simulatedWalletWealthBarsEmpty';
+  static const String simulatedWalletSelectTypeError = 'simulatedWalletSelectTypeError';
+  static const String simulatedWalletTypeMismatchWarning = 'simulatedWalletTypeMismatchWarning';
+  static const String holdingQuoteUnavailable = 'holdingQuoteUnavailable';
+  static const String holdingNotQuoted = 'holdingNotQuoted';
 
   // Home redesign — learning-first hierarchy (docs/PRODUCT_VISION.md §8)
   static const String homeContinueLearningEyebrow = SharedStrings.homeContinueLearningEyebrow;

@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/data/repositories/simulated_ticker_type_store.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/asset_quote.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_order.dart';
@@ -7,6 +9,8 @@ import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/si
 import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_portfolio_summary.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_position.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_position_quote.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/services/monthly_wealth_series.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/services/simulated_lot_builder.dart';
 
 /// Owns all state for the simulated wallet (Academy's fictitious "Carteira"
 /// tab) — entirely separate from `PortfolioController`, which still owns
@@ -15,9 +19,12 @@ import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/si
 /// never touches `PortfolioRepository`/`InvestmentRepository` or any
 /// real_portfolio endpoint.
 class SimulatedWalletController extends ChangeNotifier {
-  SimulatedWalletController({required SimulatedWalletRepository repository}) : _repository = repository;
+  SimulatedWalletController({required SimulatedWalletRepository repository, SimulatedTickerTypeStore? typeStore})
+    : _repository = repository,
+      _typeStore = typeStore ?? SimulatedTickerTypeStore();
 
   final SimulatedWalletRepository _repository;
+  final SimulatedTickerTypeStore _typeStore;
 
   bool isLoading = true;
   String? error;
@@ -30,19 +37,63 @@ class SimulatedWalletController extends ChangeNotifier {
   /// [portfolio.positions]: recomputed by every call that reloads it.
   List<SimulatedPositionQuote> positionQuotes = [];
 
+  /// The simulated wallet's every executed order — the source of each
+  /// position's approximate purchase date (see `SimulatedLotBuilder`).
+  List<SimulatedOrder> orders = [];
+
+  /// One [InvestmentLot] per held ticker (see `SimulatedLotBuilder`'s class
+  /// doc for what's exact vs. approximated), recomputed alongside
+  /// [portfolio]/[positionQuotes]/[orders]. This is the shape the rest of
+  /// the Carteira design — `Holding.fromLots`, `WealthHistoryCalculator`,
+  /// allocation — already runs on for Wallet's real portfolio.
+  List<InvestmentLot> lots = [];
+
+  /// Holdings aggregated by ticker, same shared model Wallet's real Carteira
+  /// uses for its `HoldingsSection`.
+  List<Holding> get holdings => Holding.fromLots(lots);
+
+  /// Current value grouped by [InvestmentTypeEnum] — the allocation donut's
+  /// data, computed client-side since the simulated backend has no
+  /// dedicated allocation endpoint (unlike Wallet's real one).
+  List<AllocationSlice> get allocation {
+    final byType = <InvestmentTypeEnum, double>{};
+    for (final holding in holdings) {
+      byType[holding.type] = (byType[holding.type] ?? 0) + holding.currentValue;
+    }
+    final total = byType.values.fold(0.0, (sum, value) => sum + value);
+    final slices = byType.entries
+        .map(
+          (entry) => AllocationSlice(
+            type: entry.key,
+            currentValue: entry.value,
+            portfolioPercent: total == 0 ? 0 : (entry.value / total) * 100,
+          ),
+        )
+        .toList();
+    slices.sort((a, b) => b.currentValue.compareTo(a.currentValue));
+    return slices;
+  }
+
+  /// Trailing 12 months of the Wealth Evolution chart — a pure client-side
+  /// interpolation from each lot's purchase to its current price (see
+  /// `WealthHistoryCalculator`'s class doc: this needs no backend history
+  /// table, Wallet's own per-asset-type chart filter already works this
+  /// way).
+  List<MonthlyWealthPoint> get monthlyWealth12m =>
+      MonthlyWealthSeries.fromHistory(WealthHistoryCalculator.compute(lots, HistoryRange.y1));
+
   bool isPlacingOrder = false;
   String? orderError;
 
   bool isResetting = false;
   String? resetError;
 
-  /// Sum of every position's cost basis — "quanto foi investido", the
+  /// Sum of every holding's invested value — "quanto foi investido", the
   /// denominator for [totalProfitPercent].
-  double get totalCostBasis => portfolio.positions.fold(0.0, (sum, p) => sum + p.costBasis);
+  double get totalInvestedValue => holdings.fold(0.0, (sum, h) => sum + h.investedValue);
 
-  /// Sum of every position's current value, falling back to its cost basis
-  /// where the quote is unavailable (see [SimulatedPositionQuote.valueOrCostBasis]).
-  double get totalPositionsValue => positionQuotes.fold(0.0, (sum, q) => sum + q.valueOrCostBasis);
+  /// Sum of every holding's current value.
+  double get totalPositionsValue => holdings.fold(0.0, (sum, h) => sum + h.currentValue);
 
   /// Virtual cash still uninvested, plus every position at its current
   /// (or, failing that, cost) value — the single "patrimônio total" figure.
@@ -51,9 +102,9 @@ class SimulatedWalletController extends ChangeNotifier {
   /// Unrealized gain/loss across every position with a known price. A
   /// position with no quote contributes zero here (neither a gain nor a
   /// loss), never a fabricated figure.
-  double get totalProfit => totalPositionsValue - totalCostBasis;
+  double get totalProfit => totalPositionsValue - totalInvestedValue;
 
-  double get totalProfitPercent => totalCostBasis == 0 ? 0 : (totalProfit / totalCostBasis) * 100;
+  double get totalProfitPercent => totalInvestedValue == 0 ? 0 : (totalProfit / totalInvestedValue) * 100;
 
   Future<void> loadPortfolio() async {
     isLoading = true;
@@ -62,13 +113,34 @@ class SimulatedWalletController extends ChangeNotifier {
 
     try {
       portfolio = await _repository.fetchPortfolio();
-      positionQuotes = await _fetchPositionQuotes(portfolio.positions);
+      await _refreshDerivedState();
     } catch (e) {
       error = friendlyErrorMessage(e);
     }
 
     isLoading = false;
     notifyListeners();
+  }
+
+  /// Re-fetches every held ticker's quote and the order history, then
+  /// rebuilds [lots] from them — everything [holdings]/[allocation]/
+  /// [monthlyWealth12m] depend on. Called after every successful mutation of
+  /// [portfolio] (initial load, a placed order, a reset).
+  Future<void> _refreshDerivedState() async {
+    final positions = portfolio.positions;
+    final results = await Future.wait([_fetchPositionQuotes(positions), _fetchOrders()]);
+    positionQuotes = results[0] as List<SimulatedPositionQuote>;
+    orders = results[1] as List<SimulatedOrder>;
+
+    final types = await Future.wait(positions.map((p) => _resolveType(p.ticker)));
+    final typeByTicker = {for (var i = 0; i < positions.length; i++) positions[i].ticker: types[i]};
+
+    lots = SimulatedLotBuilder.build(
+      portfolio: portfolio,
+      quotes: positionQuotes,
+      orders: orders,
+      typeOf: (ticker) => typeByTicker[ticker] ?? InvestmentTypeEnum.OTHERS,
+    );
   }
 
   /// Fetches every held ticker's current quote in parallel. A single ticker
@@ -86,6 +158,41 @@ class SimulatedWalletController extends ChangeNotifier {
       return SimulatedPositionQuote(position: position, currentPrice: null);
     }
   }
+
+  /// The order history is only used for each lot's approximate purchase
+  /// date — losing it is cosmetic (falls back to the reset date, see
+  /// `SimulatedLotBuilder`), never fatal to the portfolio load.
+  Future<List<SimulatedOrder>> _fetchOrders() async {
+    try {
+      return await _repository.fetchOrders();
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// A ticker's investment type for display: the student's own past choice
+  /// first, then the B3-suffix classifier, defaulting to [InvestmentTypeEnum
+  /// .OTHERS] only as a last resort (a [Holding]/[InvestmentLot] can't be
+  /// typeless). Contrast with [resolveDefaultType], which leaves this `null`
+  /// so the order screen's type grid asks rather than silently guessing.
+  Future<InvestmentTypeEnum> _resolveType(String ticker) async {
+    return await resolveDefaultType(ticker) ?? InvestmentTypeEnum.OTHERS;
+  }
+
+  /// The type to pre-select on the order screen's type grid for [ticker]:
+  /// the student's own stored choice if there is one, else the B3-suffix
+  /// classifier's best guess, else `null` (ambiguous — the student must
+  /// pick). Never silently overrides an explicit stored choice.
+  Future<InvestmentTypeEnum?> resolveDefaultType(String ticker) async {
+    final stored = await _typeStore.getStoredType(ticker);
+    return stored ?? TickerTypeClassifier.classify(ticker);
+  }
+
+  /// Persists the student's chosen type for [ticker] — called by the order
+  /// screen right before [placeOrder]. Keyed by ticker only (see
+  /// `SimulatedTickerTypeStore`'s class doc: a wallet reset never forgets
+  /// what kind of asset a ticker is).
+  Future<void> setTickerType(String ticker, InvestmentTypeEnum type) => _typeStore.setType(ticker, type);
 
   Future<void> refresh() => loadPortfolio();
 
@@ -105,7 +212,7 @@ class SimulatedWalletController extends ChangeNotifier {
     try {
       result = await _repository.placeOrder(ticker: ticker, side: side, quantity: quantity);
       portfolio = await _repository.fetchPortfolio();
-      positionQuotes = await _fetchPositionQuotes(portfolio.positions);
+      await _refreshDerivedState();
     } catch (e) {
       orderError = friendlyErrorMessage(e);
     }
@@ -129,7 +236,7 @@ class SimulatedWalletController extends ChangeNotifier {
     try {
       await _repository.reset();
       portfolio = await _repository.fetchPortfolio();
-      positionQuotes = await _fetchPositionQuotes(portfolio.positions);
+      await _refreshDerivedState();
       succeeded = true;
     } catch (e) {
       resetError = friendlyErrorMessage(e);
