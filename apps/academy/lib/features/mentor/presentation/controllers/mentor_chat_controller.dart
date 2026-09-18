@@ -2,9 +2,15 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_academy/core/utils/friendly_error_message.dart';
 import 'package:petrimonium_academy/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium_academy/features/mentor/domain/entities/chat_message.dart';
+
+/// Which moment of the Mentor stage is on screen. The Mentor tab shows one
+/// exchange at a time around the pet instead of a scrolling timeline, so the
+/// screen needs "where are we" rather than the raw message list.
+enum MentorStagePhase { welcome, thinking, talking }
 
 const String _fallbackErrorReply = 'Hmm, algo deu errado ao pensar na resposta 🐾 Vamos tentar de novo daqui a pouco?';
 
@@ -14,7 +20,7 @@ const String _fallbackErrorReply = 'Hmm, algo deu errado ao pensar na resposta �
 /// documented future step, not implemented in Phase 1 — see
 /// docs/AI_MENTOR.md). `conversationId` is `null` for a fresh/unsaved chat —
 /// the backend creates the conversation lazily on the first sent message.
-class MentorChatController extends ChangeNotifier {
+class MentorChatController extends ChangeNotifier with SafeChangeNotifier {
   MentorChatController({required MentorChatRepository repository}) : _repository = repository;
 
   final MentorChatRepository _repository;
@@ -24,13 +30,52 @@ class MentorChatController extends ChangeNotifier {
   bool _isSending = false;
   bool _isLoadingHistory = true;
   List<String> _suggestedPrompts = const [];
+  String? _topic;
   Timer? _revealTimer;
+  String? _revealingMessageId;
 
   int? get conversationId => _conversationId;
   List<ChatMessage> get messages => List.unmodifiable(_messages);
   bool get isSending => _isSending;
   bool get isLoadingHistory => _isLoadingHistory;
   List<String> get suggestedPrompts => List.unmodifiable(_suggestedPrompts);
+
+  /// The backend's title for the open conversation, shown as the stage card's
+  /// topic pill. Only a send returns it — a resumed conversation has none, and
+  /// the pill is hidden rather than invented.
+  String? get topic => _topic;
+
+  MentorStagePhase get stagePhase {
+    if (_messages.isEmpty) return MentorStagePhase.welcome;
+    return _messages.last.role == ChatRole.user ? MentorStagePhase.thinking : MentorStagePhase.talking;
+  }
+
+  String? get currentQuestion => _lastOf(ChatRole.user)?.text;
+
+  /// `null` while thinking: the reply to the question on stage has not arrived
+  /// yet, and an older reply must not stand in for it.
+  ChatMessage? get currentReply => stagePhase == MentorStagePhase.talking ? _messages.last : null;
+
+  ChatMessage? _lastOf(ChatRole role) {
+    for (final message in _messages.reversed) {
+      if (message.role == role) return message;
+    }
+    return null;
+  }
+
+  /// The id of the message currently mid-typewriter-reveal, or `null` when
+  /// none is revealing. `MentorScreen` uses this to decide whether the reply
+  /// on stage should track [revealingText] instead of its (still empty)
+  /// stored text.
+  String? get revealingMessageId => _revealingMessageId;
+
+  /// The text revealed so far for [revealingMessageId], updated on every
+  /// typewriter tick. Exposed as a `ValueListenable` rather than through
+  /// `notifyListeners()` so only the one widget that cares about the
+  /// in-progress text rebuilds each tick — the previous approach called
+  /// `notifyListeners()` every 16ms, forcing the entire Mentor screen (pet
+  /// stage animations included) to rebuild for every few characters revealed.
+  final ValueNotifier<String> revealingText = ValueNotifier<String>('');
 
   /// Set when loading a past conversation's history fails — `MentorScreen`
   /// shows a retry state instead of an indefinite loading spinner.
@@ -40,15 +85,17 @@ class MentorChatController extends ChangeNotifier {
   /// [conversationId] is `null`.
   Future<void> loadConversation(int? conversationId) async {
     _revealTimer?.cancel();
+    _revealingMessageId = null;
     _conversationId = conversationId;
+    _topic = null;
     _messages.clear();
     _isLoadingHistory = conversationId != null;
     historyError = null;
-    notifyListeners();
+    notifySafely();
 
     if (conversationId == null) {
       _isLoadingHistory = false;
-      notifyListeners();
+      notifySafely();
       return;
     }
 
@@ -60,7 +107,7 @@ class MentorChatController extends ChangeNotifier {
     }
 
     _isLoadingHistory = false;
-    notifyListeners();
+    notifySafely();
   }
 
   Future<void> sendMessage(String text, {String? currentScreen}) async {
@@ -69,7 +116,7 @@ class MentorChatController extends ChangeNotifier {
 
     _messages.add(ChatMessage(id: _newId(), role: ChatRole.user, text: trimmed, timestamp: DateTime.now()));
     _isSending = true;
-    notifyListeners();
+    notifySafely();
 
     try {
       final result = await _repository.sendMessage(
@@ -78,6 +125,7 @@ class MentorChatController extends ChangeNotifier {
         currentScreen: currentScreen,
       );
       _conversationId = result.conversationId;
+      _topic = result.title ?? _topic;
       await _revealReply(result.reply, isError: false);
     } catch (e, stackTrace) {
       // Logged rather than silently discarded — a swallowed exception here
@@ -88,14 +136,14 @@ class MentorChatController extends ChangeNotifier {
       await _revealReply(_fallbackErrorReply, isError: true);
     } finally {
       _isSending = false;
-      notifyListeners();
+      notifySafely();
     }
   }
 
   Future<void> loadSuggestedPrompts() async {
     try {
       _suggestedPrompts = await _repository.loadSuggestedPrompts();
-      notifyListeners();
+      notifySafely();
     } catch (e) {
       debugPrint('Mentor suggestions unavailable: $e');
     }
@@ -109,9 +157,12 @@ class MentorChatController extends ChangeNotifier {
     _messages.add(
       ChatMessage(id: messageId, role: ChatRole.mentor, text: '', timestamp: DateTime.now(), isError: isError),
     );
-    notifyListeners();
+    notifySafely();
 
     if (fullText.isEmpty) return;
+
+    _revealingMessageId = messageId;
+    revealingText.value = '';
 
     final completer = Completer<void>();
     var charIndex = 0;
@@ -121,13 +172,19 @@ class MentorChatController extends ChangeNotifier {
     _revealTimer?.cancel();
     _revealTimer = Timer.periodic(tickDuration, (timer) {
       charIndex = min(charIndex + chunkSize, fullText.length);
-      final index = _messages.indexWhere((m) => m.id == messageId);
-      if (index != -1) {
-        _messages[index] = _messages[index].copyWith(text: fullText.substring(0, charIndex));
-        notifyListeners();
-      }
+      // Ticks update only this notifier, not notifyListeners() — the whole
+      // Mentor screen must not rebuild on every character chunk. Only the
+      // ValueListenableBuilder tracking revealingText reacts per tick.
+      revealingText.value = fullText.substring(0, charIndex);
+
       if (charIndex >= fullText.length) {
         timer.cancel();
+        final index = _messages.indexWhere((m) => m.id == messageId);
+        if (index != -1) {
+          _messages[index] = _messages[index].copyWith(text: fullText);
+        }
+        _revealingMessageId = null;
+        notifySafely();
         if (!completer.isCompleted) completer.complete();
       }
     });
@@ -141,10 +198,12 @@ class MentorChatController extends ChangeNotifier {
   /// separate conversation history screen.
   void startNewChat() {
     _revealTimer?.cancel();
+    _revealingMessageId = null;
     _conversationId = null;
+    _topic = null;
     _messages.clear();
     unawaited(loadSuggestedPrompts());
-    notifyListeners();
+    notifySafely();
   }
 
   String _newId() => '${DateTime.now().microsecondsSinceEpoch}-${_messages.length}';
@@ -152,6 +211,7 @@ class MentorChatController extends ChangeNotifier {
   @override
   void dispose() {
     _revealTimer?.cancel();
+    revealingText.dispose();
     super.dispose();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:petrimonium_academy/features/mentor/data/datasources/mentor_remote_datasource.dart';
@@ -186,6 +188,93 @@ void main() {
       expect(controller.conversationId, isNull);
       await Future<void>.delayed(Duration.zero);
       verify(() => mockRepository.loadSuggestedPrompts()).called(1);
+    });
+  });
+
+  group('stage', () {
+    void stubReply(MentorChatResult result, {Completer<MentorChatResult>? gate}) {
+      when(
+        () => mockRepository.sendMessage(
+          message: any(named: 'message'),
+          conversationId: any(named: 'conversationId'),
+          currentScreen: any(named: 'currentScreen'),
+        ),
+      ).thenAnswer((_) => gate?.future ?? Future.value(result));
+    }
+
+    test('a fresh chat is on the welcome stage with no exchange or topic', () async {
+      await controller.loadConversation(null);
+
+      expect(controller.stagePhase, MentorStagePhase.welcome);
+      expect(controller.currentQuestion, isNull);
+      expect(controller.currentReply, isNull);
+      expect(controller.topic, isNull);
+    });
+
+    test('is thinking while the reply is still in flight, with the question already known', () async {
+      final gate = Completer<MentorChatResult>();
+      stubReply(const MentorChatResult(reply: 'ok', conversationId: 1), gate: gate);
+
+      final sending = controller.sendMessage('O que é um ETF?');
+      await Future<void>.delayed(Duration.zero);
+
+      expect(controller.stagePhase, MentorStagePhase.thinking);
+      expect(controller.currentQuestion, 'O que é um ETF?');
+      expect(controller.currentReply, isNull);
+
+      gate.complete(const MentorChatResult(reply: 'ok', conversationId: 1));
+      await sending;
+    });
+
+    test('is talking once the reply arrives, exposing that reply and the conversation title as topic', () async {
+      stubReply(const MentorChatResult(reply: 'Um ETF é...', conversationId: 1, title: 'O que é um ETF'));
+
+      await controller.sendMessage('O que é um ETF?');
+
+      expect(controller.stagePhase, MentorStagePhase.talking);
+      expect(controller.currentReply!.text, 'Um ETF é...');
+      expect(controller.topic, 'O que é um ETF');
+    });
+
+    test('a follow-up replaces the exchange on stage but keeps the same conversation', () async {
+      stubReply(const MentorChatResult(reply: 'Primeira.', conversationId: 5, title: 'Diversificação'));
+      await controller.sendMessage('O que é diversificação?');
+      stubReply(const MentorChatResult(reply: 'Segunda.', conversationId: 5, title: 'Diversificação'));
+
+      await controller.sendMessage('Como aplico isso na prática?');
+
+      expect(controller.currentQuestion, 'Como aplico isso na prática?');
+      expect(controller.currentReply!.text, 'Segunda.');
+      expect(controller.conversationId, 5);
+    });
+
+    test('a resumed conversation opens talking on its last exchange, with no topic to show', () async {
+      when(() => mockRepository.loadConversation(3)).thenAnswer(
+        (_) async => [
+          ChatMessage(id: '1', role: ChatRole.user, text: 'Antiga', timestamp: DateTime(2024, 1, 1)),
+          ChatMessage(id: '2', role: ChatRole.mentor, text: 'Resposta antiga', timestamp: DateTime(2024, 1, 1)),
+          ChatMessage(id: '3', role: ChatRole.user, text: 'Última', timestamp: DateTime(2024, 1, 1)),
+          ChatMessage(id: '4', role: ChatRole.mentor, text: 'Resposta última', timestamp: DateTime(2024, 1, 1)),
+        ],
+      );
+
+      await controller.loadConversation(3);
+
+      expect(controller.stagePhase, MentorStagePhase.talking);
+      expect(controller.currentQuestion, 'Última');
+      expect(controller.currentReply!.text, 'Resposta última');
+      expect(controller.topic, isNull);
+    });
+
+    test('starting a new chat returns to welcome and forgets the topic', () async {
+      stubReply(const MentorChatResult(reply: 'ok', conversationId: 1, title: 'Diversificação'));
+      when(() => mockRepository.loadSuggestedPrompts()).thenAnswer((_) async => []);
+      await controller.sendMessage('Me ensine algo');
+
+      controller.startNewChat();
+
+      expect(controller.stagePhase, MentorStagePhase.welcome);
+      expect(controller.topic, isNull);
     });
   });
 }

@@ -69,9 +69,74 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      expect(find.textContaining('9695.00'), findsOneWidget);
-      expect(find.text('PETR4'), findsOneWidget);
+      expect(find.textContaining('9.695,00'), findsOneWidget);
+      // Appears twice once positions exist: once in the allocation donut's
+      // legend, once in the holdings list below it.
+      expect(find.text('PETR4'), findsWidgets);
       expect(find.byType(AppLoadingIndicator), findsNothing);
+    });
+
+    testWidgets('shows the total patrimony and the allocation donut once positions exist', (tester) async {
+      remoteDataSource.portfolioToReturn = {
+        'virtualBalance': 1000.0,
+        'initialBalance': 10000.0,
+        'currency': 'BRL',
+        'resetAt': null,
+        'positions': [
+          {'ticker': 'PETR4', 'quantity': 10.0, 'averagePrice': 30.0, 'costBasis': 300.0, 'allocationPercent': 100.0},
+        ],
+      };
+      remoteDataSource.quoteToReturn = {'symbol': 'PETR4', 'regularMarketPrice': 35.0, 'currency': 'BRL'};
+      await controller.loadPortfolio();
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      // Patrimônio total: 1000 cash + 350 current value = 1350.
+      expect(find.textContaining('1.350,00'), findsOneWidget);
+      expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationTitle)), findsOneWidget);
+      // Unrealized gain shown both on the KPI pill and the position row:
+      // 350 - 300 = +50, +16.67%.
+      expect(find.textContaining('+16.67%'), findsWidgets);
+    });
+
+    testWidgets('a losing position shows a negative signed result and return, not a fabricated gain', (tester) async {
+      remoteDataSource.portfolioToReturn = {
+        'virtualBalance': 0.0,
+        'initialBalance': 10000.0,
+        'currency': 'BRL',
+        'resetAt': null,
+        'positions': [
+          {'ticker': 'VALE3', 'quantity': 10.0, 'averagePrice': 30.0, 'costBasis': 300.0, 'allocationPercent': 100.0},
+        ],
+      };
+      remoteDataSource.quoteToReturn = {'symbol': 'VALE3', 'regularMarketPrice': 25.0, 'currency': 'BRL'};
+      await controller.loadPortfolio();
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      // 250 current value - 300 cost basis = -50, -16.67%. Shown on both the
+      // KPI pill and the position row.
+      expect(find.textContaining('-R\$ 50,00'), findsWidgets);
+      expect(find.textContaining('-16.67%'), findsWidgets);
+    });
+
+    testWidgets('shows no allocation donut and no KPI crash when there are no positions', (tester) async {
+      remoteDataSource.portfolioToReturn = {
+        'virtualBalance': 10000.0,
+        'initialBalance': 10000.0,
+        'currency': 'BRL',
+        'resetAt': null,
+        'positions': <Map<String, dynamic>>[],
+      };
+      await controller.loadPortfolio();
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationTitle)), findsNothing);
+      expect(find.text(Translator.translate(AppStrings.simulatedWalletNoPositions)), findsOneWidget);
     });
 
     testWidgets('the FAB never labels itself as a real order', (tester) async {

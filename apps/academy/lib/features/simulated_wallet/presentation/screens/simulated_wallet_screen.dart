@@ -7,7 +7,9 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/screens/place_simulated_order_screen.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/reset_simulated_wallet_dialog.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_allocation_donut_card.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_position_tile.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_wallet_kpi_header.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulation_disclaimer_banner.dart';
 
 /// Academy's "Carteira" tab — a fictitious wallet with a virtual starting
@@ -83,6 +85,7 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
         style: ErrorStateStyle.card,
       );
     } else {
+      final hasPositions = controller.portfolio.positions.isNotEmpty;
       body = RefreshIndicator(
         onRefresh: controller.refresh,
         child: ListView(
@@ -90,8 +93,20 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
           children: [
             const SimulationDisclaimerBanner(),
             const SizedBox(height: AppSpacing.md),
-            _BalanceCard(controller: controller),
+            SimulatedWalletKpiHeader(
+              totalPatrimony: controller.totalPatrimony,
+              totalProfit: controller.totalProfit,
+              totalProfitPercent: controller.totalProfitPercent,
+              virtualBalance: controller.portfolio.virtualBalance,
+            ),
             const SizedBox(height: AppSpacing.md),
+            if (hasPositions) ...[
+              SimulatedAllocationDonutCard(
+                positionQuotes: controller.positionQuotes,
+                totalValue: controller.totalPositionsValue,
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
             GlassCard(
               padding: const EdgeInsets.all(AppSpacing.md),
               child: Column(
@@ -102,7 +117,7 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
                     style: AppTextStyles.title.copyWith(color: tokens.textPrimary),
                   ),
                   const SizedBox(height: AppSpacing.sm),
-                  if (controller.portfolio.positions.isEmpty)
+                  if (!hasPositions)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
                       child: Text(
@@ -111,7 +126,7 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
                       ),
                     )
                   else
-                    for (final position in controller.portfolio.positions) SimulatedPositionTile(position: position),
+                    for (final quote in controller.positionQuotes) SimulatedPositionTile(quote: quote),
                 ],
               ),
             ),
@@ -141,36 +156,6 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
         onPressed: _openNewOrder,
         icon: const Icon(Icons.swap_horiz),
         label: Text(Translator.translate(AppStrings.simulatedWalletNewOrderAction)),
-      ),
-    );
-  }
-}
-
-class _BalanceCard extends StatelessWidget {
-  const _BalanceCard({required this.controller});
-
-  final SimulatedWalletController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.colors;
-    final portfolio = controller.portfolio;
-    return GlassCard(
-      surface: CardSurface.elevated,
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            Translator.translate(AppStrings.simulatedWalletVirtualBalanceLabel),
-            style: AppTextStyles.caption.copyWith(color: tokens.textSecondary),
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            'R\$ ${portfolio.virtualBalance.toStringAsFixed(2)}',
-            style: AppTextStyles.titleLarge.copyWith(color: tokens.textPrimary, fontWeight: FontWeight.bold),
-          ),
-        ],
       ),
     );
   }

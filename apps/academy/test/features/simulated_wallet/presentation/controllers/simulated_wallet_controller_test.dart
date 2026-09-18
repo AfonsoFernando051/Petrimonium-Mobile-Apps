@@ -6,6 +6,7 @@ import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/as
 import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_order.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_order_side.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_portfolio_summary.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_position.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
 
 /// In-memory [SimulatedWalletRepository] double — extends the real
@@ -32,10 +33,19 @@ class FakeSimulatedWalletRepository extends SimulatedWalletRepository {
   List<AssetQuote> quotesToReturn = const [];
   String? lastSearchedQuery;
 
+  Map<String, AssetQuote?> quotesByTicker = {};
+  Set<String> quoteErrorTickers = {};
+
   @override
   Future<SimulatedPortfolioSummary> fetchPortfolio() async {
     if (fetchError != null) throw fetchError!;
     return portfolioToReturn;
+  }
+
+  @override
+  Future<AssetQuote?> fetchQuote(String ticker) async {
+    if (quoteErrorTickers.contains(ticker)) throw Exception('quote unavailable for $ticker');
+    return quotesByTicker[ticker];
   }
 
   @override
@@ -198,6 +208,84 @@ void main() {
 
       expect(repository.lastSearchedQuery, 'petr4');
       expect(result.single.symbol, 'PETR4');
+    });
+  });
+
+  group('loadPortfolio — position quotes and totals', () {
+    SimulatedPosition position({required String ticker, double quantity = 10, double costBasis = 300}) {
+      return SimulatedPosition(
+        ticker: ticker,
+        quantity: quantity,
+        averagePrice: costBasis / quantity,
+        costBasis: costBasis,
+        allocationPercent: 100,
+      );
+    }
+
+    test('pairs each position with its fetched quote and totals patrimony/profit off the current value', () async {
+      repository.portfolioToReturn = SimulatedPortfolioSummary(
+        virtualBalance: 1000,
+        initialBalance: 10000,
+        currency: 'BRL',
+        resetAt: null,
+        positions: [position(ticker: 'PETR4', quantity: 10, costBasis: 300)],
+      );
+      repository.quotesByTicker = {
+        'PETR4': const AssetQuote(symbol: 'PETR4', shortName: null, regularMarketPrice: 35, currency: 'BRL'),
+      };
+
+      await controller.loadPortfolio();
+
+      expect(controller.positionQuotes.single.currentValue, 350);
+      expect(controller.totalPositionsValue, 350);
+      expect(controller.totalPatrimony, 1350); // 1000 cash + 350 invested
+      expect(controller.totalProfit, 50); // 350 - 300 cost basis
+      expect(controller.totalProfitPercent, closeTo(16.666, 0.01));
+    });
+
+    test('a position whose quote failed falls back to its cost basis, contributing zero profit', () async {
+      repository.portfolioToReturn = SimulatedPortfolioSummary(
+        virtualBalance: 0,
+        initialBalance: 10000,
+        currency: 'BRL',
+        resetAt: null,
+        positions: [position(ticker: 'VALE3', quantity: 5, costBasis: 200)],
+      );
+      repository.quoteErrorTickers = {'VALE3'};
+
+      await controller.loadPortfolio();
+
+      expect(controller.positionQuotes.single.hasQuote, isFalse);
+      expect(controller.totalPositionsValue, 200);
+      expect(controller.totalProfit, 0);
+    });
+
+    test('an empty portfolio has zero patrimony/profit and no divide-by-zero on profitPercent', () async {
+      repository.portfolioToReturn = SimulatedPortfolioSummary.empty;
+
+      await controller.loadPortfolio();
+
+      expect(controller.positionQuotes, isEmpty);
+      expect(controller.totalPatrimony, 0);
+      expect(controller.totalProfitPercent, 0);
+    });
+
+    test('placeOrder refreshes position quotes alongside the portfolio', () async {
+      repository.orderToReturn = _order();
+      repository.portfolioToReturn = SimulatedPortfolioSummary(
+        virtualBalance: 0,
+        initialBalance: 10000,
+        currency: 'BRL',
+        resetAt: null,
+        positions: [position(ticker: 'PETR4', quantity: 10, costBasis: 300)],
+      );
+      repository.quotesByTicker = {
+        'PETR4': const AssetQuote(symbol: 'PETR4', shortName: null, regularMarketPrice: 40, currency: 'BRL'),
+      };
+
+      await controller.placeOrder(ticker: 'PETR4', side: SimulatedOrderSide.buy, quantity: 10);
+
+      expect(controller.positionQuotes.single.currentValue, 400);
     });
   });
 }

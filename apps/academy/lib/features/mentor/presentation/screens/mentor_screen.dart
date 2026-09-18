@@ -6,16 +6,22 @@ import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
+import 'package:petrimonium_academy/core/utils/display_name.dart';
 import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/mentor/domain/entities/chat_message.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/controllers/mentor_chat_controller.dart';
-import 'package:petrimonium_academy/features/mentor/presentation/widgets/chat_bubble.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_pet_stage.dart';
+import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_speech_card.dart';
 
-/// The "Mentor" tab — a full-screen chat with the user's pet acting as their
-/// personal investment mentor. Owns its own controller/state (mirrors how
-/// `PetShowcase` self-manages its pet fetch) rather than sharing dashboard's
-/// portfolio/mascot controllers, since the conversation is self-contained.
+/// The "Mentor" tab — the user's pet explaining concepts one exchange at a
+/// time (welcome → thinking → talking) instead of a scrolling chat timeline;
+/// earlier exchanges live in the conversation history. Mirrors Wallet's
+/// Mentor stage design (see `MentorPetStage`/`MentorSpeechCard`) with
+/// Academy's own two-layer reply split (CONTEÚDO/INTERPRETAÇÃO, no source
+/// citations — see `MentorSpeechCard`'s class doc). Owns its own
+/// controller/state (mirrors how `PetShowcase` self-manages its pet fetch)
+/// rather than sharing dashboard's portfolio/mascot controllers, since the
+/// conversation is self-contained.
 class MentorScreen extends StatefulWidget {
   const MentorScreen({super.key});
 
@@ -26,9 +32,9 @@ class MentorScreen extends StatefulWidget {
 class _MentorScreenState extends State<MentorScreen> {
   late final MentorChatController _controller;
   final TextEditingController _textController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
 
   String _petAsset = PetAssets.imageFor(null);
+  String? _displayName;
 
   @override
   void initState() {
@@ -39,6 +45,7 @@ class _MentorScreenState extends State<MentorScreen> {
     _controller.loadSuggestedPrompts();
     DI.mentorChatRepository.purgeLegacyLocalHistory();
     _fetchPetAvatar();
+    _loadDisplayName();
   }
 
   Future<void> _fetchPetAvatar() async {
@@ -53,19 +60,18 @@ class _MentorScreenState extends State<MentorScreen> {
     }
   }
 
-  void _onControllerChanged() {
-    setState(() {});
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+  Future<void> _loadDisplayName() async {
+    try {
+      final name = deriveDisplayNameFromEmail(await DI.authRepository.getSavedEmail());
+      if (!mounted || name == null) return;
+      setState(() => _displayName = name);
+    } catch (_) {
+      // Keep the nameless greeting — a missing/unreadable email is cosmetic,
+      // not fatal (mirrors `_fetchPetAvatar`'s same fallback reasoning).
+    }
   }
 
-  void _scrollToBottom() {
-    if (!_scrollController.hasClients) return;
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOut,
-    );
-  }
+  void _onControllerChanged() => setState(() {});
 
   void _send([String? suggested]) {
     final text = suggested ?? _textController.text;
@@ -106,67 +112,28 @@ class _MentorScreenState extends State<MentorScreen> {
     _controller.removeListener(_onControllerChanged);
     _controller.dispose();
     _textController.dispose();
-    _scrollController.dispose();
     super.dispose();
-  }
-
-  bool get _showTypingIndicator {
-    if (!_controller.isSending) return false;
-    final messages = _controller.messages;
-    if (messages.isEmpty) return true;
-    final last = messages.last;
-    return last.role != ChatRole.mentor || last.text.isEmpty;
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
       child: Column(
         children: [
-          const SizedBox(height: 8),
           _buildHeader(),
-          const SizedBox(height: 12),
           Expanded(child: _buildBody()),
           const SizedBox(height: 8),
           MentorInputBar(
             controller: _textController,
             onSend: _send,
             isSending: _controller.isSending,
-            hintText: 'Pergunte algo ao seu mentor...',
+            hintText: Translator.translate(AppStrings.mentorStageInputHint),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
         ],
       ),
     );
-  }
-
-  // A soft purple/cyan halo behind the Mentor's avatar — Light theme has no
-  // cosmic backdrop directly behind the header card, so without this the
-  // character reads as a plain chat-app avatar. Dark theme already gets
-  // that atmosphere for free from the cosmic background, so it's skipped
-  // there rather than doubling up on glow.
-  Widget _avatarWithHalo({required Widget avatar, required double haloSize}) {
-    if (!context.isDarkMode) {
-      return Container(
-        width: haloSize,
-        height: haloSize,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: RadialGradient(
-            colors: [
-              AppColors.neonPurple.withValues(alpha: 0.22),
-              AppColors.neonCyan.withValues(alpha: 0.10),
-              AppColors.neonCyan.withValues(alpha: 0),
-            ],
-            stops: const [0.0, 0.6, 1.0],
-          ),
-        ),
-        child: avatar,
-      );
-    }
-    return avatar;
   }
 
   Widget _buildHeader() {
@@ -177,45 +144,44 @@ class _MentorScreenState extends State<MentorScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       child: Row(
         children: [
-          _avatarWithHalo(
-            haloSize: 52,
-            avatar: CircleAvatar(
-              radius: 20,
-              backgroundColor: tokens.surface,
-              child: ClipOval(
-                child: Image.asset(
-                  _petAsset,
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => Icon(Icons.pets, color: tokens.textSecondary, size: 20),
-                ),
+          Container(
+            width: 38,
+            height: 38,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [AppColors.neonCyan.withValues(alpha: 0.28), AppColors.neonCyan.withValues(alpha: 0)],
+                stops: const [0.0, 0.7],
               ),
             ),
+            child: Image.asset(
+              _petAsset,
+              width: 30,
+              height: 30,
+              fit: BoxFit.contain,
+              errorBuilder: (_, _, _) => Icon(Icons.pets, color: tokens.textSecondary, size: 18),
+            ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   Translator.translate(AppStrings.mentorHeaderTitle),
-                  style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                  style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.w800, fontSize: 15),
                 ),
+                const SizedBox(height: 1),
                 Text(
                   Translator.translate(AppStrings.mentorHeaderSubtitle),
-                  style: TextStyle(color: tokens.textSecondary, fontSize: 11),
+                  style: TextStyle(color: tokens.textTertiary, fontSize: 11),
                 ),
               ],
             ),
           ),
           IconButton(
-            icon: Icon(Icons.add_comment_outlined, color: tokens.textSecondary, size: 20),
-            tooltip: Translator.translate(AppStrings.mentorNewChatTooltip),
-            onPressed: _controller.messages.isEmpty ? null : _controller.startNewChat,
-          ),
-          IconButton(
-            icon: Icon(Icons.history, color: tokens.textSecondary, size: 20),
+            icon: Icon(Icons.schedule, color: tokens.textSecondary, size: 19),
             tooltip: Translator.translate(AppStrings.mentorHistoryTooltip),
             onPressed: _openHistory,
           ),
@@ -237,115 +203,105 @@ class _MentorScreenState extends State<MentorScreen> {
       );
     }
 
-    if (_controller.messages.isEmpty) {
-      return _buildEmptyState();
-    }
+    final phase = _controller.stagePhase;
+    final reply = _controller.currentReply;
 
-    final messages = _controller.messages;
-
-    return ListView(
-      controller: _scrollController,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      children: [
-        for (var i = 0; i < messages.length; i++) ...[
-          if (i == 0 || !_isSameDay(messages[i - 1].timestamp, messages[i].timestamp))
-            _DateDivider(date: messages[i].timestamp),
-          ChatBubble(message: messages[i]),
-        ],
-        if (_showTypingIndicator) const TypingIndicator(),
-      ],
-    );
-  }
-
-  bool _isSameDay(DateTime a, DateTime b) => a.year == b.year && a.month == b.month && a.day == b.day;
-
-  Widget _buildEmptyState() {
-    final tokens = context.colors;
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 24),
-          _avatarWithHalo(
-            haloSize: 104,
-            avatar: CircleAvatar(
-              radius: 40,
-              backgroundColor: tokens.surface,
-              child: ClipOval(
-                child: Image.asset(
-                  _petAsset,
-                  width: 80,
-                  height: 80,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => Icon(Icons.pets, color: tokens.textSecondary, size: 40),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            Translator.translate(AppStrings.mentorEmptyStateGreeting),
-            textAlign: TextAlign.center,
-            style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            Translator.translate(AppStrings.mentorEmptyStateSubtitle),
-            textAlign: TextAlign.center,
-            style: TextStyle(color: tokens.textSecondary, fontSize: 13),
-          ),
-          const SizedBox(height: 20),
-          if (_controller.suggestedPrompts.isNotEmpty)
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: _controller.suggestedPrompts
-                  .map((prompt) => SuggestedPromptChip(label: prompt, onTap: () => _send(prompt)))
-                  .toList(),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-/// A small centered date-divider chip between messages sent on different
-/// days — "Hoje"/"Today"/"Hoy" for the current day (real device time, not
-/// hardcoded), a plain day/month number otherwise since a localized month
-/// name isn't worth pulling in `intl` for one chip.
-class _DateDivider extends StatelessWidget {
-  const _DateDivider({required this.date});
-
-  final DateTime date;
-
-  bool get _isToday {
-    final now = DateTime.now();
-    return now.year == date.year && now.month == date.month && now.day == date.day;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.colors;
-    final label = _isToday
-        ? Translator.translate(AppStrings.mentorTodayLabel)
-        : '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}';
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Center(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: tokens.surface.withValues(alpha: 0.6),
-            borderRadius: BorderRadius.circular(999),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(color: tokens.textTertiary, fontSize: 11, fontWeight: FontWeight.w600),
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        // A new exchange starts back at the top of the stage, not wherever the
+        // previous (possibly long) reply was scrolled to.
+        key: ValueKey('${phase.name}-${reply?.id}'),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight - 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: switch (phase) {
+              MentorStagePhase.welcome => _buildWelcome(),
+              MentorStagePhase.thinking => _buildThinking(),
+              MentorStagePhase.talking => _buildTalking(),
+            },
           ),
         ),
       ),
     );
+  }
+
+  List<Widget> _buildWelcome() {
+    final tokens = context.colors;
+    final greeting = _displayName == null
+        ? Translator.translate(AppStrings.mentorStageGreetingNoName)
+        : Translator.translate(AppStrings.mentorStageGreeting, params: {'name': _displayName!});
+    return [
+      Text(
+        greeting,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: tokens.textPrimary, fontSize: 19, fontWeight: FontWeight.w800, height: 1.3),
+      ),
+      const SizedBox(height: 4),
+      Text(
+        Translator.translate(AppStrings.mentorStageGreetingPrompt),
+        textAlign: TextAlign.center,
+        style: TextStyle(color: tokens.textSecondary, fontSize: 14),
+      ),
+      const SizedBox(height: 14),
+      MentorPetStage(petAsset: _petAsset, phase: MentorStagePhase.welcome),
+      const SizedBox(height: 14),
+      ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 300),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (final prompt in _controller.suggestedPrompts)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: SuggestedPromptChip(label: prompt, onTap: () => _send(prompt)),
+              ),
+          ],
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _buildThinking() {
+    final tokens = context.colors;
+    return [
+      MentorPetStage(petAsset: _petAsset, phase: MentorStagePhase.thinking),
+      const SizedBox(height: 14),
+      Text(
+        Translator.translate(AppStrings.mentorStageThinkingTitle),
+        textAlign: TextAlign.center,
+        style: TextStyle(color: tokens.textPrimary, fontSize: 16, fontWeight: FontWeight.w700),
+      ),
+      const SizedBox(height: 6),
+      Text(
+        Translator.translate(AppStrings.mentorStageThinkingSubtitle),
+        textAlign: TextAlign.center,
+        style: TextStyle(color: tokens.textTertiary, fontSize: 12),
+      ),
+    ];
+  }
+
+  List<Widget> _buildTalking() {
+    final reply = _controller.currentReply!;
+    final isRevealing = reply.id == _controller.revealingMessageId;
+    return [
+      MentorPetStage(petAsset: _petAsset, phase: MentorStagePhase.talking),
+      const SizedBox(height: 14),
+      MentorSpeechCard(
+        reply: reply,
+        topic: _controller.topic,
+        revealingText: isRevealing ? _controller.revealingText : null,
+      ),
+      // The backend returns no follow-up suggestions yet, so the only
+      // follow-up offered is the design's fallback: start over.
+      if (!isRevealing) ...[
+        const SizedBox(height: 12),
+        SuggestedPromptChip(
+          label: Translator.translate(AppStrings.mentorStageAskSomethingElse),
+          onTap: _controller.startNewChat,
+        ),
+      ],
+    ];
   }
 }

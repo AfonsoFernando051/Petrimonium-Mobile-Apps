@@ -281,7 +281,6 @@ class AppStrings {
   static const String academyExampleLabel = 'academyExampleLabel';
   static const String academyLessonOfLabel = 'academyLessonOfLabel';
   static const String mentorInterpretationLabel = SharedStrings.mentorInterpretationLabel;
-  static const String mentorTodayLabel = 'mentorTodayLabel';
   static const String academyContinueButton = SharedStrings.academyContinueButton;
   static const String academyConcludeButton = SharedStrings.academyConcludeButton;
   static const String academyBackToAcademyButton = SharedStrings.academyBackToAcademyButton;
@@ -487,6 +486,10 @@ class AppStrings {
   static const String simulatedOrderSuccessMessage = 'simulatedOrderSuccessMessage';
   static const String simulatedOrderSelectAssetFirst = 'simulatedOrderSelectAssetFirst';
   static const String simulatedWalletAllocationTitle = 'simulatedWalletAllocationTitle';
+  static const String simulatedWalletTotalPatrimonyLabel = 'simulatedWalletTotalPatrimonyLabel';
+  static const String simulatedWalletResultLabel = 'simulatedWalletResultLabel';
+  static const String simulatedWalletReturnLabel = 'simulatedWalletReturnLabel';
+  static const String simulatedWalletPriceUnavailable = 'simulatedWalletPriceUnavailable';
 
   // Home redesign — learning-first hierarchy (docs/PRODUCT_VISION.md §8)
   static const String homeContinueLearningEyebrow = SharedStrings.homeContinueLearningEyebrow;
@@ -617,8 +620,15 @@ class AppStrings {
   // and asks questions but never prescribes or substitutes regulated
   // advice, this can't just be implied by tone.
   static const String mentorHeaderSubtitle = 'mentorHeaderSubtitle';
-  static const String mentorEmptyStateGreeting = 'mentorEmptyStateGreeting';
-  static const String mentorEmptyStateSubtitle = 'mentorEmptyStateSubtitle';
+  // Mentor stage — the welcome/thinking/talking exchange shown one at a time
+  // around the pet (mirrors Wallet's Mentor tab; see `MentorPetStage`).
+  static const String mentorStageGreeting = 'mentorStageGreeting';
+  static const String mentorStageGreetingNoName = 'mentorStageGreetingNoName';
+  static const String mentorStageGreetingPrompt = 'mentorStageGreetingPrompt';
+  static const String mentorStageThinkingTitle = 'mentorStageThinkingTitle';
+  static const String mentorStageThinkingSubtitle = 'mentorStageThinkingSubtitle';
+  static const String mentorStageAskSomethingElse = 'mentorStageAskSomethingElse';
+  static const String mentorStageInputHint = 'mentorStageInputHint';
   // Persistent "this is simulated, not your real portfolio" marker shown on
   // every Financial Lab screen (design-system guardrail: simulations must
   // carry a persistent fictitious-data mark on every screen, not just once
