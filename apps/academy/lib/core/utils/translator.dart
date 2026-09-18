@@ -145,6 +145,10 @@ class Translator {
       AppStrings.simulatedWalletWealthBarsEmpty: 'Ainda não há histórico suficiente para montar esse gráfico.',
       AppStrings.simulatedWalletSelectTypeError: 'Escolha o tipo do ativo',
       AppStrings.simulatedWalletTypeMismatchWarning: 'Esse ticker parece ser {detected}, não {selected}.',
+      AppStrings.simulatedWalletEmptyStateTitle: 'Monte sua carteira simulada',
+      AppStrings.simulatedWalletEmptyStateBody:
+          'Adicione seu primeiro ativo fictício para acompanhar quanto você ganharia ou perderia de verdade.',
+      AppStrings.simulatedWalletEmptyStateCta: 'Adicionar primeiro ativo',
       AppStrings.holdingQuoteUnavailable: 'sem cotação',
       AppStrings.holdingNotQuoted: 'não cotado',
       AppStrings.homeKnowledgeMapLabel: 'SUA TRILHA',
@@ -270,6 +274,10 @@ class Translator {
       AppStrings.simulatedWalletWealthBarsEmpty: "There isn't enough history yet to draw this chart.",
       AppStrings.simulatedWalletSelectTypeError: 'Pick the asset type',
       AppStrings.simulatedWalletTypeMismatchWarning: 'That ticker looks like {detected}, not {selected}.',
+      AppStrings.simulatedWalletEmptyStateTitle: 'Build your simulated portfolio',
+      AppStrings.simulatedWalletEmptyStateBody:
+          'Add your first fictitious asset to track how much you would really gain or lose.',
+      AppStrings.simulatedWalletEmptyStateCta: 'Add first asset',
       AppStrings.holdingQuoteUnavailable: 'no quote',
       AppStrings.holdingNotQuoted: 'not quoted',
       AppStrings.homeKnowledgeMapLabel: 'YOUR TRACK',
@@ -385,6 +393,10 @@ class Translator {
       AppStrings.simulatedWalletWealthBarsEmpty: 'Todavía no hay suficiente historial para armar este gráfico.',
       AppStrings.simulatedWalletSelectTypeError: 'Elige el tipo de activo',
       AppStrings.simulatedWalletTypeMismatchWarning: 'Ese ticker parece ser {detected}, no {selected}.',
+      AppStrings.simulatedWalletEmptyStateTitle: 'Arma tu cartera simulada',
+      AppStrings.simulatedWalletEmptyStateBody:
+          'Agrega tu primer activo ficticio para ver cuánto ganarías o perderías de verdad.',
+      AppStrings.simulatedWalletEmptyStateCta: 'Agregar primer activo',
       AppStrings.holdingQuoteUnavailable: 'sin cotización',
       AppStrings.holdingNotQuoted: 'no cotizado',
       AppStrings.homeKnowledgeMapLabel: 'TU RUTA',

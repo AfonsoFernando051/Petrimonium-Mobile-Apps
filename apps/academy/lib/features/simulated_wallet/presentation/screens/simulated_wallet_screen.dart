@@ -4,11 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/screens/place_simulated_order_screen.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/reset_simulated_wallet_dialog.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_allocation_donut_card.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_holdings_section.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_portfolio_not_connected_card.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_wallet_kpi_header.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulation_disclaimer_banner.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/wealth_evolution_bar_card.dart';
@@ -27,9 +29,15 @@ import 'package:petrimonium_academy/features/simulated_wallet/presentation/widge
 /// embedded directly in `DashboardScreen`'s shared chrome; its own in-body
 /// header row carries the title/reset/add-asset actions instead.
 class SimulatedWalletScreen extends StatefulWidget {
-  const SimulatedWalletScreen({super.key, required this.controller});
+  const SimulatedWalletScreen({super.key, required this.controller, required this.mascotController});
 
   final SimulatedWalletController controller;
+
+  /// Drives the pet shown by [SimulatedPortfolioNotConnectedCard] while the
+  /// student hasn't placed a first simulated order yet — the same
+  /// mascot/species Academy shows everywhere else, not a Wallet-style fixed
+  /// species.
+  final MascotController mascotController;
 
   @override
   State<SimulatedWalletScreen> createState() => _SimulatedWalletScreenState();
@@ -39,10 +47,14 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
   @override
   void initState() {
     super.initState();
+    // The load itself is triggered once by DashboardScreen (alongside
+    // PortfolioController.loadAll()), not here — this tab is mounted
+    // immediately by the shared IndexedStack even while another tab is
+    // selected, and this widget may be rebuilt more than once while staying
+    // mounted, so re-triggering the load from initState would race a load
+    // already in flight. This listener just keeps the screen in sync with
+    // whatever state the controller is already in.
     widget.controller.addListener(_onChanged);
-    if (!widget.controller.isLoading || widget.controller.error != null) {
-      widget.controller.loadPortfolio();
-    }
   }
 
   @override
@@ -96,6 +108,7 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
     }
 
     final tokens = context.colors;
+    final hasPortfolio = controller.portfolio.positions.isNotEmpty;
 
     return RefreshIndicator(
       color: tokens.primary,
@@ -107,25 +120,32 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildHeader(),
+            _buildHeader(hasPortfolio: hasPortfolio),
             const SizedBox(height: 16),
             const SimulationDisclaimerBanner(),
             const SizedBox(height: 16),
-            SimulatedWalletKpiHeader(
-              totalPatrimony: controller.totalPatrimony,
-              totalProfit: controller.totalProfit,
-              totalProfitPercent: controller.totalProfitPercent,
-              virtualBalance: controller.portfolio.virtualBalance,
-            ),
-            const SizedBox(height: 16),
-            WealthEvolutionBarCard(series: controller.monthlyWealth12m),
-            const SizedBox(height: 16),
-            SimulatedAllocationDonutCard(allocation: controller.allocation, totalValue: controller.totalPositionsValue),
-            const SizedBox(height: 16),
-            SimulatedHoldingsSection(
-              holdings: controller.holdings,
-              totalPortfolioValue: controller.totalPositionsValue,
-            ),
+            if (!hasPortfolio)
+              SimulatedPortfolioNotConnectedCard(mascotController: widget.mascotController, onAddAsset: _openNewOrder)
+            else ...[
+              SimulatedWalletKpiHeader(
+                totalPatrimony: controller.totalPatrimony,
+                totalProfit: controller.totalProfit,
+                totalProfitPercent: controller.totalProfitPercent,
+                virtualBalance: controller.portfolio.virtualBalance,
+              ),
+              const SizedBox(height: 16),
+              WealthEvolutionBarCard(series: controller.monthlyWealth12m),
+              const SizedBox(height: 16),
+              SimulatedAllocationDonutCard(
+                allocation: controller.allocation,
+                totalValue: controller.totalPositionsValue,
+              ),
+              const SizedBox(height: 16),
+              SimulatedHoldingsSection(
+                holdings: controller.holdings,
+                totalPortfolioValue: controller.totalPositionsValue,
+              ),
+            ],
             const SizedBox(height: 32),
           ],
         ),
@@ -133,7 +153,7 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader({required bool hasPortfolio}) {
     final tokens = context.colors;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -159,7 +179,11 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
           tooltip: Translator.translate(AppStrings.simulatedWalletResetAction),
           onPressed: widget.controller.isResetting ? null : _confirmReset,
         ),
-        _AddAssetIconButton(onTap: _openNewOrder),
+        // Mirrors Wallet's real CarteiraScreen: once a portfolio exists, the
+        // header carries the "add another asset" shortcut; before that, the
+        // single CTA lives inside SimulatedPortfolioNotConnectedCard so
+        // there's exactly one invitation to act, not two.
+        if (hasPortfolio) _AddAssetIconButton(onTap: _openNewOrder),
       ],
     );
   }

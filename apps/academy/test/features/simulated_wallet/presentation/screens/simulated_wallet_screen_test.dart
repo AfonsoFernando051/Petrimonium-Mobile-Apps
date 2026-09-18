@@ -1,40 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/screens/place_simulated_order_screen.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/screens/simulated_wallet_screen.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_portfolio_not_connected_card.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulation_disclaimer_banner.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/wealth_evolution_bar_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/simulated_wallet_repository_test.dart';
 
+/// Minimal in-memory MascotRepository double — only `loadProfile` matters
+/// for the screens under test here.
+class FakeMascotRepository implements MascotRepository {
+  @override
+  Future<PetProfile> loadProfile() async => PetProfile();
+  @override
+  Future<void> saveName(String name) async {}
+  @override
+  Future<void> saveStage(PetEvolutionStage stage) async {}
+  @override
+  Future<void> saveXp(int xp) async {}
+  @override
+  Future<void> saveSpecie(PetSpecieEnum specie) async {}
+  @override
+  Future<void> saveNetWorth(double netWorth) async {}
+  @override
+  Future<void> saveEquippedAccessories(Map<AccessoryType, PetAccessoryId> equipped) async {}
+  @override
+  Future<void> saveUnlockedAccessories(Set<PetAccessoryId> unlocked) async {}
+  @override
+  Future<void> saveLastActiveAt(DateTime lastActiveAt) async {}
+}
+
 void main() {
   late FakeSimulatedWalletRemoteDataSource remoteDataSource;
   late SimulatedWalletController controller;
+  late MascotController mascotController;
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
     remoteDataSource = FakeSimulatedWalletRemoteDataSource();
     controller = SimulatedWalletController(repository: SimulatedWalletRepository(remoteDataSource: remoteDataSource));
+    mascotController = MascotController(repository: FakeMascotRepository());
   });
 
-  tearDown(() => controller.dispose());
+  tearDown(() {
+    controller.dispose();
+    mascotController.dispose();
+  });
 
   Widget buildTestableWidget() {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: Scaffold(body: SimulatedWalletScreen(controller: controller)),
+      home: Scaffold(
+        body: SimulatedWalletScreen(controller: controller, mascotController: mascotController),
+      ),
     );
   }
 
   group('SimulatedWalletScreen', () {
     testWidgets('shows a loading indicator before the initial load resolves', (tester) async {
+      // controller.isLoading starts true and positions empty by default —
+      // the screen shows a full-screen loader in that state, before
+      // loadPortfolio() is ever called (that's DashboardScreen's job, same
+      // as PortfolioController.loadAll() — see HomeScreen's own loading test).
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
@@ -128,7 +165,30 @@ void main() {
       expect(find.textContaining('-16.67%'), findsWidgets);
     });
 
-    testWidgets('shows the empty states of the donut/chart/holdings when there are no positions', (tester) async {
+    testWidgets(
+      'shows the pet empty-state card inviting a first asset, hiding the wealth/allocation/holdings sections',
+      (tester) async {
+        remoteDataSource.portfolioToReturn = {
+          'virtualBalance': 10000.0,
+          'initialBalance': 10000.0,
+          'currency': 'BRL',
+          'resetAt': null,
+          'positions': <Map<String, dynamic>>[],
+        };
+        await controller.loadPortfolio();
+
+        await tester.pumpWidget(buildTestableWidget());
+        await tester.pump();
+
+        expect(find.byType(SimulatedPortfolioNotConnectedCard), findsOneWidget);
+        expect(find.text(Translator.translate(AppStrings.simulatedWalletEmptyStateTitle)), findsOneWidget);
+        expect(find.text(Translator.translate(AppStrings.simulatedWalletEmptyStateCta)), findsOneWidget);
+        expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationTitle)), findsNothing);
+        expect(find.byType(WealthEvolutionBarCard), findsNothing);
+      },
+    );
+
+    testWidgets('the empty-state CTA never labels itself as a real order, and opens the order screen', (tester) async {
       remoteDataSource.portfolioToReturn = {
         'virtualBalance': 10000.0,
         'initialBalance': 10000.0,
@@ -141,33 +201,32 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationTitle)), findsOneWidget);
-      expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationEmpty)), findsOneWidget);
-      expect(find.text(Translator.translate(AppStrings.simulatedWalletNoPositions)), findsOneWidget);
-    });
-
-    testWidgets('the "add asset" action never labels itself as a real order, and opens the order screen', (
-      tester,
-    ) async {
-      remoteDataSource.portfolioToReturn = {
-        'virtualBalance': 10000.0,
-        'initialBalance': 10000.0,
-        'currency': 'BRL',
-        'resetAt': null,
-        'positions': <Map<String, dynamic>>[],
-      };
-      await controller.loadPortfolio();
-
-      await tester.pumpWidget(buildTestableWidget());
-      await tester.pump();
-
-      final addLabel = Translator.translate(AppStrings.simulatedWalletAddAssetLabel);
+      final addLabel = Translator.translate(AppStrings.simulatedWalletEmptyStateCta);
       expect(addLabel.toLowerCase(), isNot(contains('real')));
 
       await tester.tap(find.text(addLabel));
       await tester.pumpAndSettle();
 
       expect(find.byType(PlaceSimulatedOrderScreen), findsOneWidget);
+    });
+
+    testWidgets('once a first asset exists, the full carteira replaces the empty-state card', (tester) async {
+      remoteDataSource.portfolioToReturn = {
+        'virtualBalance': 9695.00,
+        'initialBalance': 10000.00,
+        'currency': 'BRL',
+        'resetAt': null,
+        'positions': [
+          {'ticker': 'PETR4', 'quantity': 10.0, 'averagePrice': 30.5, 'costBasis': 305.0, 'allocationPercent': 100.0},
+        ],
+      };
+      await controller.loadPortfolio();
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      expect(find.byType(SimulatedPortfolioNotConnectedCard), findsNothing);
+      expect(find.text(Translator.translate(AppStrings.simulatedWalletAddAssetLabel)), findsOneWidget);
     });
 
     testWidgets('the reset icon is present and disabled while a reset is in flight', (tester) async {

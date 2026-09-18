@@ -501,6 +501,9 @@ class AppStrings {
   static const String simulatedWalletWealthBarsEmpty = 'simulatedWalletWealthBarsEmpty';
   static const String simulatedWalletSelectTypeError = 'simulatedWalletSelectTypeError';
   static const String simulatedWalletTypeMismatchWarning = 'simulatedWalletTypeMismatchWarning';
+  static const String simulatedWalletEmptyStateTitle = 'simulatedWalletEmptyStateTitle';
+  static const String simulatedWalletEmptyStateBody = 'simulatedWalletEmptyStateBody';
+  static const String simulatedWalletEmptyStateCta = 'simulatedWalletEmptyStateCta';
   static const String holdingQuoteUnavailable = 'holdingQuoteUnavailable';
   static const String holdingNotQuoted = 'holdingNotQuoted';
 

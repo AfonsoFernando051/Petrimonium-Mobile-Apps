@@ -96,6 +96,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _initCompanionGreeting();
     _portfolioController.addListener(_onPortfolioChanged);
     _portfolioController.loadAll();
+    _simulatedWalletController.loadPortfolio();
     _eventSubscription = AppEventBus.instance.stream.listen(_onAppEvent);
   }
 
@@ -373,7 +374,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // radar it depended on, Stage 7) — real holdings for Academy are always
   // empty, so that tab could never actually show anything.
   Widget _buildWalletContent() {
-    return SimulatedWalletScreen(controller: _simulatedWalletController);
+    return SimulatedWalletScreen(controller: _simulatedWalletController, mascotController: _mascotController);
   }
 
   // ── Academia: module/lesson progression (see docs/ACADEMY_ENGINE.md) ────
