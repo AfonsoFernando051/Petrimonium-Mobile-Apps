@@ -37,11 +37,11 @@ void main() {
     test('returns the decoded JSON on 200', () async {
       when(
         () => mockApiClient.get(ApiConstants.simulatedPortfolioMeEndpoint),
-      ).thenAnswer((_) async => http.Response(jsonEncode({'virtualBalance': 10000.0, 'positions': []}), 200));
+      ).thenAnswer((_) async => http.Response(jsonEncode({'currency': 'BRL', 'positions': []}), 200));
 
       final result = await dataSource.fetchPortfolio();
 
-      expect(result['virtualBalance'], 10000.0);
+      expect(result['currency'], 'BRL');
     });
 
     test('throws with the surfaced detail on a non-200 response', () async {

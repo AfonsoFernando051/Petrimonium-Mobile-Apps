@@ -107,9 +107,17 @@ class _Header extends StatelessWidget {
       children: [
         const Icon(Icons.rocket_launch, color: AppColors.neonCyan, size: 22),
         const SizedBox(width: 8),
-        Text(
-          Translator.translate(AppStrings.inAppBrandName),
-          style: AppTextStyles.title.copyWith(color: Colors.white, letterSpacing: 0.5),
+        // Scales down rather than overflowing: the card is a fixed narrow width
+        // once captured, and the brand name is the one line that must never be
+        // clipped or ellipsized in a shared image.
+        Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              Translator.translate(AppStrings.inAppBrandName),
+              style: AppTextStyles.title.copyWith(color: Colors.white, letterSpacing: 0.5),
+            ),
+          ),
         ),
       ],
     );

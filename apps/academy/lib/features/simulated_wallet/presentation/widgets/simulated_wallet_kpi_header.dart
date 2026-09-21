@@ -17,13 +17,11 @@ class SimulatedWalletKpiHeader extends StatelessWidget {
     required this.totalPatrimony,
     required this.totalProfit,
     required this.totalProfitPercent,
-    required this.virtualBalance,
   });
 
   final double totalPatrimony;
   final double totalProfit;
   final double totalProfitPercent;
-  final double virtualBalance;
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +62,6 @@ class SimulatedWalletKpiHeader extends StatelessWidget {
               color: profitColor,
             ),
           ],
-        ),
-        const SizedBox(height: 8),
-        Text(
-          '${Translator.translate(AppStrings.simulatedWalletVirtualBalanceLabel)}: ${AppFormatters.currency(virtualBalance)}',
-          style: TextStyle(color: tokens.textTertiary, fontSize: 11.5),
         ),
       ],
     );

@@ -45,8 +45,6 @@ void main() {
   group('SimulatedLotBuilder.build', () {
     test('one lot per held position, using its net quantity/average price and a fetched current price', () {
       final portfolio = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
         positions: [_position(quantity: 10, averagePrice: 30, costBasis: 300)],
@@ -71,13 +69,7 @@ void main() {
     });
 
     test('uses the earliest BUY order for that ticker as the purchase date, ignoring later buys and sells', () {
-      final portfolio = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
-        currency: 'BRL',
-        resetAt: null,
-        positions: [_position()],
-      );
+      final portfolio = SimulatedPortfolioSummary(currency: 'BRL', resetAt: null, positions: [_position()]);
       final orders = [
         _order(ticker: 'PETR4', executedAt: DateTime(2025, 3, 1)),
         _order(ticker: 'PETR4', side: SimulatedOrderSide.sell, executedAt: DateTime(2025, 6, 1)),
@@ -98,13 +90,7 @@ void main() {
 
     test('falls back to the portfolio reset date when there is no matching buy order', () {
       final resetAt = DateTime(2025, 1, 15);
-      final portfolio = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
-        currency: 'BRL',
-        resetAt: resetAt,
-        positions: [_position()],
-      );
+      final portfolio = SimulatedPortfolioSummary(currency: 'BRL', resetAt: resetAt, positions: [_position()]);
 
       final lots = SimulatedLotBuilder.build(
         portfolio: portfolio,
@@ -118,8 +104,6 @@ void main() {
 
     test('a position with no fetched quote falls back to its cost basis, marked as not live', () {
       final portfolio = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
         positions: [_position(quantity: 10, averagePrice: 30, costBasis: 300)],
@@ -150,8 +134,6 @@ void main() {
 
     test('uses the caller-supplied type resolver per ticker', () {
       final portfolio = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
         positions: [_position(ticker: 'HGLG11')],

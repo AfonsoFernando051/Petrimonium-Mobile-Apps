@@ -108,14 +108,13 @@ class Translator {
       AppStrings.walletBridgeComingSoon: 'Em breve na Wallet',
       AppStrings.simulatedWalletTitle: 'Carteira Simulada',
       AppStrings.simulatedWalletDisclaimer:
-          'Dinheiro virtual, sem execução real. Sem conexão com B3, corretora, banco ou exchange. Não é recomendação financeira — resultados simulados não garantem resultados reais.',
-      AppStrings.simulatedWalletVirtualBalanceLabel: 'Saldo virtual',
+          'Carteira de simulação: você informa os ativos e as datas, e as cotações são reais. Nenhuma ordem é executada e não há conexão com B3, corretora, banco ou exchange. Não é recomendação financeira — resultados simulados não garantem resultados reais.',
       AppStrings.simulatedWalletNoPositions:
           'Você ainda não tem posições simuladas. Que tal registrar sua primeira operação?',
       AppStrings.simulatedWalletResetAction: 'Reiniciar simulação',
       AppStrings.simulatedWalletResetConfirmTitle: 'Reiniciar simulação?',
       AppStrings.simulatedWalletResetConfirmMessage:
-          'Isso apaga todas as posições e operações simuladas e restaura o saldo virtual inicial. Essa ação não pode ser desfeita.',
+          'Isso apaga todas as posições e operações simuladas. Essa ação não pode ser desfeita.',
       AppStrings.simulatedWalletResetConfirmAction: 'Reiniciar',
       AppStrings.simulatedWalletResetSuccess: 'Simulação reiniciada',
       AppStrings.simulatedOrderScreenTitle: 'Nova operação simulada',
@@ -151,7 +150,7 @@ class Translator {
       AppStrings.simulatedWalletTypeMismatchWarning: 'Esse ticker parece ser {detected}, não {selected}.',
       AppStrings.simulatedWalletEmptyStateTitle: 'Monte sua carteira simulada',
       AppStrings.simulatedWalletEmptyStateBody:
-          'Adicione seu primeiro ativo fictício para acompanhar quanto você ganharia ou perderia de verdade.',
+          'Adicione seu primeiro ativo e a data em que o compraria para acompanhar quanto você ganharia ou perderia de verdade.',
       AppStrings.simulatedWalletEmptyStateCta: 'Adicionar primeiro ativo',
       AppStrings.holdingQuoteUnavailable: 'sem cotação',
       AppStrings.holdingNotQuoted: 'não cotado',
@@ -241,14 +240,13 @@ class Translator {
       AppStrings.walletBridgeComingSoon: 'Coming soon in Wallet',
       AppStrings.simulatedWalletTitle: 'Simulated Wallet',
       AppStrings.simulatedWalletDisclaimer:
-          'Virtual money, no real execution. No connection to any exchange, broker, or bank. Not financial advice — simulated results do not guarantee real results.',
-      AppStrings.simulatedWalletVirtualBalanceLabel: 'Virtual balance',
+          'Simulation wallet: you enter the assets and dates, and quotes are real. No order is executed and there is no connection to any exchange, broker, or bank. Not financial advice — simulated results do not guarantee real results.',
       AppStrings.simulatedWalletNoPositions:
           "You don't have any simulated positions yet. How about placing your first order?",
       AppStrings.simulatedWalletResetAction: 'Reset simulation',
       AppStrings.simulatedWalletResetConfirmTitle: 'Reset simulation?',
       AppStrings.simulatedWalletResetConfirmMessage:
-          'This erases every simulated position and order and restores the starting virtual balance. This cannot be undone.',
+          'This erases every simulated position and order. This cannot be undone.',
       AppStrings.simulatedWalletResetConfirmAction: 'Reset',
       AppStrings.simulatedWalletResetSuccess: 'Simulation reset',
       AppStrings.simulatedOrderScreenTitle: 'New simulated order',
@@ -284,7 +282,7 @@ class Translator {
       AppStrings.simulatedWalletTypeMismatchWarning: 'That ticker looks like {detected}, not {selected}.',
       AppStrings.simulatedWalletEmptyStateTitle: 'Build your simulated portfolio',
       AppStrings.simulatedWalletEmptyStateBody:
-          'Add your first fictitious asset to track how much you would really gain or lose.',
+          'Add your first asset and the date you would have bought it to track how much you would really gain or lose.',
       AppStrings.simulatedWalletEmptyStateCta: 'Add first asset',
       AppStrings.holdingQuoteUnavailable: 'no quote',
       AppStrings.holdingNotQuoted: 'not quoted',
@@ -364,14 +362,13 @@ class Translator {
       AppStrings.walletBridgeComingSoon: 'Próximamente en Wallet',
       AppStrings.simulatedWalletTitle: 'Cartera Simulada',
       AppStrings.simulatedWalletDisclaimer:
-          'Dinero virtual, sin ejecución real. Sin conexión con ninguna bolsa, corredora o banco. No es una recomendación financiera — los resultados simulados no garantizan resultados reales.',
-      AppStrings.simulatedWalletVirtualBalanceLabel: 'Saldo virtual',
+          'Cartera de simulación: tú indicas los activos y las fechas, y las cotizaciones son reales. No se ejecuta ninguna orden y no hay conexión con ninguna bolsa, corredora o banco. No es una recomendación financiera — los resultados simulados no garantizan resultados reales.',
       AppStrings.simulatedWalletNoPositions:
           'Aún no tienes posiciones simuladas. ¿Qué tal registrar tu primera operación?',
       AppStrings.simulatedWalletResetAction: 'Reiniciar simulación',
       AppStrings.simulatedWalletResetConfirmTitle: '¿Reiniciar simulación?',
       AppStrings.simulatedWalletResetConfirmMessage:
-          'Esto borra todas las posiciones y operaciones simuladas y restaura el saldo virtual inicial. Esta acción no se puede deshacer.',
+          'Esto borra todas las posiciones y operaciones simuladas. Esta acción no se puede deshacer.',
       AppStrings.simulatedWalletResetConfirmAction: 'Reiniciar',
       AppStrings.simulatedWalletResetSuccess: 'Simulación reiniciada',
       AppStrings.simulatedOrderScreenTitle: 'Nueva operación simulada',
@@ -407,7 +404,7 @@ class Translator {
       AppStrings.simulatedWalletTypeMismatchWarning: 'Ese ticker parece ser {detected}, no {selected}.',
       AppStrings.simulatedWalletEmptyStateTitle: 'Arma tu cartera simulada',
       AppStrings.simulatedWalletEmptyStateBody:
-          'Agrega tu primer activo ficticio para ver cuánto ganarías o perderías de verdad.',
+          'Agrega tu primer activo y la fecha en que lo comprarías para ver cuánto ganarías o perderías de verdad.',
       AppStrings.simulatedWalletEmptyStateCta: 'Agregar primer activo',
       AppStrings.holdingQuoteUnavailable: 'sin cotización',
       AppStrings.holdingNotQuoted: 'no cotizado',

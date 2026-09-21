@@ -467,7 +467,6 @@ class AppStrings {
   // exchange. See Petrimonium-Backend docs/BACKEND_MODULE_PLAN.md §11.
   static const String simulatedWalletTitle = 'simulatedWalletTitle';
   static const String simulatedWalletDisclaimer = 'simulatedWalletDisclaimer';
-  static const String simulatedWalletVirtualBalanceLabel = 'simulatedWalletVirtualBalanceLabel';
   static const String simulatedWalletNoPositions = 'simulatedWalletNoPositions';
   static const String simulatedWalletResetAction = 'simulatedWalletResetAction';
   static const String simulatedWalletResetConfirmTitle = 'simulatedWalletResetConfirmTitle';

@@ -14,7 +14,6 @@ void main() {
     required double totalPatrimony,
     required double totalProfit,
     required double totalProfitPercent,
-    required double virtualBalance,
   }) {
     return MaterialApp(
       theme: AppTheme.dark,
@@ -23,26 +22,21 @@ void main() {
           totalPatrimony: totalPatrimony,
           totalProfit: totalProfit,
           totalProfitPercent: totalProfitPercent,
-          virtualBalance: virtualBalance,
         ),
       ),
     );
   }
 
   group('SimulatedWalletKpiHeader', () {
-    testWidgets('shows the total patrimony and cash balance', (tester) async {
-      await tester.pumpWidget(
-        buildTestableWidget(totalPatrimony: 1350, totalProfit: 50, totalProfitPercent: 16.67, virtualBalance: 1000),
-      );
+    testWidgets('shows the total patrimony with no separate cash balance', (tester) async {
+      await tester.pumpWidget(buildTestableWidget(totalPatrimony: 1350, totalProfit: 50, totalProfitPercent: 16.67));
 
       expect(find.textContaining('1.350,00'), findsOneWidget);
-      expect(find.textContaining('1.000,00'), findsOneWidget);
+      expect(find.textContaining('1.000,00'), findsNothing);
     });
 
     testWidgets('colors a gain green (success token), never the error color', (tester) async {
-      await tester.pumpWidget(
-        buildTestableWidget(totalPatrimony: 1350, totalProfit: 50, totalProfitPercent: 16.67, virtualBalance: 1000),
-      );
+      await tester.pumpWidget(buildTestableWidget(totalPatrimony: 1350, totalProfit: 50, totalProfitPercent: 16.67));
 
       final resultText = tester.widget<Text>(find.textContaining('R\$ 50,00'));
       final tokens = AppTheme.dark.extension<AppColorTokens>()!;
@@ -50,9 +44,7 @@ void main() {
     });
 
     testWidgets('colors a loss red (error token), with a signed negative currency and percent', (tester) async {
-      await tester.pumpWidget(
-        buildTestableWidget(totalPatrimony: 950, totalProfit: -50, totalProfitPercent: -16.67, virtualBalance: 1000),
-      );
+      await tester.pumpWidget(buildTestableWidget(totalPatrimony: 950, totalProfit: -50, totalProfitPercent: -16.67));
 
       final resultText = tester.widget<Text>(find.textContaining('-R\$ 50,00'));
       final tokens = AppTheme.dark.extension<AppColorTokens>()!;

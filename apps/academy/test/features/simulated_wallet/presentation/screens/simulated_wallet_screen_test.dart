@@ -79,13 +79,7 @@ void main() {
     });
 
     testWidgets('shows the title/subtitle header and the simulation disclaimer once loaded', (tester) async {
-      remoteDataSource.portfolioToReturn = {
-        'virtualBalance': 10000.0,
-        'initialBalance': 10000.0,
-        'currency': 'BRL',
-        'resetAt': null,
-        'positions': <Map<String, dynamic>>[],
-      };
+      remoteDataSource.portfolioToReturn = {'currency': 'BRL', 'resetAt': null, 'positions': <Map<String, dynamic>>[]};
       await controller.loadPortfolio();
 
       await tester.pumpWidget(buildTestableWidget());
@@ -97,10 +91,10 @@ void main() {
       expect(find.text(Translator.translate(AppStrings.simulatedWalletDisclaimer)), findsOneWidget);
     });
 
-    testWidgets('renders the virtual balance and simulated positions once loaded', (tester) async {
+    testWidgets('renders the positions the user added, with patrimony equal to their value and no cash on top', (
+      tester,
+    ) async {
       remoteDataSource.portfolioToReturn = {
-        'virtualBalance': 9695.00,
-        'initialBalance': 10000.00,
         'currency': 'BRL',
         'resetAt': null,
         'positions': [
@@ -112,7 +106,9 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      expect(find.textContaining('9.695,00'), findsOneWidget);
+      // No quote here, so the position is valued at its 305.00 cost basis — the whole patrimony.
+      expect(find.textContaining('305,00'), findsWidgets);
+      expect(find.textContaining('10.000,00'), findsNothing);
       // Grouped by type now (STOCKS/"Ações"), not by ticker — the ticker
       // itself only shows on its own row inside the expanded category.
       expect(find.text('PETR4'), findsOneWidget);
@@ -121,8 +117,6 @@ void main() {
 
     testWidgets('shows the total patrimony, wealth chart and allocation donut once positions exist', (tester) async {
       remoteDataSource.portfolioToReturn = {
-        'virtualBalance': 1000.0,
-        'initialBalance': 10000.0,
         'currency': 'BRL',
         'resetAt': null,
         'positions': [
@@ -135,8 +129,9 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      // Patrimônio total: 1000 cash + 350 current value = 1350.
-      expect(find.textContaining('1.350,00'), findsOneWidget);
+      // Patrimônio total is just the 350 current value — no cash is added on top.
+      expect(find.textContaining('R\$ 350,00'), findsWidgets);
+      expect(find.textContaining('1.350,00'), findsNothing);
       expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationTitle)), findsOneWidget);
       expect(find.byType(WealthEvolutionBarCard), findsOneWidget);
       // Unrealized gain shown on the KPI pill, the category header and the
@@ -146,8 +141,6 @@ void main() {
 
     testWidgets('a losing position shows a negative signed result and return, not a fabricated gain', (tester) async {
       remoteDataSource.portfolioToReturn = {
-        'virtualBalance': 0.0,
-        'initialBalance': 10000.0,
         'currency': 'BRL',
         'resetAt': null,
         'positions': [
@@ -169,8 +162,6 @@ void main() {
       'shows the pet empty-state card inviting a first asset, hiding the wealth/allocation/holdings sections',
       (tester) async {
         remoteDataSource.portfolioToReturn = {
-          'virtualBalance': 10000.0,
-          'initialBalance': 10000.0,
           'currency': 'BRL',
           'resetAt': null,
           'positions': <Map<String, dynamic>>[],
@@ -189,13 +180,7 @@ void main() {
     );
 
     testWidgets('the empty-state CTA never labels itself as a real order, and opens the order screen', (tester) async {
-      remoteDataSource.portfolioToReturn = {
-        'virtualBalance': 10000.0,
-        'initialBalance': 10000.0,
-        'currency': 'BRL',
-        'resetAt': null,
-        'positions': <Map<String, dynamic>>[],
-      };
+      remoteDataSource.portfolioToReturn = {'currency': 'BRL', 'resetAt': null, 'positions': <Map<String, dynamic>>[]};
       await controller.loadPortfolio();
 
       await tester.pumpWidget(buildTestableWidget());
@@ -212,8 +197,6 @@ void main() {
 
     testWidgets('once a first asset exists, the full carteira replaces the empty-state card', (tester) async {
       remoteDataSource.portfolioToReturn = {
-        'virtualBalance': 9695.00,
-        'initialBalance': 10000.00,
         'currency': 'BRL',
         'resetAt': null,
         'positions': [
@@ -230,13 +213,7 @@ void main() {
     });
 
     testWidgets('the reset icon is present and disabled while a reset is in flight', (tester) async {
-      remoteDataSource.portfolioToReturn = {
-        'virtualBalance': 10000.0,
-        'initialBalance': 10000.0,
-        'currency': 'BRL',
-        'resetAt': null,
-        'positions': <Map<String, dynamic>>[],
-      };
+      remoteDataSource.portfolioToReturn = {'currency': 'BRL', 'resetAt': null, 'positions': <Map<String, dynamic>>[]};
       await controller.loadPortfolio();
 
       await tester.pumpWidget(buildTestableWidget());

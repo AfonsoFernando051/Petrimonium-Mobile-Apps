@@ -128,10 +128,9 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
               SimulatedPortfolioNotConnectedCard(mascotController: widget.mascotController, onAddAsset: _openNewOrder)
             else ...[
               SimulatedWalletKpiHeader(
-                totalPatrimony: controller.totalPatrimony,
+                totalPatrimony: controller.totalPositionsValue,
                 totalProfit: controller.totalProfit,
                 totalProfitPercent: controller.totalProfitPercent,
-                virtualBalance: controller.portfolio.virtualBalance,
               ),
               const SizedBox(height: 16),
               WealthEvolutionBarCard(series: controller.monthlyWealth12m),

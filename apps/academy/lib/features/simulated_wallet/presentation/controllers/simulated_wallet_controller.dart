@@ -95,10 +95,6 @@ class SimulatedWalletController extends ChangeNotifier {
   /// Sum of every holding's current value.
   double get totalPositionsValue => holdings.fold(0.0, (sum, h) => sum + h.currentValue);
 
-  /// Virtual cash still uninvested, plus every position at its current
-  /// (or, failing that, cost) value — the single "patrimônio total" figure.
-  double get totalPatrimony => portfolio.virtualBalance + totalPositionsValue;
-
   /// Unrealized gain/loss across every position with a known price. A
   /// position with no quote contributes zero here (neither a gain nor a
   /// loss), never a fabricated figure.

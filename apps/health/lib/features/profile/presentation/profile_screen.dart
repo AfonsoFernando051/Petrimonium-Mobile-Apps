@@ -60,7 +60,9 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        ClipOval(child: Image.asset(PetSpecies.fox.assetPath, width: 48, height: 48, fit: BoxFit.contain)),
+                        ClipOval(
+                          child: Image.asset(PetSpecies.fox.assetPath, width: 48, height: 48, fit: BoxFit.contain),
+                        ),
                         const SizedBox(width: 14),
                         Expanded(
                           child: Column(

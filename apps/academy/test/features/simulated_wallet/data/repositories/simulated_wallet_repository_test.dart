@@ -15,13 +15,7 @@ class FakeSimulatedWalletRemoteDataSource extends SimulatedWalletRemoteDataSourc
   // to any other class under test.
   FakeSimulatedWalletRemoteDataSource() : super(apiClient: ApiClient());
 
-  Map<String, dynamic> portfolioToReturn = {
-    'virtualBalance': 10000.0,
-    'initialBalance': 10000.0,
-    'currency': 'BRL',
-    'resetAt': null,
-    'positions': <Map<String, dynamic>>[],
-  };
+  Map<String, dynamic> portfolioToReturn = {'currency': 'BRL', 'resetAt': null, 'positions': <Map<String, dynamic>>[]};
   Map<String, dynamic> orderToReturn = {
     'id': 1,
     'ticker': 'PETR4',
@@ -90,7 +84,6 @@ void main() {
   test('fetchPortfolio maps raw JSON into a SimulatedPortfolioSummary', () async {
     final result = await repository.fetchPortfolio();
 
-    expect(result.virtualBalance, 10000.0);
     expect(result.currency, 'BRL');
     expect(result.positions, isEmpty);
   });

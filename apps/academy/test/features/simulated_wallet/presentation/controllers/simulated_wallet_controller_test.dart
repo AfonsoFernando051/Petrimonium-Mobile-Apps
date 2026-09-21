@@ -120,19 +120,13 @@ void main() {
 
   group('loadPortfolio', () {
     test('populates portfolio and clears the loading flag on success', () async {
-      repository.portfolioToReturn = const SimulatedPortfolioSummary(
-        virtualBalance: 9500,
-        initialBalance: 10000,
-        currency: 'BRL',
-        resetAt: null,
-        positions: [],
-      );
+      repository.portfolioToReturn = const SimulatedPortfolioSummary(currency: 'BRL', resetAt: null, positions: []);
 
       await controller.loadPortfolio();
 
       expect(controller.isLoading, isFalse);
       expect(controller.error, isNull);
-      expect(controller.portfolio.virtualBalance, 9500);
+      expect(controller.portfolio.currency, 'BRL');
     });
 
     test('a repository failure is captured as a user-facing error, not an unhandled exception', () async {
@@ -149,17 +143,17 @@ void main() {
     test('on success, reloads the portfolio and returns the created order', () async {
       repository.orderToReturn = _order();
       repository.portfolioToReturn = const SimulatedPortfolioSummary(
-        virtualBalance: 9695,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
-        positions: [],
+        positions: [
+          SimulatedPosition(ticker: 'PETR4', quantity: 10, averagePrice: 30, costBasis: 300, allocationPercent: 100),
+        ],
       );
 
       final result = await controller.placeOrder(ticker: 'petr4', side: SimulatedOrderSide.buy, quantity: 10);
 
       expect(result?.id, 1);
-      expect(controller.portfolio.virtualBalance, 9695);
+      expect(controller.portfolio.positions.single.ticker, 'PETR4');
       expect(controller.orderError, isNull);
       expect(controller.isPlacingOrder, isFalse);
     });
@@ -189,20 +183,20 @@ void main() {
 
     test('on failure, returns null and sets orderError without touching the current portfolio', () async {
       repository.portfolioToReturn = const SimulatedPortfolioSummary(
-        virtualBalance: 10000,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
-        positions: [],
+        positions: [
+          SimulatedPosition(ticker: 'PETR4', quantity: 10, averagePrice: 30, costBasis: 300, allocationPercent: 100),
+        ],
       );
       await controller.loadPortfolio();
-      repository.placeOrderError = Exception('Insufficient virtual balance');
+      repository.placeOrderError = Exception('No historical price available');
 
       final result = await controller.placeOrder(ticker: 'PETR4', side: SimulatedOrderSide.buy, quantity: 999999);
 
       expect(result, isNull);
       expect(controller.orderError, isNotNull);
-      expect(controller.portfolio.virtualBalance, 10000); // unchanged
+      expect(controller.portfolio.positions, hasLength(1)); // unchanged
     });
   });
 
@@ -258,10 +252,8 @@ void main() {
       );
     }
 
-    test('pairs each position with its fetched quote and totals patrimony/profit off the current value', () async {
+    test('pairs each position with its fetched quote and totals profit off the current value', () async {
       repository.portfolioToReturn = SimulatedPortfolioSummary(
-        virtualBalance: 1000,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
         positions: [position(ticker: 'PETR4', quantity: 10, costBasis: 300)],
@@ -274,15 +266,12 @@ void main() {
 
       expect(controller.positionQuotes.single.currentValue, 350);
       expect(controller.totalPositionsValue, 350);
-      expect(controller.totalPatrimony, 1350); // 1000 cash + 350 invested
       expect(controller.totalProfit, 50); // 350 - 300 cost basis
       expect(controller.totalProfitPercent, closeTo(16.666, 0.01));
     });
 
     test('a position whose quote failed falls back to its cost basis, contributing zero profit', () async {
       repository.portfolioToReturn = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
         positions: [position(ticker: 'VALE3', quantity: 5, costBasis: 200)],
@@ -304,15 +293,13 @@ void main() {
       expect(controller.positionQuotes, isEmpty);
       expect(controller.holdings, isEmpty);
       expect(controller.allocation, isEmpty);
-      expect(controller.totalPatrimony, 0);
+      expect(controller.totalPositionsValue, 0);
       expect(controller.totalProfitPercent, 0);
     });
 
     test('placeOrder refreshes position quotes alongside the portfolio', () async {
       repository.orderToReturn = _order();
       repository.portfolioToReturn = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
         positions: [position(ticker: 'PETR4', quantity: 10, costBasis: 300)],
@@ -328,8 +315,6 @@ void main() {
 
     test('builds holdings and an allocation slice per B3-classified type, from real ticker positions', () async {
       repository.portfolioToReturn = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
         positions: [
@@ -349,8 +334,6 @@ void main() {
 
     test('a ticker with a stored type override uses it over the B3 classifier', () async {
       repository.portfolioToReturn = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
         positions: [position(ticker: 'PETR4', quantity: 10, costBasis: 300)],
@@ -364,8 +347,6 @@ void main() {
 
     test('an order-history fetch failure never breaks the portfolio load', () async {
       repository.portfolioToReturn = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: null,
         positions: [position(ticker: 'PETR4', quantity: 10, costBasis: 300)],
@@ -380,8 +361,6 @@ void main() {
 
     test('monthlyWealth12m has a bar for the current month, ending at today\'s real value', () async {
       repository.portfolioToReturn = SimulatedPortfolioSummary(
-        virtualBalance: 0,
-        initialBalance: 10000,
         currency: 'BRL',
         resetAt: DateTime.now().subtract(const Duration(days: 10)),
         positions: [position(ticker: 'PETR4', quantity: 10, costBasis: 300)],
