@@ -28,6 +28,9 @@ class FakeSimulatedWalletRepository extends SimulatedWalletRepository {
   String? lastPlacedTicker;
   SimulatedOrderSide? lastPlacedSide;
   double? lastPlacedQuantity;
+  DateTime? lastPlacedTradeDate;
+  AssetQuote? quoteAtDateToReturn;
+  DateTime? lastQuotedAtDate;
 
   Object? resetError;
   bool resetCalled = false;
@@ -65,12 +68,20 @@ class FakeSimulatedWalletRepository extends SimulatedWalletRepository {
     required SimulatedOrderSide side,
     required double quantity,
     String? clientOrderId,
+    DateTime? tradeDate,
   }) async {
+    lastPlacedTradeDate = tradeDate;
     lastPlacedTicker = ticker;
     lastPlacedSide = side;
     lastPlacedQuantity = quantity;
     if (placeOrderError != null) throw placeOrderError!;
     return orderToReturn!;
+  }
+
+  @override
+  Future<AssetQuote?> fetchQuoteAtDate(String ticker, DateTime date) async {
+    lastQuotedAtDate = date;
+    return quoteAtDateToReturn;
   }
 
   @override
@@ -161,6 +172,19 @@ void main() {
       expect(repository.lastPlacedTicker, 'VALE3');
       expect(repository.lastPlacedSide, SimulatedOrderSide.sell);
       expect(repository.lastPlacedQuantity, 4.5);
+    });
+
+    test('forwards a backdated tradeDate to the repository', () async {
+      repository.orderToReturn = _order();
+
+      await controller.placeOrder(
+        ticker: 'PETR4',
+        side: SimulatedOrderSide.buy,
+        quantity: 10,
+        tradeDate: DateTime(2025, 3, 14),
+      );
+
+      expect(repository.lastPlacedTradeDate, DateTime(2025, 3, 14));
     });
 
     test('on failure, returns null and sets orderError without touching the current portfolio', () async {
@@ -371,5 +395,19 @@ void main() {
       expect(controller.monthlyWealth12m, isNotEmpty);
       expect(controller.monthlyWealth12m.last.portfolioValue, 350);
     });
+  });
+
+  test('fetchQuoteAtDate delegates to the repository', () async {
+    repository.quoteAtDateToReturn = const AssetQuote(
+      symbol: 'PETR4',
+      shortName: null,
+      regularMarketPrice: 36.1,
+      currency: 'BRL',
+    );
+
+    final result = await controller.fetchQuoteAtDate('PETR4', DateTime(2025, 3, 14));
+
+    expect(result?.regularMarketPrice, 36.1);
+    expect(repository.lastQuotedAtDate, DateTime(2025, 3, 14));
   });
 }

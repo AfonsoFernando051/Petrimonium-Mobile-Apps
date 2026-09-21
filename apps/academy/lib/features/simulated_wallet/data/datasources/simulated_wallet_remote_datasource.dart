@@ -31,12 +31,14 @@ class SimulatedWalletRemoteDataSource {
     required String side,
     required double quantity,
     String? clientOrderId,
+    String? tradeDate,
   }) async {
     final response = await apiClient.post(ApiConstants.simulatedPortfolioOrdersEndpoint, {
       'ticker': ticker,
       'side': side,
       'quantity': quantity,
       'clientOrderId': ?clientOrderId,
+      'tradeDate': ?tradeDate,
     });
     if (response.statusCode != 201) {
       throw Exception(
@@ -93,6 +95,21 @@ class SimulatedWalletRemoteDataSource {
     if (response.statusCode != 200) {
       throw Exception(
         extractErrorDetail(response, fallback: 'Failed to fetch quote. Status Code: ${response.statusCode}'),
+      );
+    }
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
+
+  /// Returns `null` when there is no close on or before [date] (backend
+  /// answers 404 — the ticker didn't exist yet that far back).
+  Future<Map<String, dynamic>?> fetchQuoteAtDate(String ticker, String date) async {
+    final response = await apiClient.get(ApiConstants.simulatedPortfolioQuoteAtDateEndpoint(ticker, date));
+    if (response.statusCode == 404) {
+      return null;
+    }
+    if (response.statusCode != 200) {
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to fetch historical quote. Status Code: ${response.statusCode}'),
       );
     }
     return jsonDecode(response.body) as Map<String, dynamic>;

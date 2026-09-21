@@ -19,12 +19,14 @@ class SimulatedWalletRepository {
     required SimulatedOrderSide side,
     required double quantity,
     String? clientOrderId,
+    DateTime? tradeDate,
   }) async {
     final raw = await remoteDataSource.placeOrder(
       ticker: ticker,
       side: side.apiValue,
       quantity: quantity,
       clientOrderId: clientOrderId,
+      tradeDate: tradeDate == null ? null : _formatDate(tradeDate),
     );
     return SimulatedOrder.fromJson(raw);
   }
@@ -45,4 +47,12 @@ class SimulatedWalletRepository {
     final raw = await remoteDataSource.fetchQuote(ticker);
     return raw == null ? null : AssetQuote.fromJson(raw);
   }
+
+  Future<AssetQuote?> fetchQuoteAtDate(String ticker, DateTime date) async {
+    final raw = await remoteDataSource.fetchQuoteAtDate(ticker, _formatDate(date));
+    return raw == null ? null : AssetQuote.fromJson(raw);
+  }
+
+  String _formatDate(DateTime date) =>
+      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 }

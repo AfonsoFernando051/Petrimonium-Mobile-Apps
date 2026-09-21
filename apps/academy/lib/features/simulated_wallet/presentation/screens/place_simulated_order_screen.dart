@@ -18,6 +18,12 @@ import 'package:petrimonium_academy/features/simulated_wallet/presentation/widge
 /// never entered by the user, so the fill always matches what the server
 /// will actually execute at.
 ///
+/// The order date defaults to today (a live order). Picking a past date —
+/// like Wallet's purchase date — backdates the order to that day's close, so
+/// a student can assemble a portfolio "as if" bought months ago and see its
+/// real evolution. The price still isn't the student's to type: the close
+/// shown here is only a preview; the server re-resolves it on confirm.
+///
 /// The investment-type grid mirrors Wallet's real `AddAssetScreen` (any
 /// asset class, the student's own explicit choice, pre-filled by the same
 /// B3-ticker heuristic) — this is the "montar a carteira como bem
@@ -46,6 +52,17 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
   InvestmentTypeEnum? _selectedType;
   SimulatedOrderSide _side = SimulatedOrderSide.buy;
   bool _isSubmitting = false;
+
+  DateTime _tradeDate = _dateOnly(DateTime.now());
+  AssetQuote? _historicalQuote;
+  bool _isLoadingHistoricalQuote = false;
+
+  static DateTime _dateOnly(DateTime date) => DateTime(date.year, date.month, date.day);
+
+  static String _formatDate(DateTime date) =>
+      '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+
+  bool get _isBackdated => _tradeDate.isBefore(_dateOnly(DateTime.now()));
 
   @override
   void dispose() {
@@ -83,6 +100,8 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
       _searchController.text = quote.symbol;
     });
 
+    unawaited(_refreshHistoricalQuote());
+
     // Pre-fills the type grid with the student's own past choice for this
     // ticker, or the B3-suffix classifier's best guess — never overriding a
     // choice the student already made earlier in this session.
@@ -91,6 +110,67 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
       if (!mounted || _selected?.symbol != quote.symbol) return;
       setState(() => _selectedType = resolved);
     }
+  }
+
+  Future<void> _selectDate() async {
+    final tokens = context.colors;
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _tradeDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      builder: (context, child) => Theme(
+        data: Theme.of(context).copyWith(colorScheme: Theme.of(context).colorScheme.copyWith(primary: tokens.primary)),
+        child: child!,
+      ),
+    );
+    if (picked == null) return;
+    setState(() => _tradeDate = _dateOnly(picked));
+    await _refreshHistoricalQuote();
+  }
+
+  /// Previews the close the server will fill a backdated order at. Cleared
+  /// for a live order, where the reference price above already applies.
+  Future<void> _refreshHistoricalQuote() async {
+    final selected = _selected;
+    final date = _tradeDate;
+    if (selected == null || !_isBackdated) {
+      setState(() {
+        _historicalQuote = null;
+        _isLoadingHistoricalQuote = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _historicalQuote = null;
+      _isLoadingHistoricalQuote = true;
+    });
+    AssetQuote? quote;
+    try {
+      quote = await widget.controller.fetchQuoteAtDate(selected.symbol, date);
+    } catch (_) {
+      // Same outcome for the student as "no close that day": the order is
+      // blocked below rather than falling back to today's price.
+    }
+    if (!mounted || _selected?.symbol != selected.symbol || _tradeDate != date) return;
+    setState(() {
+      _historicalQuote = quote;
+      _isLoadingHistoricalQuote = false;
+    });
+  }
+
+  String get _referencePriceText {
+    if (!_isBackdated) {
+      final price = _selected!.regularMarketPrice;
+      return '${Translator.translate(AppStrings.simulatedOrderReferencePriceLabel)}: '
+          "${price == null ? '—' : 'R\$ ${price.toStringAsFixed(2)}'}";
+    }
+    final label = '${Translator.translate(AppStrings.simulatedOrderHistoricalPriceLabel)} ${_formatDate(_tradeDate)}';
+    if (_isLoadingHistoricalQuote) return '$label: …';
+    final price = _historicalQuote?.regularMarketPrice;
+    if (price == null) return Translator.translate(AppStrings.simulatedOrderNoHistoricalQuote);
+    return '$label: R\$ ${price.toStringAsFixed(2)}';
   }
 
   Future<void> _confirm() async {
@@ -104,6 +184,13 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
       GameSnack.show(context, Translator.translate(AppStrings.simulatedWalletSelectTypeError), isError: true);
       return;
     }
+    if (_isBackdated) {
+      if (_isLoadingHistoricalQuote) return;
+      if (_historicalQuote?.regularMarketPrice == null) {
+        GameSnack.show(context, Translator.translate(AppStrings.simulatedOrderNoHistoricalQuote), isError: true);
+        return;
+      }
+    }
     final quantity = double.tryParse(_quantityController.text.replaceAll(',', '.'));
     if (quantity == null || quantity <= 0) {
       GameSnack.show(context, Translator.translate(AppStrings.simulatedOrderQuantityLabel), isError: true);
@@ -113,7 +200,12 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
     setState(() => _isSubmitting = true);
     unawaited(HapticFeedback.mediumImpact());
     await widget.controller.setTickerType(selected.symbol, type);
-    final order = await widget.controller.placeOrder(ticker: selected.symbol, side: _side, quantity: quantity);
+    final order = await widget.controller.placeOrder(
+      ticker: selected.symbol,
+      side: _side,
+      quantity: quantity,
+      tradeDate: _isBackdated ? _tradeDate : null,
+    );
     if (!mounted) return;
     setState(() => _isSubmitting = false);
 
@@ -184,10 +276,15 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
                 children: [
                   Text(_selected!.symbol, style: AppTextStyles.titleLarge.copyWith(color: tokens.textPrimary)),
                   const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    '${Translator.translate(AppStrings.simulatedOrderReferencePriceLabel)}: '
-                    '${_selected!.regularMarketPrice == null ? '—' : 'R\$ ${_selected!.regularMarketPrice!.toStringAsFixed(2)}'}',
-                    style: AppTextStyles.body.copyWith(color: tokens.textSecondary),
+                  Text(_referencePriceText, style: AppTextStyles.body.copyWith(color: tokens.textSecondary)),
+                  const SizedBox(height: AppSpacing.md),
+                  _DateField(
+                    tokens: tokens,
+                    label: Translator.translate(AppStrings.simulatedOrderDateLabel),
+                    text: _isBackdated
+                        ? _formatDate(_tradeDate)
+                        : Translator.translate(AppStrings.simulatedOrderDateToday),
+                    onTap: _selectDate,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   TextField(
@@ -241,6 +338,49 @@ class _SideToggle extends StatelessWidget {
       selected: {selected},
       onSelectionChanged: (set) => onChanged(set.first),
       style: SegmentedButton.styleFrom(selectedForegroundColor: tokens.primary),
+    );
+  }
+}
+
+/// Tap-to-pick date row — ported from Wallet's `AddAssetScreen._DateField`,
+/// with a visible [label] since here the date has a sensible default (today)
+/// rather than being an empty required field.
+class _DateField extends StatelessWidget {
+  const _DateField({required this.tokens, required this.label, required this.text, required this.onTap});
+
+  final AppColorTokens tokens;
+  final String label;
+  final String text;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: AppTextStyles.caption.copyWith(color: tokens.textSecondary)),
+        const SizedBox(height: AppSpacing.xs),
+        InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            decoration: BoxDecoration(
+              color: tokens.surface,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: tokens.border),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.calendar_today_outlined, size: 18, color: tokens.textSecondary),
+                const SizedBox(width: 10),
+                Text(text, style: TextStyle(color: tokens.textPrimary, fontSize: 14)),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

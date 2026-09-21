@@ -197,12 +197,16 @@ class SimulatedWalletController extends ChangeNotifier {
   Future<void> refresh() => loadPortfolio();
 
   /// Places a simulated order and reloads the portfolio on success so the
-  /// new balance/position is immediately reflected. Returns the created
-  /// order, or `null` if the placement failed (see [orderError]).
+  /// new balance/position is immediately reflected. A past [tradeDate]
+  /// backdates the order to that day's close (the server resolves the
+  /// price — see [fetchQuoteAtDate] for the preview); `null` is a live
+  /// order. Returns the created order, or `null` if the placement failed
+  /// (see [orderError]).
   Future<SimulatedOrder?> placeOrder({
     required String ticker,
     required SimulatedOrderSide side,
     required double quantity,
+    DateTime? tradeDate,
   }) async {
     isPlacingOrder = true;
     orderError = null;
@@ -210,7 +214,7 @@ class SimulatedWalletController extends ChangeNotifier {
 
     SimulatedOrder? result;
     try {
-      result = await _repository.placeOrder(ticker: ticker, side: side, quantity: quantity);
+      result = await _repository.placeOrder(ticker: ticker, side: side, quantity: quantity, tradeDate: tradeDate);
       portfolio = await _repository.fetchPortfolio();
       await _refreshDerivedState();
     } catch (e) {
@@ -253,4 +257,8 @@ class SimulatedWalletController extends ChangeNotifier {
   }
 
   Future<AssetQuote?> fetchQuote(String ticker) => _repository.fetchQuote(ticker);
+
+  /// The close a backdated order for [ticker] on [date] would fill at, or
+  /// `null` when no close exists that far back.
+  Future<AssetQuote?> fetchQuoteAtDate(String ticker, DateTime date) => _repository.fetchQuoteAtDate(ticker, date);
 }

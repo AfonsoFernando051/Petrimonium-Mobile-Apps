@@ -137,5 +137,87 @@ void main() {
 
       expect(await controller.resolveDefaultType('CDBBANCO'), InvestmentTypeEnum.FIXED_INCOME);
     });
+
+    group('order date', () {
+      // Picks the 10th of the previous month — always strictly in the past,
+      // whatever day the suite runs on (a fixed "1" would be today on the 1st).
+      Future<DateTime> pickDateInPreviousMonth(WidgetTester tester) async {
+        await revealAndTap(
+          tester,
+          find.text(Translator.translate(AppStrings.simulatedOrderDateToday), skipOffstage: false),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.byTooltip('Previous month'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('10'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('OK'));
+        await tester.pumpAndSettle();
+        final now = DateTime.now();
+        return DateTime(now.year, now.month - 1, 10);
+      }
+
+      Future<void> selectPetr4(WidgetTester tester) async {
+        remoteDataSource.quotesToReturn = [
+          {'symbol': 'PETR4', 'shortName': 'Petrobras', 'regularMarketPrice': 30.5, 'currency': 'BRL'},
+        ];
+        remoteDataSource.quoteToReturn = {'symbol': 'PETR4', 'regularMarketPrice': 30.5, 'currency': 'BRL'};
+        await revealAndEnterText(tester, find.byType(TextField, skipOffstage: false).first, 'PETR4');
+        await tester.pump(const Duration(milliseconds: 400));
+        await revealAndTap(tester, find.text('PETR4', skipOffstage: false).last);
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> confirm(WidgetTester tester) async {
+        await revealAndEnterText(tester, find.byType(TextField, skipOffstage: false).last, '5');
+        await revealAndTap(
+          tester,
+          find.text(Translator.translate(AppStrings.simulatedOrderConfirmAction), skipOffstage: false),
+        );
+        await tester.pump();
+        await tester.pump();
+      }
+
+      testWidgets('defaults to today and sends no tradeDate — an ordinary live order', (tester) async {
+        await tester.pumpWidget(buildTestableWidget());
+        await selectPetr4(tester);
+        await confirm(tester);
+
+        expect(remoteDataSource.lastPlacedTicker, 'PETR4');
+        expect(remoteDataSource.lastPlacedTradeDate, isNull);
+        expect(remoteDataSource.lastQuotedAtDate, isNull);
+      });
+
+      testWidgets('a past date shows that day\'s close and is sent as the order\'s tradeDate', (tester) async {
+        remoteDataSource.quoteAtDateToReturn = {'symbol': 'PETR4', 'regularMarketPrice': 26.4, 'currency': 'BRL'};
+
+        await tester.pumpWidget(buildTestableWidget());
+        await selectPetr4(tester);
+        final picked = await pickDateInPreviousMonth(tester);
+
+        expect(remoteDataSource.lastQuotedAtDate, isNotNull);
+        expect(find.textContaining('26.40', skipOffstage: false), findsOneWidget);
+
+        await confirm(tester);
+
+        final expected =
+            '${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
+        expect(remoteDataSource.lastPlacedTradeDate, expected);
+      });
+
+      testWidgets('a past date with no historical close blocks the order instead of falling back to today\'s price', (
+        tester,
+      ) async {
+        remoteDataSource.quoteAtDateToReturn = null;
+
+        await tester.pumpWidget(buildTestableWidget());
+        await selectPetr4(tester);
+        await pickDateInPreviousMonth(tester);
+        await confirm(tester);
+
+        expect(find.text(Translator.translate(AppStrings.simulatedOrderNoHistoricalQuote)), findsWidgets);
+        expect(remoteDataSource.lastPlacedTicker, isNull);
+      });
+    });
   });
 }

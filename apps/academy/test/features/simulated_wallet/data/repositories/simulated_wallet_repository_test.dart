@@ -36,7 +36,10 @@ class FakeSimulatedWalletRemoteDataSource extends SimulatedWalletRemoteDataSourc
   List<Map<String, dynamic>> quotesToReturn = [];
   Map<String, dynamic>? quoteToReturn;
   bool resetCalled = false;
+  Map<String, dynamic>? quoteAtDateToReturn;
   String? lastPlacedTicker;
+  String? lastPlacedTradeDate;
+  String? lastQuotedAtDate;
 
   @override
   Future<Map<String, dynamic>> fetchPortfolio() async => portfolioToReturn;
@@ -47,8 +50,10 @@ class FakeSimulatedWalletRemoteDataSource extends SimulatedWalletRemoteDataSourc
     required String side,
     required double quantity,
     String? clientOrderId,
+    String? tradeDate,
   }) async {
     lastPlacedTicker = ticker;
+    lastPlacedTradeDate = tradeDate;
     return orderToReturn;
   }
 
@@ -65,6 +70,12 @@ class FakeSimulatedWalletRemoteDataSource extends SimulatedWalletRemoteDataSourc
 
   @override
   Future<Map<String, dynamic>?> fetchQuote(String ticker) async => quoteToReturn;
+
+  @override
+  Future<Map<String, dynamic>?> fetchQuoteAtDate(String ticker, String date) async {
+    lastQuotedAtDate = date;
+    return quoteAtDateToReturn;
+  }
 }
 
 void main() {
@@ -88,6 +99,23 @@ void main() {
     await repository.placeOrder(ticker: 'PETR4', side: SimulatedOrderSide.buy, quantity: 10);
 
     expect(remoteDataSource.lastPlacedTicker, 'PETR4');
+  });
+
+  test('placeOrder sends a past tradeDate as a yyyy-MM-dd string', () async {
+    await repository.placeOrder(
+      ticker: 'PETR4',
+      side: SimulatedOrderSide.buy,
+      quantity: 10,
+      tradeDate: DateTime(2025, 3, 4),
+    );
+
+    expect(remoteDataSource.lastPlacedTradeDate, '2025-03-04');
+  });
+
+  test('placeOrder sends no tradeDate when none is given — a live order', () async {
+    await repository.placeOrder(ticker: 'PETR4', side: SimulatedOrderSide.buy, quantity: 10);
+
+    expect(remoteDataSource.lastPlacedTradeDate, isNull);
   });
 
   test('placeOrder maps the raw JSON into a SimulatedOrder', () async {
@@ -137,5 +165,20 @@ void main() {
     final result = await repository.fetchQuote('PETR4');
 
     expect(result?.symbol, 'PETR4');
+  });
+
+  test('fetchQuoteAtDate asks for the yyyy-MM-dd date and maps the raw JSON into an AssetQuote', () async {
+    remoteDataSource.quoteAtDateToReturn = {'symbol': 'PETR4', 'regularMarketPrice': 36.1, 'currency': 'BRL'};
+
+    final result = await repository.fetchQuoteAtDate('PETR4', DateTime(2025, 3, 14));
+
+    expect(remoteDataSource.lastQuotedAtDate, '2025-03-14');
+    expect(result?.regularMarketPrice, 36.1);
+  });
+
+  test('fetchQuoteAtDate returns null when there is no close for that date', () async {
+    remoteDataSource.quoteAtDateToReturn = null;
+
+    expect(await repository.fetchQuoteAtDate('PETR4', DateTime(2001, 1, 2)), isNull);
   });
 }

@@ -79,4 +79,6 @@ class ApiConstants {
   static String simulatedPortfolioQuoteSearchEndpoint(String query) =>
       '/api/v1/simulated-portfolios/quotes/search?query=$query';
   static String simulatedPortfolioQuoteEndpoint(String ticker) => '/api/v1/simulated-portfolios/quotes/$ticker';
+  static String simulatedPortfolioQuoteAtDateEndpoint(String ticker, String date) =>
+      '/api/v1/simulated-portfolios/quotes/$ticker/at-date?date=$date';
 }

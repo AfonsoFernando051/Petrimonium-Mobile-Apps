@@ -91,6 +91,23 @@ void main() {
       ).called(1);
     });
 
+    test('includes tradeDate only when provided', () async {
+      when(
+        () => mockApiClient.post(any(), any()),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'id': 1, 'ticker': 'PETR4'}), 201));
+
+      await dataSource.placeOrder(ticker: 'PETR4', side: 'BUY', quantity: 10, tradeDate: '2025-03-14');
+
+      verify(
+        () => mockApiClient.post(ApiConstants.simulatedPortfolioOrdersEndpoint, {
+          'ticker': 'PETR4',
+          'side': 'BUY',
+          'quantity': 10.0,
+          'tradeDate': '2025-03-14',
+        }),
+      ).called(1);
+    });
+
     test('throws on a non-201 response', () async {
       when(
         () => mockApiClient.post(any(), any()),
@@ -185,6 +202,30 @@ void main() {
       when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response('', 500));
 
       await expectLater(() => dataSource.fetchQuote('PETR4'), throwsA(isA<Exception>()));
+    });
+  });
+
+  group('fetchQuoteAtDate', () {
+    test('returns the decoded historical quote on 200', () async {
+      when(
+        () => mockApiClient.get(ApiConstants.simulatedPortfolioQuoteAtDateEndpoint('PETR4', '2025-03-14')),
+      ).thenAnswer((_) async => http.Response(jsonEncode({'symbol': 'PETR4', 'regularMarketPrice': 36.1}), 200));
+
+      final result = await dataSource.fetchQuoteAtDate('PETR4', '2025-03-14');
+
+      expect(result?['regularMarketPrice'], 36.1);
+    });
+
+    test('returns null (not an error) on 404 — no close that far back is a normal outcome', () async {
+      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response('', 404));
+
+      expect(await dataSource.fetchQuoteAtDate('PETR4', '2001-01-02'), isNull);
+    });
+
+    test('throws on any other non-200 response', () async {
+      when(() => mockApiClient.get(any())).thenAnswer((_) async => http.Response('', 500));
+
+      await expectLater(() => dataSource.fetchQuoteAtDate('PETR4', '2025-03-14'), throwsA(isA<Exception>()));
     });
   });
 }

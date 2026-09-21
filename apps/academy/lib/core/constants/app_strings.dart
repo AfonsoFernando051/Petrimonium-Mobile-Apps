@@ -483,6 +483,10 @@ class AppStrings {
   static const String simulatedOrderConfirmAction = 'simulatedOrderConfirmAction';
   static const String simulatedOrderSuccessMessage = 'simulatedOrderSuccessMessage';
   static const String simulatedOrderSelectAssetFirst = 'simulatedOrderSelectAssetFirst';
+  static const String simulatedOrderDateLabel = 'simulatedOrderDateLabel';
+  static const String simulatedOrderDateToday = 'simulatedOrderDateToday';
+  static const String simulatedOrderHistoricalPriceLabel = 'simulatedOrderHistoricalPriceLabel';
+  static const String simulatedOrderNoHistoricalQuote = 'simulatedOrderNoHistoricalQuote';
   static const String simulatedWalletAllocationTitle = 'simulatedWalletAllocationTitle';
   static const String simulatedWalletTotalPatrimonyLabel = 'simulatedWalletTotalPatrimonyLabel';
   static const String simulatedWalletResultLabel = 'simulatedWalletResultLabel';
