@@ -63,6 +63,21 @@ class Translator {
   /// This product's own wording. Everything else comes from `sharedCopy`.
   static const Map<String, Map<String, String>> _productCopy = {
     'pt': {
+      AppStrings.simulatedHoldingQuantityPrice: '{quantity} un · PM {price}',
+      AppStrings.simulatedHoldingAllocation: '{percent} carteira',
+
+      AppStrings.academyRefreshError: 'Não foi possível atualizar seus dados. Puxe para atualizar.',
+      AppStrings.missionDailyLessonTitle: 'Aula do Dia',
+      AppStrings.missionDailyLessonDescription: 'Complete 1 aula hoje.',
+      AppStrings.missionDailyTwoTitle: 'Dia Produtivo',
+      AppStrings.missionDailyTwoDescription: 'Complete 2 aulas hoje.',
+      AppStrings.missionWeeklyThreeTitle: 'Ritmo da Semana',
+      AppStrings.missionWeeklyThreeDescription: 'Complete 3 aulas esta semana.',
+      AppStrings.missionWeeklyModuleTitle: 'Módulo Completo',
+      AppStrings.missionWeeklyModuleDescription: 'Complete um módulo inteiro esta semana.',
+      AppStrings.investmentShortFixed: 'R. Fixa',
+      AppStrings.investmentShortRealEstate: 'FIIs',
+
       AppStrings.brandTitle: 'Petrimonium',
       AppStrings.brandTagline: 'Aprenda a investir jogando',
       AppStrings.logoutConfirmTitle: 'Sair do Petrimonium Academy?',
@@ -210,6 +225,21 @@ class Translator {
           'O seu progresso é só seu. Não existe ranking de património ou retorno aqui.',
     },
     'en': {
+      AppStrings.simulatedHoldingQuantityPrice: '{quantity} units · Avg {price}',
+      AppStrings.simulatedHoldingAllocation: '{percent} of portfolio',
+
+      AppStrings.academyRefreshError: 'Unable to refresh your data. Pull to refresh.',
+      AppStrings.missionDailyLessonTitle: 'Lesson of the Day',
+      AppStrings.missionDailyLessonDescription: 'Complete 1 lesson today.',
+      AppStrings.missionDailyTwoTitle: 'Productive Day',
+      AppStrings.missionDailyTwoDescription: 'Complete 2 lessons today.',
+      AppStrings.missionWeeklyThreeTitle: 'Weekly Rhythm',
+      AppStrings.missionWeeklyThreeDescription: 'Complete 3 lessons this week.',
+      AppStrings.missionWeeklyModuleTitle: 'Module Complete',
+      AppStrings.missionWeeklyModuleDescription: 'Complete an entire module this week.',
+      AppStrings.investmentShortFixed: 'Fixed inc.',
+      AppStrings.investmentShortRealEstate: 'RE funds',
+
       AppStrings.brandTitle: 'Petrimonium',
       AppStrings.brandTagline: 'Learn investing by playing',
       AppStrings.logoutConfirmTitle: 'Leave Petrimonium Academy?',
@@ -347,6 +377,21 @@ class Translator {
       AppStrings.portfolioMilestoneUnlocked: 'New milestone: {title}',
     },
     'es': {
+      AppStrings.simulatedHoldingQuantityPrice: '{quantity} un · PM {price}',
+      AppStrings.simulatedHoldingAllocation: '{percent} de la cartera',
+
+      AppStrings.academyRefreshError: 'No se pudieron actualizar tus datos. Desliza para actualizar.',
+      AppStrings.missionDailyLessonTitle: 'Lección del día',
+      AppStrings.missionDailyLessonDescription: 'Completa 1 lección hoy.',
+      AppStrings.missionDailyTwoTitle: 'Día productivo',
+      AppStrings.missionDailyTwoDescription: 'Completa 2 lecciones hoy.',
+      AppStrings.missionWeeklyThreeTitle: 'Ritmo semanal',
+      AppStrings.missionWeeklyThreeDescription: 'Completa 3 lecciones esta semana.',
+      AppStrings.missionWeeklyModuleTitle: 'Módulo completo',
+      AppStrings.missionWeeklyModuleDescription: 'Completa un módulo entero esta semana.',
+      AppStrings.investmentShortFixed: 'R. fija',
+      AppStrings.investmentShortRealEstate: 'F. inmob.',
+
       AppStrings.brandTitle: 'Petrimonium',
       AppStrings.brandTagline: 'Aprende a invertir jugando',
       AppStrings.logoutConfirmTitle: '¿Salir de Petrimonium Academy?',

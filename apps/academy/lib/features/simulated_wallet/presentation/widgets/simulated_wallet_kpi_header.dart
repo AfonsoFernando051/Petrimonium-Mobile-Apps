@@ -1,5 +1,5 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:flutter/material.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
@@ -37,7 +37,7 @@ class SimulatedWalletKpiHeader extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          AppFormatters.currency(totalPatrimony),
+          AcademyFormatters.currency(totalPatrimony),
           style: TextStyle(
             color: tokens.textPrimary,
             fontSize: 30,
@@ -52,13 +52,13 @@ class SimulatedWalletKpiHeader extends StatelessWidget {
           children: [
             _SummaryPill(
               label:
-                  '${Translator.translate(AppStrings.simulatedWalletResultLabel)} · ${AppFormatters.currency(totalProfit)}',
+                  '${Translator.translate(AppStrings.simulatedWalletResultLabel)} · ${AcademyFormatters.currency(totalProfit)}',
               color: profitColor,
             ),
             _SummaryPill(
               label:
                   '${Translator.translate(AppStrings.simulatedWalletReturnLabel)} · '
-                  '${AppFormatters.percent(totalProfitPercent)}',
+                  '${AcademyFormatters.percent(totalProfitPercent)}',
               color: profitColor,
             ),
           ],

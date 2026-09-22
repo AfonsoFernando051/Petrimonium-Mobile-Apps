@@ -1,8 +1,8 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// One bar in a [LabStackedBarChart] — [base] is the "principal" portion
 /// (contributions/principal), [total] is the full bar height. The stacked
@@ -90,11 +90,11 @@ class _LabStackedBarChartState extends State<LabStackedBarChart> {
       children: [
         Text(point.xLabel, style: TextStyle(color: tokens.textSecondary, fontSize: 11)),
         Text(
-          AppFormatters.currency(point.base, showCents: false),
+          AcademyFormatters.currency(point.base, showCents: false),
           style: TextStyle(color: widget.baseColor, fontWeight: FontWeight.bold, fontSize: 12),
         ),
         Text(
-          '+${AppFormatters.currency(growth, showCents: false)}',
+          '+${AcademyFormatters.currency(growth, showCents: false)}',
           style: TextStyle(color: widget.growthColor, fontWeight: FontWeight.bold, fontSize: 12),
         ),
       ],
@@ -128,7 +128,7 @@ class _LabStackedBarChartState extends State<LabStackedBarChart> {
             getTitlesWidget: (value, meta) => Padding(
               padding: const EdgeInsets.only(right: 6),
               child: Text(
-                AppFormatters.compactCurrency(value),
+                AcademyFormatters.compactCurrency(value),
                 style: TextStyle(color: tokens.textSecondary, fontSize: 9),
               ),
             ),

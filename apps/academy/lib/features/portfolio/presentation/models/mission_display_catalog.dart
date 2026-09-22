@@ -1,3 +1,5 @@
+import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 /// Display-only copy/icon for each mission code — the backend
@@ -18,25 +20,25 @@ class MissionDisplayInfo {
 class MissionDisplayCatalog {
   const MissionDisplayCatalog._();
 
-  static const Map<String, MissionDisplayInfo> _entries = {
+  static Map<String, MissionDisplayInfo> get _entries => {
     'daily_complete_lesson': MissionDisplayInfo(
-      title: 'Aula do Dia',
-      description: 'Complete 1 aula hoje.',
+      title: Translator.translate(AppStrings.missionDailyLessonTitle),
+      description: Translator.translate(AppStrings.missionDailyLessonDescription),
       icon: Icons.menu_book,
     ),
     'daily_complete_two_lessons': MissionDisplayInfo(
-      title: 'Dia Produtivo',
-      description: 'Complete 2 aulas hoje.',
+      title: Translator.translate(AppStrings.missionDailyTwoTitle),
+      description: Translator.translate(AppStrings.missionDailyTwoDescription),
       icon: Icons.local_fire_department,
     ),
     'weekly_complete_three_lessons': MissionDisplayInfo(
-      title: 'Ritmo da Semana',
-      description: 'Complete 3 aulas esta semana.',
+      title: Translator.translate(AppStrings.missionWeeklyThreeTitle),
+      description: Translator.translate(AppStrings.missionWeeklyThreeDescription),
       icon: Icons.calendar_view_week,
     ),
     'weekly_complete_module': MissionDisplayInfo(
-      title: 'Módulo Completo',
-      description: 'Complete um módulo inteiro esta semana.',
+      title: Translator.translate(AppStrings.missionWeeklyModuleTitle),
+      description: Translator.translate(AppStrings.missionWeeklyModuleDescription),
       icon: Icons.workspace_premium,
     ),
   };

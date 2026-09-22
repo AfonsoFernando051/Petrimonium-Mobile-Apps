@@ -42,6 +42,7 @@ dependencies:
   petrimonium_shared_features:
     path: ../../packages/petrimonium_shared_features
 
+  intl: ^0.20.2
   http: ^1.2.1
   google_sign_in: ^7.2.0
   shared_preferences: ^2.2.3

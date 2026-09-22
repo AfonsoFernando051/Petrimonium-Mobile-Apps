@@ -1,9 +1,9 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/labeled_slider.dart';
 import 'package:petrimonium_academy/core/widgets/stat_card.dart';
@@ -138,7 +138,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: LabeledSlider(
           label: Translator.translate(AppStrings.labPortfolioTotalAmountLabel),
-          valueLabel: AppFormatters.currency(_totalAmount, showCents: false),
+          valueLabel: AcademyFormatters.currency(_totalAmount, showCents: false),
           value: _totalAmount,
           min: 0,
           max: 500000,
@@ -188,7 +188,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
             Expanded(
               child: StatCard(
                 label: Translator.translate(AppStrings.labPortfolioNewValueLabel),
-                value: AppFormatters.compactCurrency(result.newValue),
+                value: AcademyFormatters.compactCurrency(result.newValue),
                 accent: impactColor,
               ),
             ),
@@ -196,7 +196,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
             Expanded(
               child: StatCard(
                 label: Translator.translate(AppStrings.labPortfolioDeltaLabel),
-                value: AppFormatters.percent(result.deltaPercent),
+                value: AcademyFormatters.percent(result.deltaPercent),
                 accent: impactColor,
               ),
             ),
@@ -207,8 +207,8 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
             AppStrings.labPortfolioScenarioResult,
             params: {
               'deltaPercent': result.deltaPercent.toStringAsFixed(1),
-              'before': AppFormatters.currency(result.totalAmount, showCents: false),
-              'after': AppFormatters.currency(result.newValue, showCents: false),
+              'before': AcademyFormatters.currency(result.totalAmount, showCents: false),
+              'after': AcademyFormatters.currency(result.newValue, showCents: false),
             },
           ),
           variant: LabNarrativeVariant.interpretation,

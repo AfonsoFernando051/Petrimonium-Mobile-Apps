@@ -1,6 +1,6 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
@@ -118,7 +118,7 @@ class _Donut extends StatelessWidget {
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    AppFormatters.currency(totalValue, showCents: false),
+                    AcademyFormatters.currency(totalValue, showCents: false),
                     style: TextStyle(
                       color: tokens.textPrimary,
                       fontSize: 13,

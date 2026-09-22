@@ -66,7 +66,7 @@ void main() {
 
       expect(find.byType(Slider), findsNWidgets(4));
       expect(find.text('10'), findsWidgets); // default years
-      expect(find.text('5.0%'), findsOneWidget); // default inflation
+      expect(find.text('5,0%'), findsOneWidget); // default inflation
     });
 
     testWidgets('tapping complete before answering the question does not mark it done', (tester) async {

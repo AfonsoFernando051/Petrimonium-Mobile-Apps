@@ -1,3 +1,4 @@
+import 'package:petrimonium_academy/core/presentation/investment_type_labels.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
@@ -9,23 +10,8 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// `SimulatedWalletScreen`'s class doc), so it never reaches across that
 /// boundary even for a presentation-only extension.
 extension InvestmentTypeDisplay on InvestmentTypeEnum {
-  String get label => switch (this) {
-    InvestmentTypeEnum.STOCKS => 'Ações',
-    InvestmentTypeEnum.FIXED_INCOME => 'Renda Fixa',
-    InvestmentTypeEnum.REAL_ESTATE => 'Fundos Imobiliários',
-    InvestmentTypeEnum.CRYPTO => 'Cripto',
-    InvestmentTypeEnum.FUNDS => 'ETFs & Fundos',
-    InvestmentTypeEnum.OTHERS => 'Outros',
-  };
-
-  String get shortLabel => switch (this) {
-    InvestmentTypeEnum.STOCKS => 'Ações',
-    InvestmentTypeEnum.FIXED_INCOME => 'R. Fixa',
-    InvestmentTypeEnum.REAL_ESTATE => 'FIIs',
-    InvestmentTypeEnum.CRYPTO => 'Cripto',
-    InvestmentTypeEnum.FUNDS => 'ETFs',
-    InvestmentTypeEnum.OTHERS => 'Outros',
-  };
+  String get label => InvestmentTypeLabels.label(this);
+  String get shortLabel => InvestmentTypeLabels.shortLabel(this);
 
   IconData get icon => switch (this) {
     InvestmentTypeEnum.STOCKS => Icons.show_chart,

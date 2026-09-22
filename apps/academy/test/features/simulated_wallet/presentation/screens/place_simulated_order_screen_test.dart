@@ -47,6 +47,22 @@ void main() {
   }
 
   group('PlaceSimulatedOrderScreen', () {
+    testWidgets('search and reference quote preserve EUR in English', (tester) async {
+      Translator.currentLanguage = 'en';
+      remoteDataSource.quotesToReturn = [
+        {'symbol': 'EURO', 'shortName': 'Euro asset', 'regularMarketPrice': 1234.56, 'currency': 'EUR'},
+      ];
+      remoteDataSource.quoteToReturn = {'symbol': 'EURO', 'regularMarketPrice': 1234.56, 'currency': 'EUR'};
+      await tester.pumpWidget(buildTestableWidget());
+      await revealAndEnterText(tester, find.byType(TextField, skipOffstage: false).first, 'EURO');
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('€1,234.56', skipOffstage: false), findsOneWidget);
+      await revealAndTap(tester, find.text('EURO', skipOffstage: false).last);
+      await tester.pump();
+      expect(find.textContaining('€1,234.56', skipOffstage: false), findsOneWidget);
+      expect(find.textContaining('R\$', skipOffstage: false), findsNothing);
+    });
+
     testWidgets('shows all 6 investment-type cards, none selected before a ticker is searched', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
@@ -196,7 +212,7 @@ void main() {
         final picked = await pickDateInPreviousMonth(tester);
 
         expect(remoteDataSource.lastQuotedAtDate, isNotNull);
-        expect(find.textContaining('26.40', skipOffstage: false), findsOneWidget);
+        expect(find.textContaining('R\$ 26,40', skipOffstage: false), findsOneWidget);
 
         await confirm(tester);
 

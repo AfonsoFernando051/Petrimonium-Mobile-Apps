@@ -1,6 +1,6 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/models/investment_type_display.dart';
@@ -90,7 +90,7 @@ class _SimulatedExpandableCategoryState extends State<SimulatedExpandableCategor
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          AppFormatters.currency(categoryValue),
+                          AcademyFormatters.currency(categoryValue),
                           style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
                         ),
                         PerformanceBadge(percent: gainPercent, compact: true),

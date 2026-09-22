@@ -49,7 +49,7 @@ void main() {
       final resultText = tester.widget<Text>(find.textContaining('-R\$ 50,00'));
       final tokens = AppTheme.dark.extension<AppColorTokens>()!;
       expect(resultText.style?.color, tokens.error);
-      expect(find.textContaining('-16.67%'), findsOneWidget);
+      expect(find.textContaining('-16,67%'), findsOneWidget);
     });
   });
 }

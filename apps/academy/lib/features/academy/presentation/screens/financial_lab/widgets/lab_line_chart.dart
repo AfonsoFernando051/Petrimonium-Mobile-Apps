@@ -1,8 +1,8 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// One line series in a [LabLineChart] — [dashed] marks a flat reference
 /// line (e.g. nominal value that never grows) as visually distinct from the
@@ -109,7 +109,7 @@ class _LabLineChartState extends State<LabLineChart> {
             getTitlesWidget: (value, meta) => Padding(
               padding: const EdgeInsets.only(right: 6),
               child: Text(
-                AppFormatters.compactCurrency(value),
+                AcademyFormatters.compactCurrency(value),
                 style: TextStyle(color: tokens.textSecondary, fontSize: 9),
               ),
             ),

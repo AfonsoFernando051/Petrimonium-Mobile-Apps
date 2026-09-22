@@ -1,7 +1,7 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
@@ -120,12 +120,12 @@ class _WealthEvolutionBarCardState extends State<WealthEvolutionBarCard> {
         Text(month.shortLabel, style: AppTextStyles.caption.copyWith(color: tokens.textSecondary)),
         Text(
           '${Translator.translate(AppStrings.simulatedWalletWealthBarsLegendInvested)}: '
-          '${AppFormatters.currency(month.investedCapital, showCents: false)}',
+          '${AcademyFormatters.currency(month.investedCapital, showCents: false)}',
           style: AppTextStyles.label.copyWith(color: AppColors.neonViolet, fontWeight: FontWeight.bold),
         ),
         Text(
           '${Translator.translate(AppStrings.simulatedWalletWealthBarsLegendGain)}: '
-          '${gain >= 0 ? '+' : ''}${AppFormatters.currency(gain, showCents: false)}',
+          '${gain >= 0 ? '+' : ''}${AcademyFormatters.currency(gain, showCents: false)}',
           style: AppTextStyles.label.copyWith(
             color: gain >= 0 ? AppColors.neonCyan : tokens.chartNegative,
             fontWeight: FontWeight.bold,
@@ -169,7 +169,7 @@ class _WealthEvolutionBarCardState extends State<WealthEvolutionBarCard> {
             getTitlesWidget: (value, meta) => Padding(
               padding: const EdgeInsets.only(right: 6),
               child: Text(
-                AppFormatters.compactCurrency(value),
+                AcademyFormatters.compactCurrency(value),
                 style: TextStyle(color: tokens.textSecondary, fontSize: 9),
               ),
             ),

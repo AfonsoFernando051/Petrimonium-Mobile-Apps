@@ -1,9 +1,9 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/shared/performance_badge.dart';
 
@@ -38,7 +38,13 @@ class SimulatedAssetRow extends StatelessWidget {
                   style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
                 ),
                 Text(
-                  '${holding.quantity.toStringAsFixed(holding.quantity.truncateToDouble() == holding.quantity ? 0 : 2)} un · PM ${AppFormatters.currency(holding.averagePrice)}',
+                  Translator.translate(
+                    AppStrings.simulatedHoldingQuantityPrice,
+                    params: {
+                      'quantity': AcademyFormatters.quantity(holding.quantity),
+                      'price': AcademyFormatters.currency(holding.averagePrice),
+                    },
+                  ),
                   style: TextStyle(color: tokens.textSecondary, fontSize: 10),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -51,11 +57,14 @@ class SimulatedAssetRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  AppFormatters.currency(holding.currentValue, showCents: false),
+                  AcademyFormatters.currency(holding.currentValue, showCents: false),
                   style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 12),
                 ),
                 Text(
-                  '${holding.portfolioPercent.toStringAsFixed(1)}% carteira',
+                  Translator.translate(
+                    AppStrings.simulatedHoldingAllocation,
+                    params: {'percent': AcademyFormatters.percentPlain(holding.portfolioPercent)},
+                  ),
                   style: TextStyle(color: tokens.textSecondary, fontSize: 10),
                 ),
               ],

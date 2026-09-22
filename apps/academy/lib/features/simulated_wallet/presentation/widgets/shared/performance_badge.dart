@@ -1,6 +1,6 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 
 /// Small pill showing a signed percentage with a trend arrow, colored
 /// positive/negative — reused across the KPI header, holdings rows and
@@ -30,7 +30,7 @@ class PerformanceBadge extends StatelessWidget {
         children: [
           Icon(isPositive ? Icons.arrow_drop_up : Icons.arrow_drop_down, color: color, size: compact ? 14 : 18),
           Text(
-            AppFormatters.percent(percent),
+            AcademyFormatters.percent(percent),
             style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: compact ? 11 : 12),
           ),
         ],

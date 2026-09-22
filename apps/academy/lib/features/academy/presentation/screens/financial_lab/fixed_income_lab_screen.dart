@@ -1,8 +1,8 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/labeled_slider.dart';
 import 'package:petrimonium_academy/core/widgets/stat_card.dart';
@@ -107,8 +107,8 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
               LabDataTableRow(
                 label: '${p.year}',
                 values: [
-                  AppFormatters.currency(p.principal, showCents: false),
-                  AppFormatters.currency(p.value - p.principal, showCents: false),
+                  AcademyFormatters.currency(p.principal, showCents: false),
+                  AcademyFormatters.currency(p.value - p.principal, showCents: false),
                 ],
               ),
           ],
@@ -151,7 +151,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
           children: [
             LabeledSlider(
               label: Translator.translate(AppStrings.labInitialAmountLabel),
-              valueLabel: AppFormatters.currency(_initialAmount, showCents: false),
+              valueLabel: AcademyFormatters.currency(_initialAmount, showCents: false),
               value: _initialAmount,
               min: 0,
               max: 100000,
@@ -160,7 +160,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
             ),
             LabeledSlider(
               label: Translator.translate(AppStrings.labMonthlyContributionLabel),
-              valueLabel: AppFormatters.currency(_monthlyContribution, showCents: false),
+              valueLabel: AcademyFormatters.currency(_monthlyContribution, showCents: false),
               value: _monthlyContribution,
               min: 0,
               max: 5000,
@@ -169,7 +169,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
             ),
             LabeledSlider(
               label: Translator.translate(AppStrings.labFixedIncomeNominalRateLabel),
-              valueLabel: AppFormatters.percentPlain(_annualRatePercent),
+              valueLabel: AcademyFormatters.percentPlain(_annualRatePercent),
               value: _annualRatePercent,
               min: 0,
               max: 20,
@@ -197,7 +197,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
         Expanded(
           child: StatCard(
             label: Translator.translate(AppStrings.labFinalValueLabel),
-            value: AppFormatters.compactCurrency(result.grossFinalValue),
+            value: AcademyFormatters.compactCurrency(result.grossFinalValue),
             accent: AppColors.goldenBorder,
           ),
         ),
@@ -205,7 +205,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
         Expanded(
           child: StatCard(
             label: Translator.translate(AppStrings.labFixedIncomeEffectiveRateLabel),
-            value: AppFormatters.percentPlain(result.effectiveAnnualRatePercent, decimals: 2),
+            value: AcademyFormatters.percentPlain(result.effectiveAnnualRatePercent, decimals: 2),
             accent: AppColors.neonCyan,
           ),
         ),
@@ -213,7 +213,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
         Expanded(
           child: StatCard(
             label: Translator.translate(AppStrings.labFixedIncomeInterestLabel),
-            value: AppFormatters.compactCurrency(result.totalInterest),
+            value: AcademyFormatters.compactCurrency(result.totalInterest),
             accent: AppColors.positiveGreen,
           ),
         ),

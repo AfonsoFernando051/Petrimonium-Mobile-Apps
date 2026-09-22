@@ -1,3 +1,4 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -164,13 +165,13 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
     if (!_isBackdated) {
       final price = _selected!.regularMarketPrice;
       return '${Translator.translate(AppStrings.simulatedOrderReferencePriceLabel)}: '
-          "${price == null ? '—' : 'R\$ ${price.toStringAsFixed(2)}'}";
+          "${price == null ? '—' : AcademyFormatters.currency(price, currencyCode: _selected!.currency)}";
     }
     final label = '${Translator.translate(AppStrings.simulatedOrderHistoricalPriceLabel)} ${_formatDate(_tradeDate)}';
     if (_isLoadingHistoricalQuote) return '$label: …';
     final price = _historicalQuote?.regularMarketPrice;
     if (price == null) return Translator.translate(AppStrings.simulatedOrderNoHistoricalQuote);
-    return '$label: R\$ ${price.toStringAsFixed(2)}';
+    return '$label: ${AcademyFormatters.currency(price, currencyCode: _historicalQuote!.currency)}';
   }
 
   Future<void> _confirm() async {
@@ -261,7 +262,7 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
                       subtitle: quote.shortName == null ? null : Text(quote.shortName!),
                       trailing: quote.regularMarketPrice == null
                           ? null
-                          : Text('R\$ ${quote.regularMarketPrice!.toStringAsFixed(2)}'),
+                          : Text(AcademyFormatters.currency(quote.regularMarketPrice!, currencyCode: quote.currency)),
                       onTap: () => _selectAsset(quote),
                     ),
                 ],

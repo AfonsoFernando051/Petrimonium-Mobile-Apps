@@ -1,8 +1,8 @@
+import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/core/widgets/labeled_slider.dart';
 import 'package:petrimonium_academy/core/widgets/stat_card.dart';
@@ -81,8 +81,8 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
   );
 
   void _onInitialAmountChanged(double value) {
-    final from = AppFormatters.currency(_initialAmount, showCents: false);
-    final to = AppFormatters.currency(value, showCents: false);
+    final from = AcademyFormatters.currency(_initialAmount, showCents: false);
+    final to = AcademyFormatters.currency(value, showCents: false);
     setState(() {
       _explanationKey = value > _initialAmount
           ? AppStrings.labExplanationIncreaseInitial
@@ -93,8 +93,8 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
   }
 
   void _onMonthlyContributionChanged(double value) {
-    final from = AppFormatters.currency(_monthlyContribution, showCents: false);
-    final to = AppFormatters.currency(value, showCents: false);
+    final from = AcademyFormatters.currency(_monthlyContribution, showCents: false);
+    final to = AcademyFormatters.currency(value, showCents: false);
     setState(() {
       _explanationKey = value > _monthlyContribution
           ? AppStrings.labExplanationIncreaseContribution
@@ -164,8 +164,8 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
               LabDataTableRow(
                 label: '${point.year}',
                 values: [
-                  AppFormatters.currency(point.contributions, showCents: false),
-                  AppFormatters.currency(point.value - point.contributions, showCents: false),
+                  AcademyFormatters.currency(point.contributions, showCents: false),
+                  AcademyFormatters.currency(point.value - point.contributions, showCents: false),
                 ],
               ),
           ],
@@ -202,7 +202,7 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
           children: [
             LabeledSlider(
               label: Translator.translate(AppStrings.labInitialAmountLabel),
-              valueLabel: AppFormatters.currency(_initialAmount, showCents: false),
+              valueLabel: AcademyFormatters.currency(_initialAmount, showCents: false),
               value: _initialAmount,
               min: 0,
               max: 100000,
@@ -211,7 +211,7 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
             ),
             LabeledSlider(
               label: Translator.translate(AppStrings.labMonthlyContributionLabel),
-              valueLabel: AppFormatters.currency(_monthlyContribution, showCents: false),
+              valueLabel: AcademyFormatters.currency(_monthlyContribution, showCents: false),
               value: _monthlyContribution,
               min: 0,
               max: 5000,
@@ -220,7 +220,7 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
             ),
             LabeledSlider(
               label: Translator.translate(AppStrings.labAnnualReturnLabel),
-              valueLabel: AppFormatters.percentPlain(_annualRatePercent),
+              valueLabel: AcademyFormatters.percentPlain(_annualRatePercent),
               value: _annualRatePercent,
               min: 0,
               max: 30,
@@ -248,7 +248,7 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
         Expanded(
           child: StatCard(
             label: Translator.translate(AppStrings.labFinalValueLabel),
-            value: AppFormatters.compactCurrency(result.finalValue),
+            value: AcademyFormatters.compactCurrency(result.finalValue),
             accent: AppColors.goldenBorder,
           ),
         ),
@@ -256,7 +256,7 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
         Expanded(
           child: StatCard(
             label: Translator.translate(AppStrings.labTotalContributionsLabel),
-            value: AppFormatters.compactCurrency(result.totalContributions),
+            value: AcademyFormatters.compactCurrency(result.totalContributions),
             accent: AppColors.neonCyan,
           ),
         ),
@@ -264,7 +264,7 @@ class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
         Expanded(
           child: StatCard(
             label: Translator.translate(AppStrings.labTotalGrowthLabel),
-            value: AppFormatters.compactCurrency(result.totalGrowth),
+            value: AcademyFormatters.compactCurrency(result.totalGrowth),
             accent: AppColors.neonViolet,
           ),
         ),

@@ -94,7 +94,7 @@ void main() {
         ], totalPortfolioValue: 350),
       );
 
-      expect(find.textContaining('16.67%'), findsWidgets);
+      expect(find.textContaining('16,67%'), findsWidgets);
     });
 
     testWidgets('a holding priced at a stale purchase price shows "sem cotação", not a fake 0%', (tester) async {

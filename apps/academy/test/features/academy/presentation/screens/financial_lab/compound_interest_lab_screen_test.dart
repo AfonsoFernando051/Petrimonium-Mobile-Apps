@@ -81,7 +81,7 @@ void main() {
 
       expect(find.byType(Slider), findsNWidgets(4));
       expect(find.text('10'), findsWidgets); // default years (also appears as a chart axis label)
-      expect(find.text('8.0%'), findsOneWidget); // default annual return
+      expect(find.text('8,0%'), findsOneWidget); // default annual return
     });
 
     testWidgets('changing the years slider updates the displayed value and explanation', (tester) async {

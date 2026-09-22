@@ -135,8 +135,8 @@ void main() {
       expect(find.text(Translator.translate(AppStrings.simulatedWalletAllocationTitle)), findsOneWidget);
       expect(find.byType(WealthEvolutionBarCard), findsOneWidget);
       // Unrealized gain shown on the KPI pill, the category header and the
-      // asset row: 350 - 300 = +50, +16.67%.
-      expect(find.textContaining('+16.67%'), findsWidgets);
+      // asset row: 350 - 300 = +50, +16,67%.
+      expect(find.textContaining('+16,67%'), findsWidgets);
     });
 
     testWidgets('a losing position shows a negative signed result and return, not a fabricated gain', (tester) async {
@@ -153,9 +153,9 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      // 250 current value - 300 cost basis = -50, -16.67%.
+      // 250 current value - 300 cost basis = -50, -16,67%.
       expect(find.textContaining('-R\$ 50,00'), findsWidgets);
-      expect(find.textContaining('-16.67%'), findsWidgets);
+      expect(find.textContaining('-16,67%'), findsWidgets);
     });
 
     testWidgets(

@@ -8,6 +8,21 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// nothing at runtime. The ones still declared with a literal are this
 /// product's own - screens the sibling app does not have.
 class AppStrings {
+  static const String simulatedHoldingQuantityPrice = 'simulatedHoldingQuantityPrice';
+  static const String simulatedHoldingAllocation = 'simulatedHoldingAllocation';
+
+  static const String academyRefreshError = 'academyRefreshError';
+  static const String missionDailyLessonTitle = 'missionDailyLessonTitle';
+  static const String missionDailyLessonDescription = 'missionDailyLessonDescription';
+  static const String missionDailyTwoTitle = 'missionDailyTwoTitle';
+  static const String missionDailyTwoDescription = 'missionDailyTwoDescription';
+  static const String missionWeeklyThreeTitle = 'missionWeeklyThreeTitle';
+  static const String missionWeeklyThreeDescription = 'missionWeeklyThreeDescription';
+  static const String missionWeeklyModuleTitle = 'missionWeeklyModuleTitle';
+  static const String missionWeeklyModuleDescription = 'missionWeeklyModuleDescription';
+  static const String investmentShortFixed = 'investmentShortFixed';
+  static const String investmentShortRealEstate = 'investmentShortRealEstate';
+
   AppStrings._();
 
   // Nomes das espécies do Pet — rótulos do seletor no onboarding. O wire

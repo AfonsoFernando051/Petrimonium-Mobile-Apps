@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // fetch failure that still has cached content to show.
             if (_academyController.catalogError != null && _academyController.snapshot == null) ...[
               ErrorBanner(
-                message: 'Não foi possível atualizar seus dados. Puxe para atualizar.',
+                message: Translator.translate(AppStrings.academyRefreshError),
                 onRetry: _academyController.load,
               ),
               const SizedBox(height: 12),
