@@ -1,0 +1,89 @@
+From 617bfcf0ab535bdbf0a399c0667dc9736ab49002 Mon Sep 17 00:00:00 2001
+From: Fernando Afonso <afonsofernando051@gmail.com>
+Date: Tue, 22 Sep 2026 14:31:51 -0300
+Subject: [PATCH 2/2] fix(pet): prime Companion rig inputs on init and detect
+ species changes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Two latent issues in PetRiveCompanion that only a real Companion-contract
+file (wolf.riv) exposes:
+
+- The `state`/`reducedMotion`/`interacting` inputs were only written on
+  rebuild, which happens before the artboard exists — so a pet resting in
+  `sleep` rendered `idle` until something else rebuilt the widget. Now
+  primed in onInit.
+- didUpdateWidget compared `oldWidget.controller.profile.specie` with the
+  new one, but both widgets share the same (already-updated) controller,
+  so a species change was never seen. Now compares the key last loaded,
+  and ignores a stale load that finishes after the species changed.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01NQZcr29rrVaDqjp5ujTzTx
+---
+ .../companion/rive/pet_rive_companion.dart     | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/lib/features/pet/presentation/companion/rive/pet_rive_companion.dart b/lib/features/pet/presentation/companion/rive/pet_rive_companion.dart
+index c7fc034..25e8d90 100644
+--- a/lib/features/pet/presentation/companion/rive/pet_rive_companion.dart
++++ b/lib/features/pet/presentation/companion/rive/pet_rive_companion.dart
+@@ -158,6 +158,12 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
+   /// on every rebuild would spam the rig with redundant pulses.
+   PetAnimationState? _lastSyncedState;
+ 
++  /// Species key the current/last [_load] was for. Compared in
++  /// [didUpdateWidget] instead of `oldWidget.controller.profile` — the old
++  /// and new widgets usually share the *same* controller, whose profile is
++  /// already the new one by then, so that comparison could never see a change.
++  String? _loadedKey;
++
+   String get _specieKey {
+     final specie = widget.controller.profile.specie.name;
+     return specie.trim().isEmpty ? 'dog' : specie.trim().toLowerCase();
+@@ -188,16 +194,18 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
+   @override
+   void didUpdateWidget(covariant PetRiveCompanion oldWidget) {
+     super.didUpdateWidget(oldWidget);
+-    if (oldWidget.controller.profile.specie != widget.controller.profile.specie) {
++    if (_loadedKey != null && _loadedKey != _specieKey) {
+       _smController?.dispose();
+       _smController = null;
+       _riveFile = null;
++      _lastSyncedState = null;
+       if (widget.controller.hasLoadedProfile) _load();
+     }
+   }
+ 
+   Future<void> _load() async {
+     final path = _riveAssetPath;
++    _loadedKey = _specieKey;
+     if (_knownMissing.contains(path)) return;
+     final rig = _rigFor(_specieKey);
+     try {
+@@ -211,7 +219,8 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
+         _knownMissing.add(path);
+         return;
+       }
+-      if (mounted) {
++      // Drop a stale result if the species changed while loading.
++      if (mounted && path == _riveAssetPath) {
+         setState(() {
+           _riveFile = file;
+           _rig = rig;
+@@ -260,6 +269,11 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
+         _stateInput = controller.findInput<double>('state') as SMINumber?;
+         _reducedMotionInput = controller.findInput<bool>('reducedMotion') as SMIBool?;
+         _interactingInput = controller.findInput<bool>('interacting') as SMIBool?;
++        // Prime the inputs now: `_syncInputs` already ran for this build
++        // before the artboard existed, and the next rebuild may be a while
++        // away (e.g. a pet resting in `sleep`), which would otherwise show
++        // `idle` until then.
++        _syncInputs(context);
+       case _TriggerRig(:final triggerForState):
+         final controller = StateMachineController.fromArtboard(artboard, rig.stateMachineName);
+         if (controller == null) {
+-- 
+2.43.0
+
