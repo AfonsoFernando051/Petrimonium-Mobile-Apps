@@ -187,6 +187,13 @@ class _AcademyHomeScreenState extends State<AcademyHomeScreen> {
 
     final journey = _controller.journey;
     final expandedStageId = _resolveExpandedStageId(journey);
+    // Once every reachable lesson is done there is no current stage to hang
+    // practice and review off, and they would disappear from the tab
+    // entirely — review in particular is still live in exactly that state
+    // (completed lessons that weren't answered perfectly). They close the
+    // journey instead.
+    final extras = _journeyExtras();
+    final hasCurrentStage = journey.any((s) => s.state == JourneyStageState.current);
 
     return RefreshIndicator(
       color: tokens.primary,
@@ -212,9 +219,11 @@ class _AcademyHomeScreenState extends State<AcademyHomeScreen> {
                 onToggle: () => _toggleStage(journey[i], expandedStageId),
                 onOpenModule: _openModule,
                 onContinue: _continueFrom(journey[i]),
-                currentStageExtras: _currentStageExtras(),
+                currentStageExtras: hasCurrentStage ? extras : const [],
               ),
             ],
+            if (!hasCurrentStage)
+              for (final extra in extras) ...[extra, const SizedBox(height: AppSpacing.md)],
           ],
         ),
       ),
@@ -255,7 +264,7 @@ class _AcademyHomeScreenState extends State<AcademyHomeScreen> {
   /// activities on the journey, not a parallel catalog. Review only appears
   /// when there is something actually due — an "all caught up" row is not
   /// worth a line (same rule `AcademyReviewCard` already documented).
-  List<Widget> _currentStageExtras() {
+  List<Widget> _journeyExtras() {
     return [
       if (_controller.reviewQueue.isNotEmpty)
         AcademyReviewCard(

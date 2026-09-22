@@ -210,6 +210,22 @@ void main() {
       expect(find.text(Translator.translate(AppStrings.academyJourneyContinueLesson)), findsOneWidget);
     });
 
+    testWidgets('practice and review survive a finished journey, with nothing left to continue', (tester) async {
+      // Everything completed: there is no current stage to hang the extras
+      // off, but the review queue is at its fullest (completed lessons that
+      // were never answered perfectly), so both must still be on screen.
+      when(
+        () => mockRemoteDataSource.getCompletedLessonIds(),
+      ).thenAnswer((_) async => {testLesson1.id, testLesson2.id, testLesson3.id});
+
+      await tester.pumpWidget(buildTestable());
+      await pumpUntilLoaded(tester);
+
+      expect(find.text(Translator.translate(AppStrings.academyJourneyContinueLesson)), findsNothing);
+      expect(find.text(Translator.translate(AppStrings.academyReviewCardTitle)), findsOneWidget);
+      expect(find.byIcon(Icons.science_outlined), findsOneWidget);
+    });
+
     testWidgets('practice stays reachable from inside the journey', (tester) async {
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
