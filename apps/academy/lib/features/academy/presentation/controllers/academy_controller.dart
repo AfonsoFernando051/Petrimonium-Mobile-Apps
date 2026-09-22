@@ -8,7 +8,9 @@ import 'package:petrimonium_academy/features/academy/data/datasources/academy_re
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/knowledge_level.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
+import 'package:petrimonium_academy/features/academy/domain/entities/journey_stage.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/mastery_tier.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_journey_builder.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_recommendation_service.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/knowledge_progress_calculator.dart';
@@ -78,6 +80,26 @@ class AcademyController extends ChangeNotifier {
   List<School> get schools => _catalog?.schools ?? const [];
 
   List<AcademyDomain> get domains => _catalog?.domains ?? const [];
+
+  /// The ordered learning journey — the Academy tab's timeline. Rebuilding
+  /// it walks every module and lesson of the catalog, so it is memoized
+  /// against the two inputs it derives from (the snapshot in memory and the
+  /// completion set) rather than recomputed on every widget rebuild the
+  /// `ChangeNotifier` triggers.
+  List<JourneyStage> get journey {
+    final catalog = _catalog;
+    if (catalog == null) return const [];
+
+    final key = Object.hash(identityHashCode(catalog), Object.hashAllUnordered(completedLessonIds));
+    if (_journeyCacheKey == key && _journeyCache != null) return _journeyCache!;
+
+    _journeyCache = AcademyJourneyBuilder.build(catalog: catalog, completedIds: completedLessonIds);
+    _journeyCacheKey = key;
+    return _journeyCache!;
+  }
+
+  List<JourneyStage>? _journeyCache;
+  int? _journeyCacheKey;
 
   Lesson? get nextLesson {
     final catalog = _catalog;

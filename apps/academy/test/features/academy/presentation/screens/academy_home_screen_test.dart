@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/academy_domain_detail_screen.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/all_modules_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/financial_lab/financial_lab_home_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/academy_home_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/lesson_screen.dart';
+import 'package:petrimonium_academy/features/academy/presentation/screens/module_detail_screen.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,14 +80,19 @@ void main() {
     companionController = PetCompanionController(mascotController: mascotController);
   });
 
-  Widget buildTestable() {
+  Widget buildTestable({ThemeData? theme, double textScale = 1.0}) {
     return MaterialApp(
-      theme: AppTheme.dark,
-      home: Scaffold(
-        body: AcademyHomeScreen(
-          mascotController: mascotController,
-          companionController: companionController,
-          onOpenPortfolioTab: () {},
+      theme: theme ?? AppTheme.dark,
+      home: Builder(
+        builder: (context) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScale)),
+          child: Scaffold(
+            body: AcademyHomeScreen(
+              mascotController: mascotController,
+              companionController: companionController,
+              onOpenPortfolioTab: () {},
+            ),
+          ),
         ),
       ),
     );
@@ -108,47 +115,122 @@ void main() {
     await tester.pump(const Duration(seconds: 10));
   }
 
-  group('AcademyHomeScreen', () {
-    testWidgets('renders the level header, continue CTA and domain list once loaded', (tester) async {
+  Future<void> tapAt(WidgetTester tester, Finder finder) async {
+    await tester.ensureVisible(finder);
+    await tester.pump();
+    await tester.tap(finder);
+    await pumpUntilLoaded(tester);
+  }
+
+  group('AcademyHomeScreen journey', () {
+    testWidgets('renders the journey: chapter, stage and the stage the learner is on', (tester) async {
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
 
-      expect(find.text(testLesson1.title), findsOneWidget); // continue card's next lesson
-      expect(find.text(testDomain.title), findsOneWidget);
+      expect(find.text(Translator.translate(AppStrings.navAcademy)), findsOneWidget);
+      expect(find.text(testDomain.title.toUpperCase()), findsOneWidget); // chapter heading
+      expect(find.text(testSchool.title), findsOneWidget); // stage
+      expect(find.text(testComingSoonSchool.title), findsOneWidget); // placeholder stage, not hidden
+      expect(find.text(Translator.translate(AppStrings.academyJourneyYouAreHere).toUpperCase()), findsOneWidget);
     });
 
-    testWidgets('navigates to LessonScreen when the continue CTA is tapped', (tester) async {
+    testWidgets('unfolds the current stage down to its modules and lessons without a tap', (tester) async {
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
 
-      // The continue CTA is a GameButton — the lesson title text above it
-      // isn't itself tappable.
-      await tester.tap(find.byType(GameButton));
+      expect(find.text(testModule.title), findsOneWidget);
+      expect(find.text(testLesson1.title), findsOneWidget);
+      expect(find.text(testLesson3.title), findsOneWidget);
+    });
+
+    testWidgets('collapsing the current stage hides its lessons and keeps the stage itself', (tester) async {
+      await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
+
+      await tapAt(tester, find.text(testSchool.title));
+
+      expect(find.text(testSchool.title), findsOneWidget);
+      expect(find.text(testLesson1.title), findsNothing);
+      expect(find.text(testModule.title), findsNothing);
+    });
+
+    testWidgets('the continue CTA opens the real next lesson', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await pumpUntilLoaded(tester);
+
+      await tapAt(tester, find.text(Translator.translate(AppStrings.academyJourneyContinueLesson)));
 
       expect(find.byType(LessonScreen), findsOneWidget);
+      // `Explain` is testLesson1's first step — proof the CTA opened the
+      // real next lesson, not just some lesson.
+      expect(find.text('Explain'), findsOneWidget);
     });
 
-    testWidgets('navigates to AcademyDomainDetailScreen when a domain is tapped', (tester) async {
+    testWidgets('a module row opens ModuleDetailScreen', (tester) async {
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
 
-      await tester.ensureVisible(find.text(testDomain.title));
-      await tester.pump();
-      await tester.tap(find.text(testDomain.title));
+      await tapAt(tester, find.text(testModule.title));
+
+      expect(find.byType(ModuleDetailScreen), findsOneWidget);
+    });
+
+    testWidgets('the chapter heading still opens the domain it names', (tester) async {
+      await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
+
+      await tapAt(tester, find.text(testDomain.title.toUpperCase()));
 
       expect(find.byType(AcademyDomainDetailScreen), findsOneWidget);
     });
 
-    testWidgets('navigates to FinancialLabHomeScreen when the lab entry card is tapped', (tester) async {
+    testWidgets('the header action opens the full track', (tester) async {
       await tester.pumpWidget(buildTestable());
       await pumpUntilLoaded(tester);
 
-      await tester.ensureVisible(find.byIcon(Icons.science_outlined));
-      await tester.pump();
-      await tester.tap(find.byIcon(Icons.science_outlined));
+      await tapAt(tester, find.byIcon(Icons.format_list_bulleted_rounded));
+
+      expect(find.byType(AllModulesScreen), findsOneWidget);
+    });
+
+    testWidgets('holds up in light theme, on a small viewport and at large text', (tester) async {
+      // The timeline is the one screen where a stage header, a progress bar,
+      // a badge and the Pet share a single 390pt-wide row — the combination
+      // that overflows first. Anything that does would surface here as a
+      // framework exception rather than in a screenshot nobody took.
+      tester.view.physicalSize = const Size(320, 568);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(buildTestable(theme: AppTheme.light, textScale: 1.6));
       await pumpUntilLoaded(tester);
+
+      expect(tester.takeException(), isNull);
+      expect(find.text(testSchool.title), findsOneWidget);
+      expect(find.text(Translator.translate(AppStrings.academyJourneyContinueLesson)), findsOneWidget);
+    });
+
+    testWidgets('practice and review survive a finished journey, with nothing left to continue', (tester) async {
+      // Everything completed: there is no current stage to hang the extras
+      // off, but the review queue is at its fullest (completed lessons that
+      // were never answered perfectly), so both must still be on screen.
+      when(
+        () => mockRemoteDataSource.getCompletedLessonIds(),
+      ).thenAnswer((_) async => {testLesson1.id, testLesson2.id, testLesson3.id});
+
+      await tester.pumpWidget(buildTestable());
+      await pumpUntilLoaded(tester);
+
+      expect(find.text(Translator.translate(AppStrings.academyJourneyContinueLesson)), findsNothing);
+      expect(find.text(Translator.translate(AppStrings.academyReviewCardTitle)), findsOneWidget);
+      expect(find.byIcon(Icons.science_outlined), findsOneWidget);
+    });
+
+    testWidgets('practice stays reachable from inside the journey', (tester) async {
+      await tester.pumpWidget(buildTestable());
+      await pumpUntilLoaded(tester);
+
+      await tapAt(tester, find.byIcon(Icons.science_outlined));
 
       expect(find.byType(FinancialLabHomeScreen), findsOneWidget);
     });
