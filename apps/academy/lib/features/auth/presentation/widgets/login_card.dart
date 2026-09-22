@@ -5,10 +5,10 @@ import '../../../../core/di/dependency_injection.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import '../../../../core/utils/friendly_error_message.dart';
-import '../../../../core/utils/pet_assets.dart';
 import '../../../../core/utils/translator.dart';
 import '../../../../main.dart';
 import '../password_recovery_routes.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/brand_pet_mascot.dart';
 
 /// Flat, edge-to-edge layout (no glass card/floating badge) — mascot + brand
 /// title sit directly on [LoginBackground]. Toggles inline between Entrar
@@ -46,14 +46,7 @@ class _LoginCardState extends State<LoginCard> {
             children: [
               // Sem recorte circular: a arte do mascote já vem com fundo
               // transparente e assenta direto sobre o fundo da tela.
-              Image.asset(
-                PetAssets.imageFor(null),
-                height: 96,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.pets, size: 48, color: tokens.mentor);
-                },
-              ),
+              const BrandPetMascot(size: 96),
               const SizedBox(height: 14),
               Text(
                 Translator.translate(AppStrings.brandTitle).toUpperCase(),

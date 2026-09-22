@@ -4,19 +4,32 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/controllers/mentor_chat_controller.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/rive/pet_rive_companion.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// The pet at the centre of the Mentor tab, in a glow whose colour, ring and
 /// motion follow the stage: a slow bob while waiting, a tilt under a spinning
 /// dashed ring while thinking, a quick bob inside a pulsing ring while
 /// talking — where it also shrinks to leave room for the speech card.
 ///
-/// A static portrait plus Flutter motion, not the Rive companion: the Rive
-/// rigs have no thinking/talking poses yet.
+/// The glow, ring and bob are the stage's own Flutter motion and stay that
+/// way. The pet inside is the Rive character when [mascotController] is
+/// given and the species has a `Companion`-contract rig (today: the wolf);
+/// otherwise it falls back to the static portrait this stage used before.
+///
+/// The phase drives the character through `stateOverride`, never the shared
+/// controller's own state: `think` belongs to this screen while a reply is
+/// being generated and must not leak into the Home hero or the companion
+/// header, which show the same [MascotController].
 class MentorPetStage extends StatefulWidget {
-  const MentorPetStage({super.key, required this.petAsset, required this.phase});
+  const MentorPetStage({super.key, required this.petAsset, required this.phase, this.mascotController});
 
   final String petAsset;
   final MentorStagePhase phase;
+
+  /// `null` keeps the static portrait — see the class doc.
+  final MascotController? mascotController;
 
   @override
   State<MentorPetStage> createState() => _MentorPetStageState();
@@ -61,6 +74,36 @@ class _MentorPetStageState extends State<MentorPetStage> with SingleTickerProvid
   void dispose() {
     _motion.dispose();
     super.dispose();
+  }
+
+  /// No rig has a "talking" pose, so talking keeps the character at rest and
+  /// lets the stage's pulsing ring and quicker bob carry it — exactly what
+  /// read as talking before the Rive character landed here.
+  PetAnimationState get _stateForPhase => switch (widget.phase) {
+    MentorStagePhase.welcome => PetAnimationState.idle,
+    MentorStagePhase.thinking => PetAnimationState.think,
+    MentorStagePhase.talking => PetAnimationState.idle,
+  };
+
+  Widget _portrait(BuildContext context, double size) => Image.asset(
+    widget.petAsset,
+    width: size,
+    height: size,
+    fit: BoxFit.contain,
+    errorBuilder: (_, _, _) => Icon(Icons.pets, color: context.colors.textSecondary, size: size * 0.4),
+  );
+
+  Widget _buildPet(BuildContext context, double size) {
+    final mascot = widget.mascotController;
+    if (mascot == null) return _portrait(context, size);
+    return PetRiveCompanion(
+      controller: mascot,
+      size: size,
+      interactive: false,
+      allowStopgapRigs: false,
+      stateOverride: _stateForPhase,
+      fallbackBuilder: (context) => _portrait(context, size),
+    );
   }
 
   @override
@@ -132,13 +175,7 @@ class _MentorPetStageState extends State<MentorPetStage> with SingleTickerProvid
             ],
           );
         },
-        child: Image.asset(
-          widget.petAsset,
-          width: imageSize,
-          height: imageSize,
-          fit: BoxFit.contain,
-          errorBuilder: (_, _, _) => Icon(Icons.pets, color: context.colors.textSecondary, size: imageSize * 0.4),
-        ),
+        child: _buildPet(context, imageSize),
       ),
     );
   }

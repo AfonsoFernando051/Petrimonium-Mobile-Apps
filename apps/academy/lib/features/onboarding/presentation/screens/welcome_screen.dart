@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/pet_hero_capsule.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/pet_configuration_screen.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/brand_pet_mascot.dart';
 
 /// Onboarding's opening beat — a real emotional entrance rather than a form.
 /// No species/name is chosen yet (that's `PetConfigurationScreen`, the next
@@ -46,7 +46,7 @@ class WelcomeScreen extends StatelessWidget {
                 style: TextStyle(color: tokens.mentor, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.5),
               ),
               const SizedBox(height: 24),
-              PetHeroCapsule(size: 180, child: Image.asset(PetAssets.imageFor(null), fit: BoxFit.contain)),
+              const PetHeroCapsule(size: 180, child: BrandPetMascot()),
               const SizedBox(height: 24),
               Text(
                 Translator.translate(AppStrings.welcomeHeadline),

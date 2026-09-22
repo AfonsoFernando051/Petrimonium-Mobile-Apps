@@ -11,6 +11,7 @@ import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/controllers/mentor_chat_controller.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_pet_stage.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_speech_card.dart';
 
 /// The "Mentor" tab — the user's pet explaining concepts one exchange at a
@@ -23,7 +24,14 @@ import 'package:petrimonium_academy/features/mentor/presentation/widgets/mentor_
 /// rather than sharing dashboard's portfolio/mascot controllers, since the
 /// conversation is self-contained.
 class MentorScreen extends StatefulWidget {
-  const MentorScreen({super.key});
+  const MentorScreen({super.key, this.mascotController});
+
+  /// Only drives the pet's *look* on the stage: with it, the pet renders as
+  /// its Rive character and tilts into `think` while a reply is generated
+  /// (screen-local, via `stateOverride` — see [MentorPetStage]). Without it,
+  /// or for a species with no `Companion`-contract rig, the static portrait
+  /// shows exactly as before.
+  final MascotController? mascotController;
 
   @override
   State<MentorScreen> createState() => _MentorScreenState();
@@ -245,7 +253,7 @@ class _MentorScreenState extends State<MentorScreen> {
         style: TextStyle(color: tokens.textSecondary, fontSize: 14),
       ),
       const SizedBox(height: 14),
-      MentorPetStage(petAsset: _petAsset, phase: MentorStagePhase.welcome),
+      MentorPetStage(petAsset: _petAsset, phase: MentorStagePhase.welcome, mascotController: widget.mascotController),
       const SizedBox(height: 14),
       ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 300),
@@ -266,7 +274,7 @@ class _MentorScreenState extends State<MentorScreen> {
   List<Widget> _buildThinking() {
     final tokens = context.colors;
     return [
-      MentorPetStage(petAsset: _petAsset, phase: MentorStagePhase.thinking),
+      MentorPetStage(petAsset: _petAsset, phase: MentorStagePhase.thinking, mascotController: widget.mascotController),
       const SizedBox(height: 14),
       Text(
         Translator.translate(AppStrings.mentorStageThinkingTitle),
@@ -286,7 +294,7 @@ class _MentorScreenState extends State<MentorScreen> {
     final reply = _controller.currentReply!;
     final isRevealing = reply.id == _controller.revealingMessageId;
     return [
-      MentorPetStage(petAsset: _petAsset, phase: MentorStagePhase.talking),
+      MentorPetStage(petAsset: _petAsset, phase: MentorStagePhase.talking, mascotController: widget.mascotController),
       const SizedBox(height: 14),
       MentorSpeechCard(
         reply: reply,

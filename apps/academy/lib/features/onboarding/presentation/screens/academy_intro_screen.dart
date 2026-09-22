@@ -3,7 +3,6 @@ import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
-import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
@@ -11,6 +10,7 @@ import 'package:petrimonium_academy/features/academy/presentation/controllers/ac
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/gamification_intro_screen.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/screens/financial_goal_screen.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/brand_pet_mascot.dart';
 
 /// Onboarding's "here's your track" beat — a vertical, locked/unlocked
 /// sequence of the first real Academy modules (matching the Notion
@@ -186,14 +186,10 @@ class _MentorIntroCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClipOval(
-          child: Image.asset(
-            PetAssets.imageFor(null),
-            width: 36,
-            height: 36,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Icon(Icons.pets, size: 20, color: tokens.mentor),
-          ),
+        // Recorte à cabeça: `cover` + `topCenter` mantém o enquadramento do
+        // retrato anterior num avatar circular pequeno.
+        const ClipOval(
+          child: BrandPetMascot(size: 36, fit: BoxFit.cover, alignment: Alignment.topCenter),
         ),
         const SizedBox(width: 12),
         Expanded(

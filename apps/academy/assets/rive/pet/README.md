@@ -21,30 +21,49 @@ First species built directly against the target contract, so it needs no adapter
 Generated reproducibly from `assets/images/generated_wolf.png` by `tools/rive_pet/` (see its README,
 including how it is verified against the official Rive runtime).
 
+Verified in the app itself (not only in the generator's C++ harness) on 2026-09-22, with the pinned
+`rive 0.13.x`: the file loads, `mainArtboard` is `Wolf` 500×686, `Companion` exposes exactly
+`state`/`reducedMotion`/`interacting`, and each `PetAnimationState` renders a visibly distinct pose
+— including `sleep` right at mount, which is what the `onInit` input priming in `PetRiveCompanion`
+exists for.
+
+**Do not try to assert any of that in a widget test.** `flutter_tester` cannot parse a `.riv` at all
+on this toolchain — `RiveFile.asset` dies inside `rive_common`'s text-engine FFI init
+(`Failed to lookup symbol 'init'`), before any of this project's code runs. That is why
+`pet_rive_companion_test.dart` only ever exercises the fallback path, and why anything that needs
+real parsing is checked by running the app on a real device (`flutter run -d linux`).
+
 ## Where the Rive pet renders (Academy)
 
-Every surface that shows the player's pet goes through `PetRiveCompanion`:
+Every surface that shows the pet goes through `PetRiveCompanion`, in two groups split by whose pet
+is on screen.
+
+**The player's pet**, driven by the shared `MascotController`:
 
 | Surface | Notes |
 |---|---|
 | Companion header + interaction sheet | `interacting` drives the medallion pulse |
 | Home hero (`LearningHeroCard`) | tap-to-pet plays `happy` from rest; Flutter breathe only on the portrait fallback |
-| Home Mentor card, lesson complete card, choice-question feedback | follow the shared `MascotController` |
-| Journey stage tile (`JourneyStageTile`) | follows the shared `MascotController` |
+| Home Mentor card, lesson complete card, choice-question feedback | follow the controller as-is |
+| Journey stage tile (`JourneyStageTile`) | follows the controller as-is |
+| Mentor tab stage (`MentorPetStage`) | `think` while a reply is generated, screen-local via `stateOverride` so it never leaks into the surfaces above. No rig has a *talking* pose, so talking keeps the character at rest and the stage's pulsing ring and bob carry it |
 
-The hero passes `allowStopgapRigs: false` plus a `fallbackBuilder` with the species' original
-portrait, so only real `Companion`-contract characters swap in there and dog/owl keep their
-portrait art.
+**The brand's pet**, on screens that run before a pet exists to load — splash, login, onboarding.
+These go through `BrandPetMascot`, which fixes the species instead of reading a profile (there is
+no signed-in player yet) and owns a `MascotController` it deliberately never loads:
 
-Deliberately still static, each for its own reason:
+| Surface | Notes |
+|---|---|
+| Splash, login card, onboarding welcome | the brand mascot (`PetAssets.defaultSpecie` — the wolf) |
+| Academy intro avatar | head crop (`BoxFit.cover` + `topCenter`) in a 36px circle |
+| Onboarding "name your pet" (`PetConfigurationScreen`) | `specieOverride` = the species being named, so it still tracks the picker if `_kSpeciesPickerVisible` is ever flipped back on |
 
-- The **Mentor tab stage** (`MentorPetStage`) — a portrait with Flutter motion, because no rig has
-  the thinking/talking poses that stage needs. `stateOverride` exists for the day one does.
-- The **onboarding species preview** (`PetConfigurationScreen`) — the species picker is hidden
-  (`_kSpeciesPickerVisible = false`) while every app is locked to one mascot (Academy = wolf), so
-  there is nothing to preview. `specieOverride` is what that preview would use.
-- The level-up / module-completion **share cards** (rasterized to a PNG for sharing — see
-  `LevelUpShareCard`) and the species-picker grid tiles.
+Every one of these passes `allowStopgapRigs: false` plus a `fallbackBuilder` with the species'
+original portrait, so only real `Companion`-contract characters swap in and dog/owl keep their
+portrait art rather than the differently-drawn reference assets.
+
+Deliberately still static: the level-up / module-completion **share cards** (rasterized to a PNG
+for sharing — see `LevelUpShareCard`) and the species-picker grid tiles.
 
 ## `dog.riv` and `owl.riv` — stopgaps, not yet contract-compliant
 

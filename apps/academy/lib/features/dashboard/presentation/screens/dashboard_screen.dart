@@ -390,11 +390,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   // ── Mentor: AI-powered chat with the pet acting as investment mentor ────
-  // No mascot controller is handed over on purpose: the Mentor stage runs a
-  // static portrait with its own Flutter motion (see `MentorPetStage`), since
-  // no rig has thinking/talking poses yet.
+  // Shares the dashboard's mascot controller so the stage renders the pet's
+  // Rive character. Safe to share: the stage drives it through
+  // `stateOverride`, so its `think` never leaks into the other surfaces.
   Widget _buildMentorContent() {
-    return const MentorScreen();
+    return MentorScreen(mascotController: _mascotController);
   }
 
   // ── Bottom Nav ────────────────────────────────────────────────────────────

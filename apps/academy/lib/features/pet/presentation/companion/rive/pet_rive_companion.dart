@@ -165,6 +165,22 @@ class PetRiveCompanion extends StatefulWidget {
   /// no such input, so it's accepted but unused for those two species.
   final bool interacting;
 
+  /// `false` stops [PetRiveCompanion] just short of actually reading a `.riv`
+  /// off disk. Every decision before that — species key, the `_knownMissing`
+  /// cache, the [allowStopgapRigs] guard — still runs, so what a caller sees
+  /// is exactly a species whose asset isn't there: the fallback.
+  ///
+  /// Widget tests turn this off once, in `test/flutter_test_config.dart`,
+  /// because `flutter_tester` cannot initialize Rive's text engine and the
+  /// failure is not catchable: `rive_common`'s `Font.initialize` routes the
+  /// FFI error through a `.then` with no error handler, so it surfaces as an
+  /// *unhandled* zone error that fails whichever test first touches Rive (and
+  /// then poisons later tests in the same run), and it never completes its
+  /// completer, so `RiveFile.asset` hangs instead of throwing. Nothing in
+  /// production reads this. See `assets/rive/pet/README.md`.
+  @visibleForTesting
+  static bool debugLoadRiveAssets = true;
+
   @override
   State<PetRiveCompanion> createState() => _PetRiveCompanionState();
 }
@@ -255,6 +271,7 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
       // allow stopgaps share that cache.
       return;
     }
+    if (!PetRiveCompanion.debugLoadRiveAssets) return;
     try {
       final file = await RiveFile.asset(path);
       if (rig is _PoseSwapRig && !_posesExistIn(file, rig)) {
