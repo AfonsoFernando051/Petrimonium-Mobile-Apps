@@ -7,7 +7,10 @@ import json, os, cv2, numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
-SRC = os.path.join(ROOT, 'assets/images/generated_wolf.png')
+# Os assets vivem dentro do app, nao na raiz do workspace Melos: WOLF_APP
+# permite gerar para outro app (ex.: apps/wallet) sem editar o script.
+APP = os.environ.get('WOLF_APP', os.path.join(ROOT, 'apps/academy'))
+SRC = os.path.join(APP, 'assets/images/generated_wolf.png')
 OUT = os.environ.get('WOLF_LAYERS', os.path.join(ROOT, 'build/rive_pet/wolf_layers'))
 os.makedirs(OUT, exist_ok=True)
 S = 1.5                      # escala original -> artboard
@@ -198,7 +201,7 @@ ORDER = ['ground_shadow', 'tail', 'rear_haunch', 'torso', 'front_leg_right', 'fr
          'medallion', 'ear_right', 'ear_left', 'head', 'muzzle', 'mouth_open', 'eye_right', 'eye_left',
          'eye_right_closed', 'eye_left_closed', 'eye_right_happy', 'eye_left_happy', 'eyebrow_right', 'eyebrow_left']
 
-manifest = {'source': 'assets/images/generated_wolf.png', 'artboard': [ART_W, ART_H], 'scale': S,
+manifest = {'source': 'apps/academy/assets/images/generated_wolf.png', 'artboard': [ART_W, ART_H], 'scale': S,
             'offset': OFF, 'draw_order_back_to_front': ORDER,
             'hidden_by_default': ['mouth_open', 'eye_left_closed', 'eye_right_closed', 'eye_left_happy', 'eye_right_happy'], 'layers': {}}
 for name in ORDER:

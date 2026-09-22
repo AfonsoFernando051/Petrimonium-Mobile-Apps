@@ -13,6 +13,7 @@ import 'package:petrimonium_academy/core/utils/pet_assets.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/game/domain/services/level_title.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/rive/pet_rive_companion.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
 /// Home's "where am I, and how is my companion doing" hero
@@ -207,10 +208,7 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
       // rest, so a tap never cuts short a real celebrate/victory moment.
       final mascot = widget.mascotController;
       if (mascot.animationState == PetAnimationState.idle) {
-        mascot.triggerEventAnimation(
-          PetAnimationState.happy,
-          duration: const Duration(milliseconds: 900),
-        );
+        mascot.triggerEventAnimation(PetAnimationState.happy, duration: const Duration(milliseconds: 900));
       }
     }
   }
@@ -325,14 +323,26 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
                               _parallax.value.dx,
                               _parallax.value.dy + _floatAnimation.value + _bounceAnimation.value,
                             ),
-                            child: Transform.scale(
-                              scaleY: _breatheAnimation.value * celebrationScale,
-                              scaleX: (1.0 + (1.0 - _breatheAnimation.value)) * celebrationScale,
-                              child: Image.asset(
-                                PetAssets.imageFor(widget.mascotController.profile.specie.name),
-                                height: 220,
-                                fit: BoxFit.contain,
-                                errorBuilder: (_, _, _) => const Icon(Icons.pets, size: 100, color: Colors.white70),
+                            // O rig respira sozinho, por isso o breathe/
+                            // celebration em Flutter fica só no retrato
+                            // estático — as duas animações juntas brigam.
+                            // `allowStopgapRigs: false`: só personagens do
+                            // contrato Companion (hoje o lobo) entram aqui;
+                            // dog/owl continuam com a arte original.
+                            child: PetRiveCompanion(
+                              controller: widget.mascotController,
+                              size: 220,
+                              interactive: false,
+                              allowStopgapRigs: false,
+                              fallbackBuilder: (_) => Transform.scale(
+                                scaleY: _breatheAnimation.value * celebrationScale,
+                                scaleX: (1.0 + (1.0 - _breatheAnimation.value)) * celebrationScale,
+                                child: Image.asset(
+                                  PetAssets.imageFor(widget.mascotController.profile.specie.name),
+                                  height: 220,
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (_, _, _) => const Icon(Icons.pets, size: 100, color: Colors.white70),
+                                ),
                               ),
                             ),
                           );

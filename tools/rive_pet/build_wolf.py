@@ -16,8 +16,11 @@ sys.path.insert(0, os.path.dirname(__file__))
 from riv import Writer
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+# Mesma convencao de slice_wolf.py: o .riv sai dentro do app que o declara
+# em `flutter: assets:`, nao na raiz do workspace Melos.
+APP = os.environ.get('WOLF_APP', os.path.join(ROOT, 'apps/academy'))
 LAYERS = os.environ.get('WOLF_LAYERS', os.path.join(ROOT, 'build/rive_pet/wolf_layers'))
-OUT = os.environ.get('WOLF_OUT', os.path.join(ROOT, 'assets/rive/pet/wolf.riv'))
+OUT = os.environ.get('WOLF_OUT', os.path.join(APP, 'assets/rive/pet/wolf.riv'))
 M = json.load(open(f'{LAYERS}/wolf_layers.json'))
 L = M['layers']
 FPS = 60

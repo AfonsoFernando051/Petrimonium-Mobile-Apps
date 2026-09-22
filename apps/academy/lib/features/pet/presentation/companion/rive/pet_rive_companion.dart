@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 
-import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
+import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium_academy/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
 
 /// How a species' bundled `.riv` should be driven to reflect
 /// [PetAnimationState]. Every bundled file is expected to satisfy the
@@ -206,8 +206,7 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
     return specie.trim().isEmpty ? 'dog' : specie.trim().toLowerCase();
   }
 
-  PetAnimationState get _animationState =>
-      widget.stateOverride ?? widget.controller.profile.animationState;
+  PetAnimationState get _animationState => widget.stateOverride ?? widget.controller.profile.animationState;
 
   bool get _canLoad => widget.specieOverride != null || widget.controller.hasLoadedProfile;
 
@@ -400,11 +399,9 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
   Widget build(BuildContext context) {
     final file = _riveFile;
     if (file == null) {
-      return PetMascotWidget(
-        controller: widget.controller,
-        size: widget.size,
-        interactive: widget.interactive,
-      );
+      final fallback = widget.fallbackBuilder;
+      if (fallback != null) return fallback(context);
+      return PetMascotWidget(controller: widget.controller, size: widget.size, interactive: widget.interactive);
     }
     final rig = _rig;
 

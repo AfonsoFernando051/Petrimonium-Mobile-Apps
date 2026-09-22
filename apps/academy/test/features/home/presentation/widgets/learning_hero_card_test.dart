@@ -5,6 +5,7 @@ import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/learning_hero_card.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/rive/pet_rive_companion.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
@@ -131,10 +132,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(
-        find.descendant(of: find.byType(PetRiveCompanion), matching: find.byType(Image)),
-        findsOneWidget,
-      );
+      expect(find.descendant(of: find.byType(PetRiveCompanion), matching: find.byType(Image)), findsOneWidget);
     });
 
     testWidgets('honors disableAnimations — renders correctly with no crash and no error text', (tester) async {

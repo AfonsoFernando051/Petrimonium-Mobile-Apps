@@ -1,13 +1,17 @@
 # tools/rive_pet — geração do `wolf.riv`
 
-Gera `assets/rive/pet/wolf.riv` de forma reproduzível a partir de `assets/images/generated_wolf.png`,
-já no contrato `Companion` que `PetRiveCompanion` espera (`_CompanionRig`) — nenhuma mudança de código
-é necessária para o lobo: `wolf` não está em `_kRigForSpecie`, então cai no rig padrão.
+Gera `apps/academy/assets/rive/pet/wolf.riv` de forma reproduzível a partir de
+`apps/academy/assets/images/generated_wolf.png`, já no contrato `Companion` que `PetRiveCompanion`
+espera (`_CompanionRig`) — nenhuma mudança de código é necessária para o lobo: `wolf` não está em
+`_kRigForSpecie`, então cai no rig padrão.
+
+Rode da raiz do workspace Melos (`petrimonium-mobile/`). Os caminhos de asset são relativos ao app,
+não à raiz: `WOLF_APP` escolhe qual app recebe a arte e o `.riv` (por omissão `apps/academy`).
 
 ```bash
 pip install opencv-python numpy pillow
 python3 tools/rive_pet/slice_wolf.py   # fatia a arte em 21 camadas → build/rive_pet/wolf_layers/
-python3 tools/rive_pet/build_wolf.py   # escreve assets/rive/pet/wolf.riv (determinístico)
+python3 tools/rive_pet/build_wolf.py   # escreve apps/academy/assets/rive/pet/wolf.riv (determinístico)
 ```
 
 ## Contrato do arquivo

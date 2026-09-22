@@ -30,15 +30,21 @@ Every surface that shows the player's pet goes through `PetRiveCompanion`:
 | Companion header + interaction sheet | `interacting` drives the medallion pulse |
 | Home hero (`LearningHeroCard`) | tap-to-pet plays `happy` from rest; Flutter breathe only on the portrait fallback |
 | Home Mentor card, lesson complete card, choice-question feedback | follow the shared `MascotController` |
-| Mentor chat avatar (`MentorScreen`) | head crop (`BoxFit.cover` + `topCenter`); `think` while a reply is generated, screen-local via `stateOverride` |
-| Onboarding species preview (`PetConfigurationScreen`) | `specieOverride` = the species being picked, short `happy` on each pick |
+| Journey stage tile (`JourneyStageTile`) | follows the shared `MascotController` |
 
-The newer surfaces (hero, Mentor chat, onboarding preview) pass `allowStopgapRigs: false` plus
-a `fallbackBuilder` with the species' original portrait, so only real `Companion`-contract
-characters swap in there and dog/owl keep their portrait art.
+The hero passes `allowStopgapRigs: false` plus a `fallbackBuilder` with the species' original
+portrait, so only real `Companion`-contract characters swap in there and dog/owl keep their
+portrait art.
 
-Deliberately still static: the level-up / module-completion **share cards** (rasterized to a PNG
-for sharing — see `LevelUpShareCard`) and the species-picker grid tiles.
+Deliberately still static, each for its own reason:
+
+- The **Mentor tab stage** (`MentorPetStage`) — a portrait with Flutter motion, because no rig has
+  the thinking/talking poses that stage needs. `stateOverride` exists for the day one does.
+- The **onboarding species preview** (`PetConfigurationScreen`) — the species picker is hidden
+  (`_kSpeciesPickerVisible = false`) while every app is locked to one mascot (Academy = wolf), so
+  there is nothing to preview. `specieOverride` is what that preview would use.
+- The level-up / module-completion **share cards** (rasterized to a PNG for sharing — see
+  `LevelUpShareCard`) and the species-picker grid tiles.
 
 ## `dog.riv` and `owl.riv` — stopgaps, not yet contract-compliant
 

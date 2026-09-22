@@ -76,4 +76,67 @@ void main() {
 
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('renders fallbackBuilder instead of PetMascotWidget when there is no .riv', (tester) async {
+    final controller = await _catController(FakeMascotRepository());
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PetRiveCompanion(controller: controller, size: 48, fallbackBuilder: (_) => const Text('portrait')),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('portrait'), findsOneWidget);
+    expect(find.byType(PetMascotWidget), findsNothing);
+    expect(find.byType(RiveAnimation), findsNothing);
+  });
+
+  testWidgets('keeps the fallback for a stopgap rig when allowStopgapRigs is false', (tester) async {
+    // DOG maps to the `dog.riv` stopgap rig; with stopgaps disallowed the
+    // asset is never loaded/parsed, so this is safe under flutter_tester.
+    final repository = FakeMascotRepository()..profileToReturn = PetProfile(specie: PetSpecieEnum.DOG);
+    final controller = MascotController(repository: repository);
+    await controller.loadProfile();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PetRiveCompanion(
+          controller: controller,
+          size: 48,
+          allowStopgapRigs: false,
+          fallbackBuilder: (_) => const Text('portrait'),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('portrait'), findsOneWidget);
+    expect(find.byType(RiveAnimation), findsNothing);
+  });
+
+  testWidgets('specieOverride renders without waiting for the controller profile to load', (tester) async {
+    // Never loaded: without the override this would sit waiting for
+    // `hasLoadedProfile`. CAT has no .riv, so the fallback shows once the
+    // (failed) asset load resolves.
+    final controller = MascotController(repository: FakeMascotRepository());
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PetRiveCompanion(
+          controller: controller,
+          size: 48,
+          specieOverride: PetSpecieEnum.CAT,
+          fallbackBuilder: (_) => const Text('portrait'),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(controller.hasLoadedProfile, isFalse);
+    expect(find.text('portrait'), findsOneWidget);
+  });
 }
