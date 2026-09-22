@@ -99,6 +99,42 @@ void main() {
       await tester.pump();
 
       expect(tester.takeException(), isNull);
+      // Let a tap-to-pet `happy` reaction (MascotController's 900 ms revert
+      // timer) run out so no Timer is left pending when the test ends.
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('tapping the pet at rest plays the short happy reaction, then reverts', (tester) async {
+      // Fixed midday `now` so the resting state is idle, not night-time sleep.
+      await controller.loadProfile(now: DateTime(2026, 1, 1, 12));
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      final pet = find.ancestor(of: find.byType(PetRiveCompanion), matching: find.byType(GestureDetector)).first;
+      await tester.tap(pet, warnIfMissed: false);
+      await tester.pump();
+      expect(controller.animationState, PetAnimationState.happy);
+
+      await tester.pump(const Duration(seconds: 1));
+      // Reverts to the resting state (idle, or sleep if the real clock is in
+      // the night window — the revert uses DateTime.now()).
+      expect(controller.animationState, isNot(PetAnimationState.happy));
+    });
+
+    testWidgets('species without a Companion-contract Rive character keep their static portrait', (tester) async {
+      // DOG's bundled `dog.riv` is a stopgap rig, which the hero excludes
+      // (`allowStopgapRigs: false`) — so the portrait fallback renders and
+      // no `.riv` is ever parsed (see pet_rive_companion_test.dart for why
+      // parsing is avoided under flutter_tester).
+      await controller.loadProfile();
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump();
+
+      expect(
+        find.descendant(of: find.byType(PetRiveCompanion), matching: find.byType(Image)),
+        findsOneWidget,
+      );
     });
 
     testWidgets('honors disableAnimations — renders correctly with no crash and no error text', (tester) async {

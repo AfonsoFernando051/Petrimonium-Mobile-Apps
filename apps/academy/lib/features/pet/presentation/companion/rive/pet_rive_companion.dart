@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 
-import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
-import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
-import 'package:petrimonium_academy/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
+import 'package:petrimonium/features/pet/domain/enums/pet_animation_state.dart';
+import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium/features/pet/presentation/mascot/widgets/pet_mascot_widget.dart';
 
 /// How a species' bundled `.riv` should be driven to reflect
 /// [PetAnimationState]. Every bundled file is expected to satisfy the
@@ -103,10 +103,11 @@ _RiveCompanionRig _rigFor(String specieKey) => _kRigForSpecie[specieKey] ?? cons
 /// through its Rive character (`assets/rive/pet/{specie}.riv`) once one
 /// exists, and falls back to [PetMascotWidget] until then.
 ///
-/// `dog.riv` and `owl.riv` are bundled today (both stopgap reference assets,
-/// verbatim — see [_kRigForSpecie]); every other species still renders the
-/// fallback because nothing is bundled at that asset path yet (see
-/// `assets/rive/pet/README.md`).
+/// `dog.riv` and `owl.riv` are bundled today as stopgap reference assets
+/// (verbatim — see [_kRigForSpecie]); `wolf.riv` is the first real
+/// `Companion`-contract file and uses the default [_CompanionRig]. Every other
+/// species still renders the fallback because nothing is bundled at that asset
+/// path yet (see `assets/rive/pet/README.md`).
 class PetRiveCompanion extends StatefulWidget {
   const PetRiveCompanion({
     super.key,
@@ -114,11 +115,48 @@ class PetRiveCompanion extends StatefulWidget {
     this.size = 220,
     this.interactive = true,
     this.interacting = false,
+    this.fit = BoxFit.contain,
+    this.alignment = Alignment.center,
+    this.fallbackBuilder,
+    this.stateOverride,
+    this.specieOverride,
+    this.allowStopgapRigs = true,
   });
 
   final MascotController controller;
   final double size;
   final bool interactive;
+
+  /// How the artboard is laid out inside the `size`×`size` box — e.g.
+  /// `BoxFit.cover` + `Alignment.topCenter` to crop to the pet's head inside
+  /// a small circular avatar.
+  final BoxFit fit;
+  final Alignment alignment;
+
+  /// What to render when there's no usable `.riv` for the species (missing,
+  /// unparsable, or a stopgap rig with [allowStopgapRigs] off). Defaults to
+  /// [PetMascotWidget]. Screens that previously showed the species' static
+  /// portrait pass that portrait here, so species without a Rive character
+  /// look exactly as they did before.
+  final WidgetBuilder? fallbackBuilder;
+
+  /// Drives the `state` input instead of [MascotController.animationState],
+  /// for a screen-local mood that shouldn't leak into every other place the
+  /// shared controller is shown (e.g. `think` only in the Mentor chat while a
+  /// reply is being generated). `null` follows the controller.
+  final PetAnimationState? stateOverride;
+
+  /// Renders this species instead of the controller profile's — for previews
+  /// of a species that isn't saved yet (onboarding species picker). Skips
+  /// waiting for [MascotController.hasLoadedProfile].
+  final PetSpecieEnum? specieOverride;
+
+  /// Whether the `dog.riv`/`owl.riv` stopgap rigs (see [_kRigForSpecie]) may
+  /// render here. Newer call sites that replace a static portrait pass
+  /// `false`, so only real `Companion`-contract characters (today: wolf) swap
+  /// in and dog/owl keep their original portrait art instead of the
+  /// differently-drawn reference assets.
+  final bool allowStopgapRigs;
 
   /// Whether the companion's interaction panel is currently open — mirrors
   /// the optional `interacting` state-machine input from the target
@@ -157,17 +195,28 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
   /// on every rebuild would spam the rig with redundant pulses.
   PetAnimationState? _lastSyncedState;
 
+  /// Species key the current/last [_load] was for. Compared in
+  /// [didUpdateWidget] instead of `oldWidget.controller.profile` — the old
+  /// and new widgets usually share the *same* controller, whose profile is
+  /// already the new one by then, so that comparison could never see a change.
+  String? _loadedKey;
+
   String get _specieKey {
-    final specie = widget.controller.profile.specie.name;
+    final specie = (widget.specieOverride ?? widget.controller.profile.specie).name;
     return specie.trim().isEmpty ? 'dog' : specie.trim().toLowerCase();
   }
+
+  PetAnimationState get _animationState =>
+      widget.stateOverride ?? widget.controller.profile.animationState;
+
+  bool get _canLoad => widget.specieOverride != null || widget.controller.hasLoadedProfile;
 
   String get _riveAssetPath => 'assets/rive/pet/$_specieKey.riv';
 
   @override
   void initState() {
     super.initState();
-    if (widget.controller.hasLoadedProfile) {
+    if (_canLoad) {
       _load();
     } else {
       // The controller's `profile.specie` is just the constructor's
@@ -179,7 +228,7 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
   }
 
   void _onProfileMaybeLoaded() {
-    if (!widget.controller.hasLoadedProfile) return;
+    if (!_canLoad) return;
     widget.controller.removeListener(_onProfileMaybeLoaded);
     _load();
   }
@@ -187,18 +236,26 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
   @override
   void didUpdateWidget(covariant PetRiveCompanion oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller.profile.specie != widget.controller.profile.specie) {
+    if ((_loadedKey != null && _loadedKey != _specieKey) || oldWidget.allowStopgapRigs != widget.allowStopgapRigs) {
       _smController?.dispose();
       _smController = null;
       _riveFile = null;
-      if (widget.controller.hasLoadedProfile) _load();
+      _lastSyncedState = null;
+      if (_canLoad) _load();
     }
   }
 
   Future<void> _load() async {
     final path = _riveAssetPath;
+    _loadedKey = _specieKey;
     if (_knownMissing.contains(path)) return;
     final rig = _rigFor(_specieKey);
+    if (!widget.allowStopgapRigs && rig is! _CompanionRig) {
+      // Stopgap rig not wanted here — keep the fallback. Deliberately *not*
+      // added to `_knownMissing`: the file exists, and other call sites that
+      // allow stopgaps share that cache.
+      return;
+    }
     try {
       final file = await RiveFile.asset(path);
       if (rig is _PoseSwapRig && !_posesExistIn(file, rig)) {
@@ -210,7 +267,10 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
         _knownMissing.add(path);
         return;
       }
-      if (mounted) {
+      // The species may have changed while the asset was loading (e.g. the
+      // user tapping through the onboarding species picker) — drop a stale
+      // result instead of showing the previous species.
+      if (mounted && path == _riveAssetPath) {
         setState(() {
           _riveFile = file;
           _rig = rig;
@@ -259,6 +319,11 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
         _stateInput = controller.findInput<double>('state') as SMINumber?;
         _reducedMotionInput = controller.findInput<bool>('reducedMotion') as SMIBool?;
         _interactingInput = controller.findInput<bool>('interacting') as SMIBool?;
+        // Prime the inputs now: `_syncInputs` already ran for this build
+        // before the artboard existed, and the next rebuild may be a while
+        // away (e.g. a pet resting in `sleep`, or the Mentor's `think`
+        // override), which would otherwise show `idle` until then.
+        _syncInputs(context);
       case _TriggerRig(:final triggerForState):
         final controller = StateMachineController.fromArtboard(artboard, rig.stateMachineName);
         if (controller == null) {
@@ -281,7 +346,7 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
         // once the artboard is actually mounted) and found `_triggers`
         // empty, so it has to be primed here directly rather than by
         // relying on the next rebuild.
-        final state = widget.controller.profile.animationState;
+        final state = _animationState;
         _lastSyncedState = state;
         _triggers[state]?.fire();
       case _PoseSwapRig():
@@ -297,11 +362,11 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
     final rig = _rig;
     switch (rig) {
       case _CompanionRig():
-        _stateInput?.value = widget.controller.profile.animationState.index.toDouble();
+        _stateInput?.value = _animationState.index.toDouble();
         _reducedMotionInput?.value = MediaQuery.of(context).disableAnimations;
         _interactingInput?.value = widget.interacting;
       case _TriggerRig():
-        final state = widget.controller.profile.animationState;
+        final state = _animationState;
         if (state == _lastSyncedState) return;
         _lastSyncedState = state;
         // Accessibility stand-in for [_CompanionRig]'s `reducedMotion`
@@ -335,7 +400,11 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
   Widget build(BuildContext context) {
     final file = _riveFile;
     if (file == null) {
-      return PetMascotWidget(controller: widget.controller, size: widget.size, interactive: widget.interactive);
+      return PetMascotWidget(
+        controller: widget.controller,
+        size: widget.size,
+        interactive: widget.interactive,
+      );
     }
     final rig = _rig;
 
@@ -346,15 +415,17 @@ class _PetRiveCompanionState extends State<PetRiveCompanion> {
         if (rig is _PoseSwapRig) {
           return RiveAnimation.direct(
             file,
-            artboard: rig.artboardForState(widget.controller.profile.animationState),
+            artboard: rig.artboardForState(_animationState),
             stateMachines: [rig.stateMachineName],
-            fit: BoxFit.contain,
+            fit: widget.fit,
+            alignment: widget.alignment,
           );
         }
         return RiveAnimation.direct(
           file,
           stateMachines: [rig.stateMachineName],
-          fit: BoxFit.contain,
+          fit: widget.fit,
+          alignment: widget.alignment,
           onInit: _onRiveInit,
         );
       },

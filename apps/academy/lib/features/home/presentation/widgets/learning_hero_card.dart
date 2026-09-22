@@ -202,6 +202,16 @@ class _LearningHeroCardState extends State<LearningHeroCard> with TickerProvider
     if (!_bounceController.isAnimating) {
       HapticFeedback.lightImpact();
       _bounceController.forward(from: 0.0);
+      // Tap-to-pet: the Rive character answers with its short `happy`
+      // reaction (same 900 ms as PetMascotWidget's own tap) — only from
+      // rest, so a tap never cuts short a real celebrate/victory moment.
+      final mascot = widget.mascotController;
+      if (mascot.animationState == PetAnimationState.idle) {
+        mascot.triggerEventAnimation(
+          PetAnimationState.happy,
+          duration: const Duration(milliseconds: 900),
+        );
+      }
     }
   }
 

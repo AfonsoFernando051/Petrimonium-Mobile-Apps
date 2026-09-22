@@ -8,13 +8,45 @@ The target design and technical contract each file should satisfy — character 
 `Companion` state machine, its three inputs (`state`, `reducedMotion`, `interacting`) and their
 exact meaning — is specified in `docs/RIVE_PET_COMPANION_BRIEF.md`, not here.
 
+## `wolf.riv` — contract-compliant (`Companion`)
+
+First species built directly against the target contract, so it needs no adapter — `wolf` is not in
+`_kRigForSpecie` and uses `_CompanionRig` as-is:
+
+- Artboard `Wolf` (500×686), default state machine **`Companion`**.
+- `state` (number) = `PetAnimationState.index`: 0 idle, 1 celebrate, 2 think, 3 sleep, 4 victory, 5 happy.
+- `reducedMotion` (bool) → an equivalent static pose per state, switched instantly.
+- `interacting` (bool) → a gentle medallion pulse while the interaction sheet is open.
+
+Generated reproducibly from `assets/images/generated_wolf.png` by `tools/rive_pet/` (see its README,
+including how it is verified against the official Rive runtime).
+
+## Where the Rive pet renders (Academy)
+
+Every surface that shows the player's pet goes through `PetRiveCompanion`:
+
+| Surface | Notes |
+|---|---|
+| Companion header + interaction sheet | `interacting` drives the medallion pulse |
+| Home hero (`LearningHeroCard`) | tap-to-pet plays `happy` from rest; Flutter breathe only on the portrait fallback |
+| Home Mentor card, lesson complete card, choice-question feedback | follow the shared `MascotController` |
+| Mentor chat avatar (`MentorScreen`) | head crop (`BoxFit.cover` + `topCenter`); `think` while a reply is generated, screen-local via `stateOverride` |
+| Onboarding species preview (`PetConfigurationScreen`) | `specieOverride` = the species being picked, short `happy` on each pick |
+
+The newer surfaces (hero, Mentor chat, onboarding preview) pass `allowStopgapRigs: false` plus
+a `fallbackBuilder` with the species' original portrait, so only real `Companion`-contract
+characters swap in there and dog/owl keep their portrait art.
+
+Deliberately still static: the level-up / module-completion **share cards** (rasterized to a PNG
+for sharing — see `LevelUpShareCard`) and the species-picker grid tiles.
+
 ## `dog.riv` and `owl.riv` — stopgaps, not yet contract-compliant
 
-Two species are bundled today, both reference assets copied in as-is rather than real
+These two are reference assets copied in as-is rather than real
 `Companion`-contract files — see `_RiveCompanionRig` in
 `lib/features/pet/presentation/companion/rive/pet_rive_companion.dart` for the full adapter that
-wires each one around the target contract. Every other species still has no `.riv` and renders
-the `PetMascotWidget` (Lottie/PNG) fallback.
+wires each one around the target contract. Every species other than dog, owl and wolf still has no
+`.riv` and renders the `PetMascotWidget` (Lottie/PNG) fallback.
 
 **`dog.riv`** (copied verbatim from a `pet_cachorro_state_machine.riv` reference asset, kept only in git history):
 

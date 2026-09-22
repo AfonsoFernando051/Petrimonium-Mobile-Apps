@@ -391,7 +391,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // ── Mentor: AI-powered chat with the pet acting as investment mentor ────
   Widget _buildMentorContent() {
-    return const MentorScreen();
+    return MentorScreen(mascotController: _mascotController);
   }
 
   // ── Bottom Nav ────────────────────────────────────────────────────────────
