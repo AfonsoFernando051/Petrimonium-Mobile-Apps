@@ -291,6 +291,21 @@ class AppStrings {
   static const String academyModuleStatusComingSoon = SharedStrings.academyModuleStatusComingSoon;
   static const String academyLockedPrerequisiteLabel = SharedStrings.academyLockedPrerequisiteLabel;
   static const String academyAllModulesTitle = 'academyAllModulesTitle';
+
+  // Academia — jornada de aprendizado (timeline da aba Academia). Copy
+  // só deste produto: Wallet e Health não têm currículo nem trilha.
+  static const String academyJourneySubtitle = 'academyJourneySubtitle';
+  static const String academyJourneyExploreTooltip = 'academyJourneyExploreTooltip';
+  static const String academyJourneyYouAreHere = 'academyJourneyYouAreHere';
+  static const String academyJourneyUpNext = 'academyJourneyUpNext';
+  static const String academyJourneyContinueLesson = 'academyJourneyContinueLesson';
+  static const String academyJourneyStageProgress = 'academyJourneyStageProgress';
+  static const String academyJourneyStageCompleted = 'academyJourneyStageCompleted';
+  static const String academyJourneyStageTotalLessons = 'academyJourneyStageTotalLessons';
+  static const String academyJourneyStageNotStarted = 'academyJourneyStageNotStarted';
+  static const String academyJourneyModuleProgress = 'academyJourneyModuleProgress';
+  static const String academyJourneyBadgeInProgress = 'academyJourneyBadgeInProgress';
+  static const String academyJourneyLessonMinutes = 'academyJourneyLessonMinutes';
   static const String academyMicroExerciseLabel = SharedStrings.academyMicroExerciseLabel;
   static const String academyApplyLabel = SharedStrings.academyApplyLabel;
   static const String academyCorrectFeedbackTitle = SharedStrings.academyCorrectFeedbackTitle;
