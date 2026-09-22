@@ -116,6 +116,9 @@ class AppStrings {
   static const String academyIntroMentorIntro = 'academyIntroMentorIntro';
   static const String academyIntroLessonSingular = 'academyIntroLessonSingular';
   static const String academyIntroLessonPlural = 'academyIntroLessonPlural';
+  static const String academyIntroMoreSchools = 'academyIntroMoreSchools';
+  static const String academyIntroSchoolSingular = 'academyIntroSchoolSingular';
+  static const String academyIntroSchoolPlural = 'academyIntroSchoolPlural';
 
   // Gamification intro (onboarding)
   static const String gamificationIntroTitle = SharedStrings.gamificationIntroTitle;

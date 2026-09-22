@@ -83,6 +83,9 @@ class Translator {
       AppStrings.academyIntroMentorIntro: 'Vamos começar por {module}. {count} — dá pra começar agora.',
       AppStrings.academyIntroLessonSingular: 'aula',
       AppStrings.academyIntroLessonPlural: 'aulas',
+      AppStrings.academyIntroMoreSchools: 'Mais {count} {unit} na trilha.',
+      AppStrings.academyIntroSchoolSingular: 'escola',
+      AppStrings.academyIntroSchoolPlural: 'escolas',
       AppStrings.gamificationIntroTitle: 'Como você progride aqui',
       AppStrings.gamificationIntroXpRuleTitle: 'XP por aprender',
       AppStrings.gamificationIntroXpRuleBody:
@@ -227,6 +230,9 @@ class Translator {
       AppStrings.academyIntroMentorIntro: "Let's start with {module}. {count} — you can do it now.",
       AppStrings.academyIntroLessonSingular: 'lesson',
       AppStrings.academyIntroLessonPlural: 'lessons',
+      AppStrings.academyIntroMoreSchools: '{count} more {unit} on the track.',
+      AppStrings.academyIntroSchoolSingular: 'school',
+      AppStrings.academyIntroSchoolPlural: 'schools',
       AppStrings.gamificationIntroTitle: 'How you progress here',
       AppStrings.gamificationIntroXpRuleTitle: 'XP for learning',
       AppStrings.gamificationIntroXpRuleBody:
@@ -361,6 +367,9 @@ class Translator {
       AppStrings.academyIntroMentorIntro: 'Empecemos por {module}. {count} — puedes hacerlo ahora.',
       AppStrings.academyIntroLessonSingular: 'lección',
       AppStrings.academyIntroLessonPlural: 'lecciones',
+      AppStrings.academyIntroMoreSchools: '{count} {unit} más en el camino.',
+      AppStrings.academyIntroSchoolSingular: 'escuela',
+      AppStrings.academyIntroSchoolPlural: 'escuelas',
       AppStrings.gamificationIntroTitle: 'Cómo progresas aquí',
       AppStrings.gamificationIntroXpRuleTitle: 'XP por aprender',
       AppStrings.gamificationIntroXpRuleBody:
