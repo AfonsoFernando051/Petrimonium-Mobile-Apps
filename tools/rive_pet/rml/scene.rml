@@ -1,0 +1,2392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Gerado por tools/rive_pet/build_wolf_rml.py — não edite à mão:
+     ajuste o gerador (ou o spec) e rode de novo, senão o editor e o
+     Python saem de sincronia. Contrato do app: state machine `Companion`,
+     input `state` = PetAnimationState.index (0 idle, 1 celebrate, 2 think,
+     3 sleep, 4 victory, 5 happy), bools `reducedMotion` e `interacting`. -->
+<Rive version="1" kind="fragment">
+  <ImageAsset id="eyebrow_left" name="wolf_eyebrow_left" src="images/wolf_eyebrow_left.png" width="82" height="26"/>
+  <ImageAsset id="eyebrow_right" name="wolf_eyebrow_right" src="images/wolf_eyebrow_right.png" width="53" height="28"/>
+  <ImageAsset id="eye_left_happy" name="wolf_eye_left_happy" src="images/wolf_eye_left_happy.png" width="67" height="20"/>
+  <ImageAsset id="eye_right_happy" name="wolf_eye_right_happy" src="images/wolf_eye_right_happy.png" width="64" height="20"/>
+  <ImageAsset id="eye_left_closed" name="wolf_eye_left_closed" src="images/wolf_eye_left_closed.png" width="85" height="29"/>
+  <ImageAsset id="eye_right_closed" name="wolf_eye_right_closed" src="images/wolf_eye_right_closed.png" width="85" height="29"/>
+  <ImageAsset id="eye_left" name="wolf_eye_left" src="images/wolf_eye_left.png" width="101" height="101"/>
+  <ImageAsset id="eye_right" name="wolf_eye_right" src="images/wolf_eye_right.png" width="98" height="95"/>
+  <ImageAsset id="mouth_open" name="wolf_mouth_open" src="images/wolf_mouth_open.png" width="132" height="81"/>
+  <ImageAsset id="muzzle" name="wolf_muzzle" src="images/wolf_muzzle.png" width="132" height="81"/>
+  <ImageAsset id="head" name="wolf_head" src="images/wolf_head.png" width="374" height="331"/>
+  <ImageAsset id="ear_left" name="wolf_ear_left" src="images/wolf_ear_left.png" width="131" height="170"/>
+  <ImageAsset id="ear_right" name="wolf_ear_right" src="images/wolf_ear_right.png" width="111" height="153"/>
+  <ImageAsset id="medallion" name="wolf_medallion" src="images/wolf_medallion.png" width="90" height="92"/>
+  <ImageAsset id="collar" name="wolf_collar" src="images/wolf_collar.png" width="191" height="72"/>
+  <ImageAsset id="front_leg_left" name="wolf_front_leg_left" src="images/wolf_front_leg_left.png" width="104" height="136"/>
+  <ImageAsset id="front_leg_right" name="wolf_front_leg_right" src="images/wolf_front_leg_right.png" width="122" height="136"/>
+  <ImageAsset id="torso" name="wolf_torso" src="images/wolf_torso.png" width="334" height="271"/>
+  <ImageAsset id="rear_haunch" name="wolf_rear_haunch" src="images/wolf_rear_haunch.png" width="99" height="117"/>
+  <ImageAsset id="tail" name="wolf_tail" src="images/wolf_tail.png" width="159" height="141"/>
+  <ImageAsset id="ground_shadow" name="wolf_ground_shadow" src="images/wolf_ground_shadow.png" width="364" height="34"/>
+  <Artboard name="Wolf" width="500.0" height="686.0" defaultStateMachine="Companion">
+    <Node id="body" name="body" x="287.0" y="675.0">
+      <Node id="head_root" name="head_root" x="0.0" y="-252.0">
+        <Image id="eyebrow_left" name="eyebrow_left" x="-73.0" y="-201.0" assetId="eyebrow_left" originX="0.5" originY="0.5"/>
+        <Image id="eyebrow_right" name="eyebrow_right" x="92.5" y="-194.0" assetId="eyebrow_right" originX="0.5" originY="0.5"/>
+        <Image id="eye_left_happy" name="eye_left_happy" x="-76.5" y="-122.0" assetId="eye_left_happy" originX="0.5" originY="0.5" opacity="0.0"/>
+        <Image id="eye_right_happy" name="eye_right_happy" x="90.0" y="-119.0" assetId="eye_right_happy" originX="0.5" originY="0.5" opacity="0.0"/>
+        <Image id="eye_left_closed" name="eye_left_closed" x="-82.5" y="-112.5" assetId="eye_left_closed" originX="0.5" originY="0.5" opacity="0.0"/>
+        <Image id="eye_right_closed" name="eye_right_closed" x="95.5" y="-109.5" assetId="eye_right_closed" originX="0.5" originY="0.5" opacity="0.0"/>
+        <Image id="eye_left" name="eye_left" x="-76.5" y="-119.5" assetId="eye_left" originX="0.5" originY="0.5"/>
+        <Image id="eye_right" name="eye_right" x="90.0" y="-116.5" assetId="eye_right" originX="0.5" originY="0.5"/>
+        <Image id="mouth_open" name="mouth_open" x="12.0" y="-52.5" assetId="mouth_open" originX="0.5" originY="0.5" opacity="0.0"/>
+        <Image id="muzzle" name="muzzle" x="12.0" y="-52.5" assetId="muzzle" originX="0.5" originY="0.5"/>
+        <Image id="head" name="head" x="-15.0" y="-152.5" assetId="head" originX="0.5" originY="0.5"/>
+        <Node id="ear_left_root" name="ear_left_root" x="-108.0" y="-243.0">
+          <Image id="ear_left" name="ear_left" x="-11.5" y="-46.0" assetId="ear_left" originX="0.5" originY="0.5"/>
+        </Node>
+        <Node id="ear_right_root" name="ear_right_root" x="87.0" y="-243.0">
+          <Image id="ear_right" name="ear_right" x="14.5" y="-43.5" assetId="ear_right" originX="0.5" originY="0.5"/>
+        </Node>
+      </Node>
+      <Image id="medallion" name="medallion" x="10.0" y="-178.0" assetId="medallion" originX="0.5" originY="0.5"/>
+      <Image id="collar" name="collar" x="-17.5" y="-227.0" assetId="collar" originX="0.5" originY="0.5"/>
+      <Image id="front_leg_left" name="front_leg_left" x="-106.0" y="-62.0" assetId="front_leg_left" originX="0.5" originY="0.5"/>
+      <Image id="front_leg_right" name="front_leg_right" x="95.0" y="-62.0" assetId="front_leg_right" originX="0.5" originY="0.5"/>
+      <Image id="torso" name="torso" x="31.0" y="-129.5" assetId="torso" originX="0.5" originY="0.5"/>
+      <Image id="rear_haunch" name="rear_haunch" x="148.5" y="-52.5" assetId="rear_haunch" originX="0.5" originY="0.5"/>
+      <Node id="tail_root" name="tail_root" x="-129.0" y="-18.0">
+        <Image id="tail" name="tail" x="-58.5" y="-46.5" assetId="tail" originX="0.5" originY="0.5"/>
+      </Node>
+    </Node>
+    <Image id="ground_shadow" name="ground_shadow" x="280.0" y="664.0" assetId="ground_shadow" originX="0.5" originY="0.5"/>
+    <LinearAnimation name="idle" fps="60" duration="240" speed="1.0" loopValue="1">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="1.0003" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="1.0011" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="1.0033" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="1.0095" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="1.0109" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0117" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="1.012" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="1.0117" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0109" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="1.0087" interpolationType="1"/>
+          <KeyFrameDouble frame="102" value="1.0025" interpolationType="1"/>
+          <KeyFrameDouble frame="108" value="1.0011" interpolationType="1"/>
+          <KeyFrameDouble frame="114" value="1.0003" interpolationType="1"/>
+          <KeyFrameDouble frame="120" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="126" value="1.0003" interpolationType="1"/>
+          <KeyFrameDouble frame="132" value="1.0011" interpolationType="1"/>
+          <KeyFrameDouble frame="141" value="1.0033" interpolationType="1"/>
+          <KeyFrameDouble frame="162" value="1.0095" interpolationType="1"/>
+          <KeyFrameDouble frame="168" value="1.0109" interpolationType="1"/>
+          <KeyFrameDouble frame="174" value="1.0117" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="1.012" interpolationType="1"/>
+          <KeyFrameDouble frame="186" value="1.0117" interpolationType="1"/>
+          <KeyFrameDouble frame="192" value="1.0109" interpolationType="1"/>
+          <KeyFrameDouble frame="201" value="1.0087" interpolationType="1"/>
+          <KeyFrameDouble frame="222" value="1.0025" interpolationType="1"/>
+          <KeyFrameDouble frame="228" value="1.0011" interpolationType="1"/>
+          <KeyFrameDouble frame="234" value="1.0003" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="0.0005" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="0.002" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.0057" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="0.0166" interpolationType="1"/>
+          <KeyFrameDouble frame="99" value="0.0194" interpolationType="1"/>
+          <KeyFrameDouble frame="111" value="0.0207" interpolationType="1"/>
+          <KeyFrameDouble frame="123" value="0.0209" interpolationType="1"/>
+          <KeyFrameDouble frame="135" value="0.0201" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="0.0184" interpolationType="1"/>
+          <KeyFrameDouble frame="168" value="0.0137" interpolationType="1"/>
+          <KeyFrameDouble frame="204" value="0.0043" interpolationType="1"/>
+          <KeyFrameDouble frame="219" value="0.0015" interpolationType="1"/>
+          <KeyFrameDouble frame="231" value="0.0003" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="-252.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="150" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="153" value="0.08" interpolationType="1"/>
+          <KeyFrameDouble frame="155" value="0.1222" interpolationType="1"/>
+          <KeyFrameDouble frame="156" value="0.1105" interpolationType="1"/>
+          <KeyFrameDouble frame="159" value="0.0117" interpolationType="1"/>
+          <KeyFrameDouble frame="160" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="162" value="0.0241" interpolationType="1"/>
+          <KeyFrameDouble frame="165" value="0.0698" interpolationType="1"/>
+          <KeyFrameDouble frame="168" value="0.0241" interpolationType="1"/>
+          <KeyFrameDouble frame="170" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="0.0004" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.0017" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="0.0038" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="0.0067" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="0.0102" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="0.0144" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="0.0191" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="0.0241" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="0.0457" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="0.0508" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.0554" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="0.0596" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="0.0631" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="0.066" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.0681" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="0.0694" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="0.0698" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="0.0694" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="0.0681" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="0.066" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.0631" interpolationType="1"/>
+          <KeyFrameDouble frame="75" value="0.0596" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="0.0554" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="0.0508" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="0.0457" interpolationType="1"/>
+          <KeyFrameDouble frame="96" value="0.0241" interpolationType="1"/>
+          <KeyFrameDouble frame="99" value="0.0191" interpolationType="1"/>
+          <KeyFrameDouble frame="102" value="0.0144" interpolationType="1"/>
+          <KeyFrameDouble frame="105" value="0.0102" interpolationType="1"/>
+          <KeyFrameDouble frame="108" value="0.0067" interpolationType="1"/>
+          <KeyFrameDouble frame="111" value="0.0038" interpolationType="1"/>
+          <KeyFrameDouble frame="114" value="0.0017" interpolationType="1"/>
+          <KeyFrameDouble frame="117" value="0.0004" interpolationType="1"/>
+          <KeyFrameDouble frame="123" value="-0.0003" interpolationType="1"/>
+          <KeyFrameDouble frame="126" value="-0.0013" interpolationType="1"/>
+          <KeyFrameDouble frame="129" value="-0.0029" interpolationType="1"/>
+          <KeyFrameDouble frame="132" value="-0.005" interpolationType="1"/>
+          <KeyFrameDouble frame="135" value="-0.0077" interpolationType="1"/>
+          <KeyFrameDouble frame="138" value="-0.0108" interpolationType="1"/>
+          <KeyFrameDouble frame="141" value="-0.0143" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="-0.0221" interpolationType="1"/>
+          <KeyFrameDouble frame="156" value="-0.0343" interpolationType="1"/>
+          <KeyFrameDouble frame="159" value="-0.0381" interpolationType="1"/>
+          <KeyFrameDouble frame="162" value="-0.0416" interpolationType="1"/>
+          <KeyFrameDouble frame="165" value="-0.0447" interpolationType="1"/>
+          <KeyFrameDouble frame="168" value="-0.0474" interpolationType="1"/>
+          <KeyFrameDouble frame="171" value="-0.0495" interpolationType="1"/>
+          <KeyFrameDouble frame="174" value="-0.0511" interpolationType="1"/>
+          <KeyFrameDouble frame="177" value="-0.052" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="-0.0524" interpolationType="1"/>
+          <KeyFrameDouble frame="183" value="-0.052" interpolationType="1"/>
+          <KeyFrameDouble frame="186" value="-0.0511" interpolationType="1"/>
+          <KeyFrameDouble frame="189" value="-0.0495" interpolationType="1"/>
+          <KeyFrameDouble frame="192" value="-0.0474" interpolationType="1"/>
+          <KeyFrameDouble frame="195" value="-0.0447" interpolationType="1"/>
+          <KeyFrameDouble frame="198" value="-0.0416" interpolationType="1"/>
+          <KeyFrameDouble frame="201" value="-0.0381" interpolationType="1"/>
+          <KeyFrameDouble frame="207" value="-0.0303" interpolationType="1"/>
+          <KeyFrameDouble frame="216" value="-0.0181" interpolationType="1"/>
+          <KeyFrameDouble frame="219" value="-0.0143" interpolationType="1"/>
+          <KeyFrameDouble frame="222" value="-0.0108" interpolationType="1"/>
+          <KeyFrameDouble frame="225" value="-0.0077" interpolationType="1"/>
+          <KeyFrameDouble frame="228" value="-0.005" interpolationType="1"/>
+          <KeyFrameDouble frame="231" value="-0.0029" interpolationType="1"/>
+          <KeyFrameDouble frame="234" value="-0.0013" interpolationType="1"/>
+          <KeyFrameDouble frame="237" value="-0.0003" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="196" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="198" value="0.3625" interpolationType="1"/>
+          <KeyFrameDouble frame="199" value="0.15" interpolationType="1"/>
+          <KeyFrameDouble frame="202" value="0.15" interpolationType="1"/>
+          <KeyFrameDouble frame="204" value="0.7875" interpolationType="1"/>
+          <KeyFrameDouble frame="205" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="198" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="199" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="202" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="203" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="196" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="198" value="0.3625" interpolationType="1"/>
+          <KeyFrameDouble frame="199" value="0.15" interpolationType="1"/>
+          <KeyFrameDouble frame="202" value="0.15" interpolationType="1"/>
+          <KeyFrameDouble frame="204" value="0.7875" interpolationType="1"/>
+          <KeyFrameDouble frame="205" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="198" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="199" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="202" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="203" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="198" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="199" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="202" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="203" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="198" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="199" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="202" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="203" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-201.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="-201.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-194.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="-194.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="celebrate" fps="60" duration="90" speed="1.0" loopValue="1">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.01" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.01" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="0.0004" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.0015" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="0.0033" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="0.0058" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="0.0087" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="0.0121" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="0.0228" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="0.0262" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="0.0291" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="0.0316" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="0.0334" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.0345" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="0.0349" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="0.0345" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="0.0334" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.0316" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="0.0291" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="0.0262" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="0.0228" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.0121" interpolationType="1"/>
+          <KeyFrameDouble frame="75" value="0.0087" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="0.0058" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="0.0033" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="0.0015" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="0.0004" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="-252.2711" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="-253.0354" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="-254.1548" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="-255.4269" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="-256.6219" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="-257.5238" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="-257.9695" interpolationType="1"/>
+          <KeyFrameDouble frame="22" value="-258.0" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="-257.8888" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="-257.3271" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="-256.3802" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="-255.2047" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="-253.9954" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="-252.9523" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="-252.2484" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="-252.2711" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="-253.0354" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="-254.1548" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="-255.4269" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="-256.6219" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="-257.5238" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="-257.9695" interpolationType="1"/>
+          <KeyFrameDouble frame="67" value="-258.0" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="-257.8888" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="-257.3271" interpolationType="1"/>
+          <KeyFrameDouble frame="75" value="-256.3802" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="-255.2047" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="-253.9954" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="-252.9523" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="-252.2484" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="-252.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.1396" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="-0.1402" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="-0.1419" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="-0.1446" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="-0.1483" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="-0.1527" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="-0.1577" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="-0.1739" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="-0.1789" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="-0.1833" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="-0.187" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="-0.1897" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="-0.1914" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="-0.192" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="-0.1914" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="-0.1897" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="-0.187" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="-0.1833" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="-0.1789" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="-0.1739" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="-0.1577" interpolationType="1"/>
+          <KeyFrameDouble frame="75" value="-0.1527" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="-0.1483" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="-0.1446" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="-0.1419" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="-0.1402" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="-0.1396" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.1396" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="0.1402" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.1419" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="0.1446" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="0.1483" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="0.1527" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="0.1577" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="0.1739" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="0.1789" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="0.1833" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="0.187" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="0.1897" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.1914" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="0.192" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="0.1914" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="0.1897" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.187" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="0.1833" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="0.1789" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="0.1739" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.1577" interpolationType="1"/>
+          <KeyFrameDouble frame="75" value="0.1527" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="0.1483" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="0.1446" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="0.1419" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="0.1402" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="0.1396" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="-0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="-0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="-0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="-0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="-0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="-0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="-0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="-0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="-0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="-0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="-0.166" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="-0.1026" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="-0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-201.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="-201.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-194.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="-194.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="think" fps="60" duration="180" speed="1.0" loopValue="1">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="1.0005" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0072" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="1.008" interpolationType="1"/>
+          <KeyFrameDouble frame="102" value="1.0077" interpolationType="1"/>
+          <KeyFrameDouble frame="162" value="1.0008" interpolationType="1"/>
+          <KeyFrameDouble frame="177" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.0873" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="-0.0877" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="-0.0889" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="-0.0916" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="-0.1011" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="-0.1031" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="-0.1043" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="-0.1047" interpolationType="1"/>
+          <KeyFrameDouble frame="99" value="-0.1043" interpolationType="1"/>
+          <KeyFrameDouble frame="108" value="-0.1031" interpolationType="1"/>
+          <KeyFrameDouble frame="120" value="-0.1004" interpolationType="1"/>
+          <KeyFrameDouble frame="153" value="-0.0909" interpolationType="1"/>
+          <KeyFrameDouble frame="162" value="-0.0889" interpolationType="1"/>
+          <KeyFrameDouble frame="171" value="-0.0877" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="-0.0873" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="-252.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.0524" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="-0.0524" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0873" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="0.0873" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.0004" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="0.0015" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="0.0033" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="0.0058" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="0.0087" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="0.0246" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="0.0277" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="0.0304" interpolationType="1"/>
+          <KeyFrameDouble frame="75" value="0.0326" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="0.0341" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="0.0348" interpolationType="1"/>
+          <KeyFrameDouble frame="93" value="0.0348" interpolationType="1"/>
+          <KeyFrameDouble frame="99" value="0.0341" interpolationType="1"/>
+          <KeyFrameDouble frame="105" value="0.0326" interpolationType="1"/>
+          <KeyFrameDouble frame="111" value="0.0304" interpolationType="1"/>
+          <KeyFrameDouble frame="117" value="0.0277" interpolationType="1"/>
+          <KeyFrameDouble frame="126" value="0.0228" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="0.0104" interpolationType="1"/>
+          <KeyFrameDouble frame="153" value="0.0072" interpolationType="1"/>
+          <KeyFrameDouble frame="159" value="0.0045" interpolationType="1"/>
+          <KeyFrameDouble frame="165" value="0.0023" interpolationType="1"/>
+          <KeyFrameDouble frame="171" value="0.0009" interpolationType="1"/>
+          <KeyFrameDouble frame="177" value="0.0001" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="140" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="141" value="0.7875" interpolationType="1"/>
+          <KeyFrameDouble frame="143" value="0.15" interpolationType="1"/>
+          <KeyFrameDouble frame="146" value="0.15" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="0.3625" interpolationType="1"/>
+          <KeyFrameDouble frame="149" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="142" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="143" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="146" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="140" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="141" value="0.7875" interpolationType="1"/>
+          <KeyFrameDouble frame="143" value="0.15" interpolationType="1"/>
+          <KeyFrameDouble frame="146" value="0.15" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="0.3625" interpolationType="1"/>
+          <KeyFrameDouble frame="149" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="142" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="143" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="146" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="142" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="143" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="146" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="142" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="143" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="146" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-199.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="-199.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-201.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="-201.0055" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="-201.0219" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="-201.0489" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="-201.0865" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="-201.134" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="-201.191" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="-201.2569" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="-201.3309" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="-201.4122" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="-201.5" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="-201.5933" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="-201.691" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="-201.7921" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="-201.8955" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="-202.1045" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="-202.2079" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="-202.309" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="-202.4067" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="-202.5" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="-202.5878" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="-202.6691" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="-202.7431" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="-202.809" interpolationType="1"/>
+          <KeyFrameDouble frame="75" value="-202.866" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="-202.9135" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="-202.9511" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="-202.9781" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="-202.9945" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="-203.0" interpolationType="1"/>
+          <KeyFrameDouble frame="93" value="-202.9945" interpolationType="1"/>
+          <KeyFrameDouble frame="96" value="-202.9781" interpolationType="1"/>
+          <KeyFrameDouble frame="99" value="-202.9511" interpolationType="1"/>
+          <KeyFrameDouble frame="102" value="-202.9135" interpolationType="1"/>
+          <KeyFrameDouble frame="105" value="-202.866" interpolationType="1"/>
+          <KeyFrameDouble frame="108" value="-202.809" interpolationType="1"/>
+          <KeyFrameDouble frame="111" value="-202.7431" interpolationType="1"/>
+          <KeyFrameDouble frame="114" value="-202.6691" interpolationType="1"/>
+          <KeyFrameDouble frame="117" value="-202.5878" interpolationType="1"/>
+          <KeyFrameDouble frame="120" value="-202.5" interpolationType="1"/>
+          <KeyFrameDouble frame="123" value="-202.4067" interpolationType="1"/>
+          <KeyFrameDouble frame="126" value="-202.309" interpolationType="1"/>
+          <KeyFrameDouble frame="129" value="-202.2079" interpolationType="1"/>
+          <KeyFrameDouble frame="132" value="-202.1045" interpolationType="1"/>
+          <KeyFrameDouble frame="138" value="-201.8955" interpolationType="1"/>
+          <KeyFrameDouble frame="141" value="-201.7921" interpolationType="1"/>
+          <KeyFrameDouble frame="144" value="-201.691" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="-201.5933" interpolationType="1"/>
+          <KeyFrameDouble frame="150" value="-201.5" interpolationType="1"/>
+          <KeyFrameDouble frame="153" value="-201.4122" interpolationType="1"/>
+          <KeyFrameDouble frame="156" value="-201.3309" interpolationType="1"/>
+          <KeyFrameDouble frame="159" value="-201.2569" interpolationType="1"/>
+          <KeyFrameDouble frame="162" value="-201.191" interpolationType="1"/>
+          <KeyFrameDouble frame="165" value="-201.134" interpolationType="1"/>
+          <KeyFrameDouble frame="168" value="-201.0865" interpolationType="1"/>
+          <KeyFrameDouble frame="171" value="-201.0489" interpolationType="1"/>
+          <KeyFrameDouble frame="174" value="-201.0219" interpolationType="1"/>
+          <KeyFrameDouble frame="177" value="-201.0055" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="-201.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="sleep" fps="60" duration="300" speed="1.0" loopValue="1">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="144" value="1.006" interpolationType="1"/>
+          <KeyFrameDouble frame="297" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="1.0007" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="1.0032" interpolationType="1"/>
+          <KeyFrameDouble frame="111" value="1.0168" interpolationType="1"/>
+          <KeyFrameDouble frame="129" value="1.019" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="1.02" interpolationType="1"/>
+          <KeyFrameDouble frame="165" value="1.0195" interpolationType="1"/>
+          <KeyFrameDouble frame="186" value="1.0173" interpolationType="1"/>
+          <KeyFrameDouble frame="261" value="1.0032" interpolationType="1"/>
+          <KeyFrameDouble frame="279" value="1.001" interpolationType="1"/>
+          <KeyFrameDouble frame="297" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0524" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="0.0532" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="0.0564" interpolationType="1"/>
+          <KeyFrameDouble frame="111" value="0.0671" interpolationType="1"/>
+          <KeyFrameDouble frame="132" value="0.0692" interpolationType="1"/>
+          <KeyFrameDouble frame="150" value="0.0698" interpolationType="1"/>
+          <KeyFrameDouble frame="171" value="0.069" interpolationType="1"/>
+          <KeyFrameDouble frame="198" value="0.0658" interpolationType="1"/>
+          <KeyFrameDouble frame="261" value="0.0551" interpolationType="1"/>
+          <KeyFrameDouble frame="282" value="0.053" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="0.0524" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-244.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="-243.998" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="-243.9921" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="-243.9823" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="-243.9686" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="-243.9511" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="-243.9298" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="-243.9048" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="-243.8763" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="-243.8443" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="-243.809" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="-243.7705" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="-243.729" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="-243.6845" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="-243.6374" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="-243.5878" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="-243.5358" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="-243.4818" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="-243.4258" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="-243.3681" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="-243.309" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="-243.2487" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="-243.1874" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="-243.1253" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="-243.0628" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="-242.9372" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="-242.8747" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="-242.8126" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="-242.7513" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="-242.691" interpolationType="1"/>
+          <KeyFrameDouble frame="93" value="-242.6319" interpolationType="1"/>
+          <KeyFrameDouble frame="96" value="-242.5742" interpolationType="1"/>
+          <KeyFrameDouble frame="99" value="-242.5182" interpolationType="1"/>
+          <KeyFrameDouble frame="102" value="-242.4642" interpolationType="1"/>
+          <KeyFrameDouble frame="105" value="-242.4122" interpolationType="1"/>
+          <KeyFrameDouble frame="108" value="-242.3626" interpolationType="1"/>
+          <KeyFrameDouble frame="111" value="-242.3155" interpolationType="1"/>
+          <KeyFrameDouble frame="114" value="-242.271" interpolationType="1"/>
+          <KeyFrameDouble frame="117" value="-242.2295" interpolationType="1"/>
+          <KeyFrameDouble frame="120" value="-242.191" interpolationType="1"/>
+          <KeyFrameDouble frame="123" value="-242.1557" interpolationType="1"/>
+          <KeyFrameDouble frame="126" value="-242.1237" interpolationType="1"/>
+          <KeyFrameDouble frame="129" value="-242.0952" interpolationType="1"/>
+          <KeyFrameDouble frame="132" value="-242.0702" interpolationType="1"/>
+          <KeyFrameDouble frame="135" value="-242.0489" interpolationType="1"/>
+          <KeyFrameDouble frame="138" value="-242.0314" interpolationType="1"/>
+          <KeyFrameDouble frame="141" value="-242.0177" interpolationType="1"/>
+          <KeyFrameDouble frame="144" value="-242.0079" interpolationType="1"/>
+          <KeyFrameDouble frame="147" value="-242.002" interpolationType="1"/>
+          <KeyFrameDouble frame="150" value="-242.0" interpolationType="1"/>
+          <KeyFrameDouble frame="153" value="-242.002" interpolationType="1"/>
+          <KeyFrameDouble frame="156" value="-242.0079" interpolationType="1"/>
+          <KeyFrameDouble frame="159" value="-242.0177" interpolationType="1"/>
+          <KeyFrameDouble frame="162" value="-242.0314" interpolationType="1"/>
+          <KeyFrameDouble frame="165" value="-242.0489" interpolationType="1"/>
+          <KeyFrameDouble frame="168" value="-242.0702" interpolationType="1"/>
+          <KeyFrameDouble frame="171" value="-242.0952" interpolationType="1"/>
+          <KeyFrameDouble frame="174" value="-242.1237" interpolationType="1"/>
+          <KeyFrameDouble frame="177" value="-242.1557" interpolationType="1"/>
+          <KeyFrameDouble frame="180" value="-242.191" interpolationType="1"/>
+          <KeyFrameDouble frame="183" value="-242.2295" interpolationType="1"/>
+          <KeyFrameDouble frame="186" value="-242.271" interpolationType="1"/>
+          <KeyFrameDouble frame="189" value="-242.3155" interpolationType="1"/>
+          <KeyFrameDouble frame="192" value="-242.3626" interpolationType="1"/>
+          <KeyFrameDouble frame="195" value="-242.4122" interpolationType="1"/>
+          <KeyFrameDouble frame="198" value="-242.4642" interpolationType="1"/>
+          <KeyFrameDouble frame="201" value="-242.5182" interpolationType="1"/>
+          <KeyFrameDouble frame="204" value="-242.5742" interpolationType="1"/>
+          <KeyFrameDouble frame="207" value="-242.6319" interpolationType="1"/>
+          <KeyFrameDouble frame="210" value="-242.691" interpolationType="1"/>
+          <KeyFrameDouble frame="213" value="-242.7513" interpolationType="1"/>
+          <KeyFrameDouble frame="216" value="-242.8126" interpolationType="1"/>
+          <KeyFrameDouble frame="219" value="-242.8747" interpolationType="1"/>
+          <KeyFrameDouble frame="222" value="-242.9372" interpolationType="1"/>
+          <KeyFrameDouble frame="228" value="-243.0628" interpolationType="1"/>
+          <KeyFrameDouble frame="231" value="-243.1253" interpolationType="1"/>
+          <KeyFrameDouble frame="234" value="-243.1874" interpolationType="1"/>
+          <KeyFrameDouble frame="237" value="-243.2487" interpolationType="1"/>
+          <KeyFrameDouble frame="240" value="-243.309" interpolationType="1"/>
+          <KeyFrameDouble frame="243" value="-243.3681" interpolationType="1"/>
+          <KeyFrameDouble frame="246" value="-243.4258" interpolationType="1"/>
+          <KeyFrameDouble frame="249" value="-243.4818" interpolationType="1"/>
+          <KeyFrameDouble frame="252" value="-243.5358" interpolationType="1"/>
+          <KeyFrameDouble frame="255" value="-243.5878" interpolationType="1"/>
+          <KeyFrameDouble frame="258" value="-243.6374" interpolationType="1"/>
+          <KeyFrameDouble frame="261" value="-243.6845" interpolationType="1"/>
+          <KeyFrameDouble frame="264" value="-243.729" interpolationType="1"/>
+          <KeyFrameDouble frame="267" value="-243.7705" interpolationType="1"/>
+          <KeyFrameDouble frame="270" value="-243.809" interpolationType="1"/>
+          <KeyFrameDouble frame="273" value="-243.8443" interpolationType="1"/>
+          <KeyFrameDouble frame="276" value="-243.8763" interpolationType="1"/>
+          <KeyFrameDouble frame="279" value="-243.9048" interpolationType="1"/>
+          <KeyFrameDouble frame="282" value="-243.9298" interpolationType="1"/>
+          <KeyFrameDouble frame="285" value="-243.9511" interpolationType="1"/>
+          <KeyFrameDouble frame="288" value="-243.9686" interpolationType="1"/>
+          <KeyFrameDouble frame="291" value="-243.9823" interpolationType="1"/>
+          <KeyFrameDouble frame="294" value="-243.9921" interpolationType="1"/>
+          <KeyFrameDouble frame="297" value="-243.998" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="-244.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.1745" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="-0.1745" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.1745" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="0.1745" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-198.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="-198.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-191.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="-191.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="300" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="victory" fps="60" duration="72" speed="1.0" loopValue="1">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="674.1962" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="672.0" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="666.0" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="663.8038" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="663.0" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="663.8038" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="666.0" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="672.0" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="674.1962" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="674.1962" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="672.0" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="666.0" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="663.8038" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="663.0" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="663.8038" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="666.0" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="672.0" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="674.1962" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="0.985" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="1.01" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="1.0098" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="1.0093" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="1.0057" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="1.0052" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="1.005" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="0.985" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="1.01" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="1.0098" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="1.0093" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="1.0057" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="1.0052" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="1.005" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.985" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="-0.0023" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="-0.0087" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="-0.0262" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="-0.0326" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="-0.0349" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="-0.0326" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="-0.0262" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="-0.0087" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="-0.0023" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="0.0023" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.0087" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="0.0262" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="0.0326" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.0349" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="0.0326" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="0.0262" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="0.0087" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="0.0023" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="-252.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.2094" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="-0.2094" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.2094" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.2094" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.2443" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="-0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="-0.2443" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="-0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="0.2443" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="-0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="-0.2443" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="-0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.2443" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="-0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="-0.2443" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="-0.1728" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="-0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-205.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="-205.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-198.0" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="-198.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="0.992" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.97" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="0.91" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="0.888" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="0.88" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="0.888" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="0.91" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="0.97" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="0.992" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="0.992" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.97" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="0.91" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="0.888" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.88" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="0.888" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="0.91" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="0.97" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="0.992" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="0.9766" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.9125" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="0.7375" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="0.6734" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="0.65" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="0.6734" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="0.7375" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="0.9125" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="0.9766" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="0.9766" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.9125" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="0.7375" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="0.6734" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.65" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="0.6734" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="0.7375" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="0.9125" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="0.9766" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="happy" fps="60" duration="54" speed="1.0" loopValue="1">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="1.0031" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="1.0098" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="1.0146" interpolationType="1"/>
+          <KeyFrameDouble frame="10" value="1.015" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="1.0136" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="1.0014" interpolationType="1"/>
+          <KeyFrameDouble frame="20" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="0.0114" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.0407" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="0.0751" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="0.0995" interpolationType="1"/>
+          <KeyFrameDouble frame="14" value="0.1047" interpolationType="1"/>
+          <KeyFrameDouble frame="40" value="0.1047" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.103" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="0.0948" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="0.0834" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="0.0736" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.0698" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="-252.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.1047" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="-0.1047" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.1047" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.1047" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="2" value="0.1346" interpolationType="1"/>
+          <KeyFrameDouble frame="4" value="0.2063" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.1814" interpolationType="1"/>
+          <KeyFrameDouble frame="8" value="0.0716" interpolationType="1"/>
+          <KeyFrameDouble frame="10" value="-0.0716" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="-0.1814" interpolationType="1"/>
+          <KeyFrameDouble frame="14" value="-0.2063" interpolationType="1"/>
+          <KeyFrameDouble frame="16" value="-0.1346" interpolationType="1"/>
+          <KeyFrameDouble frame="20" value="0.1346" interpolationType="1"/>
+          <KeyFrameDouble frame="22" value="0.2063" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="0.1814" interpolationType="1"/>
+          <KeyFrameDouble frame="26" value="0.0716" interpolationType="1"/>
+          <KeyFrameDouble frame="28" value="-0.0716" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="-0.1814" interpolationType="1"/>
+          <KeyFrameDouble frame="32" value="-0.2063" interpolationType="1"/>
+          <KeyFrameDouble frame="34" value="-0.1346" interpolationType="1"/>
+          <KeyFrameDouble frame="38" value="0.1346" interpolationType="1"/>
+          <KeyFrameDouble frame="40" value="0.2063" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.1814" interpolationType="1"/>
+          <KeyFrameDouble frame="44" value="0.0716" interpolationType="1"/>
+          <KeyFrameDouble frame="46" value="-0.0716" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="-0.1814" interpolationType="1"/>
+          <KeyFrameDouble frame="50" value="-0.2063" interpolationType="1"/>
+          <KeyFrameDouble frame="52" value="-0.1346" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="-0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-201.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="-201.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-194.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="-194.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="idle_static" fps="60" duration="1" speed="1.0" loopValue="0">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-252.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-201.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-201.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-194.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-194.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="celebrate_static" fps="60" duration="1" speed="1.0" loopValue="0">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.01" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.01" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-252.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.1396" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-0.1396" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.1396" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.1396" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-201.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-201.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-194.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-194.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="think_static" fps="60" duration="1" speed="1.0" loopValue="0">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.0873" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-0.0873" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-252.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.0524" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-0.0524" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0873" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0873" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-199.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-199.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-201.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-201.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="sleep_static" fps="60" duration="1" speed="1.0" loopValue="0">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0524" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0524" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-244.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-244.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.1745" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-0.1745" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.1745" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.1745" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-198.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-198.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-191.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-191.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="victory_static" fps="60" duration="1" speed="1.0" loopValue="0">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="0.985" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.985" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-252.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.2094" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-0.2094" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.2094" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.2094" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-205.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-205.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-198.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-198.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="happy_static" fps="60" duration="1" speed="1.0" loopValue="0">
+      <KeyedObject objectId="body">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="675.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="675.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="head_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.1047" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.1047" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-252.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-252.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_left_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="-0.1047" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-0.1047" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ear_right_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.1047" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.1047" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="tail_root">
+        <KeyedProperty propertyKey="rotation">
+          <KeyFrameDouble frame="0" value="0.1346" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.1346" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right">
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_closed">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_left_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eye_right_happy">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="mouth_open">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="muzzle">
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="0.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="0.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_left">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-201.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-201.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="eyebrow_right">
+        <KeyedProperty propertyKey="y">
+          <KeyFrameDouble frame="0" value="-194.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="-194.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+      <KeyedObject objectId="ground_shadow">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="medallion_glow" fps="60" duration="90" speed="1.0" loopValue="1">
+      <KeyedObject objectId="medallion">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="1.0008" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="1.003" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="1.0067" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="1.0116" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="1.0175" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="1.0242" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="1.0458" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="1.0525" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="1.0584" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="1.0633" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="1.067" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="1.0692" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="1.07" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="1.0692" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="1.067" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0633" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="1.0584" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="1.0525" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="1.0458" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0242" interpolationType="1"/>
+          <KeyFrameDouble frame="75" value="1.0175" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="1.0116" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="1.0067" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="1.003" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="1.0008" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="1.0008" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="1.003" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="1.0067" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="1.0116" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="1.0175" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="1.0242" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="1.0458" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="1.0525" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="1.0584" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="1.0633" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="1.067" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="1.0692" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="1.07" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="1.0692" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="1.067" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="1.0633" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="1.0584" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="1.0525" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="1.0458" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="1.0242" interpolationType="1"/>
+          <KeyFrameDouble frame="75" value="1.0175" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="1.0116" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="1.0067" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="1.003" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="1.0008" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="3" value="0.9978" interpolationType="1"/>
+          <KeyFrameDouble frame="6" value="0.9914" interpolationType="1"/>
+          <KeyFrameDouble frame="9" value="0.9809" interpolationType="1"/>
+          <KeyFrameDouble frame="12" value="0.9669" interpolationType="1"/>
+          <KeyFrameDouble frame="15" value="0.95" interpolationType="1"/>
+          <KeyFrameDouble frame="18" value="0.9309" interpolationType="1"/>
+          <KeyFrameDouble frame="21" value="0.9105" interpolationType="1"/>
+          <KeyFrameDouble frame="24" value="0.8895" interpolationType="1"/>
+          <KeyFrameDouble frame="27" value="0.8691" interpolationType="1"/>
+          <KeyFrameDouble frame="30" value="0.85" interpolationType="1"/>
+          <KeyFrameDouble frame="33" value="0.8331" interpolationType="1"/>
+          <KeyFrameDouble frame="36" value="0.8191" interpolationType="1"/>
+          <KeyFrameDouble frame="39" value="0.8086" interpolationType="1"/>
+          <KeyFrameDouble frame="42" value="0.8022" interpolationType="1"/>
+          <KeyFrameDouble frame="45" value="0.8" interpolationType="1"/>
+          <KeyFrameDouble frame="48" value="0.8022" interpolationType="1"/>
+          <KeyFrameDouble frame="51" value="0.8086" interpolationType="1"/>
+          <KeyFrameDouble frame="54" value="0.8191" interpolationType="1"/>
+          <KeyFrameDouble frame="57" value="0.8331" interpolationType="1"/>
+          <KeyFrameDouble frame="60" value="0.85" interpolationType="1"/>
+          <KeyFrameDouble frame="63" value="0.8691" interpolationType="1"/>
+          <KeyFrameDouble frame="66" value="0.8895" interpolationType="1"/>
+          <KeyFrameDouble frame="69" value="0.9105" interpolationType="1"/>
+          <KeyFrameDouble frame="72" value="0.9309" interpolationType="1"/>
+          <KeyFrameDouble frame="75" value="0.95" interpolationType="1"/>
+          <KeyFrameDouble frame="78" value="0.9669" interpolationType="1"/>
+          <KeyFrameDouble frame="81" value="0.9809" interpolationType="1"/>
+          <KeyFrameDouble frame="84" value="0.9914" interpolationType="1"/>
+          <KeyFrameDouble frame="87" value="0.9978" interpolationType="1"/>
+          <KeyFrameDouble frame="90" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <LinearAnimation name="medallion_rest" fps="60" duration="1" speed="1.0" loopValue="0">
+      <KeyedObject objectId="medallion">
+        <KeyedProperty propertyKey="scaleX">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="scaleY">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+        <KeyedProperty propertyKey="opacity">
+          <KeyFrameDouble frame="0" value="1.0" interpolationType="1"/>
+          <KeyFrameDouble frame="1" value="1.0" interpolationType="1"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+    <StateMachine name="Companion">
+      <StateMachineNumber name="state" value="0"/>
+      <StateMachineBool name="reducedMotion" value="false"/>
+      <StateMachineBool name="interacting" value="false"/>
+      <StateMachineLayer name="Mood">
+        <EntryState><StateTransition stateToId="idle"/></EntryState>
+        <AnyState>
+          <StateTransition stateToId="idle" duration="250" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="0.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="notEqual"/>
+          </StateTransition>
+          <StateTransition stateToId="idle_static" duration="0" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="0.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="equal"/>
+          </StateTransition>
+          <StateTransition stateToId="celebrate" duration="250" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="1.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="notEqual"/>
+          </StateTransition>
+          <StateTransition stateToId="celebrate_static" duration="0" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="1.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="equal"/>
+          </StateTransition>
+          <StateTransition stateToId="think" duration="250" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="2.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="notEqual"/>
+          </StateTransition>
+          <StateTransition stateToId="think_static" duration="0" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="2.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="equal"/>
+          </StateTransition>
+          <StateTransition stateToId="sleep" duration="250" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="3.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="notEqual"/>
+          </StateTransition>
+          <StateTransition stateToId="sleep_static" duration="0" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="3.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="equal"/>
+          </StateTransition>
+          <StateTransition stateToId="victory" duration="250" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="4.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="notEqual"/>
+          </StateTransition>
+          <StateTransition stateToId="victory_static" duration="0" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="4.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="equal"/>
+          </StateTransition>
+          <StateTransition stateToId="happy" duration="250" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="5.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="notEqual"/>
+          </StateTransition>
+          <StateTransition stateToId="happy_static" duration="0" flags="32">
+            <TransitionNumberCondition inputId="state" opValue="equal" value="5.0"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="equal"/>
+          </StateTransition>
+        </AnyState>
+        <AnimationState name="idle" animationId="idle"/>
+        <AnimationState name="idle_static" animationId="idle_static"/>
+        <AnimationState name="celebrate" animationId="celebrate"/>
+        <AnimationState name="celebrate_static" animationId="celebrate_static"/>
+        <AnimationState name="think" animationId="think"/>
+        <AnimationState name="think_static" animationId="think_static"/>
+        <AnimationState name="sleep" animationId="sleep"/>
+        <AnimationState name="sleep_static" animationId="sleep_static"/>
+        <AnimationState name="victory" animationId="victory"/>
+        <AnimationState name="victory_static" animationId="victory_static"/>
+        <AnimationState name="happy" animationId="happy"/>
+        <AnimationState name="happy_static" animationId="happy_static"/>
+        <ExitState/>
+      </StateMachineLayer>
+      <StateMachineLayer name="Interaction">
+        <EntryState><StateTransition stateToId="medallion_rest"/></EntryState>
+        <AnyState>
+          <StateTransition stateToId="medallion_glow" duration="250" flags="32">
+            <TransitionBoolCondition inputId="interacting" opValue="equal"/>
+            <TransitionBoolCondition inputId="reducedMotion" opValue="notEqual"/>
+          </StateTransition>
+          <StateTransition stateToId="medallion_rest" duration="250" flags="32">
+            <TransitionBoolCondition inputId="interacting" opValue="notEqual"/>
+          </StateTransition>
+          <StateTransition stateToId="medallion_rest" duration="0" flags="32">
+            <TransitionBoolCondition inputId="reducedMotion" opValue="equal"/>
+          </StateTransition>
+        </AnyState>
+        <AnimationState name="medallion_rest" animationId="medallion_rest"/>
+        <AnimationState name="medallion_glow" animationId="medallion_glow"/>
+        <ExitState/>
+      </StateMachineLayer>
+    </StateMachine>
+  </Artboard>
+</Rive>

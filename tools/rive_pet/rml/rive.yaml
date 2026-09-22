@@ -1,0 +1,8 @@
+# Projeto da Rive CLI para o pet lobo do Petrimonium.
+#   rive tools/rive_pet/rml --verify   # valida
+#   rive tools/rive_pet/rml            # preview com hot reload
+#   rive login && rive push            # envia para o arquivo da conta (abre no editor)
+name: wolf-companion
+version: 1
+sources:
+  - scene.rml

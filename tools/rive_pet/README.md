@@ -60,6 +60,11 @@ python3 tools/rive_pet/preview.py
 Os type/property keys usados foram conferidos contra o runtime Dart legado `rive 0.13.20` (o que o
 app usa): todos existem com os mesmos números.
 
+## Editar no editor do Rive (RML)
+
+`build_wolf_rml.py` gera um projeto da Rive CLI (RML) com o mesmo rig, as mesmas animações e a
+mesma state machine, para abrir tudo editável no editor — veja `RML.md`.
+
 ## Limitações
 
 - A arte de origem tem só 331×434 px e corta as patas na base; gere uma versão ≥1024 px de corpo
