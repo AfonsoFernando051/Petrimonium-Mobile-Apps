@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
 /// This product's wording and iconography for each portfolio-health facet.
@@ -9,12 +11,12 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// is pure arithmetic and is tested as such.
 extension HealthMetricDisplay on HealthMetricKind {
   String get label => switch (this) {
-    HealthMetricKind.diversification => 'Diversificação',
-    HealthMetricKind.growth => 'Crescimento',
-    HealthMetricKind.incomeStability => 'Estab. de Renda',
-    HealthMetricKind.dividendStrength => 'Força de Dividendos',
-    HealthMetricKind.volatilityControl => 'Controle de Volatilidade',
-    HealthMetricKind.longTermPotential => 'Potencial Longo Prazo',
+    HealthMetricKind.diversification => Translator.translate(AppStrings.healthMetricDiversification),
+    HealthMetricKind.growth => Translator.translate(AppStrings.healthMetricGrowth),
+    HealthMetricKind.incomeStability => Translator.translate(AppStrings.healthMetricIncomeStability),
+    HealthMetricKind.dividendStrength => Translator.translate(AppStrings.healthMetricDividendStrength),
+    HealthMetricKind.volatilityControl => Translator.translate(AppStrings.healthMetricVolatilityControl),
+    HealthMetricKind.longTermPotential => Translator.translate(AppStrings.healthMetricLongTermPotential),
   };
 
   IconData get icon => switch (this) {

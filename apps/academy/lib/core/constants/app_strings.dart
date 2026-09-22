@@ -111,6 +111,13 @@ class AppStrings {
   static const String financialGoalSubtitle = SharedStrings.financialGoalSubtitle;
   static const String financialGoalContinue = SharedStrings.financialGoalContinue;
 
+  // Financial Goal (onboarding) — PetGoalEnum option labels
+  static const String petGoalEmergencyFund = 'petGoalEmergencyFund';
+  static const String petGoalGetOutOfDebt = 'petGoalGetOutOfDebt';
+  static const String petGoalBuyImportantThing = 'petGoalBuyImportantThing';
+  static const String petGoalInvestWithConfidence = 'petGoalInvestWithConfidence';
+  static const String petGoalJustWantToLearn = 'petGoalJustWantToLearn';
+
   // Onboarding — shared chrome (Skip/Next reused by Welcome, Academy and
   // Gamification intro screens; Goal/Horizon reuse onboardingNext too).
   static const String onboardingSkip = SharedStrings.onboardingSkip;
@@ -153,9 +160,23 @@ class AppStrings {
   static const String timeHorizonTitle = SharedStrings.timeHorizonTitle;
   static const String timeHorizonSubtitle = SharedStrings.timeHorizonSubtitle;
 
+  // Time Horizon (onboarding) — InvestmentHorizonEnum option labels
+  static const String investmentHorizonUpToOneYear = 'investmentHorizonUpToOneYear';
+  static const String investmentHorizonOneToFiveYears = 'investmentHorizonOneToFiveYears';
+  static const String investmentHorizonMoreThanFiveYears = 'investmentHorizonMoreThanFiveYears';
+  static const String investmentHorizonNotSureYet = 'investmentHorizonNotSureYet';
+
   // Experience Level (onboarding)
   static const String experienceLevelTitle = 'experienceLevelTitle';
   static const String experienceLevelSubtitle = 'experienceLevelSubtitle';
+
+  // Experience Level (onboarding) — ExperienceLevelEnum option labels
+  static const String experienceLevelNoviceLabel = 'experienceLevelNoviceLabel';
+  static const String experienceLevelCuriousLabel = 'experienceLevelCuriousLabel';
+  static const String experienceLevelPractitionerLabel = 'experienceLevelPractitionerLabel';
+  static const String experienceLevelNoviceDescription = 'experienceLevelNoviceDescription';
+  static const String experienceLevelCuriousDescription = 'experienceLevelCuriousDescription';
+  static const String experienceLevelPractitionerDescription = 'experienceLevelPractitionerDescription';
 
   // Journey Ready (onboarding — replaces the old Tutorial's final step)
   static const String journeyReadyTitle = SharedStrings.journeyReadyTitle;
@@ -657,6 +678,37 @@ class AppStrings {
   // Portfolio — shared empty/error states
   static const String noAssetsRegisteredYet = SharedStrings.noAssetsRegisteredYet;
   static const String retryButtonLabel = SharedStrings.retryButtonLabel;
+
+  // Portfolio — health facet labels (HealthMetricKind)
+  static const String healthMetricDiversification = 'healthMetricDiversification';
+  static const String healthMetricGrowth = 'healthMetricGrowth';
+  static const String healthMetricIncomeStability = 'healthMetricIncomeStability';
+  static const String healthMetricDividendStrength = 'healthMetricDividendStrength';
+  static const String healthMetricVolatilityControl = 'healthMetricVolatilityControl';
+  static const String healthMetricLongTermPotential = 'healthMetricLongTermPotential';
+
+  // Portfolio — achievement copy (AchievementCatalog; ids/XP/conditions stay
+  // in the shared AchievementRules, only the wording lives here)
+  static const String achievementFirstInvestmentTitle = 'achievementFirstInvestmentTitle';
+  static const String achievementFirstInvestmentDescription = 'achievementFirstInvestmentDescription';
+  static const String achievementFirstDividendTitle = 'achievementFirstDividendTitle';
+  static const String achievementFirstDividendDescription = 'achievementFirstDividendDescription';
+  static const String achievementPositiveReturnTitle = 'achievementPositiveReturnTitle';
+  static const String achievementPositiveReturnDescription = 'achievementPositiveReturnDescription';
+  static const String achievementPortfolio10kTitle = 'achievementPortfolio10kTitle';
+  static const String achievementPortfolio10kDescription = 'achievementPortfolio10kDescription';
+  static const String achievementPortfolio50kTitle = 'achievementPortfolio50kTitle';
+  static const String achievementPortfolio50kDescription = 'achievementPortfolio50kDescription';
+  static const String achievementDiversificationMasterTitle = 'achievementDiversificationMasterTitle';
+  static const String achievementDiversificationMasterDescription = 'achievementDiversificationMasterDescription';
+  static const String achievementEtfCollectorTitle = 'achievementEtfCollectorTitle';
+  static const String achievementEtfCollectorDescription = 'achievementEtfCollectorDescription';
+  static const String achievementHundredDaysTitle = 'achievementHundredDaysTitle';
+  static const String achievementHundredDaysDescription = 'achievementHundredDaysDescription';
+  static const String achievementLongTermInvestorTitle = 'achievementLongTermInvestorTitle';
+  static const String achievementLongTermInvestorDescription = 'achievementLongTermInvestorDescription';
+  static const String achievementDividendHunterTitle = 'achievementDividendHunterTitle';
+  static const String achievementDividendHunterDescription = 'achievementDividendHunterDescription';
 
   // Generic fallback error copy — used by friendlyErrorMessage() wherever a
   // caught error has no more specific translated message of its own.

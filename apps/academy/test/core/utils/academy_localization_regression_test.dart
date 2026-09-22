@@ -1,6 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_academy/core/utils/academy_formatters.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
+import 'package:petrimonium_academy/features/pet/data/models/experience_level_enum.dart';
+import 'package:petrimonium_academy/features/pet/data/models/investment_horizon_enum.dart';
+import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/achievement_catalog.dart';
+import 'package:petrimonium_academy/features/portfolio/presentation/models/health_metric_display.dart';
 import 'package:petrimonium_academy/features/portfolio/presentation/models/mission_display_catalog.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/models/investment_type_display.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
@@ -16,6 +21,26 @@ void main() {
     expect(MissionDisplayCatalog.forCode('daily_complete_lesson').title, 'Lección del día');
     Translator.currentLanguage = 'pt';
     expect(InvestmentTypeEnum.STOCKS.label, 'Ações');
+  });
+  test('onboarding enum options and portfolio-health/achievement copy follows language changes', () {
+    Translator.currentLanguage = 'pt';
+    expect(PetGoalEnum.emergencyFund.label, 'Reserva de emergência');
+    expect(ExperienceLevelEnum.curious.label, 'Curioso');
+    expect(InvestmentHorizonEnum.notSureYet.label, 'Ainda não sei');
+    expect(HealthMetricKind.growth.label, 'Crescimento');
+    expect(AchievementCatalog.resolve({}).first.title, 'Primeiro Investimento');
+    Translator.currentLanguage = 'en';
+    expect(PetGoalEnum.emergencyFund.label, 'Emergency fund');
+    expect(ExperienceLevelEnum.curious.label, 'Curious');
+    expect(InvestmentHorizonEnum.notSureYet.label, 'Not sure yet');
+    expect(HealthMetricKind.growth.label, 'Growth');
+    expect(AchievementCatalog.resolve({}).first.title, 'First Investment');
+    Translator.currentLanguage = 'es';
+    expect(PetGoalEnum.emergencyFund.label, 'Fondo de emergencia');
+    expect(ExperienceLevelEnum.curious.label, 'Curioso');
+    expect(InvestmentHorizonEnum.notSureYet.label, 'Aún no lo sé');
+    expect(HealthMetricKind.growth.label, 'Crecimiento');
+    expect(AchievementCatalog.resolve({}).first.title, 'Primera Inversión');
   });
   test('financial percentages and quantities follow the presentation locale', () {
     Translator.currentLanguage = 'pt';

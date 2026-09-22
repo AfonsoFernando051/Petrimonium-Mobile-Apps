@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
 
 /// The user's main financial-life objective, chosen during onboarding's
 /// "Qual é o seu objetivo agora?" step. Matches the Notion mockup's 5
@@ -8,11 +10,11 @@ enum PetGoalEnum { emergencyFund, getOutOfDebt, buyImportantThing, investWithCon
 
 extension PetGoalEnumDisplay on PetGoalEnum {
   String get label => switch (this) {
-    PetGoalEnum.emergencyFund => 'Reserva de emergência',
-    PetGoalEnum.getOutOfDebt => 'Sair das dívidas',
-    PetGoalEnum.buyImportantThing => 'Comprar algo importante',
-    PetGoalEnum.investWithConfidence => 'Investir com confiança',
-    PetGoalEnum.justWantToLearn => 'Só quero aprender',
+    PetGoalEnum.emergencyFund => Translator.translate(AppStrings.petGoalEmergencyFund),
+    PetGoalEnum.getOutOfDebt => Translator.translate(AppStrings.petGoalGetOutOfDebt),
+    PetGoalEnum.buyImportantThing => Translator.translate(AppStrings.petGoalBuyImportantThing),
+    PetGoalEnum.investWithConfidence => Translator.translate(AppStrings.petGoalInvestWithConfidence),
+    PetGoalEnum.justWantToLearn => Translator.translate(AppStrings.petGoalJustWantToLearn),
   };
 
   /// The mockup's goal-picker card uses a literal emoji per option (not a

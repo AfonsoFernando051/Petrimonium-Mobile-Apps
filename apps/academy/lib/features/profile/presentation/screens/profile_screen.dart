@@ -104,9 +104,9 @@ class ProfileScreen extends StatelessWidget {
                         const SizedBox(height: 24),
                         OutlinedButton.icon(
                           icon: const Icon(Icons.settings_outlined, color: AppColors.neonPink),
-                          label: const Text(
-                            'Configurações',
-                            style: TextStyle(color: AppColors.neonPink, fontWeight: FontWeight.bold),
+                          label: Text(
+                            Translator.translate(AppStrings.settingsTitle),
+                            style: const TextStyle(color: AppColors.neonPink, fontWeight: FontWeight.bold),
                           ),
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(color: AppColors.neonPink),

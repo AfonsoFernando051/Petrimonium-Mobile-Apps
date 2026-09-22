@@ -1,3 +1,6 @@
+import 'package:petrimonium_academy/core/constants/app_strings.dart';
+import 'package:petrimonium_academy/core/utils/translator.dart';
+
 /// The user's self-reported investing experience, chosen during onboarding's
 /// "Como está sua experiência hoje?" step — lets the Academy skip content
 /// the user already knows instead of a one-size-fits-all track. Matches the
@@ -6,15 +9,15 @@ enum ExperienceLevelEnum { novice, curious, practitioner }
 
 extension ExperienceLevelEnumDisplay on ExperienceLevelEnum {
   String get label => switch (this) {
-    ExperienceLevelEnum.novice => 'Iniciante',
-    ExperienceLevelEnum.curious => 'Curioso',
-    ExperienceLevelEnum.practitioner => 'Praticante',
+    ExperienceLevelEnum.novice => Translator.translate(AppStrings.experienceLevelNoviceLabel),
+    ExperienceLevelEnum.curious => Translator.translate(AppStrings.experienceLevelCuriousLabel),
+    ExperienceLevelEnum.practitioner => Translator.translate(AppStrings.experienceLevelPractitionerLabel),
   };
 
   String get description => switch (this) {
-    ExperienceLevelEnum.novice => 'Nunca investi',
-    ExperienceLevelEnum.curious => 'Já ouvi falar, nunca pratiquei',
-    ExperienceLevelEnum.practitioner => 'Já invisto, quero entender melhor',
+    ExperienceLevelEnum.novice => Translator.translate(AppStrings.experienceLevelNoviceDescription),
+    ExperienceLevelEnum.curious => Translator.translate(AppStrings.experienceLevelCuriousDescription),
+    ExperienceLevelEnum.practitioner => Translator.translate(AppStrings.experienceLevelPractitionerDescription),
   };
 
   String get emoji => switch (this) {
