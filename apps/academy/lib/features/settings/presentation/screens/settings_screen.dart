@@ -30,13 +30,11 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   static const _dailyMissionRemindersKey = 'settings_daily_mission_reminders';
   static const _achievementAlertsKey = 'settings_achievement_alerts';
-  static const _showOnRankingsKey = 'settings_show_on_rankings';
 
   String? _email;
   String? _petName;
   bool _dailyMissionReminders = true;
   bool _achievementAlerts = true;
-  bool _showOnRankings = true;
   bool _loadingPrefs = true;
   String? _loadError;
 
@@ -57,7 +55,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _petName = profile.name;
         _dailyMissionReminders = prefs.getBool(_dailyMissionRemindersKey) ?? true;
         _achievementAlerts = prefs.getBool(_achievementAlertsKey) ?? true;
-        _showOnRankings = prefs.getBool(_showOnRankingsKey) ?? true;
         _loadingPrefs = false;
         _loadError = null;
       });
@@ -129,13 +126,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _setBoolPref(String key, bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(key, value);
-  }
-
-  Future<void> _handleCountrySelected(String countryCode) async {
-    if (countryCode == CountryPreference.current) return;
-    unawaited(HapticFeedback.selectionClick());
-    await CountryPreference.setCountry(countryCode);
-    await DI.settingsRepository.syncCountry(countryCode);
   }
 
   Future<void> _handleLanguageSelected(String language) async {
@@ -297,12 +287,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onLanguageSelected: _handleLanguageSelected,
                       ),
                       const SizedBox(height: AppSpacing.xl),
-                      CountrySection(
-                        sectionLabel: _sectionLabel,
-                        sectionTitle: Translator.translate(AppStrings.countrySectionTitle),
-                        brazilLabel: Translator.translate(AppStrings.countryBrazil),
-                        portugalLabel: Translator.translate(AppStrings.countryPortugal),
-                        onCountrySelected: _handleCountrySelected,
+                      _sectionLabel(Translator.translate(AppStrings.countrySectionTitle).toUpperCase()),
+                      ListTile(
+                        leading: const Icon(Icons.public),
+                        title: Text(Translator.translate(AppStrings.countryBrazil)),
+                        trailing: const Icon(Icons.check_circle_outline),
                       ),
                       const SizedBox(height: AppSpacing.xl),
                       AppearanceSection(
@@ -330,17 +319,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onAchievementAlertsChanged: (v) {
                           setState(() => _achievementAlerts = v);
                           _setBoolPref(_achievementAlertsKey, v);
-                        },
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      PrivacySection(
-                        sectionLabel: _sectionLabel,
-                        sectionTitle: Translator.translate(AppStrings.privacySectionTitle),
-                        showOnRankingsLabel: Translator.translate(AppStrings.showOnRankings),
-                        showOnRankings: _showOnRankings,
-                        onShowOnRankingsChanged: (v) {
-                          setState(() => _showOnRankings = v);
-                          _setBoolPref(_showOnRankingsKey, v);
                         },
                       ),
                       const SizedBox(height: AppSpacing.xl),

@@ -24,6 +24,15 @@ MissionStatus _mission({
 
 void main() {
   group('NextActionResolver.resolve', () {
+    test('a mission with no progress is not almost complete', () {
+      final action = NextActionResolver.resolve(
+        nextLesson: testLesson1,
+        moduleTitle: testModule.title,
+        missions: [_mission(progress: 0, target: 1)],
+      );
+      expect(action, isA<ContinueLessonAction>());
+    });
+
     test('defaults to ContinueLessonAction when a next lesson exists and no mission is urgent', () {
       final action = NextActionResolver.resolve(
         nextLesson: testLesson1,

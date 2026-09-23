@@ -9,6 +9,19 @@ void main() {
   });
 
   group('Translator', () {
+    test('streak and review messages distinguish one from many', () {
+      expect(Translator.translate(AppStrings.homeStreakDaysLabel, params: {'days': '1'}), '1 dia');
+      expect(Translator.translate(AppStrings.homeStreakDaysLabel, params: {'days': '2'}), '2 dias');
+      expect(
+        Translator.translate(AppStrings.companionAcademyReviewDue, params: {'count': '1'}),
+        'Você tem 1 aula para revisar. Vamos reforçar o que já aprendeu?',
+      );
+      expect(
+        Translator.translate(AppStrings.companionAcademyReviewDue, params: {'count': '2'}),
+        'Você tem 2 aulas para revisar. Vamos reforçar o que já aprendeu?',
+      );
+    });
+
     test('translates key to Portuguese by default', () {
       expect(Translator.translate(AppStrings.welcomeBack), 'Bem-vindo de volta');
     });

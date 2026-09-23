@@ -47,7 +47,7 @@ void main() async {
     // blank screen.
     appRunner: () async {
       await Translator.load();
-      await CountryPreference.load();
+      await CountryPreference.setCountry('BR');
       await ThemeController.load();
       await DI.onboardingStateRepository.incrementSessionCount();
       runApp(const MyApp());
@@ -175,7 +175,7 @@ class _SplashScreen extends StatelessWidget {
               SizedBox(width: 28, height: 28, child: CircularProgressIndicator(color: tokens.primary, strokeWidth: 2)),
               const SizedBox(height: 20),
               Text(
-                'Inicializando Módulo de Comandante...',
+                'Preparando sua jornada...',
                 style: GoogleFonts.outfit(color: tokens.textSecondary, fontSize: 13, letterSpacing: 0.5),
               ),
             ],

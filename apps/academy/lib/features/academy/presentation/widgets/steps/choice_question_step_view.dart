@@ -188,6 +188,13 @@ class _FeedbackCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(explanation, style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4)),
+                if (!isCorrect) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    Translator.translate(AppStrings.quizRetryInstruction),
+                    style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.w600),
+                  ),
+                ],
               ],
             ),
           ),

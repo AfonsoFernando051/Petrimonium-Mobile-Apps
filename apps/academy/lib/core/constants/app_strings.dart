@@ -8,6 +8,15 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// nothing at runtime. The ones still declared with a literal are this
 /// product's own - screens the sibling app does not have.
 class AppStrings {
+  static const String quizRetryInstruction = 'quizRetryInstruction';
+  static const String homeStreakDaySingular = 'homeStreakDaySingular';
+  static const String reviewDueSingular = 'reviewDueSingular';
+  static const String profileLearningProgress = 'profileLearningProgress';
+  static const String profileLearningProgressOne = 'profileLearningProgressOne';
+  static const String profileLearningEmpty = 'profileLearningEmpty';
+  static const String profileXp = 'profileXp';
+  static const String profileProgressUnavailable = 'profileProgressUnavailable';
+
   static const String simulatedHoldingQuantityPrice = 'simulatedHoldingQuantityPrice';
   static const String simulatedHoldingAllocation = 'simulatedHoldingAllocation';
 

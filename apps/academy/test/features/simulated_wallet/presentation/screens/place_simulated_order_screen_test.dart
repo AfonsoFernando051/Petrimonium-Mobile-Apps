@@ -47,6 +47,18 @@ void main() {
   }
 
   group('PlaceSimulatedOrderScreen', () {
+    testWidgets('desktop asset classes stay compact and leave room for search', (tester) async {
+      tester.view.physicalSize = const Size(1280, 720);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(buildTestableWidget());
+      final grid = tester.getRect(find.byType(GridView));
+      expect(grid.height, lessThanOrEqualTo(120));
+      expect(tester.getRect(find.text('Ações')).top, tester.getRect(find.text('Outros')).top);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('search and reference quote preserve EUR in English', (tester) async {
       Translator.currentLanguage = 'en';
       remoteDataSource.quotesToReturn = [

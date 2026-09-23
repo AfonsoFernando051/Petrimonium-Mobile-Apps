@@ -78,6 +78,18 @@ void main() {
   }
 
   group('ChoiceQuestionStepView', () {
+    testWidgets('wrong answer tells the learner how to proceed and correct option remains tappable', (tester) async {
+      int? selected;
+      await tester.pumpWidget(
+        buildTestable(selectedIndex: 0, hasAnswered: true, onSelect: (index) => selected = index),
+      );
+      expect(find.text('Toque na resposta correta, marcada em verde, para continuar.'), findsOneWidget);
+      await tester.tap(find.text('4'));
+      expect(selected, 1);
+      await tester.pumpWidget(buildTestable(selectedIndex: 1, hasAnswered: true, answeredCorrectly: true));
+      expect(find.text('Toque na resposta correta, marcada em verde, para continuar.'), findsNothing);
+    });
+
     testWidgets('renders the prompt and all options', (tester) async {
       await tester.pumpWidget(buildTestable());
 

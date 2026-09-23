@@ -49,7 +49,7 @@ class NextActionResolver {
   /// deterministic when several missions happen to tie.
   static MissionStatus? _oneAwayFromCompletion(List<MissionStatus> missions) {
     for (final mission in missions) {
-      if (!mission.completed && mission.target > 0 && mission.target - mission.progress == 1) {
+      if (!mission.completed && mission.progress > 0 && mission.target > 0 && mission.target - mission.progress == 1) {
         return mission;
       }
     }

@@ -13,8 +13,13 @@ class PerformanceBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPositive = percent >= 0;
-    final color = isPositive ? context.colors.success : context.colors.error;
+    final rounded = AcademyFormatters.rounded(percent);
+    final isPositive = rounded > 0;
+    final color = rounded == 0
+        ? context.colors.textSecondary
+        : isPositive
+        ? context.colors.success
+        : context.colors.error;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
@@ -28,7 +33,15 @@ class PerformanceBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(isPositive ? Icons.arrow_drop_up : Icons.arrow_drop_down, color: color, size: compact ? 14 : 18),
+          Icon(
+            rounded == 0
+                ? Icons.remove
+                : isPositive
+                ? Icons.arrow_drop_up
+                : Icons.arrow_drop_down,
+            color: color,
+            size: compact ? 14 : 18,
+          ),
           Text(
             AcademyFormatters.percent(percent),
             style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: compact ? 11 : 12),

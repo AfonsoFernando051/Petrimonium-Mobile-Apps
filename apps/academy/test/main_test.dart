@@ -146,7 +146,7 @@ void main() {
       await tester.pumpWidget(buildTestable());
       await tester.pump();
 
-      expect(find.text('Inicializando Módulo de Comandante...'), findsOneWidget);
+      expect(find.text('Preparando sua jornada...'), findsOneWidget);
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
   });

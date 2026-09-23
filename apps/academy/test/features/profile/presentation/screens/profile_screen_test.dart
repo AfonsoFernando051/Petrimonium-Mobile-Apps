@@ -59,6 +59,7 @@ void main() {
     // SettingsScreen (pushed from this screen) reads DI.mascotRepository on
     // init — kept a working double so navigating into it doesn't crash.
     DI.mascotRepository = FakeMascotRepository();
+    DI.academyProgressRepository = AcademyProgressLocalRepository();
 
     mascotController = MascotController(repository: FakeMascotRepository());
     companionController = PetCompanionController(mascotController: mascotController);
@@ -72,14 +73,25 @@ void main() {
   }
 
   group('ProfileScreen', () {
-    testWidgets('renders the placeholder profile card', (tester) async {
+    testWidgets('shows completed lessons from saved progress', (tester) async {
+      await DI.academyProgressRepository.markLessonCompleted('lesson-1');
+      await DI.academyProgressRepository.markLessonCompleted('lesson-2');
+      await tester.pumpWidget(buildTestable());
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.text('2 aulas concluídas'), findsOneWidget);
+    });
+
+    testWidgets('renders real learning progress without a placeholder', (tester) async {
       await tester.pumpWidget(buildTestable());
       // CosmicBackground has repeating AnimationControllers — never
       // pumpAndSettle here.
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.text('Perfil do Comandante'), findsOneWidget);
+      expect(find.text('Seu aprendizado'), findsOneWidget);
+      expect(find.text('EM BREVE'), findsNothing);
+      expect(find.text('0 XP conquistados'), findsOneWidget);
       expect(find.byIcon(Icons.manage_accounts), findsOneWidget);
     });
 

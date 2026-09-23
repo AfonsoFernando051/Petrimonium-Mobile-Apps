@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_academy/core/constants/app_strings.dart';
@@ -18,10 +19,18 @@ import 'package:petrimonium_academy/features/settings/presentation/screens/setti
 /// Keeps the same [PetCompanionController] instance `DashboardScreen` owns
 /// (not a new one) so the companion's message/cooldown state stays
 /// continuous across the push — see that controller's class doc.
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key, required this.companionController});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key, required this.companionController});
 
   final PetCompanionController companionController;
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  PetCompanionController get companionController => widget.companionController;
+  late final Future<Set<String>> _completedLessons = DI.academyProgressRepository.loadCompletedLessonIds();
 
   // This screen's own Pet anchor (a fresh `LayerLink`/`GlobalKey` pair, not
   // shared with `DashboardScreen`'s — Profile is pushed on top of it, so
@@ -32,6 +41,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
+    final level = LevelCalculator.fromXp(companionController.mascotController.profile.xp).level;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -60,7 +70,8 @@ class ProfileScreen extends StatelessWidget {
         child: Stack(
           children: [
             SafeArea(
-              child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
                 child: GlassCard(
                   backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
                   borderColor: AppColors.neonPink.withValues(alpha: 0.3),
@@ -78,22 +89,46 @@ class ProfileScreen extends StatelessWidget {
                           style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 20),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              Translator.translate(AppStrings.profileAchievementsLabel),
-                              style: TextStyle(color: tokens.textPrimary, fontSize: 13, fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(width: 8),
-                            UnavailableBadge(label: Translator.translate(AppStrings.labComingSoon)),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
                         Text(
-                          Translator.translate(AppStrings.profileAchievementsComingSoonBody),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4),
+                          Translator.translate(
+                            AppStrings.appBarPlayerGenericGreeting,
+                            params: {
+                              'level': '$level',
+                              'tier': Translator.translate(levelTierKey(LevelTier.forLevel(level))),
+                            },
+                          ),
+                          style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          Translator.translate(
+                            AppStrings.profileXp,
+                            params: {'xp': '${companionController.mascotController.profile.xp}'},
+                          ),
+                          style: TextStyle(color: tokens.primary),
+                        ),
+                        const SizedBox(height: 12),
+                        FutureBuilder<Set<String>>(
+                          future: _completedLessons,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Text(Translator.translate(AppStrings.profileProgressUnavailable));
+                            }
+                            if (!snapshot.hasData) return const CircularProgressIndicator();
+                            final count = snapshot.data!.length;
+                            return Text(
+                              Translator.translate(
+                                count == 0
+                                    ? AppStrings.profileLearningEmpty
+                                    : count == 1
+                                    ? AppStrings.profileLearningProgressOne
+                                    : AppStrings.profileLearningProgress,
+                                params: {'count': '$count'},
+                              ),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: tokens.textSecondary),
+                            );
+                          },
                         ),
                         const SizedBox(height: 8),
                         Text(

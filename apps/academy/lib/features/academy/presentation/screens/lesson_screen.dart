@@ -22,7 +22,15 @@ import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers
 /// — a lesson always completes, there is no fail/restart state (see
 /// `docs/ACADEMY_ENGINE.md`, no lives/hearts).
 class LessonScreen extends StatefulWidget {
-  const LessonScreen({super.key, required this.lesson, required this.catalog, required this.mascotController});
+  const LessonScreen({
+    super.key,
+    required this.lesson,
+    required this.catalog,
+    required this.mascotController,
+    this.onBackToAcademy,
+  });
+
+  final VoidCallback? onBackToAcademy;
 
   final Lesson lesson;
 
@@ -87,10 +95,10 @@ class _LessonScreenState extends State<LessonScreen> {
     super.dispose();
   }
 
-  // Academia is a bottom-nav tab living on the Dashboard's root route (its
-  // `IndexedStack` keeps the tab's own state, `_selectedIndex`, alive) —
-  // "back to Academia" is just "pop every pushed screen back to that root".
+  // Popping alone preserves the Home tab when it launched the lesson.
+  // Let that caller select Academia before returning to the dashboard.
   void _backToAcademy() {
+    widget.onBackToAcademy?.call();
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
@@ -214,7 +222,14 @@ class _LessonScreenState extends State<LessonScreen> {
       return;
     }
     Navigator.of(context).pushReplacement(
-      _fadeRoute(LessonScreen(lesson: next, catalog: widget.catalog, mascotController: widget.mascotController)),
+      _fadeRoute(
+        LessonScreen(
+          lesson: next,
+          catalog: widget.catalog,
+          mascotController: widget.mascotController,
+          onBackToAcademy: widget.onBackToAcademy,
+        ),
+      ),
     );
   }
 

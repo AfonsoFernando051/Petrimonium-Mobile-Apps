@@ -5,36 +5,9 @@ import 'package:petrimonium_academy/features/pet/presentation/companion/pet_comp
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
-/// Floats [PetCompanionController]'s current message next to wherever the
-/// Pet actually renders on screen — anchored via [anchor], not a hardcoded
-/// screen coordinate, so the bubble reads as the Pet's own speech instead of
-/// an unrelated banner (`docs/investor_companion_speech_bubble_design_system
-/// .md`'s "My companion is talking directly to me" test).
-///
-/// When [anchor] is provided, the bubble is glued to the anchor target
-/// (typically `PetCompanionHeader`'s avatar or `HomeCompanionCard`'s pet
-/// art) via `CompositedTransformFollower`. That tracks the target's actual
-/// position live, including while it scrolls (e.g. Home's
-/// `SingleChildScrollView`), with no manual scroll-offset bookkeeping — the
-/// compositor recomputes the offset every frame from the target's layer
-/// transform. Which side of the anchor the bubble grows toward, whether it
-/// sits above or below, and how wide it can safely be are all computed once
-/// per shown message from the anchor's *measured* screen position, so the
-/// same widget adapts to every host screen instead of needing per-screen
-/// tuning.
-///
-/// When [anchor] is omitted (the showcase screen, or any host that hasn't
-/// registered a Pet visual), falls back to a plain top-center placement.
-///
-/// Rendered through an [OverlayEntry] rather than inline in the host's
-/// widget tree. `CompositedTransformFollower` requires its target to have
-/// *painted* earlier in the same frame — a plain requirement that broke for
-/// [anchor]s living in an `AppBar` (e.g. `PetCompanionHeader`), since
-/// `Scaffold` paints its `body` before its `appBar` so the bar's shadow sits
-/// on top. Inserting into the app's root `Overlay` (already used by
-/// `Navigator` for routes/dialogs) guarantees this widget paints last —
-/// after every possible anchor location — regardless of which screen region
-/// hosts the Pet.
+/// Shows companion speech in the root overlay so it paints after the AppBar.
+/// The measured avatar position and available viewport keep speech near the pet,
+/// clear of the toolbar and navigation, even during scrolling or text scaling.
 class PetSpeechBubbleOverlay extends StatefulWidget {
   const PetSpeechBubbleOverlay({super.key, required this.controller, this.anchor, this.onActionSelected});
 
@@ -174,112 +147,66 @@ class _AnchoredBubble extends StatelessWidget {
       return Align(alignment: Alignment.topCenter, child: _bubble(PetBubbleTailPosition.bottomLeft, 360));
     }
 
-    final placement = PetBubblePlacement.resolve(context, resolvedAnchor.boxKey);
-    return CompositedTransformFollower(
-      link: resolvedAnchor.link,
-      showWhenUnlinked: false,
-      targetAnchor: placement.targetAnchor,
-      followerAnchor: placement.followerAnchor,
-      offset: placement.offset,
-      child: _bubble(placement.tail, placement.maxWidth),
+    final scrollPosition = resolvedAnchor.boxKey.currentContext == null
+        ? null
+        : Scrollable.maybeOf(resolvedAnchor.boxKey.currentContext!)?.position;
+    if (scrollPosition != null) {
+      return ListenableBuilder(
+        listenable: scrollPosition,
+        builder: (context, _) => _positionedBubble(context, resolvedAnchor),
+      );
+    }
+    return _positionedBubble(context, resolvedAnchor);
+  }
+
+  Widget _positionedBubble(BuildContext context, PetSpeechBubbleAnchor anchor) {
+    final box = anchor.boxKey.currentContext?.findRenderObject();
+    if (box is! RenderBox || !box.attached || !box.hasSize) return const SizedBox.shrink();
+    final media = MediaQuery.of(context);
+    final viewport = Rect.fromLTRB(
+      16,
+      media.padding.top + kToolbarHeight + 8,
+      media.size.width - 16,
+      media.size.height - media.padding.bottom - 80,
+    );
+    final rect = box.localToGlobal(Offset.zero) & box.size;
+    if (!rect.overlaps(Offset.zero & media.size)) return const SizedBox.shrink();
+    final below = rect.top - viewport.top < viewport.bottom - rect.bottom;
+    final fraction = rect.center.dx / media.size.width;
+    final tail = fraction < .4
+        ? (below ? PetBubbleTailPosition.topLeft : PetBubbleTailPosition.bottomLeft)
+        : fraction > .6
+        ? (below ? PetBubbleTailPosition.topRight : PetBubbleTailPosition.bottomRight)
+        : (below ? PetBubbleTailPosition.topCenter : PetBubbleTailPosition.bottomCenter);
+    return CustomSingleChildLayout(
+      delegate: _BubbleViewportLayout(anchor: rect, viewport: viewport, below: below),
+      child: SingleChildScrollView(child: _bubble(tail, viewport.width.clamp(0, 320))),
     );
   }
 }
 
-enum _PetAnchorSide { left, center, right }
+/// Uses the bubble's actual laid-out size, including translated text and text
+/// scaling, so a long message cannot extend above the window or over the toolbar.
+class _BubbleViewportLayout extends SingleChildLayoutDelegate {
+  const _BubbleViewportLayout({required this.anchor, required this.viewport, required this.below});
 
-/// Where, relative to a measured Pet anchor, the speech bubble should sit —
-/// which side it grows toward, whether it's above or below, and how wide it
-/// can safely be before it risks leaving the viewport. Computed fresh each
-/// time a message is shown (not on every frame — live tracking of the
-/// anchor's actual pixel offset, including through scrolling, is handled by
-/// `CompositedTransformFollower` itself).
-class PetBubblePlacement {
-  const PetBubblePlacement({
-    required this.tail,
-    required this.targetAnchor,
-    required this.followerAnchor,
-    required this.offset,
-    required this.maxWidth,
-  });
+  final Rect anchor;
+  final Rect viewport;
+  final bool below;
 
-  final PetBubbleTailPosition tail;
-  final Alignment targetAnchor;
-  final Alignment followerAnchor;
-  final Offset offset;
-  final double maxWidth;
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
+      BoxConstraints(maxWidth: viewport.width.clamp(0, 320), maxHeight: viewport.height.clamp(0, double.infinity));
 
-  static const double _gap = 10.0;
-  static const double _horizontalMargin = 16.0;
-  static const double _defaultMaxWidth = 320.0;
-  static const double _minMaxWidth = 220.0;
-
-  /// Below this much room above the anchor, there isn't enough space for a
-  /// comfortably-sized bubble to sit above it (e.g. the header avatar,
-  /// which lives inside the AppBar itself) — so the bubble is placed below
-  /// the anchor instead, with an upward-pointing tail.
-  static const double _minSpaceAboveForTopPlacement = 140.0;
-
-  static PetBubblePlacement resolve(BuildContext context, GlobalKey anchorKey) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    final renderObject = anchorKey.currentContext?.findRenderObject();
-
-    if (renderObject is! RenderBox || !renderObject.attached || !renderObject.hasSize) {
-      // The anchor hasn't laid out yet (should be rare — Pet visuals mount
-      // well before any event-driven message can fire). Fall back to a
-      // reasonable default rather than crashing.
-      return const PetBubblePlacement(
-        tail: PetBubbleTailPosition.bottomCenter,
-        targetAnchor: Alignment.topCenter,
-        followerAnchor: Alignment.bottomCenter,
-        offset: Offset(0, -_gap),
-        maxWidth: _defaultMaxWidth,
-      );
-    }
-
-    final anchorTopLeft = renderObject.localToGlobal(Offset.zero);
-    final anchorSize = renderObject.size;
-    final anchorCenterX = anchorTopLeft.dx + anchorSize.width / 2;
-    final placeBelow = anchorTopLeft.dy < _minSpaceAboveForTopPlacement;
-
-    final horizontalFraction = screenWidth <= 0 ? 0.5 : anchorCenterX / screenWidth;
-    final side = horizontalFraction < 0.4
-        ? _PetAnchorSide.left
-        : (horizontalFraction > 0.6 ? _PetAnchorSide.right : _PetAnchorSide.center);
-
-    final maxWidthRaw = switch (side) {
-      _PetAnchorSide.left => screenWidth - anchorTopLeft.dx - _horizontalMargin,
-      _PetAnchorSide.right => anchorTopLeft.dx + anchorSize.width - _horizontalMargin,
-      _PetAnchorSide.center => screenWidth - _horizontalMargin * 2,
-    };
-
-    return PetBubblePlacement(
-      tail: _tailFor(side, placeBelow),
-      targetAnchor: _targetAnchorFor(side, placeBelow),
-      followerAnchor: _followerAnchorFor(side, placeBelow),
-      offset: Offset(0, placeBelow ? _gap : -_gap),
-      maxWidth: maxWidthRaw.clamp(_minMaxWidth, _defaultMaxWidth),
-    );
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    final x = (anchor.center.dx - childSize.width / 2).clamp(viewport.left, viewport.right - childSize.width);
+    final desiredY = below ? anchor.bottom + 10 : anchor.top - childSize.height - 10;
+    final y = desiredY.clamp(viewport.top, viewport.bottom - childSize.height);
+    return Offset(x, y);
   }
 
-  static Alignment _targetAnchorFor(_PetAnchorSide side, bool below) => switch (side) {
-    _PetAnchorSide.left => below ? Alignment.bottomLeft : Alignment.topLeft,
-    _PetAnchorSide.right => below ? Alignment.bottomRight : Alignment.topRight,
-    _PetAnchorSide.center => below ? Alignment.bottomCenter : Alignment.topCenter,
-  };
-
-  static Alignment _followerAnchorFor(_PetAnchorSide side, bool below) => switch (side) {
-    _PetAnchorSide.left => below ? Alignment.topLeft : Alignment.bottomLeft,
-    _PetAnchorSide.right => below ? Alignment.topRight : Alignment.bottomRight,
-    _PetAnchorSide.center => below ? Alignment.topCenter : Alignment.bottomCenter,
-  };
-
-  static PetBubbleTailPosition _tailFor(_PetAnchorSide side, bool below) => switch ((side, below)) {
-    (_PetAnchorSide.left, false) => PetBubbleTailPosition.bottomLeft,
-    (_PetAnchorSide.left, true) => PetBubbleTailPosition.topLeft,
-    (_PetAnchorSide.right, false) => PetBubbleTailPosition.bottomRight,
-    (_PetAnchorSide.right, true) => PetBubbleTailPosition.topRight,
-    (_PetAnchorSide.center, false) => PetBubbleTailPosition.bottomCenter,
-    (_PetAnchorSide.center, true) => PetBubbleTailPosition.topCenter,
-  };
+  @override
+  bool shouldRelayout(_BubbleViewportLayout oldDelegate) =>
+      anchor != oldDelegate.anchor || viewport != oldDelegate.viewport || below != oldDelegate.below;
 }

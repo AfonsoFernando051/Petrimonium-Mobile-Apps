@@ -15,7 +15,13 @@ class AcademyFormatters {
 
   // Academy's portfolio and editable lab scenarios are denominated in BRL.
   // Quotes supply their own ISO currency code explicitly.
+  static double rounded(double value, {int decimals = 2}) {
+    final result = double.parse(value.toStringAsFixed(decimals));
+    return result == 0 ? 0 : result;
+  }
+
   static String currency(double value, {bool showCents = true, String currencyCode = 'BRL'}) {
+    value = rounded(value, decimals: showCents ? 2 : 0);
     return NumberFormat.simpleCurrency(
       locale: _locale,
       name: currencyCode,
@@ -31,10 +37,10 @@ class AcademyFormatters {
   }
 
   static String percent(double value, {bool showSign = true}) =>
-      '${showSign && value > 0 ? '+' : ''}${percentPlain(value, decimals: 2)}';
+      '${showSign && rounded(value) > 0 ? '+' : ''}${percentPlain(value, decimals: 2)}';
 
   static String percentPlain(double value, {int decimals = 1}) =>
-      '${NumberFormat.decimalPatternDigits(locale: _locale, decimalDigits: decimals).format(value)}%';
+      '${NumberFormat.decimalPatternDigits(locale: _locale, decimalDigits: decimals).format(rounded(value, decimals: decimals))}%';
 
   static String quantity(double value) => NumberFormat.decimalPatternDigits(
     locale: _locale,

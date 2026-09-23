@@ -336,7 +336,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         AppStrings.appBarPlayerNamedGreeting,
                         params: {'petName': _mascotController.profile.name!, 'level': '$level'},
                       )
-                    : Translator.translate(AppStrings.appBarPlayerGenericGreeting, params: {'level': '$level'}),
+                    : Translator.translate(
+                        AppStrings.appBarPlayerGenericGreeting,
+                        params: {
+                          'level': '$level',
+                          'tier': Translator.translate(levelTierKey(LevelTier.forLevel(level))),
+                        },
+                      ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.caption.copyWith(color: context.colors.primary.withValues(alpha: 0.9)),

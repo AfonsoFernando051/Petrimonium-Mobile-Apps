@@ -400,13 +400,15 @@ class _TypeGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
+    return GridView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 3,
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      childAspectRatio: 1.08,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: MediaQuery.sizeOf(context).width >= 900 ? 6 : 3,
+        mainAxisExtent: 112,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+      ),
       children: [
         for (final type in InvestmentTypeEnum.values)
           _TypeCard(type: type, selected: type == selected, tokens: tokens, onTap: () => onSelect(type)),

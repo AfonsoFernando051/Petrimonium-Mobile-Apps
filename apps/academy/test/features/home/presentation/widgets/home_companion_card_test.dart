@@ -57,7 +57,7 @@ void main() {
           key: ValueKey(reason),
           mascotController: mascotController,
           petName: 'Bolt',
-          message: 'Você estava progredindo em "Aula X". Continuar de onde parou?',
+          message: 'Sua próxima aula é "Aula X". Vamos aprender?',
           reason: reason,
         ),
       ),
@@ -72,13 +72,13 @@ void main() {
       await tester.pump();
 
       expect(find.text('Bolt'), findsOneWidget);
-      expect(find.text('Você estava progredindo em "Aula X". Continuar de onde parou?'), findsOneWidget);
+      expect(find.text('Sua próxima aula é "Aula X". Vamos aprender?'), findsOneWidget);
       expect(find.text('Por que estou vendo isto?'), findsOneWidget);
     });
 
     testWidgets('reveals the matching reason for each signal on tap', (tester) async {
       for (final (reason, expected) in [
-        (HomeCompanionReason.continueLesson, 'Baseado na sua última aula concluída.'),
+        (HomeCompanionReason.continueLesson, 'Baseado na próxima aula disponível na sua trilha.'),
         (HomeCompanionReason.reviewDue, 'Baseado em conceitos pendentes de revisão.'),
         (HomeCompanionReason.returning, 'Baseado no tempo desde sua última visita.'),
       ]) {

@@ -85,7 +85,9 @@ void main() {
       expect(find.byType(LanguageSection), findsOneWidget);
       expect(find.byType(AppearanceSection), findsOneWidget);
       expect(find.byType(NotificationsSection), findsOneWidget);
-      expect(find.byType(PrivacySection), findsOneWidget);
+      expect(find.byType(PrivacySection), findsNothing);
+      expect(find.text('Brasil'), findsOneWidget);
+      expect(find.text('Portugal'), findsNothing);
       expect(find.byType(AccountSection), findsOneWidget);
       expect(find.text('user@example.com'), findsOneWidget);
       expect(find.text('Rex'), findsOneWidget);
@@ -100,7 +102,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      for (final title in ['COMPANHEIRO', 'IDIOMA', 'PAÍS', 'APARÊNCIA', 'NOTIFICAÇÕES', 'PRIVACIDADE', 'CONTA']) {
+      for (final title in ['COMPANHEIRO', 'IDIOMA', 'PAÍS', 'APARÊNCIA', 'NOTIFICAÇÕES', 'CONTA']) {
         expect(find.text(title), findsOneWidget, reason: title);
       }
       expect(find.text('Nome do companheiro'), findsOneWidget);
@@ -108,7 +110,7 @@ void main() {
       expect(find.text('Brasil'), findsOneWidget);
       expect(find.text('Claro'), findsOneWidget);
       expect(find.text('Lembretes de missões diárias'), findsOneWidget);
-      expect(find.text('Aparecer nos rankings'), findsOneWidget);
+      expect(find.text('Aparecer nos rankings'), findsNothing);
       expect(find.text('Sair'), findsOneWidget);
     });
 

@@ -43,7 +43,7 @@ void main() {
       // AnimationControllers, so never call pumpAndSettle.
       await tester.pump();
 
-      expect(find.text('Escolha seu parceiro de jornada'), findsOneWidget);
+      expect(find.text('Dê um nome ao seu parceiro de jornada'), findsOneWidget);
       expect(find.text('Ele evolui com o que você aprende — nunca com quanto você tem.'), findsOneWidget);
       expect(find.text('Mas antes... eu preciso de um nome!'), findsOneWidget);
       expect(find.text('Como você gostaria de chamar seu companheiro?'), findsOneWidget);

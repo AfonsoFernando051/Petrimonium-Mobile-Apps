@@ -251,7 +251,12 @@ class _HomeScreenState extends State<HomeScreen> {
     unawaited(HapticFeedback.selectionClick());
     await Navigator.of(context).push(
       _fadeRoute(
-        LessonScreen(lesson: lesson, catalog: _academyController.snapshot!, mascotController: widget.mascotController),
+        LessonScreen(
+          lesson: lesson,
+          catalog: _academyController.snapshot!,
+          mascotController: widget.mascotController,
+          onBackToAcademy: widget.onOpenAcademyTab,
+        ),
       ),
     );
     unawaited(_academyController.load());

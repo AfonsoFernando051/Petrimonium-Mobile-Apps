@@ -81,6 +81,45 @@ void main() {
   }
 
   group('LessonScreen', () {
+    testWidgets('back to Academy selects its tab before popping the lesson', (tester) async {
+      var academySelected = false;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark,
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                child: const Text('open lesson'),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => LessonScreen(
+                      lesson: testLesson1,
+                      catalog: buildAcademyCatalogSnapshot(),
+                      mascotController: mascotController,
+                      onBackToAcademy: () => academySelected = true,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open lesson'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.byType(GameButton));
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 5));
+      await tester.ensureVisible(find.text('Voltar à Academia'));
+      await tester.tap(find.text('Voltar à Academia'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(academySelected, isTrue);
+      expect(find.byType(LessonScreen), findsNothing);
+      mascotController.dispose();
+    });
+
     testWidgets('renders an ExplanationStep and advances via the continue button', (tester) async {
       await tester.pumpWidget(buildTestable(lesson: testLesson1));
       await tester.pump();

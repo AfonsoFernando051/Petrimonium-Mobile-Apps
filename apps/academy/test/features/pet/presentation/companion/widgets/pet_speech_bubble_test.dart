@@ -64,6 +64,48 @@ void main() {
   }
 
   group('PetSpeechBubbleOverlay', () {
+    testWidgets('desktop bubble stays below the toolbar and inside the viewport', (tester) async {
+      tester.view.physicalSize = const Size(1280, 720);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final anchor = PetSpeechBubbleAnchor();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark,
+          home: Scaffold(
+            body: Stack(
+              children: [
+                Positioned(
+                  left: 40,
+                  top: 160,
+                  child: CompositedTransformTarget(
+                    link: anchor.link,
+                    child: SizedBox(key: anchor.boxKey, width: 80, height: 80),
+                  ),
+                ),
+                PetSpeechBubbleOverlay(controller: companionController, anchor: anchor),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      companionController.enterContext(
+        PetContext.home,
+        data: {'lessonTitle': 'Uma aula longa para entender como organizar sua vida financeira'},
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      final bubble = tester.getRect(find.byType(PetComicSpeechBubble));
+      expect(bubble.top, greaterThanOrEqualTo(kToolbarHeight));
+      expect(bubble.left, greaterThanOrEqualTo(16));
+      expect(bubble.right, lessThanOrEqualTo(1264));
+      expect(bubble.bottom, lessThanOrEqualTo(640));
+      companionController.dispose();
+      mascotController.dispose();
+    });
+
     testWidgets('renders nothing when there is no current message', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();

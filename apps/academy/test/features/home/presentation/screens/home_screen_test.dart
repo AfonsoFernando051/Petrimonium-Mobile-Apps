@@ -256,7 +256,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.text('Você estava progredindo em "${testLesson1.title}". Continuar de onde parou?'), findsOneWidget);
+      expect(find.text('Sua próxima aula é "${testLesson1.title}". Vamos aprender?'), findsOneWidget);
       expect(find.text('Por que estou vendo isto?'), findsOneWidget);
 
       // The real next-lesson data also triggers PetCompanionController's own

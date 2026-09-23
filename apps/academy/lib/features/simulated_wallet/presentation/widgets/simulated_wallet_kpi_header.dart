@@ -26,7 +26,12 @@ class SimulatedWalletKpiHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
-    final profitColor = totalProfit < 0 ? tokens.error : tokens.success;
+    final profit = AcademyFormatters.rounded(totalProfit);
+    final profitColor = profit == 0
+        ? tokens.textSecondary
+        : profit < 0
+        ? tokens.error
+        : tokens.success;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
