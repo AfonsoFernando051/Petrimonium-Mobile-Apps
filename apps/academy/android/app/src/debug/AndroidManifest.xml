@@ -4,4 +4,13 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Debug-only, and it must stay that way: the dev backend is plain HTTP
+         (http://10.0.2.2:8081, see PetrimoniumEnvironment.devDefaultBaseUrl) and
+         Android blocks cleartext by default from API 28 on, so without this the
+         emulator cannot reach it at all. Release builds inherit nothing from this
+         source set, and PetrimoniumEnvironment.assertConfiguredForRelease refuses
+         to start a release build whose API_BASE_URL is not https. Health already
+         carried this; Wallet and Academy did not, which is the only reason the
+         three behaved differently against the same local backend. -->
+    <application android:usesCleartextTraffic="true"/>
 </manifest>

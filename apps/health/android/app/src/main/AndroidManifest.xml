@@ -10,7 +10,7 @@
          fullBackupContent/dataExtractionRules cover the pre-31 and 31+ backup paths
          respectively; both are set so the answer is the same on every supported API level. -->
     <application
-        android:label="petrimonium_health"
+        android:label="Petrimonium Health"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
