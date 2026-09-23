@@ -117,6 +117,7 @@ void main() {
       // route — a single pump past its duration leaves both routes on stage.
       await tester.pumpAndSettle();
       expect(academySelected, isTrue);
+      await tester.pump(const Duration(milliseconds: 400));
       expect(find.byType(LessonScreen), findsNothing);
       mascotController.dispose();
     });
