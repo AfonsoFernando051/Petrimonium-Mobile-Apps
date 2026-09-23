@@ -12,7 +12,8 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/academy_domain_detail_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/academy_home_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/lesson_screen.dart';
-import 'package:petrimonium_academy/features/academy/presentation/widgets/academy_domain_card.dart';
+import 'package:petrimonium_academy/features/home/presentation/widgets/next_action_card.dart';
+import 'package:petrimonium_academy/features/academy/presentation/widgets/journey/journey_chapter_label.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/school_card.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/lesson_completion_result.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
@@ -32,6 +33,8 @@ import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../test/features/simulated_wallet/presentation/controllers/simulated_wallet_controller_test.dart'
+    show FakeSimulatedWalletRepository;
 import '../test/features/academy/academy_test_fixtures.dart';
 import '../test/features/academy/presentation/screens/academy_home_screen_test.dart'
     show MockAcademyCatalogRepository, MockAcademyRemoteDataSource;
@@ -59,17 +62,9 @@ class MockMentorChatRepository extends Mock implements MentorChatRepository {}
 
 class MockApiClient extends Mock implements ApiClient {}
 
-/// The app's one real end-to-end flow: a returning, fully-onboarded user
-/// logs in and lands on [DashboardScreen] — exercising `MyApp`'s real
-/// `StartRouteResolver` routing (see `core/navigation/start_route_resolver.dart`)
-/// and `LoginForm`'s real `pushAndRemoveUntil(MyApp())` re-mount, not just
-/// the individual screens/controllers in isolation (already covered by
-/// `test/`'s widget/unit tests).
-///
-/// Runs via `flutter test integration_test/app_test.dart` (see
-/// `.github/workflows/mobile-ci.yml`) — this app has no native-plugin
-/// behavior under test here, so the plain widget-tree-level `flutter test`
-/// runner is sufficient; no device/emulator is required.
+/// Native UI integration with deterministic repository boundaries.
+/// Run with `xvfb-run -a flutter test -d linux integration_test` as in academy.yml.
+/// Real authenticated HTTP and database persistence are covered in the backend.
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -89,6 +84,9 @@ void main() {
   late MockMentorChatRepository mockMentorChatRepository;
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    DI.academyProgressRepository = AcademyProgressLocalRepository();
+    DI.simulatedWalletRepository = FakeSimulatedWalletRepository();
     Translator.currentLanguage = 'pt';
 
     // Starts logged out (so MyApp's first resolve() lands on LoginScreen);
@@ -153,6 +151,8 @@ void main() {
 
     mockOnboardingStateRepository = MockOnboardingStateRepository();
     DI.onboardingStateRepository = mockOnboardingStateRepository;
+    when(() => mockOnboardingStateRepository.isFirstHomeVisit()).thenAnswer((_) async => false);
+    when(() => mockOnboardingStateRepository.markHomeSeen()).thenAnswer((_) async {});
     when(() => mockOnboardingStateRepository.hasSetGoal()).thenAnswer((_) async => true);
     when(() => mockOnboardingStateRepository.isTutorialCompleted()).thenAnswer((_) async => true);
     when(() => mockOnboardingStateRepository.isPortfolioStepDone()).thenAnswer((_) async => true);
@@ -182,8 +182,8 @@ void main() {
     when(
       () => mockAcademyRemoteDataSource.completeLesson(any(), perfectFirstTry: any(named: 'perfectFirstTry')),
     ).thenAnswer(
-      (_) async => const LessonCompletionResult(
-        lessonId: 'test_lesson_3',
+      (invocation) async => LessonCompletionResult(
+        lessonId: invocation.positionalArguments.first as String,
         alreadyCompleted: false,
         xpAwarded: 20,
         moduleCompleted: true,
@@ -226,7 +226,7 @@ void main() {
 
     // LoginScreen also has a GoogleSignInButton, which is GameButton-based
     // too — target the CTA by its label so the tap isn't ambiguous.
-    await tester.tap(find.widgetWithText(GameButton, 'Entrar'));
+    await tester.tap(find.descendant(of: find.widgetWithText(GameButton, 'Entrar'), matching: find.text('Entrar')));
     // Not pumpAndSettle() anywhere in this test: both LoginScreen and
     // DashboardScreen mount a CosmicBackground with an indefinitely
     // repeating animation. Pump bounded steps instead:
@@ -273,7 +273,7 @@ void main() {
 
     final signupAction = find.widgetWithText(GameButton, 'Cadastrar');
     await tester.ensureVisible(signupAction);
-    await tester.tap(signupAction);
+    await tester.tap(find.descendant(of: signupAction, matching: find.text('Cadastrar')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
     for (var i = 0; i < 6; i++) {
@@ -312,9 +312,9 @@ void main() {
 
     // Drill into the one domain in the fake catalog to reach its schools —
     // AcademyHomeScreen itself lists domains, not schools directly.
-    await tester.ensureVisible(find.byType(AcademyDomainCard).first);
+    await tester.ensureVisible(find.byType(JourneyChapterLabel).first);
     await tester.pump();
-    await tester.tap(find.byType(AcademyDomainCard).first);
+    await tester.tap(find.byType(JourneyChapterLabel).first);
     await tester.pump(); // HapticFeedback + Navigator.push starts
     await tester.pump(const Duration(milliseconds: 300)); // fade/slide page transition
     for (var i = 0; i < 6; i++) {
@@ -333,7 +333,7 @@ void main() {
     final fields = find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField));
     await tester.enterText(fields.first, 'investor@test.com');
     await tester.enterText(fields.last, 'Str0ngPass1');
-    await tester.tap(find.widgetWithText(GameButton, 'Entrar'));
+    await tester.tap(find.descendant(of: find.widgetWithText(GameButton, 'Entrar'), matching: find.text('Entrar')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
     for (var i = 0; i < 6; i++) {
@@ -354,6 +354,112 @@ void main() {
     expect(find.text('O que devo estudar antes de investir?'), findsOneWidget);
     expect(find.text('Como analisar minha carteira?'), findsOneWidget);
     verify(() => mockMentorChatRepository.loadSuggestedPrompts()).called(1);
+  });
+
+  Future<void> drainNavigation(WidgetTester tester) async {
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    for (var i = 0; i < 8; i++) {
+      await tester.pump();
+    }
+  }
+
+  Future<void> loginAndOpenHomeLesson(WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+    await drainNavigation(tester);
+    final fields = find.descendant(of: find.byType(CustomTextField), matching: find.byType(TextField));
+    await tester.enterText(fields.first, 'investor@test.com');
+    await tester.enterText(fields.last, 'Str0ngPass1');
+    await tester.tap(find.descendant(of: find.widgetWithText(GameButton, 'Entrar'), matching: find.text('Entrar')));
+    await drainNavigation(tester);
+    expect(find.byType(DashboardScreen), findsOneWidget);
+    final action = find.descendant(of: find.byType(NextActionCard), matching: find.text('Continuar aula'));
+    await tester.ensureVisible(action);
+    await tester.tap(action);
+    await drainNavigation(tester);
+    expect(find.byType(LessonScreen), findsOneWidget);
+  }
+
+  testWidgets('Home lesson completion returns to Academy and persists across app remount', (tester) async {
+    await loginAndOpenHomeLesson(tester);
+    expect(tester.widget<LessonScreen>(find.byType(LessonScreen)).lesson.id, testLesson1.id);
+    await tester.tap(find.text('Concluir'));
+    await drainNavigation(tester);
+    final back = find.text('Voltar à Academia');
+    await tester.ensureVisible(back);
+    await tester.tap(back);
+    await drainNavigation(tester);
+    expect(tester.widget<BottomNavigationBar>(find.byType(BottomNavigationBar)).currentIndex, 1);
+    expect(find.byType(AcademyHomeScreen), findsOneWidget);
+    expect(await AcademyProgressLocalRepository().loadCompletedLessonIds(), {testLesson1.id});
+
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    DI.academyProgressRepository = AcademyProgressLocalRepository();
+    await tester.pumpWidget(const MyApp());
+    await drainNavigation(tester);
+    expect(find.byType(DashboardScreen), findsOneWidget);
+    expect(find.descendant(of: find.byType(NextActionCard), matching: find.text(testLesson2.title)), findsOneWidget);
+    expect(await DI.academyProgressRepository.loadCompletedLessonIds(), {testLesson1.id});
+  });
+
+  testWidgets('completion survives a network failure and syncs when the app reopens', (tester) async {
+    var offline = true;
+    final remote = DI.academyRemoteDataSource;
+    when(() => remote.completeLesson(testLesson1.id, perfectFirstTry: true)).thenAnswer((_) async {
+      if (offline) throw Exception('Network unavailable');
+      return const LessonCompletionResult(
+        lessonId: 'test_lesson_1',
+        alreadyCompleted: false,
+        xpAwarded: 20,
+        moduleCompleted: false,
+        moduleXpAwarded: 0,
+        totalXp: 20,
+        level: 1,
+        xpIntoLevel: 20,
+        xpForNextLevel: 50,
+      );
+    });
+    await loginAndOpenHomeLesson(tester);
+    await tester.tap(find.text('Concluir'));
+    await drainNavigation(tester);
+    expect(find.text('Voltar à Academia'), findsOneWidget);
+    expect(await AcademyProgressLocalRepository().loadCompletedLessonIds(), {testLesson1.id});
+    expect(await AcademyProgressLocalRepository().loadPendingSyncLessonIds(), {testLesson1.id});
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+
+    offline = false;
+    DI.academyProgressRepository = AcademyProgressLocalRepository();
+    await tester.pumpWidget(const MyApp());
+    await drainNavigation(tester);
+    expect(find.byType(DashboardScreen), findsOneWidget);
+    expect(await AcademyProgressLocalRepository().loadPendingSyncLessonIds(), isEmpty);
+    expect(await AcademyProgressLocalRepository().loadCompletedLessonIds(), {testLesson1.id});
+    expect(find.descendant(of: find.byType(NextActionCard), matching: find.text(testLesson2.title)), findsOneWidget);
+  });
+
+  testWidgets('wrong quiz answer explains recovery and completing after retry preserves the mistake', (tester) async {
+    await DI.academyProgressRepository.markLessonCompleted(testLesson1.id);
+    await loginAndOpenHomeLesson(tester);
+    expect(tester.widget<LessonScreen>(find.byType(LessonScreen)).lesson.id, testLesson2.id);
+    await tester.tap(find.text('B'));
+    await drainNavigation(tester);
+    expect(find.text('Toque na resposta correta, marcada em verde, para continuar.'), findsOneWidget);
+    expect(tester.widget<GameButton>(find.widgetWithText(GameButton, 'Concluir')).onPressed, isNull);
+    expect(await DI.academyProgressRepository.loadCompletedLessonIds(), {testLesson1.id});
+    await tester.tap(find.text('A'));
+    await drainNavigation(tester);
+    final conclude = find.text('Concluir');
+    await tester.ensureVisible(conclude);
+    await tester.tap(conclude);
+    await drainNavigation(tester);
+    expect(find.text('Voltar à Academia'), findsOneWidget);
+    expect(await AcademyProgressLocalRepository().loadCompletedLessonIds(), {testLesson1.id, testLesson2.id});
+    expect(await AcademyProgressLocalRepository().loadPerfectLessonIds(), isNot(contains(testLesson2.id)));
+    await tester.pump(const Duration(seconds: 5));
   });
 
   testWidgets('finishing a module opens its social-share celebration', (tester) async {
@@ -379,7 +485,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    await tester.tap(find.byType(GameButton));
+    await tester.tap(find.text('Concluir'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
     await tester.pump();
