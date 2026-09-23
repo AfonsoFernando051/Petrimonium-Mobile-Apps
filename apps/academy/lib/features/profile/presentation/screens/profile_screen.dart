@@ -70,90 +70,108 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Stack(
           children: [
             SafeArea(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: GlassCard(
-                  backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
-                  borderColor: AppColors.neonPink.withValues(alpha: 0.3),
-                  borderRadius: 24,
-                  borderWidth: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.manage_accounts, size: 64, color: AppColors.neonPink.withValues(alpha: 0.7)),
-                        const SizedBox(height: 16),
-                        Text(
-                          Translator.translate(AppStrings.profileCommanderTitle),
-                          style: TextStyle(color: tokens.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          Translator.translate(
-                            AppStrings.appBarPlayerGenericGreeting,
-                            params: {
-                              'level': '$level',
-                              'tier': Translator.translate(levelTierKey(LevelTier.forLevel(level))),
-                            },
+              // Scrolls when the card outgrows the viewport (small phones, large
+              // text scale) but stays centred when it fits — the plain
+              // `SingleChildScrollView` this replaced pinned the card to the top-left
+              // corner on anything wider than a phone.
+              child: LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: (constraints.maxHeight - 40).clamp(0.0, double.infinity)),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 440),
+                        child: GlassCard(
+                          backgroundColor: tokens.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
+                          borderColor: AppColors.neonPink.withValues(alpha: 0.3),
+                          borderRadius: 24,
+                          borderWidth: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.manage_accounts, size: 64, color: AppColors.neonPink.withValues(alpha: 0.7)),
+                                const SizedBox(height: 16),
+                                Text(
+                                  Translator.translate(AppStrings.profileCommanderTitle),
+                                  style: TextStyle(
+                                    color: tokens.textPrimary,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  Translator.translate(
+                                    AppStrings.appBarPlayerGenericGreeting,
+                                    params: {
+                                      'level': '$level',
+                                      'tier': Translator.translate(levelTierKey(LevelTier.forLevel(level))),
+                                    },
+                                  ),
+                                  style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.w600),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  Translator.translate(
+                                    AppStrings.profileXp,
+                                    params: {'xp': '${companionController.mascotController.profile.xp}'},
+                                  ),
+                                  style: TextStyle(color: tokens.primary),
+                                ),
+                                const SizedBox(height: 12),
+                                FutureBuilder<Set<String>>(
+                                  future: _completedLessons,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      return Text(Translator.translate(AppStrings.profileProgressUnavailable));
+                                    }
+                                    if (!snapshot.hasData) return const CircularProgressIndicator();
+                                    final count = snapshot.data!.length;
+                                    return Text(
+                                      Translator.translate(
+                                        count == 0
+                                            ? AppStrings.profileLearningEmpty
+                                            : count == 1
+                                            ? AppStrings.profileLearningProgressOne
+                                            : AppStrings.profileLearningProgress,
+                                        params: {'count': '$count'},
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: tokens.textSecondary),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  Translator.translate(AppStrings.profileSettingsHint),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: tokens.textTertiary, fontSize: 12),
+                                ),
+                                const SizedBox(height: 24),
+                                OutlinedButton.icon(
+                                  icon: const Icon(Icons.settings_outlined, color: AppColors.neonPink),
+                                  label: Text(
+                                    Translator.translate(AppStrings.settingsTitle),
+                                    style: const TextStyle(color: AppColors.neonPink, fontWeight: FontWeight.bold),
+                                  ),
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(color: AppColors.neonPink),
+                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                  ),
+                                  onPressed: () {
+                                    HapticFeedback.selectionClick();
+                                    Navigator.of(context).push(fadeRoute(const SettingsScreen()));
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                          style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.w600),
                         ),
-                        const SizedBox(height: 12),
-                        Text(
-                          Translator.translate(
-                            AppStrings.profileXp,
-                            params: {'xp': '${companionController.mascotController.profile.xp}'},
-                          ),
-                          style: TextStyle(color: tokens.primary),
-                        ),
-                        const SizedBox(height: 12),
-                        FutureBuilder<Set<String>>(
-                          future: _completedLessons,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return Text(Translator.translate(AppStrings.profileProgressUnavailable));
-                            }
-                            if (!snapshot.hasData) return const CircularProgressIndicator();
-                            final count = snapshot.data!.length;
-                            return Text(
-                              Translator.translate(
-                                count == 0
-                                    ? AppStrings.profileLearningEmpty
-                                    : count == 1
-                                    ? AppStrings.profileLearningProgressOne
-                                    : AppStrings.profileLearningProgress,
-                                params: {'count': '$count'},
-                              ),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: tokens.textSecondary),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          Translator.translate(AppStrings.profileSettingsHint),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: tokens.textTertiary, fontSize: 12),
-                        ),
-                        const SizedBox(height: 24),
-                        OutlinedButton.icon(
-                          icon: const Icon(Icons.settings_outlined, color: AppColors.neonPink),
-                          label: Text(
-                            Translator.translate(AppStrings.settingsTitle),
-                            style: const TextStyle(color: AppColors.neonPink, fontWeight: FontWeight.bold),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: AppColors.neonPink),
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                          ),
-                          onPressed: () {
-                            HapticFeedback.selectionClick();
-                            Navigator.of(context).push(fadeRoute(const SettingsScreen()));
-                          },
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),

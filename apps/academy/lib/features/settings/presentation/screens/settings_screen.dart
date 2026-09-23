@@ -287,11 +287,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onLanguageSelected: _handleLanguageSelected,
                       ),
                       const SizedBox(height: AppSpacing.xl),
+                      // Academy's simulated market is Brazilian, so there is nothing to
+                      // choose here — the row is shown (not hidden) so the locale the
+                      // prices and the tax content assume stays visible. Same anatomy as
+                      // the sections around it; `CountrySection` stays for Wallet, which
+                      // does let the account pick.
                       _sectionLabel(Translator.translate(AppStrings.countrySectionTitle).toUpperCase()),
-                      ListTile(
-                        leading: const Icon(Icons.public),
-                        title: Text(Translator.translate(AppStrings.countryBrazil)),
-                        trailing: const Icon(Icons.check_circle_outline),
+                      GlassCard(
+                        backgroundColor: context.colors.surface.withValues(alpha: context.isDarkMode ? 0.6 : 0.94),
+                        borderColor: context.colors.textPrimary.withValues(alpha: 0.12),
+                        borderRadius: AppRadii.lg + 2,
+                        borderWidth: 1,
+                        padding: EdgeInsets.zero,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(AppRadii.lg + 2),
+                          child: OptionRow(
+                            leading: '🇧🇷',
+                            label: Translator.translate(AppStrings.countryBrazil),
+                            selected: true,
+                            onTap: () {},
+                            showDivider: false,
+                          ),
+                        ),
                       ),
                       const SizedBox(height: AppSpacing.xl),
                       AppearanceSection(

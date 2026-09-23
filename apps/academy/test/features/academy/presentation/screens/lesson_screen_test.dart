@@ -113,8 +113,9 @@ void main() {
       await tester.pump(const Duration(seconds: 5));
       await tester.ensureVisible(find.text('Voltar à Academia'));
       await tester.tap(find.text('Voltar à Academia'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
+      // The pop transition needs more than one frame to actually unmount the
+      // route — a single pump past its duration leaves both routes on stage.
+      await tester.pumpAndSettle();
       expect(academySelected, isTrue);
       expect(find.byType(LessonScreen), findsNothing);
       mascotController.dispose();
