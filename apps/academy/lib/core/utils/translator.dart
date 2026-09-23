@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
@@ -32,6 +32,13 @@ class Translator {
   static ValueNotifier<String> get languageNotifier => _engine.languageNotifier;
 
   static String get currentLanguage => _engine.currentLanguage;
+
+  /// The current choice as a [Locale], for `MaterialApp.locale` — Flutter's
+  /// own widgets (date picker, Cupertino dialogs) read this, not our codes.
+  static Locale get currentLocale => _engine.currentLocale;
+
+  /// Every offered language as a Locale, for `MaterialApp.supportedLocales`.
+  static List<Locale> get supportedLocales => _engine.supportedLocales;
 
   /// Synchronous setter kept for tests and simple in-memory switches.
   /// Prefer [setLanguage] in the app so the preference is persisted.
@@ -115,7 +122,7 @@ class Translator {
       AppStrings.shareProgressCta: 'Baixe o Petrimonium Academy e comece sua jornada',
       AppStrings.inAppBrandName: 'Petrimonium Academy',
       AppStrings.academyIntroTitle: 'Sua trilha começa aqui',
-      AppStrings.academyIntroSubtitle: 'O resto libera conforme você avança — sem pular etapas.',
+      AppStrings.academyIntroSubtitle: 'Uma ordem sugerida — você escolhe por onde começar.',
       AppStrings.academyIntroStartsNow: 'começa agora',
       AppStrings.academyIntroMentorIntro: 'Vamos começar por {module}. {count} — dá pra começar agora.',
       AppStrings.academyIntroLessonSingular: 'aula',
@@ -214,7 +221,7 @@ class Translator {
       AppStrings.homeCompanionLevelChip: 'Nível {level}',
       AppStrings.homeJourneySummaryLabel: 'SUA JORNADA',
       AppStrings.homeViewFullJourneyCta: 'Ver jornada completa',
-      AppStrings.homeJourneyStagePosition: 'Etapa {position} de {total}',
+      AppStrings.homeJourneyStagePosition: 'Escola {position} de {total}',
       AppStrings.homeJourneyNextStage: 'A seguir: {title}',
       AppStrings.homeJourneyCompleteTitle: 'Você percorreu toda a jornada disponível',
       AppStrings.homeJourneyCompleteStages: '{completed} de {total} etapas concluídas',
@@ -340,7 +347,7 @@ class Translator {
       AppStrings.shareProgressCta: 'Download Petrimonium Academy and start your journey',
       AppStrings.inAppBrandName: 'Petrimonium Academy',
       AppStrings.academyIntroTitle: 'Your track starts here',
-      AppStrings.academyIntroSubtitle: 'The rest unlocks as you go — no skipping steps.',
+      AppStrings.academyIntroSubtitle: 'A suggested order — you choose where to start.',
       AppStrings.academyIntroStartsNow: 'starts now',
       AppStrings.academyIntroMentorIntro: "Let's start with {module}. {count} — you can do it now.",
       AppStrings.academyIntroLessonSingular: 'lesson',
@@ -436,7 +443,7 @@ class Translator {
       AppStrings.homeCompanionLevelChip: 'Level {level}',
       AppStrings.homeJourneySummaryLabel: 'YOUR JOURNEY',
       AppStrings.homeViewFullJourneyCta: 'See full journey',
-      AppStrings.homeJourneyStagePosition: 'Stage {position} of {total}',
+      AppStrings.homeJourneyStagePosition: 'School {position} of {total}',
       AppStrings.homeJourneyNextStage: 'Up next: {title}',
       AppStrings.homeJourneyCompleteTitle: "You've walked the whole journey available",
       AppStrings.homeJourneyCompleteStages: '{completed} of {total} stages done',
@@ -555,7 +562,7 @@ class Translator {
       AppStrings.shareProgressCta: 'Descarga Petrimonium Academy y comienza tu viaje',
       AppStrings.inAppBrandName: 'Petrimonium Academy',
       AppStrings.academyIntroTitle: 'Tu camino comienza aquí',
-      AppStrings.academyIntroSubtitle: 'El resto se desbloquea a medida que avanzas — sin saltar pasos.',
+      AppStrings.academyIntroSubtitle: 'Un orden sugerido — tú eliges por dónde empezar.',
       AppStrings.academyIntroStartsNow: 'empieza ahora',
       AppStrings.academyIntroMentorIntro: 'Empecemos por {module}. {count} — puedes hacerlo ahora.',
       AppStrings.academyIntroLessonSingular: 'lección',
@@ -651,7 +658,7 @@ class Translator {
       AppStrings.homeCompanionLevelChip: 'Nivel {level}',
       AppStrings.homeJourneySummaryLabel: 'TU RECORRIDO',
       AppStrings.homeViewFullJourneyCta: 'Ver recorrido completo',
-      AppStrings.homeJourneyStagePosition: 'Etapa {position} de {total}',
+      AppStrings.homeJourneyStagePosition: 'Escuela {position} de {total}',
       AppStrings.homeJourneyNextStage: 'A continuación: {title}',
       AppStrings.homeJourneyCompleteTitle: 'Recorriste todo el camino disponible',
       AppStrings.homeJourneyCompleteStages: '{completed} de {total} etapas completadas',

@@ -188,8 +188,21 @@ class PetCompanionController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _isDisposed = true;
     _autoHideTimer?.cancel();
     _eventSubscription.cancel();
     super.dispose();
   }
+
+  bool _isDisposed = false;
+
+  /// Whether [dispose] has already run.
+  ///
+  /// This controller outlives individual screens on purpose (one instance per
+  /// authenticated session, shared by every tab and by the screens pushed
+  /// over them), so a pushed screen can still be mounted after its owner is
+  /// gone — switching language rebuilds the app from the root and does
+  /// exactly that. A widget that rebuilds on its own clock, rather than on
+  /// this controller's notifications, has no other way to know.
+  bool get isDisposed => _isDisposed;
 }

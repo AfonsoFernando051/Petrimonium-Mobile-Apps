@@ -75,6 +75,61 @@ void main() {
       expect(find.textContaining('R\$', skipOffstage: false), findsNothing);
     });
 
+    // Typing 54 for PETR4, changing your mind and picking VALE3 used to
+    // carry the 54 over silently — a quantity chosen for one asset applied
+    // to a different one, at a different price, with no sign it happened.
+    testWidgets('clears the quantity when the chosen ticker changes', (tester) async {
+      remoteDataSource.quotesToReturn = [
+        {'symbol': 'PETR4', 'shortName': 'Petrobras', 'regularMarketPrice': 30.5, 'currency': 'BRL'},
+      ];
+      remoteDataSource.quoteToReturn = {'symbol': 'PETR4', 'regularMarketPrice': 30.5, 'currency': 'BRL'};
+
+      await tester.pumpWidget(buildTestableWidget());
+      await revealAndEnterText(tester, find.byType(TextField, skipOffstage: false).first, 'PETR4');
+      await tester.pump(const Duration(milliseconds: 400));
+      await revealAndTap(tester, find.text('PETR4', skipOffstage: false).last);
+      await tester.pump();
+
+      final quantityField = find.byType(TextField, skipOffstage: false).last;
+      await revealAndEnterText(tester, quantityField, '54');
+      await tester.pump();
+      expect(find.text('54', skipOffstage: false), findsOneWidget);
+
+      remoteDataSource.quotesToReturn = [
+        {'symbol': 'VALE3', 'shortName': 'Vale', 'regularMarketPrice': 71.6, 'currency': 'BRL'},
+      ];
+      remoteDataSource.quoteToReturn = {'symbol': 'VALE3', 'regularMarketPrice': 71.6, 'currency': 'BRL'};
+      await revealAndEnterText(tester, find.byType(TextField, skipOffstage: false).first, 'VALE3');
+      await tester.pump(const Duration(milliseconds: 400));
+      await revealAndTap(tester, find.text('VALE3', skipOffstage: false).last);
+      await tester.pump();
+
+      expect(find.text('54', skipOffstage: false), findsNothing);
+    });
+
+    testWidgets('keeps the quantity when the same ticker is picked again', (tester) async {
+      remoteDataSource.quotesToReturn = [
+        {'symbol': 'PETR4', 'shortName': 'Petrobras', 'regularMarketPrice': 30.5, 'currency': 'BRL'},
+      ];
+      remoteDataSource.quoteToReturn = {'symbol': 'PETR4', 'regularMarketPrice': 30.5, 'currency': 'BRL'};
+
+      await tester.pumpWidget(buildTestableWidget());
+      await revealAndEnterText(tester, find.byType(TextField, skipOffstage: false).first, 'PETR4');
+      await tester.pump(const Duration(milliseconds: 400));
+      await revealAndTap(tester, find.text('PETR4', skipOffstage: false).last);
+      await tester.pump();
+
+      await revealAndEnterText(tester, find.byType(TextField, skipOffstage: false).last, '54');
+      await tester.pump();
+
+      await revealAndEnterText(tester, find.byType(TextField, skipOffstage: false).first, 'PETR4');
+      await tester.pump(const Duration(milliseconds: 400));
+      await revealAndTap(tester, find.text('PETR4', skipOffstage: false).last);
+      await tester.pump();
+
+      expect(find.text('54', skipOffstage: false), findsOneWidget);
+    });
+
     testWidgets('shows all 6 investment-type cards, none selected before a ticker is searched', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 

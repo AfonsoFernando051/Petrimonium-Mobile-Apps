@@ -8,8 +8,20 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// Shows companion speech in the root overlay so it paints after the AppBar.
 /// The measured avatar position and available viewport keep speech near the pet,
 /// clear of the toolbar and navigation, even during scrolling or text scaling.
+///
+/// Painting in the root overlay also puts the bubble above any route pushed
+/// on top of the host screen, where it has nothing to point at and covers
+/// content — it once sat over a lesson's question stem. So it follows its
+/// host route's `secondaryAnimation` and stays hidden while something else
+/// is covering that route.
 class PetSpeechBubbleOverlay extends StatefulWidget {
-  const PetSpeechBubbleOverlay({super.key, required this.controller, this.anchor, this.onActionSelected});
+  const PetSpeechBubbleOverlay({
+    super.key,
+    required this.controller,
+    this.anchor,
+    this.onActionSelected,
+    this.isMessageShownInline = false,
+  });
 
   final PetCompanionController controller;
 
@@ -22,12 +34,29 @@ class PetSpeechBubbleOverlay extends StatefulWidget {
   /// widget only reports the intent.
   final ValueChanged<PetMessageAction>? onActionSelected;
 
+  /// Set by a host that already prints the companion's message in its own
+  /// layout (Home does, inside `HomeCompanionCard`). The bubble then stays
+  /// out of the way instead of repeating the same sentence on top of the
+  /// card below it.
+  final bool isMessageShownInline;
+
   @override
   State<PetSpeechBubbleOverlay> createState() => _PetSpeechBubbleOverlayState();
 }
 
 class _PetSpeechBubbleOverlayState extends State<PetSpeechBubbleOverlay> {
   OverlayEntry? _entry;
+
+  /// The route this overlay was mounted from. Its `secondaryAnimation` runs
+  /// 0 -> 1 as another route covers it, which is exactly when the bubble
+  /// must get out of the way.
+  ModalRoute<dynamic>? _hostRoute;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _hostRoute = ModalRoute.of(context);
+  }
 
   @override
   void initState() {
@@ -49,6 +78,7 @@ class _PetSpeechBubbleOverlayState extends State<PetSpeechBubbleOverlay> {
     // tabs) need an explicit rebuild request.
     if (oldWidget.controller != widget.controller ||
         oldWidget.anchor != widget.anchor ||
+        oldWidget.isMessageShownInline != widget.isMessageShownInline ||
         oldWidget.onActionSelected != widget.onActionSelected) {
       // `OverlayEntry.markNeedsBuild` calls `setState` on the overlay's own
       // element — calling it synchronously here would happen *during* this
@@ -62,6 +92,24 @@ class _PetSpeechBubbleOverlayState extends State<PetSpeechBubbleOverlay> {
   }
 
   Widget _buildOverlayContent(BuildContext context) {
+    if (widget.isMessageShownInline) return const SizedBox.shrink();
+    // This entry is rebuilt by the route transition's own animation, so it
+    // can tick after the controller's owner has gone (a language switch
+    // rebuilds the app from the root while this screen stays pushed).
+    // Subscribing to a disposed ChangeNotifier throws.
+    if (!mounted || widget.controller.isDisposed) return const SizedBox.shrink();
+    final hostRoute = _hostRoute;
+    if (hostRoute == null) return _buildBubble(context);
+    return AnimatedBuilder(
+      animation: hostRoute.secondaryAnimation ?? kAlwaysDismissedAnimation,
+      builder: (context, _) {
+        final covered = (hostRoute.secondaryAnimation?.value ?? 0) > 0 || !hostRoute.isCurrent;
+        return covered ? const SizedBox.shrink() : _buildBubble(context);
+      },
+    );
+  }
+
+  Widget _buildBubble(BuildContext context) {
     final reducedMotion = MediaQuery.of(context).disableAnimations;
 
     // A transparent `Material` ancestor: this content is inserted into the

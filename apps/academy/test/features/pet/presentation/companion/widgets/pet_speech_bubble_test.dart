@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -103,6 +105,97 @@ void main() {
       expect(bubble.right, lessThanOrEqualTo(1264));
       expect(bubble.bottom, lessThanOrEqualTo(640));
       companionController.dispose();
+      mascotController.dispose();
+    });
+
+    // The bubble lives in the root Overlay so it paints above the AppBar —
+    // which also put it above every route pushed on top of the host. That is
+    // how the companion ended up covering the question stem on the lesson
+    // screen while the student was trying to read it.
+    testWidgets('hides while another route covers the screen that owns it', (tester) async {
+      final navigatorKey = GlobalKey<NavigatorState>();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark,
+          navigatorKey: navigatorKey,
+          home: Scaffold(body: PetSpeechBubbleOverlay(controller: companionController)),
+        ),
+      );
+      await tester.pump();
+      companionController.enterContext(PetContext.home, data: {'lessonTitle': 'Vida Financeira'});
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.byType(PetComicSpeechBubble), findsOneWidget);
+
+      unawaited(
+        navigatorKey.currentState!.push(MaterialPageRoute<void>(builder: (_) => const Scaffold(body: Text('Aula')))),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Aula'), findsOneWidget);
+      expect(find.byType(PetComicSpeechBubble), findsNothing);
+
+      navigatorKey.currentState!.pop();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(PetComicSpeechBubble), findsOneWidget);
+
+      companionController.dispose();
+      mascotController.dispose();
+    });
+
+    // On Home the companion's message is already printed inside
+    // HomeCompanionCard, so the floating bubble repeated it word for word
+    // while sitting on top of the "Continue aprendendo" CTA underneath.
+    testWidgets('renders nothing while the host says the message is shown inline', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark,
+          home: Scaffold(body: PetSpeechBubbleOverlay(controller: companionController, isMessageShownInline: true)),
+        ),
+      );
+      await tester.pump();
+      companionController.enterContext(PetContext.home, data: {'lessonTitle': 'Vida Financeira'});
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.byType(PetComicSpeechBubble), findsNothing);
+
+      companionController.dispose();
+      mascotController.dispose();
+    });
+
+    // The overlay rebuilds on its host route's transition animation, which
+    // ticks independently of the controller. Switching language rebuilds the
+    // app from the root and can dispose the controller's owner while a
+    // pushed screen still holds this overlay — the next tick then tried to
+    // subscribe to a dead ChangeNotifier and threw a red screen over Perfil.
+    testWidgets('survives its controller being disposed underneath it', (tester) async {
+      final navigatorKey = GlobalKey<NavigatorState>();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.dark,
+          navigatorKey: navigatorKey,
+          home: Scaffold(body: PetSpeechBubbleOverlay(controller: companionController)),
+        ),
+      );
+      await tester.pump();
+      companionController.enterContext(PetContext.home, data: {'lessonTitle': 'Vida Financeira'});
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.byType(PetComicSpeechBubble), findsOneWidget);
+
+      companionController.dispose();
+
+      unawaited(
+        navigatorKey.currentState!.push(MaterialPageRoute<void>(builder: (_) => const Scaffold(body: Text('Perfil')))),
+      );
+      await tester.pumpAndSettle();
+      navigatorKey.currentState!.pop();
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+
       mascotController.dispose();
     });
 

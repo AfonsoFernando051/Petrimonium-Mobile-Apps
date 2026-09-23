@@ -10,6 +10,7 @@ import 'package:petrimonium_academy/features/onboarding/presentation/screens/por
 import 'package:petrimonium_academy/features/onboarding/presentation/onboarding_constants.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/mission_reward_card.dart';
 import 'package:petrimonium_academy/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
 
 /// Onboarding's closing beat — a summary of the choices just made plus the
@@ -28,6 +29,13 @@ class _JourneyReadyScreenState extends State<JourneyReadyScreen> {
   PetProfile? _profile;
   bool _isStarting = false;
 
+  /// The lesson the app will actually open first, resolved through the same
+  /// [AcademyProgressCalculator.nextLessonToContinue] the Home card and the
+  /// timeline use. Null while it loads, or when the catalog is unreachable —
+  /// the card then falls back to the generic mission copy rather than
+  /// blocking the end of onboarding on a network call.
+  String? _firstMissionTitle;
+
   @override
   void initState() {
     super.initState();
@@ -41,6 +49,23 @@ class _JourneyReadyScreenState extends State<JourneyReadyScreen> {
       _goal = results[0] as PetGoalEnum;
       _profile = results[1] as PetProfile;
     });
+    unawaited(_loadFirstMission());
+  }
+
+  /// Best-effort: a failure here only means the generic mission copy stays.
+  Future<void> _loadFirstMission() async {
+    final language = Translator.currentLanguage;
+    try {
+      final catalog =
+          await DI.academyCatalogRepository.loadCached(language) ??
+          await DI.academyCatalogRepository.fetchAndCache(language);
+      final completed = await DI.academyProgressRepository.loadCompletedLessonIds();
+      final next = AcademyProgressCalculator.nextLessonToContinue(catalog: catalog, completedIds: completed);
+      if (!mounted || next == null) return;
+      setState(() => _firstMissionTitle = next.title);
+    } catch (_) {
+      // Offline or an empty catalog — keep the generic mission.
+    }
   }
 
   Future<void> _handleStart() async {
@@ -113,7 +138,7 @@ class _JourneyReadyScreenState extends State<JourneyReadyScreen> {
                 const SizedBox(height: 20),
                 MissionRewardCard(
                   eyebrow: Translator.translate(AppStrings.journeyReadyFirstMissionLabel),
-                  title: Translator.translate(AppStrings.missionCompoundInterestTitle),
+                  title: _firstMissionTitle ?? Translator.translate(AppStrings.missionCompoundInterestTitle),
                   xp: kStandardLessonXpReward,
                   completed: false,
                 ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
@@ -36,8 +38,55 @@ class FakeMascotRepository implements MascotRepository {
   Future<void> saveLastActiveAt(DateTime lastActiveAt) async {}
 }
 
+class MockAcademyCatalogRepository extends Mock implements AcademyCatalogRepository {}
+
+class MockAcademyRemoteDataSource extends Mock implements AcademyRemoteDataSource {}
+
+/// One school, one module, two lessons — enough for
+/// `AcademyProgressCalculator.nextLessonToContinue` to have a real answer.
+final _snapshot = AcademyCatalogSnapshot(
+  domains: const [
+    AcademyDomain(
+      id: 'd1',
+      title: 'Educação Financeira',
+      description: 'desc',
+      iconKey: 'savings_outlined',
+      order: 1,
+      schoolIds: ['s1'],
+    ),
+  ],
+  schools: const [
+    School(
+      id: 's1',
+      title: 'Vida Financeira',
+      description: 'desc',
+      iconKey: 'savings_outlined',
+      order: 1,
+      contentAvailable: true,
+    ),
+  ],
+  modules: const [
+    AcademyModule(
+      id: 'm1',
+      schoolId: 's1',
+      title: 'Fundamentos do Dinheiro',
+      description: 'desc',
+      iconKey: 'savings_outlined',
+      order: 1,
+      lessonIds: ['l1', 'l2'],
+      contentAvailable: true,
+    ),
+  ],
+  lessons: const [
+    Lesson(id: 'l1', moduleId: 'm1', title: 'O que é Dinheiro?', order: 1, xpReward: 20, steps: []),
+    Lesson(id: 'l2', moduleId: 'm1', title: 'Renda e Despesas', order: 2, xpReward: 20, steps: []),
+  ],
+);
+
 void main() {
   late FakeMascotRepository fakeMascotRepository;
+  late MockAcademyCatalogRepository mockCatalogRepository;
+  late MockAcademyRemoteDataSource mockRemoteDataSource;
 
   setUp(() async {
     Translator.currentLanguage = 'pt';
@@ -46,6 +95,15 @@ void main() {
     DI.mascotRepository = fakeMascotRepository;
     DI.petPreferencesRepository = PetPreferencesRepository();
     await DI.petPreferencesRepository.saveGoal(PetGoalEnum.justWantToLearn);
+
+    mockCatalogRepository = MockAcademyCatalogRepository();
+    DI.academyCatalogRepository = mockCatalogRepository;
+    when(() => mockCatalogRepository.loadCached(any())).thenAnswer((_) async => null);
+    when(() => mockCatalogRepository.fetchAndCache(any())).thenAnswer((_) async => _snapshot);
+
+    mockRemoteDataSource = MockAcademyRemoteDataSource();
+    DI.academyRemoteDataSource = mockRemoteDataSource;
+    when(() => mockRemoteDataSource.getCompletedLessonIds()).thenThrow(Exception('offline'));
   });
 
   Widget buildTestableWidget() {
@@ -66,15 +124,33 @@ void main() {
       expect(find.text('+30 XP'), findsOneWidget);
     });
 
-    testWidgets('renders the first mission reward card', (tester) async {
+    // The card used to promise "Aprenda sobre juros compostos" to everyone,
+    // while the very next screen offered "O que é Dinheiro?" — the closing
+    // beat of onboarding named a mission the app then did not give them.
+    testWidgets('names the lesson the app will actually open next', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
-      await tester.pump();
-      await tester.pump();
+      for (var i = 0; i < 6; i++) {
+        await tester.pump();
+      }
+      await tester.pump(const Duration(milliseconds: 950));
+
+      expect(find.text('Sua primeira missão'), findsOneWidget);
+      expect(find.text('O que é Dinheiro?'), findsOneWidget);
+      expect(find.text('Aprenda sobre juros compostos'), findsNothing);
+      expect(find.text('+20 XP'), findsOneWidget);
+    });
+
+    testWidgets('falls back to the generic mission when the catalog is unreachable', (tester) async {
+      when(() => mockCatalogRepository.fetchAndCache(any())).thenThrow(Exception('offline'));
+
+      await tester.pumpWidget(buildTestableWidget());
+      for (var i = 0; i < 6; i++) {
+        await tester.pump();
+      }
       await tester.pump(const Duration(milliseconds: 950));
 
       expect(find.text('Sua primeira missão'), findsOneWidget);
       expect(find.text('Aprenda sobre juros compostos'), findsOneWidget);
-      expect(find.text('+20 XP'), findsOneWidget);
     });
 
     testWidgets('tapping the CTA completes the tutorial and navigates to PortfolioChoiceScreen', (tester) async {

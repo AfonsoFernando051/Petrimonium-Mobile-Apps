@@ -47,6 +47,14 @@ class AcademyFormatters {
     decimalDigits: value == value.truncateToDouble() ? 0 : 2,
   ).format(value);
 
+  /// dd/MM/yyyy in every language. The simulated wallet is denominated and
+  /// dated in the Brazilian market's terms (see [currency]'s note on BRL),
+  /// and the order form has always shown trade dates this way — a history
+  /// row that reordered the fields per locale would disagree with the very
+  /// screen that produced it.
+  static String date(DateTime value) =>
+      '${value.day.toString().padLeft(2, '0')}/${value.month.toString().padLeft(2, '0')}/${value.year}';
+
   static String multiplier(double value) =>
       '${NumberFormat.decimalPatternDigits(locale: _locale, decimalDigits: 1).format(value)}x';
 }

@@ -107,6 +107,16 @@ class FakeOnboardingStateRepository implements OnboardingStateRepository {
   bool tutorialCompleted = true;
   bool portfolioStepDone = true;
 
+  // Home's first-visit greeting flag — irrelevant to route resolution, but
+  // part of the interface this fake stands in for.
+  bool firstHomeVisit = false;
+
+  @override
+  Future<bool> isFirstHomeVisit() async => firstHomeVisit;
+
+  @override
+  Future<void> markHomeSeen() async {}
+
   @override
   Future<bool> hasSetGoal() async => hasSetGoalValue;
 

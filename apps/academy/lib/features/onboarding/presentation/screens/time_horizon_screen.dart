@@ -21,7 +21,9 @@ class TimeHorizonScreen extends StatefulWidget {
 }
 
 class _TimeHorizonScreenState extends State<TimeHorizonScreen> {
-  InvestmentHorizonEnum _selected = InvestmentHorizonEnum.oneToFiveYears;
+  // Null until the user picks — "Ainda não sei" is itself an option here, so
+  // pre-answering only puts words in their mouth.
+  InvestmentHorizonEnum? _selected;
   bool _isSaving = false;
 
   void _select(InvestmentHorizonEnum horizon) {
@@ -30,9 +32,11 @@ class _TimeHorizonScreenState extends State<TimeHorizonScreen> {
   }
 
   Future<void> _handleContinue() async {
+    final horizon = _selected;
+    if (horizon == null) return;
     setState(() => _isSaving = true);
     try {
-      await DI.petPreferencesRepository.saveHorizon(_selected);
+      await DI.petPreferencesRepository.saveHorizon(horizon);
       await DI.onboardingStateRepository.setGoalChosen();
       if (mounted) {
         unawaited(Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ExperienceLevelScreen())));
@@ -51,7 +55,7 @@ class _TimeHorizonScreenState extends State<TimeHorizonScreen> {
       subtitle: Translator.translate(AppStrings.timeHorizonSubtitle),
       ctaLabel: Translator.translate(AppStrings.onboardingNext),
       isCtaLoading: _isSaving,
-      onCta: _handleContinue,
+      onCta: _selected == null ? null : _handleContinue,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

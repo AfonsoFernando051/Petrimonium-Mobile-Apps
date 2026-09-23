@@ -1,3 +1,4 @@
+import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// After this many app sessions with portfolio still unconnected, the pet
@@ -23,6 +24,13 @@ class OnboardingStateRepository {
   static const _sessionCountKey = 'onboarding_session_count';
   static const _reminderShownAtSessionKey = 'onboarding_reminder_shown_at_session';
   static const _portfolioActivationSeenKey = 'portfolio_activation_seen';
+
+  /// User-scoped, unlike the keys above: "has this *account* ever seen Home"
+  /// is the question, and a device can hold more than one account. The
+  /// session counter cannot answer it — it counts app launches, so a second
+  /// account created on a device that already ran the app would be greeted
+  /// as a returning user on its very first screen.
+  static const _homeSeenKey = 'home_seen';
 
   Future<bool> hasSetGoal() async {
     final prefs = await SharedPreferences.getInstance();
@@ -127,5 +135,15 @@ class OnboardingStateRepository {
   Future<void> markPortfolioActivationSeen() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_portfolioActivationSeenKey, true);
+  }
+
+  /// True until [markHomeSeen] runs for this account — i.e. exactly once,
+  /// on the first Home this user ever opens.
+  Future<bool> isFirstHomeVisit() async {
+    return await UserScopedPrefs.readString(_homeSeenKey) == null;
+  }
+
+  Future<void> markHomeSeen() async {
+    await UserScopedPrefs.writeString(_homeSeenKey, 'true');
   }
 }

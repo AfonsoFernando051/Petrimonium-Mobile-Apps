@@ -47,7 +47,8 @@ void main() {
       await tester.pumpWidget(buildTestableWidget(buildHoldings()));
 
       expect(find.text('Ações'), findsOneWidget);
-      expect(find.textContaining('1 ativo(s)'), findsOneWidget);
+      expect(find.textContaining('1 ativo ·'), findsOneWidget);
+      expect(find.textContaining('ativo(s)'), findsNothing);
     });
 
     testWidgets('shows the category total in full, not rounded to thousands', (WidgetTester tester) async {

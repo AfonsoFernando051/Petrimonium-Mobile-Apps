@@ -3,24 +3,37 @@ import 'package:petrimonium_academy/core/constants/app_strings.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 
-/// Home's opening line — "Welcome back, {name}" plus a streak badge, both
-/// real: [userName] comes from the account's registered name (null while
+/// Home's opening line — a greeting plus a streak badge, both real:
+/// [userName] comes from the account's registered name (null while
 /// unresolved, in which case a name-less greeting shows rather than
 /// guessing), [streakDays] from the backend's real gamification summary
 /// (`GamificationSummary.currentStreak`) — hidden entirely at 0 rather than
 /// showing a meaningless "0 days".
+///
+/// [isFirstSession] picks "Bem-vindo" over "Bem-vindo de volta". Without it
+/// Home greeted a user who had finished signing up seconds earlier as if
+/// they were returning.
 class HomeGreetingRow extends StatelessWidget {
-  const HomeGreetingRow({super.key, this.userName, this.streakDays});
+  const HomeGreetingRow({super.key, this.userName, this.streakDays, this.isFirstSession = false});
 
   final String? userName;
   final int? streakDays;
 
+  /// True only while this is the user's first run of the app — resolved from
+  /// `OnboardingStateRepository.currentSessionCount()`. Defaults to false so
+  /// an unresolved count greets a returning user, never the other way round.
+  final bool isFirstSession;
+
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
-    final greeting = userName == null || userName!.isEmpty
-        ? Translator.translate(AppStrings.welcomeBack)
-        : Translator.translate(AppStrings.homeGreetingWithName, params: {'name': userName!});
+    final hasName = userName != null && userName!.isNotEmpty;
+    final greeting = hasName
+        ? Translator.translate(
+            isFirstSession ? AppStrings.welcomeFirstTimeWithName : AppStrings.homeGreetingWithName,
+            params: {'name': userName!},
+          )
+        : Translator.translate(isFirstSession ? AppStrings.welcomeFirstTime : AppStrings.welcomeBack);
 
     return Row(
       children: [

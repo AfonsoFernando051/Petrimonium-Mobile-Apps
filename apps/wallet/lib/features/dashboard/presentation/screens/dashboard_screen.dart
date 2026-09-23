@@ -508,7 +508,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         backgroundColor: Colors.transparent,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: tokens.primary,
-        unselectedItemColor: tokens.textTertiary,
+        // textSecondary, not textTertiary: against the light theme's
+        // `backgroundSecondary` the tertiary tone measures 2.6:1, under the
+        // 4.5:1 AA floor — the labels were effectively unreadable in light
+        // mode. textSecondary clears it in both themes (5.6:1 / 10.6:1).
+        unselectedItemColor: tokens.textSecondary,
         selectedLabelStyle: AppTextStyles.caption.copyWith(fontWeight: FontWeight.w600),
         unselectedLabelStyle: AppTextStyles.caption,
         currentIndex: currentPosition == -1 ? 0 : currentPosition,

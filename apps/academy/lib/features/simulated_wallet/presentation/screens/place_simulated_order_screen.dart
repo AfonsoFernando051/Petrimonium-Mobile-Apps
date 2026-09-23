@@ -60,8 +60,7 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
 
   static DateTime _dateOnly(DateTime date) => DateTime(date.year, date.month, date.day);
 
-  static String _formatDate(DateTime date) =>
-      '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+  static String _formatDate(DateTime date) => AcademyFormatters.date(date);
 
   bool get _isBackdated => _tradeDate.isBefore(_dateOnly(DateTime.now()));
 
@@ -95,10 +94,17 @@ class _PlaceSimulatedOrderScreenState extends State<PlaceSimulatedOrderScreen> {
 
   Future<void> _selectAsset(AssetQuote quote) async {
     unawaited(HapticFeedback.selectionClick());
+    // A quantity belongs to the asset it was typed for: 54 of a R$ 49 stock
+    // is not the same order as 54 of a R$ 71 one. Carrying it across a
+    // ticker change let a silent, unintended order through — so the field
+    // resets, but only when the ticker actually changed (re-picking the
+    // same one from the results keeps what the student already typed).
+    final switchedTicker = _selected?.symbol != quote.symbol;
     setState(() {
       _selected = quote;
       _results = [];
       _searchController.text = quote.symbol;
+      if (switchedTicker) _quantityController.clear();
     });
 
     unawaited(_refreshHistoricalQuote());

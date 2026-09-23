@@ -22,6 +22,17 @@ class SharedStrings {
   static const String petSpecieLion = 'petSpecieLion';
   static const String petSpecieOwl = 'petSpecieOwl';
   static const String welcomeBack = 'welcomeBack';
+  static const String simulatedOrderHistoryTitle = 'simulatedOrderHistoryTitle';
+  static const String simulatedOrderHistoryEmpty = 'simulatedOrderHistoryEmpty';
+  static const String simulatedRealizedResultLabel = 'simulatedRealizedResultLabel';
+  static const String simulatedOrderHistoryBuy = 'simulatedOrderHistoryBuy';
+  static const String simulatedOrderHistorySell = 'simulatedOrderHistorySell';
+  static const String simulatedAllPositionsClosedTitle = 'simulatedAllPositionsClosedTitle';
+  static const String simulatedAllPositionsClosedBody = 'simulatedAllPositionsClosedBody';
+  static const String walletCategoryAssetsOne = 'walletCategoryAssetsOne';
+  static const String walletCategoryAssetsMany = 'walletCategoryAssetsMany';
+  static const String welcomeFirstTime = 'welcomeFirstTime';
+  static const String welcomeFirstTimeWithName = 'welcomeFirstTimeWithName';
   static const String loginToContinue = 'loginToContinue';
   static const String emailOrUserHint = 'emailOrUserHint';
   static const String passwordHint = 'passwordHint';

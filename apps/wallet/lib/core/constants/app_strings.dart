@@ -11,6 +11,8 @@ class AppStrings {
   AppStrings._();
 
   static const String welcomeBack = SharedStrings.welcomeBack;
+  static const String walletCategoryAssetsOne = SharedStrings.walletCategoryAssetsOne;
+  static const String walletCategoryAssetsMany = SharedStrings.walletCategoryAssetsMany;
   static const String loginToContinue = SharedStrings.loginToContinue;
   static const String emailOrUserHint = SharedStrings.emailOrUserHint;
   static const String passwordHint = SharedStrings.passwordHint;

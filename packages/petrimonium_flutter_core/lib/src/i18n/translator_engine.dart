@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 import '../util/user_scoped_prefs.dart';
 
@@ -52,6 +52,27 @@ class TranslatorEngine {
   late final ValueNotifier<String> languageNotifier = ValueNotifier(defaultLanguage);
 
   String get currentLanguage => languageNotifier.value;
+
+  /// The same choice expressed as a [Locale], for `MaterialApp.locale`.
+  ///
+  /// Our language codes are not locales: `pt` means pt-BR here (the product's
+  /// default market) and `pt_PT` is a separate offering. Flutter's own
+  /// widgets — the date picker above all — read the Locale and nothing else,
+  /// so without this they fall back to English no matter what the app's own
+  /// copy is doing.
+  Locale get currentLocale => _localeFor(currentLanguage) ?? _localeFor(defaultLanguage)!;
+
+  /// Every offered language as a Locale, for `MaterialApp.supportedLocales`.
+  /// Derived from [supportedLanguages] so the two can never drift apart.
+  List<Locale> get supportedLocales => [for (final language in supportedLanguages) ?_localeFor(language)];
+
+  static Locale? _localeFor(String language) => switch (language) {
+    'pt' => const Locale('pt', 'BR'),
+    'pt_PT' => const Locale('pt', 'PT'),
+    'en' => const Locale('en', 'US'),
+    'es' => const Locale('es', 'ES'),
+    _ => null,
+  };
 
   /// Synchronous setter kept for tests and simple in-memory switches.
   /// Prefer [setLanguage] in the app so the preference is persisted.

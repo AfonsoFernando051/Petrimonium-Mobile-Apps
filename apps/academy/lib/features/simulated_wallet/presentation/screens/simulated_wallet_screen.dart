@@ -12,6 +12,8 @@ import 'package:petrimonium_academy/features/simulated_wallet/presentation/widge
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_holdings_section.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_portfolio_not_connected_card.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_wallet_kpi_header.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_all_positions_closed_card.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulated_order_history_section.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/simulation_disclaimer_banner.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/presentation/widgets/wealth_evolution_bar_card.dart';
 
@@ -124,8 +126,12 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
             const SizedBox(height: 16),
             const SimulationDisclaimerBanner(),
             const SizedBox(height: 16),
-            if (!hasPortfolio)
+            if (!hasPortfolio && !controller.hasHistory)
               SimulatedPortfolioNotConnectedCard(mascotController: widget.mascotController, onAddAsset: _openNewOrder)
+            else if (!hasPortfolio)
+              // Held nothing, but has traded: the untouched "add your first
+              // asset" card would deny the student's own history back to them.
+              const SimulatedAllPositionsClosedCard()
             else ...[
               SimulatedWalletKpiHeader(
                 totalPatrimony: controller.totalPositionsValue,
@@ -144,6 +150,10 @@ class _SimulatedWalletScreenState extends State<SimulatedWalletScreen> {
                 holdings: controller.holdings,
                 totalPortfolioValue: controller.totalPositionsValue,
               ),
+            ],
+            if (controller.hasHistory) ...[
+              const SizedBox(height: 16),
+              SimulatedOrderHistorySection(orders: controller.orders, realizedResult: controller.realizedResult),
             ],
             const SizedBox(height: 32),
           ],

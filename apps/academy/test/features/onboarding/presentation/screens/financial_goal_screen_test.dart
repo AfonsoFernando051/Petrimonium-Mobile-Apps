@@ -42,12 +42,30 @@ void main() {
       }
     });
 
-    testWidgets('defaults to investWithConfidence selected', (tester) async {
+    // "Isso ajusta sua trilha" — so the answer has to be the user's. It used
+    // to arrive pre-ticked on investWithConfidence, which meant anyone who
+    // tapped straight through submitted a goal they never chose.
+    testWidgets('arrives with no goal pre-selected', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      expect(isGoalSelected(tester, PetGoalEnum.investWithConfidence), isTrue);
-      expect(isGoalSelected(tester, PetGoalEnum.justWantToLearn), isFalse);
+      for (final goal in PetGoalEnum.values) {
+        expect(isGoalSelected(tester, goal), isFalse, reason: goal.name);
+      }
+    });
+
+    testWidgets('cannot continue before a goal is chosen', (tester) async {
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      final continueButton = find.text('Continuar');
+      await tester.ensureVisible(continueButton);
+      await tester.pump();
+      await tester.tap(continueButton, warnIfMissed: false);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 350));
+
+      expect(find.byType(TimeHorizonScreen), findsNothing);
     });
 
     testWidgets('tapping a goal row selects it', (tester) async {

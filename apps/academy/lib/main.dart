@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:petrimonium_academy/core/constants/api_constants.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
@@ -108,6 +109,17 @@ class _MyAppState extends State<MyApp> {
         builder: (context, themeMode, _) => MaterialApp(
           navigatorKey: _navigatorKey,
           debugShowCheckedModeBanner: false,
+          // Flutter's own widgets read the Locale, not our language code:
+          // without these the date picker in the order form renders in
+          // English ("Select date", "September 2026", "Cancel"/"OK") no
+          // matter which language the app itself is speaking.
+          locale: Translator.currentLocale,
+          supportedLocales: Translator.supportedLocales,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
           themeMode: themeMode,
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,

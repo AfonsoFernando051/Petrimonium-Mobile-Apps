@@ -45,6 +45,17 @@ class AppStrings {
   static const String petSpecieOwl = SharedStrings.petSpecieOwl;
 
   static const String welcomeBack = SharedStrings.welcomeBack;
+  static const String simulatedOrderHistoryTitle = SharedStrings.simulatedOrderHistoryTitle;
+  static const String simulatedOrderHistoryEmpty = SharedStrings.simulatedOrderHistoryEmpty;
+  static const String simulatedRealizedResultLabel = SharedStrings.simulatedRealizedResultLabel;
+  static const String simulatedOrderHistoryBuy = SharedStrings.simulatedOrderHistoryBuy;
+  static const String simulatedOrderHistorySell = SharedStrings.simulatedOrderHistorySell;
+  static const String simulatedAllPositionsClosedTitle = SharedStrings.simulatedAllPositionsClosedTitle;
+  static const String simulatedAllPositionsClosedBody = SharedStrings.simulatedAllPositionsClosedBody;
+  static const String walletCategoryAssetsOne = SharedStrings.walletCategoryAssetsOne;
+  static const String walletCategoryAssetsMany = SharedStrings.walletCategoryAssetsMany;
+  static const String welcomeFirstTime = SharedStrings.welcomeFirstTime;
+  static const String welcomeFirstTimeWithName = SharedStrings.welcomeFirstTimeWithName;
   static const String loginToContinue = SharedStrings.loginToContinue;
   static const String emailOrUserHint = SharedStrings.emailOrUserHint;
   static const String passwordHint = SharedStrings.passwordHint;

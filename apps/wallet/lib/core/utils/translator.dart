@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 
@@ -32,6 +32,13 @@ class Translator {
   static ValueNotifier<String> get languageNotifier => _engine.languageNotifier;
 
   static String get currentLanguage => _engine.currentLanguage;
+
+  /// The current choice as a [Locale], for `MaterialApp.locale` — Flutter's
+  /// own widgets (date picker, Cupertino dialogs) read this, not our codes.
+  static Locale get currentLocale => _engine.currentLocale;
+
+  /// Every offered language as a Locale, for `MaterialApp.supportedLocales`.
+  static List<Locale> get supportedLocales => _engine.supportedLocales;
 
   /// Synchronous setter kept for tests and simple in-memory switches.
   /// Prefer [setLanguage] in the app so the preference is persisted.

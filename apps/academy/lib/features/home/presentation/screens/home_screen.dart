@@ -96,6 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
   /// comments on why login alone can't supply this.
   String? _userName;
 
+  /// True only on the first Home this account ever opens. Starts false so
+  /// the greeting errs towards "welcome back" while the flag is still
+  /// loading, rather than flashing a first-time welcome at a returning user.
+  bool _isFirstSession = false;
+
   @override
   void initState() {
     super.initState();
@@ -114,6 +119,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     DI.authRepository.refreshUserName().then((name) {
       if (mounted && name != null) setState(() => _userName = name);
+    });
+    DI.onboardingStateRepository.isFirstHomeVisit().then((isFirst) {
+      if (!mounted) return;
+      setState(() => _isFirstSession = isFirst);
+      if (isFirst) DI.onboardingStateRepository.markHomeSeen();
     });
   }
 
@@ -287,7 +297,11 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            HomeGreetingRow(userName: _userName, streakDays: portfolioController.gamificationSummary?.currentStreak),
+            HomeGreetingRow(
+              userName: _userName,
+              streakDays: portfolioController.gamificationSummary?.currentStreak,
+              isFirstSession: _isFirstSession,
+            ),
             const SizedBox(height: 16),
 
             if (_companionInsight != null) ...[

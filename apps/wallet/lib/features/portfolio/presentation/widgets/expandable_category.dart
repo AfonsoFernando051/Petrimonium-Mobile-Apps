@@ -1,3 +1,5 @@
+import 'package:petrimonium_wallet/core/constants/app_strings.dart';
+import 'package:petrimonium_wallet/core/utils/translator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
@@ -81,7 +83,15 @@ class _ExpandableCategoryState extends State<ExpandableCategory> {
                             style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 13),
                           ),
                           Text(
-                            '${widget.holdings.length} ativo(s) · ${portfolioPercent.toStringAsFixed(1)}% da carteira',
+                            Translator.translate(
+                              widget.holdings.length == 1
+                                  ? AppStrings.walletCategoryAssetsOne
+                                  : AppStrings.walletCategoryAssetsMany,
+                              params: {
+                                'count': '${widget.holdings.length}',
+                                'percent': portfolioPercent.toStringAsFixed(1),
+                              },
+                            ),
                             style: TextStyle(color: tokens.textSecondary, fontSize: 10),
                           ),
                         ],

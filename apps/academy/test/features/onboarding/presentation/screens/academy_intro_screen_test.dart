@@ -121,7 +121,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('Sua trilha começa aqui'), findsOneWidget);
-      expect(find.text('O resto libera conforme você avança — sem pular etapas.'), findsOneWidget);
+      expect(find.text('Uma ordem sugerida — você escolhe por onde começar.'), findsOneWidget);
     });
 
     testWidgets('renders a track step per school, with real lesson counts and no fabricated claims', (tester) async {

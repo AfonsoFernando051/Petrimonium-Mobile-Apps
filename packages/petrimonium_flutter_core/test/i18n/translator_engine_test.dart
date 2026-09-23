@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium_flutter_core/petrimonium_flutter_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -144,6 +145,42 @@ void main() {
       await engine.load();
 
       expect(engine.currentLanguage, 'pt');
+    });
+
+    group('currentLocale — what Flutter\'s own widgets get told', () {
+      // The date picker, the Cupertino dialogs and every other Material
+      // widget read the Locale, not our language code. Before this existed
+      // the apps shipped no `locale` at all, so a pt-BR user met an English
+      // "Select date / September 2026 / Cancel / OK".
+      test('maps the product language codes onto real locales', () {
+        final engine = build();
+
+        engine.currentLanguage = 'pt';
+        expect(engine.currentLocale, const Locale('pt', 'BR'));
+
+        engine.currentLanguage = 'pt_PT';
+        expect(engine.currentLocale, const Locale('pt', 'PT'));
+
+        engine.currentLanguage = 'en';
+        expect(engine.currentLocale, const Locale('en', 'US'));
+
+        engine.currentLanguage = 'es';
+        expect(engine.currentLocale, const Locale('es', 'ES'));
+      });
+
+      test('falls back to the default language rather than to the system one', () {
+        final engine = build();
+        engine.currentLanguage = 'de';
+
+        expect(engine.currentLocale, const Locale('pt', 'BR'));
+      });
+
+      test('supportedLocales covers every language the app offers', () {
+        final engine = build();
+
+        expect(engine.supportedLocales, containsAll(const [Locale('pt', 'BR'), Locale('en', 'US')]));
+        expect(engine.supportedLocales.length, engine.supportedLanguages.length);
+      });
     });
 
     test('languageNotifier fires so widgets rebuild on a language switch', () {

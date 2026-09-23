@@ -91,6 +91,87 @@ void main() {
       expect(find.text(Translator.translate(AppStrings.simulatedWalletDisclaimer)), findsOneWidget);
     });
 
+    // Selling the last position used to return the wallet to its pristine
+    // "Monte sua carteira simulada / Adicione seu primeiro ativo" state,
+    // erasing the trade the student had just practised along with its
+    // result. The history is the one place a closed position survives.
+    group('after closing every position', () {
+      void givenABoughtAndSoldPosition() {
+        remoteDataSource.portfolioToReturn = {
+          'currency': 'BRL',
+          'resetAt': null,
+          'positions': <Map<String, dynamic>>[],
+        };
+        remoteDataSource.ordersToReturn = [
+          {
+            'id': 1,
+            'ticker': 'PETR4',
+            'side': 'BUY',
+            'quantity': 10.0,
+            'price': 48.09,
+            'total': 480.9,
+            'executedAt': '2026-01-05T12:00:00Z',
+            'clientOrderId': 'o1',
+          },
+          {
+            'id': 2,
+            'ticker': 'PETR4',
+            'side': 'SELL',
+            'quantity': 10.0,
+            'price': 49.59,
+            'total': 495.9,
+            'executedAt': '2026-02-05T12:00:00Z',
+            'clientOrderId': 'o2',
+          },
+        ];
+      }
+
+      testWidgets('does not pretend the student never started', (tester) async {
+        givenABoughtAndSoldPosition();
+        await controller.loadPortfolio();
+
+        await tester.pumpWidget(buildTestableWidget());
+        await tester.pump();
+
+        expect(find.byType(SimulatedPortfolioNotConnectedCard), findsNothing);
+        expect(find.text(Translator.translate(AppStrings.simulatedAllPositionsClosedTitle)), findsOneWidget);
+      });
+
+      testWidgets('still shows both orders, newest first', (tester) async {
+        givenABoughtAndSoldPosition();
+        await controller.loadPortfolio();
+
+        await tester.pumpWidget(buildTestableWidget());
+        await tester.pump();
+
+        expect(find.text(Translator.translate(AppStrings.simulatedOrderHistoryTitle)), findsOneWidget);
+        expect(find.textContaining('Compra · PETR4'), findsOneWidget);
+        expect(find.textContaining('Venda · PETR4'), findsOneWidget);
+      });
+
+      testWidgets('reports the result the trade actually produced', (tester) async {
+        givenABoughtAndSoldPosition();
+        await controller.loadPortfolio();
+
+        await tester.pumpWidget(buildTestableWidget());
+        await tester.pump();
+
+        expect(find.textContaining('R\$ 15,00'), findsWidgets);
+      });
+    });
+
+    testWidgets('a wallet that has never traded still offers the first-asset card', (tester) async {
+      remoteDataSource.portfolioToReturn = {'currency': 'BRL', 'resetAt': null, 'positions': <Map<String, dynamic>>[]};
+      remoteDataSource.ordersToReturn = [];
+      await controller.loadPortfolio();
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+
+      expect(find.byType(SimulatedPortfolioNotConnectedCard), findsOneWidget);
+      expect(find.text(Translator.translate(AppStrings.simulatedOrderHistoryTitle)), findsNothing);
+    });
+
     testWidgets('renders the positions the user added, with patrimony equal to their value and no cash on top', (
       tester,
     ) async {

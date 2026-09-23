@@ -77,7 +77,7 @@ void main() {
 
       expect(find.text('SUA JORNADA'), findsOneWidget);
       expect(find.text('Escola 3'), findsOneWidget);
-      expect(find.text('Etapa 3 de 12 · 6 de 10 aulas'), findsOneWidget);
+      expect(find.text('Escola 3 de 12 · 6 de 10 aulas'), findsOneWidget);
       expect(find.text('A seguir: Escola 4'), findsOneWidget);
       expect(find.text('Ver jornada completa'), findsOneWidget);
     });

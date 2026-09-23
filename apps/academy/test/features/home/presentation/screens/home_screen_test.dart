@@ -243,8 +243,24 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.text('Bem-vindo de volta, Camila'), findsOneWidget);
+      // Empty prefs means this account has never opened Home, so the
+      // first-visit greeting is the correct one here — "de volta" belongs to
+      // the second visit on (see the test right below).
+      expect(find.text('Bem-vindo, Camila'), findsOneWidget);
       expect(find.text('3 dias'), findsOneWidget);
+    });
+
+    testWidgets('greets a returning account with "de volta"', (tester) async {
+      SharedPreferences.setMockInitialValues({'auth_email': 'camila@teste.com', 'home_seen::camila@teste.com': 'true'});
+      when(() => mockAuthRepository.getSavedUserName()).thenAnswer((_) async => 'Camila');
+      await portfolioController.loadAll();
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.text('Bem-vindo de volta, Camila'), findsOneWidget);
     });
 
     testWidgets('shows the companion card naming the real next lesson when one exists', (tester) async {

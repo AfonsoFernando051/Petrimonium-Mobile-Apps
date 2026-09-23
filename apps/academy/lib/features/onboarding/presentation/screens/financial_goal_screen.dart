@@ -26,7 +26,10 @@ class FinancialGoalScreen extends StatefulWidget {
 }
 
 class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
-  PetGoalEnum _selectedGoal = PetGoalEnum.investWithConfidence;
+  // Null until the user picks. The screen says this choice adjusts their
+  // path, so it must not arrive pre-answered — tapping straight through used
+  // to submit "investir com confiança" on their behalf.
+  PetGoalEnum? _selectedGoal;
   bool _isSaving = false;
 
   void _selectGoal(PetGoalEnum goal) {
@@ -35,9 +38,11 @@ class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
   }
 
   Future<void> _handleContinue() async {
+    final goal = _selectedGoal;
+    if (goal == null) return;
     setState(() => _isSaving = true);
     try {
-      await DI.petPreferencesRepository.saveGoal(_selectedGoal);
+      await DI.petPreferencesRepository.saveGoal(goal);
       if (mounted) {
         unawaited(Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TimeHorizonScreen())));
       }
@@ -55,7 +60,7 @@ class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
       subtitle: Translator.translate(AppStrings.financialGoalSubtitle),
       ctaLabel: Translator.translate(AppStrings.financialGoalContinue),
       isCtaLoading: _isSaving,
-      onCta: _handleContinue,
+      onCta: _selectedGoal == null ? null : _handleContinue,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

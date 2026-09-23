@@ -64,11 +64,14 @@ void main() {
       }
     });
 
-    testWidgets('defaults to oneToFiveYears selected', (tester) async {
+    // "Ainda não sei" is already one of the options, so there is no reason
+    // to answer for the user: the screen used to arrive ticked on
+    // "1 a 5 anos" no matter what they had just said their goal was.
+    testWidgets('arrives with no horizon pre-selected', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      expect(find.byIcon(Icons.check_circle), findsOneWidget);
+      expect(find.byIcon(Icons.check_circle), findsNothing);
     });
 
     testWidgets('tapping a horizon row selects it', (tester) async {

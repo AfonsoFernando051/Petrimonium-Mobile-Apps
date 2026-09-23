@@ -11,6 +11,7 @@ import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/si
 import 'package:petrimonium_academy/features/simulated_wallet/domain/entities/simulated_position_quote.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/domain/services/monthly_wealth_series.dart';
 import 'package:petrimonium_academy/features/simulated_wallet/domain/services/simulated_lot_builder.dart';
+import 'package:petrimonium_academy/features/simulated_wallet/domain/services/simulated_realized_result_calculator.dart';
 
 /// Owns all state for the simulated wallet (Academy's fictitious "Carteira"
 /// tab) — entirely separate from `PortfolioController`, which still owns
@@ -101,6 +102,17 @@ class SimulatedWalletController extends ChangeNotifier {
   double get totalProfit => totalPositionsValue - totalInvestedValue;
 
   double get totalProfitPercent => totalInvestedValue == 0 ? 0 : (totalProfit / totalInvestedValue) * 100;
+
+  /// Result already booked on positions the student has closed. Read from
+  /// [orders] rather than from [holdings], because a fully sold position
+  /// leaves no holding behind — see
+  /// [SimulatedRealizedResultCalculator]'s doc comment.
+  double get realizedResult => SimulatedRealizedResultCalculator.total(orders);
+
+  /// True once the student has any history at all, even with nothing held
+  /// right now. Distinguishes "never started" from "started and closed
+  /// everything" — the wallet used to show both as an untouched empty state.
+  bool get hasHistory => orders.isNotEmpty;
 
   Future<void> loadPortfolio() async {
     isLoading = true;
