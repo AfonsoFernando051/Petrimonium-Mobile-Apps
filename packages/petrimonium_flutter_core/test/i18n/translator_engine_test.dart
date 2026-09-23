@@ -79,24 +79,27 @@ void main() {
   });
 
   group('persistence', () {
-    test('setLanguage stores a supported language', () async {
+    // The preference is stored per account (UserScopedPrefs), so these assert on the scoped key.
+    test('setLanguage stores a supported language against the current account', () async {
+      SharedPreferences.setMockInitialValues({'auth_email': 'a@example.com'});
       final engine = build();
       await engine.setLanguage('en');
       expect(engine.currentLanguage, 'en');
       final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getString('app_language'), 'en');
+      expect(prefs.getString('app_language::a@example.com'), 'en');
     });
 
     test('setLanguage ignores an unsupported language and stores nothing', () async {
+      SharedPreferences.setMockInitialValues({'auth_email': 'a@example.com'});
       final engine = build();
       await engine.setLanguage('de');
       expect(engine.currentLanguage, 'pt');
       final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getString('app_language'), isNull);
+      expect(prefs.getString('app_language::a@example.com'), isNull);
     });
 
     test('load restores a persisted language', () async {
-      SharedPreferences.setMockInitialValues({'app_language': 'en'});
+      SharedPreferences.setMockInitialValues({'auth_email': 'a@example.com', 'app_language::a@example.com': 'en'});
       final engine = build();
       await engine.load();
       expect(engine.currentLanguage, 'en');
@@ -105,9 +108,41 @@ void main() {
     test('load ignores a persisted language the app no longer supports', () async {
       // A hand-edited or stale preference must not strand the user in a
       // language this build has no copy for.
-      SharedPreferences.setMockInitialValues({'app_language': 'de'});
+      SharedPreferences.setMockInitialValues({'auth_email': 'a@example.com', 'app_language::a@example.com': 'de'});
       final engine = build();
       await engine.load();
+      expect(engine.currentLanguage, 'pt');
+    });
+
+    test('one account never inherits another account\'s language on the same device', () async {
+      SharedPreferences.setMockInitialValues({'auth_email': 'first@example.com'});
+      await build().setLanguage('en');
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('auth_email', 'second@example.com');
+      final second = build();
+      await second.load();
+
+      expect(second.currentLanguage, 'pt', reason: 'falls back to the default, not the first account choice');
+    });
+
+    test('adopts a language left under the old global key into the logged-in account', () async {
+      SharedPreferences.setMockInitialValues({'auth_email': 'a@example.com', 'app_language': 'en'});
+      final engine = build();
+
+      await engine.load();
+
+      expect(engine.currentLanguage, 'en');
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getString('app_language'), isNull, reason: 'the leaky global key must not survive');
+    });
+
+    test('does not adopt the old global key while logged out', () async {
+      SharedPreferences.setMockInitialValues({'app_language': 'en'});
+      final engine = build();
+
+      await engine.load();
+
       expect(engine.currentLanguage, 'pt');
     });
 

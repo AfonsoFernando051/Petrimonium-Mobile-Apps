@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../util/user_scoped_prefs.dart';
 
 /// Resolves a key to product copy in the language the user picked, and
 /// remembers that choice across launches.
@@ -60,9 +61,15 @@ class TranslatorEngine {
 
   /// Loads the persisted language preference. Call once during app startup,
   /// before the first screen is built.
+  ///
+  /// The preference is scoped to the logged-in account ([UserScopedPrefs]).
+  /// Under a single global key, a device shared by two accounts served the
+  /// second one whatever language the first had chosen: this runs once in
+  /// `main()`, nothing re-runs it after a login, and `logout()` deliberately
+  /// keeps preferences — so the wrong language survived both a session switch
+  /// and a restart, until someone reopened Settings and re-synced it.
   Future<void> load() async {
-    final prefs = await SharedPreferences.getInstance();
-    final saved = prefs.getString(_prefsKey);
+    final saved = await UserScopedPrefs.readString(_prefsKey);
     if (saved != null && supportedLanguages.contains(saved)) {
       languageNotifier.value = saved;
     }
@@ -74,8 +81,7 @@ class TranslatorEngine {
   Future<void> setLanguage(String language) async {
     if (!supportedLanguages.contains(language)) return;
     languageNotifier.value = language;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_prefsKey, language);
+    await UserScopedPrefs.writeString(_prefsKey, language);
   }
 
   /// [params] fills `{token}` placeholders in the translated string (e.g.

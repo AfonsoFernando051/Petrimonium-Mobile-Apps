@@ -29,4 +29,40 @@ class UserScopedPrefs {
     final scope = (email == null || email.isEmpty) ? _anonymousScope : email;
     return '$baseKey::$scope';
   }
+
+  /// Reads [baseKey] from the current account's scope.
+  ///
+  /// A preference that used to be stored unscoped is adopted into the current
+  /// account's scope the first time this runs, and the old global key removed —
+  /// otherwise moving a key onto scoping would read as "never chosen" for every
+  /// user already on the app, until they happened to reopen the screen that
+  /// re-syncs it from the backend.
+  ///
+  /// The adoption deliberately does not happen while logged out: the anonymous
+  /// scope is shared by everyone who opens the app without a session, so
+  /// handing it the last account's value would recreate exactly the cross-account
+  /// leak that scoping exists to close. The old key is left in place for the next
+  /// real login to adopt instead.
+  static Future<String?> readString(String baseKey) async {
+    final prefs = await SharedPreferences.getInstance();
+    final scopedKey = await key(baseKey);
+
+    final scoped = prefs.getString(scopedKey);
+    if (scoped != null) return scoped;
+
+    if (scopedKey == '$baseKey::$_anonymousScope') return null;
+
+    final legacy = prefs.getString(baseKey);
+    if (legacy == null) return null;
+
+    await prefs.setString(scopedKey, legacy);
+    await prefs.remove(baseKey);
+    return legacy;
+  }
+
+  /// Writes [value] under [baseKey] in the current account's scope.
+  static Future<void> writeString(String baseKey, String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(await key(baseKey), value);
+  }
 }
