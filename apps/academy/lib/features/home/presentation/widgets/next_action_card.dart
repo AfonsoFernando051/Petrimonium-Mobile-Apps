@@ -29,6 +29,8 @@ class NextActionCard extends StatelessWidget {
         :final moduleTitle,
         :final moduleLessonCount,
         :final moduleCompletedCount,
+        :final lessonPosition,
+        :final estimatedMinutes,
         :final goalLabel,
       ) =>
         _ContinueLessonContent(
@@ -36,6 +38,8 @@ class NextActionCard extends StatelessWidget {
           moduleTitle: moduleTitle,
           moduleLessonCount: moduleLessonCount,
           moduleCompletedCount: moduleCompletedCount,
+          lessonPosition: lessonPosition,
+          estimatedMinutes: estimatedMinutes,
           goalLabel: goalLabel,
           onStartLesson: onStartLesson,
         ),
@@ -98,6 +102,8 @@ class _ContinueLessonContent extends StatelessWidget {
     required this.moduleTitle,
     required this.moduleLessonCount,
     required this.moduleCompletedCount,
+    required this.lessonPosition,
+    required this.estimatedMinutes,
     required this.goalLabel,
     required this.onStartLesson,
   });
@@ -106,27 +112,37 @@ class _ContinueLessonContent extends StatelessWidget {
   final String? moduleTitle;
   final int? moduleLessonCount;
   final int? moduleCompletedCount;
+  final int? lessonPosition;
+  final int? estimatedMinutes;
   final String? goalLabel;
   final VoidCallback onStartLesson;
+
+  /// "Aula 7 de 10 · ~8 min · +20 XP" — only the parts actually known, so a
+  /// half-loaded catalog drops a fragment instead of inventing one.
+  String _meta() {
+    return [
+      if (lessonPosition != null && moduleLessonCount != null)
+        Translator.translate(
+          AppStrings.homeContinueLessonPosition,
+          params: {'position': '$lessonPosition', 'total': '$moduleLessonCount'},
+        ),
+      if (estimatedMinutes != null && estimatedMinutes! > 0)
+        Translator.translate(AppStrings.academyJourneyLessonMinutes, params: {'minutes': '$estimatedMinutes'}),
+      Translator.translate(AppStrings.academyXpToCompleteLabel, params: {'xp': '${lesson.xpReward}'}),
+    ].join(' · ');
+  }
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
+    final hasProgress = moduleLessonCount != null && moduleLessonCount! > 0 && moduleCompletedCount != null;
+    final progress = hasProgress ? moduleCompletedCount! / moduleLessonCount! : 0.0;
+
     return _Shell(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _Eyebrow(icon: Icons.flag_circle, label: Translator.translate(AppStrings.homeContinueLearningEyebrow)),
-              if (moduleLessonCount != null)
-                Text(
-                  '$moduleLessonCount ${Translator.translate(moduleLessonCount == 1 ? AppStrings.academyIntroLessonSingular : AppStrings.academyIntroLessonPlural)}',
-                  style: TextStyle(color: tokens.textTertiary, fontSize: 11),
-                ),
-            ],
-          ),
+          _Eyebrow(icon: Icons.flag_circle, label: Translator.translate(AppStrings.homeContinueLearningEyebrow)),
           const SizedBox(height: 10),
           if (moduleTitle != null) ...[
             Text(
@@ -140,10 +156,7 @@ class _ContinueLessonContent extends StatelessWidget {
             style: TextStyle(color: tokens.textPrimary, fontWeight: FontWeight.bold, fontSize: 19),
           ),
           const SizedBox(height: 4),
-          Text(
-            Translator.translate(AppStrings.academyXpToCompleteLabel, params: {'xp': '${lesson.xpReward}'}),
-            style: TextStyle(color: tokens.textSecondary, fontSize: 12),
-          ),
+          Text(_meta(), style: TextStyle(color: tokens.textSecondary, fontSize: 12)),
           if (goalLabel != null) ...[
             const SizedBox(height: 4),
             Text(
@@ -151,13 +164,24 @@ class _ContinueLessonContent extends StatelessWidget {
               style: TextStyle(color: tokens.textTertiary, fontSize: 12),
             ),
           ],
-          if (moduleLessonCount != null && moduleLessonCount! > 0 && moduleCompletedCount != null) ...[
+          if (hasProgress) ...[
             const SizedBox(height: 12),
-            XpBar(progress: moduleCompletedCount! / moduleLessonCount!, color: AppColors.neonCyan, height: 6),
+            Row(
+              children: [
+                Expanded(
+                  child: XpBar(progress: progress, color: AppColors.neonCyan, height: 6),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '${(progress * 100).round()}%',
+                  style: TextStyle(color: tokens.textTertiary, fontSize: 11, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
           ],
           const SizedBox(height: 16),
           GameButton(
-            label: Translator.translate(AppStrings.homeContinueLearningCta),
+            label: Translator.translate(AppStrings.academyJourneyContinueLesson),
             icon: Icons.play_arrow_rounded,
             color: AppColors.neonViolet,
             onPressed: onStartLesson,

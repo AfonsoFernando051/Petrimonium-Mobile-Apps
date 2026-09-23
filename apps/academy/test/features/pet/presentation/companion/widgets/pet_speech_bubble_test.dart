@@ -149,7 +149,7 @@ void main() {
     }
 
     // A small stand-in for a Pet visual (`PetCompanionHeader`'s avatar or
-    // `LearningHeroCard`'s art) registered as the anchor, plus the overlay,
+    // `HomeCompanionCard`'s art) registered as the anchor, plus the overlay,
     // both inside one Stack — mirrors how `DashboardScreen`/`ProfileScreen`
     // actually compose them.
     Widget buildAnchoredWidget({required PetSpeechBubbleAnchor anchor, required Alignment anchorAlignment}) {
@@ -206,7 +206,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 250));
 
-      // Mirrors `LearningHeroCard`'s big pet, centered with plenty of room
+      // Mirrors `HomeCompanionCard`'s pet, centered with plenty of room
       // above it — the comic convention the design doc calls for: bubble
       // above, tail pointing down at the speaker.
       expect(painterOf(tester).tailPosition, PetBubbleTailPosition.bottomCenter);

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:petrimonium_academy/core/events/app_event.dart';
+import 'package:petrimonium_academy/core/events/app_event_bus.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
-import 'package:petrimonium_academy/features/home/presentation/widgets/home_mentor_card.dart';
+import 'package:petrimonium_academy/features/pet/presentation/companion/rive/pet_rive_companion.dart';
+import 'package:petrimonium_academy/features/home/presentation/widgets/home_companion_card.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
@@ -43,14 +46,14 @@ void main() {
 
   tearDown(() => mascotController.dispose());
 
-  Widget buildTestable({required HomeMentorReason reason}) {
+  Widget buildTestable({required HomeCompanionReason reason}) {
     return MaterialApp(
       theme: AppTheme.dark,
       home: Scaffold(
         // Keyed by reason so each loop iteration below mounts a fresh
         // State — otherwise Flutter reuses the previous element/State at
         // the same tree position and `_showReason` leaks across iterations.
-        body: HomeMentorCard(
+        body: HomeCompanionCard(
           key: ValueKey(reason),
           mascotController: mascotController,
           petName: 'Bolt',
@@ -61,9 +64,9 @@ void main() {
     );
   }
 
-  group('HomeMentorCard', () {
+  group('HomeCompanionCard', () {
     testWidgets('renders the pet name and message', (tester) async {
-      await tester.pumpWidget(buildTestable(reason: HomeMentorReason.continueLesson));
+      await tester.pumpWidget(buildTestable(reason: HomeCompanionReason.continueLesson));
       // Hosts a live pet render (repeating AnimationController) — never
       // call pumpAndSettle.
       await tester.pump();
@@ -75,9 +78,9 @@ void main() {
 
     testWidgets('reveals the matching reason for each signal on tap', (tester) async {
       for (final (reason, expected) in [
-        (HomeMentorReason.continueLesson, 'Baseado na sua última aula concluída.'),
-        (HomeMentorReason.reviewDue, 'Baseado em conceitos pendentes de revisão.'),
-        (HomeMentorReason.returning, 'Baseado no tempo desde sua última visita.'),
+        (HomeCompanionReason.continueLesson, 'Baseado na sua última aula concluída.'),
+        (HomeCompanionReason.reviewDue, 'Baseado em conceitos pendentes de revisão.'),
+        (HomeCompanionReason.returning, 'Baseado no tempo desde sua última visita.'),
       ]) {
         await tester.pumpWidget(buildTestable(reason: reason));
         await tester.pump();
@@ -87,6 +90,57 @@ void main() {
         await tester.pump();
         expect(find.text(expected), findsOneWidget);
       }
+    });
+
+    testWidgets('shows the level and XP progress from the real profile', (tester) async {
+      await tester.pumpWidget(buildTestable(reason: HomeCompanionReason.continueLesson));
+      await tester.pump();
+
+      expect(find.text('Nível 1'), findsOneWidget);
+      expect(find.textContaining('XP para o próximo nível'), findsOneWidget);
+    });
+
+    testWidgets('petting the character at rest plays the short happy reaction, then reverts', (tester) async {
+      // Fixed midday `now` so the resting state is idle, not night-time sleep.
+      await mascotController.loadProfile(now: DateTime(2026, 1, 1, 12));
+
+      await tester.pumpWidget(buildTestable(reason: HomeCompanionReason.continueLesson));
+      await tester.pump();
+
+      final pet = find.ancestor(of: find.byType(PetRiveCompanion), matching: find.byType(GestureDetector)).first;
+      await tester.tap(pet, warnIfMissed: false);
+      await tester.pump();
+      expect(mascotController.animationState, PetAnimationState.happy);
+
+      await tester.pump(const Duration(seconds: 1));
+      expect(mascotController.animationState, isNot(PetAnimationState.happy));
+    });
+
+    testWidgets('celebrates a real level-up from AppEventBus without throwing', (tester) async {
+      await tester.pumpWidget(buildTestable(reason: HomeCompanionReason.continueLesson));
+      await tester.pump();
+
+      AppEventBus.instance.emit(const UserLeveledUpEvent(5));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 1200));
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('honors disableAnimations', (tester) async {
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(disableAnimations: true),
+          child: buildTestable(reason: HomeCompanionReason.reviewDue),
+        ),
+      );
+      await tester.pump();
+
+      AppEventBus.instance.emit(const UserLeveledUpEvent(5));
+      await tester.pump(const Duration(seconds: 2));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('Bolt'), findsOneWidget);
     });
   });
 }

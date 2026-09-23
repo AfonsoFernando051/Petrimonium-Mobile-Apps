@@ -12,7 +12,7 @@ import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 /// .md`'s "My companion is talking directly to me" test).
 ///
 /// When [anchor] is provided, the bubble is glued to the anchor target
-/// (typically `PetCompanionHeader`'s avatar or `LearningHeroCard`'s big pet
+/// (typically `PetCompanionHeader`'s avatar or `HomeCompanionCard`'s pet
 /// art) via `CompositedTransformFollower`. That tracks the target's actual
 /// position live, including while it scrolls (e.g. Home's
 /// `SingleChildScrollView`), with no manual scroll-offset bookkeeping — the

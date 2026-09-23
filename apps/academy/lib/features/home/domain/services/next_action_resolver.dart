@@ -21,6 +21,8 @@ class NextActionResolver {
     required List<MissionStatus> missions,
     int? moduleLessonCount,
     int? moduleCompletedCount,
+    int? lessonPosition,
+    int? estimatedMinutes,
     String? goalLabel,
   }) {
     final urgentMission = _oneAwayFromCompletion(missions);
@@ -32,6 +34,8 @@ class NextActionResolver {
         moduleTitle: moduleTitle,
         moduleLessonCount: moduleLessonCount,
         moduleCompletedCount: moduleCompletedCount,
+        lessonPosition: lessonPosition,
+        estimatedMinutes: estimatedMinutes,
         goalLabel: goalLabel,
       );
     }

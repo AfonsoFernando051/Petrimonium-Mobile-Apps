@@ -57,13 +57,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // Where the Pet actually renders on screen, for `PetSpeechBubbleOverlay`
   // to glue its bubble to (see `PetSpeechBubbleAnchor`'s doc comment).
-  // `_heroAnchor` is Home's big, more expressive pet (`LearningHeroCard`)
-  // and takes priority whenever Home is the visible tab; `_headerAnchor` is
-  // the always-present AppBar avatar every other tab falls back to.
-  final PetSpeechBubbleAnchor _heroAnchor = PetSpeechBubbleAnchor();
+  // `_homePetAnchor` is Home's own pet (`HomeCompanionCard`) and takes
+  // priority whenever Home is the visible tab; `_headerAnchor` is the
+  // always-present AppBar avatar every other tab falls back to.
+  final PetSpeechBubbleAnchor _homePetAnchor = PetSpeechBubbleAnchor();
   final PetSpeechBubbleAnchor _headerAnchor = PetSpeechBubbleAnchor();
 
-  PetSpeechBubbleAnchor get _activeCompanionAnchor => _selectedIndex == 0 ? _heroAnchor : _headerAnchor;
+  PetSpeechBubbleAnchor get _activeCompanionAnchor => _selectedIndex == 0 ? _homePetAnchor : _headerAnchor;
 
   // The level just reached, awaiting `LevelUpCelebrationOverlay` — `null`
   // when there's no level-up celebration to show. Replaces the old plain
@@ -359,7 +359,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       mascotController: _mascotController,
       onOpenAcademyTab: () => setState(() => _selectedIndex = 1),
       companionController: _companionController,
-      heroAnchor: _heroAnchor,
+      petAnchor: _homePetAnchor,
     );
   }
 

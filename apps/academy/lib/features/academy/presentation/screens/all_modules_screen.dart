@@ -16,11 +16,11 @@ import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers
 /// The full, flat learning track — every real module across every school,
 /// in order, each with its real status (completed/in-progress/available)
 /// and, when locked, the real reason why (never just a padlock — see
-/// `ModuleCard.missingPrerequisites`). Reached from Home's "Ver todas as
-/// escolas" link, a full-screen expansion of the same "Sua trilha" data
-/// Home shows a preview of (`KnowledgeMapStrip`) — same
-/// `AcademyController`/`ModuleCard` building blocks `SchoolDetailScreen`
-/// already uses per-school, just unscoped across the whole catalog.
+/// `ModuleCard.missingPrerequisites`). Reached from the Academia tab's
+/// "explore" action — same `AcademyController`/`ModuleCard` building blocks
+/// `SchoolDetailScreen` already uses per-school, just unscoped across the
+/// whole catalog. Home no longer links here: it names where the learner
+/// stands (`JourneySummaryCard`) and hands the rest to the journey.
 class AllModulesScreen extends StatefulWidget {
   const AllModulesScreen({super.key, required this.mascotController});
 

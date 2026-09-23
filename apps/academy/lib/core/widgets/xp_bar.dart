@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium_academy/core/constants/app_colors.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 
-/// A thin, animated, glowing progress bar for XP/level progress — the same
-/// visual language as `LearningHeroCard`'s private `_thinProgressBar`
-/// (rounded gradient-glow fill over a track), promoted to a real shared
-/// widget so other screens (onboarding's Gamification demo today) don't
-/// have to re-hand-roll it. [progress] animates smoothly on change; honors
+/// A thin, animated, glowing progress bar for XP/level progress — a
+/// rounded gradient-glow fill over a track, shared so every screen that
+/// shows progress (Home's companion card, onboarding's Gamification demo)
+/// draws it the same way instead of re-hand-rolling it. [progress] animates smoothly on change; honors
 /// reduced-motion by jumping straight to the target value.
 class XpBar extends StatelessWidget {
   const XpBar({super.key, required this.progress, this.label, this.color = AppColors.neonCyan, this.height = 8});

@@ -573,8 +573,6 @@ class AppStrings {
   static const String homeLevelProgressLabel = SharedStrings.homeLevelProgressLabel;
   static const String homeNextEvolutionLabel = SharedStrings.homeNextEvolutionLabel;
   static const String homeMaxEvolutionLabel = SharedStrings.homeMaxEvolutionLabel;
-  static const String homeKnowledgeMapLabel = SharedStrings.homeKnowledgeMapLabel;
-  static const String homeViewFullAcademyCta = SharedStrings.homeViewFullAcademyCta;
   static const String homePortfolioBridgeLabel = SharedStrings.homePortfolioBridgeLabel;
   static const String homePortfolioBridgeApplyMessage = SharedStrings.homePortfolioBridgeApplyMessage;
   static const String homeViewPortfolioCta = SharedStrings.homeViewPortfolioCta;
@@ -584,6 +582,17 @@ class AppStrings {
   static const String homeGreetingWithName = 'homeGreetingWithName';
   static const String homeStreakDaysLabel = 'homeStreakDaysLabel';
   static const String homeContinueGoalSubtitle = 'homeContinueGoalSubtitle';
+  static const String homeContinueLessonPosition = 'homeContinueLessonPosition';
+  static const String homeCompanionLevelChip = 'homeCompanionLevelChip';
+  // Home's compact journey block — the full timeline belongs to the
+  // Academia tab, so Home only names where the learner stands and how to
+  // get to the rest.
+  static const String homeJourneySummaryLabel = 'homeJourneySummaryLabel';
+  static const String homeViewFullJourneyCta = 'homeViewFullJourneyCta';
+  static const String homeJourneyStagePosition = 'homeJourneyStagePosition';
+  static const String homeJourneyNextStage = 'homeJourneyNextStage';
+  static const String homeJourneyCompleteTitle = 'homeJourneyCompleteTitle';
+  static const String homeJourneyCompleteStages = 'homeJourneyCompleteStages';
   static const String homeMentorWhySeeing = SharedStrings.homeMentorWhySeeing;
   static const String homeMentorReasonContinue = 'homeMentorReasonContinue';
   static const String homeMentorReasonReview = 'homeMentorReasonReview';

@@ -53,8 +53,8 @@ void main() {
       expect(find.text('O que é Renda Fixa?'), findsOneWidget);
       expect(find.text('Fundamentos'), findsOneWidget);
       expect(find.text('+25 XP ao concluir'), findsOneWidget);
-      expect(find.text('Continuar Aprendendo'), findsOneWidget);
-      expect(find.text('MISSÃO DE HOJE'), findsOneWidget);
+      expect(find.text('Continuar aula'), findsOneWidget);
+      expect(find.text('CONTINUE APRENDENDO'), findsOneWidget);
     });
 
     testWidgets('omits the module title row when moduleTitle is null', (tester) async {
@@ -76,7 +76,7 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('renders the lesson count, goal subtitle and a progress bar when known', (tester) async {
+    testWidgets('names where in the module the lesson sits, with duration, progress and goal', (tester) async {
       await tester.pumpWidget(
         buildTestableWidget(
           action: const ContinueLessonAction(
@@ -84,20 +84,41 @@ void main() {
             moduleTitle: 'Fundamentos',
             moduleLessonCount: 4,
             moduleCompletedCount: 1,
+            lessonPosition: 2,
+            estimatedMinutes: 8,
             goalLabel: 'Reserva de emergência',
           ),
         ),
       );
 
-      expect(find.text('4 aulas'), findsOneWidget);
+      expect(find.text('Aula 2 de 4 · ~8 min · +25 XP ao concluir'), findsOneWidget);
+      expect(find.text('25%'), findsOneWidget);
       expect(find.text('Baseado no seu objetivo: Reserva de emergência'), findsOneWidget);
     });
 
-    testWidgets('omits lesson count and goal subtitle when unknown', (tester) async {
+    testWidgets('drops the parts that are not known instead of inventing them', (tester) async {
       await tester.pumpWidget(buildTestableWidget(action: action));
 
-      expect(find.textContaining('aulas'), findsNothing);
+      expect(find.text('+25 XP ao concluir'), findsOneWidget);
+      expect(find.textContaining('Aula '), findsNothing);
+      expect(find.textContaining('min'), findsNothing);
       expect(find.textContaining('Baseado no seu objetivo'), findsNothing);
+    });
+
+    testWidgets('omits the duration when the lesson has no steps to estimate from', (tester) async {
+      await tester.pumpWidget(
+        buildTestableWidget(
+          action: const ContinueLessonAction(
+            lesson: _lesson,
+            moduleTitle: 'Fundamentos',
+            moduleLessonCount: 4,
+            lessonPosition: 2,
+            estimatedMinutes: 0,
+          ),
+        ),
+      );
+
+      expect(find.text('Aula 2 de 4 · +25 XP ao concluir'), findsOneWidget);
     });
   });
 

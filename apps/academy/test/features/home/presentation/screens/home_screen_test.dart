@@ -6,10 +6,10 @@ import 'package:petrimonium_academy/core/di/dependency_injection.dart';
 import 'package:petrimonium_academy/core/theme/app_theme.dart';
 import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_academy/features/academy/data/datasources/academy_remote_datasource.dart';
-import 'package:petrimonium_academy/features/academy/presentation/screens/all_modules_screen.dart';
 import 'package:petrimonium_academy/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/home/presentation/screens/home_screen.dart';
+import 'package:petrimonium_academy/features/home/presentation/widgets/journey_summary_card.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/next_action_card.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
@@ -175,7 +175,7 @@ void main() {
           mascotController: mascotController,
           onOpenAcademyTab: onOpenAcademyTab ?? () {},
           companionController: companionController,
-          heroAnchor: PetSpeechBubbleAnchor(),
+          petAnchor: PetSpeechBubbleAnchor(),
         ),
       ),
     );
@@ -222,7 +222,7 @@ void main() {
     });
   });
 
-  group('HomeScreen — greeting, streak and Mentor insight', () {
+  group('HomeScreen — greeting, streak and companion insight', () {
     testWidgets('shows the real name once resolved and the streak badge from the real gamification summary', (
       tester,
     ) async {
@@ -247,7 +247,7 @@ void main() {
       expect(find.text('3 dias'), findsOneWidget);
     });
 
-    testWidgets('shows the Mentor insight card naming the real next lesson when one exists', (tester) async {
+    testWidgets('shows the companion card naming the real next lesson when one exists', (tester) async {
       when(() => mockCatalogRepository.fetchAndCache(any())).thenAnswer((_) async => buildAcademyCatalogSnapshot());
       await portfolioController.loadAll();
 
@@ -260,14 +260,14 @@ void main() {
       expect(find.text('Por que estou vendo isto?'), findsOneWidget);
 
       // The real next-lesson data also triggers PetCompanionController's own
-      // nudge (a separate, transient mechanism — see HomeMentorCard's doc
+      // nudge (a separate, transient mechanism — see HomeCompanionCard's doc
       // comment), which starts a real auto-hide Timer (up to 9s). Flush it
       // so it doesn't outlive this test as a pending timer (mirrors
       // main_test.dart's own comment on the same mechanism).
       await tester.pump(const Duration(seconds: 10));
     });
 
-    testWidgets('omits the Mentor insight card when no real signal applies', (tester) async {
+    testWidgets('omits the companion card when no real signal applies', (tester) async {
       await portfolioController.loadAll();
 
       await tester.pumpWidget(buildTestableWidget());
@@ -279,8 +279,36 @@ void main() {
     });
   });
 
-  group('HomeScreen — Sua trilha', () {
-    testWidgets('tapping "Ver todas as escolas" pushes AllModulesScreen', (tester) async {
+  group('HomeScreen — Sua jornada', () {
+    testWidgets('summarises the journey instead of listing every school, and opens the Academia tab', (tester) async {
+      when(() => mockCatalogRepository.fetchAndCache(any())).thenAnswer((_) async => buildAcademyCatalogSnapshot());
+      var openedAcademy = 0;
+      await portfolioController.loadAll();
+
+      await tester.pumpWidget(buildTestableWidget(onOpenAcademyTab: () => openedAcademy++));
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(JourneySummaryCard), findsOneWidget);
+      // The Academia tab owns the full timeline; Home names only the stage
+      // the learner is on, so the second school never appears here.
+      expect(find.text(testComingSoonSchool.title), findsNothing);
+
+      await tester.ensureVisible(find.text('Ver jornada completa'));
+      await tester.pump();
+      await tester.tap(find.text('Ver jornada completa'));
+      await tester.pump();
+
+      expect(openedAcademy, 1);
+
+      // Real next-lesson data also starts PetCompanionController's own
+      // auto-hiding nudge Timer (up to 9s) — flush it so it doesn't outlive
+      // the test.
+      await tester.pump(const Duration(seconds: 10));
+    });
+
+    testWidgets('renders no journey block while the catalog is unavailable', (tester) async {
       await portfolioController.loadAll();
 
       await tester.pumpWidget(buildTestableWidget());
@@ -288,13 +316,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      await tester.ensureVisible(find.text('Ver todas as escolas'));
-      await tester.pump();
-      await tester.tap(find.text('Ver todas as escolas'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
-
-      expect(find.byType(AllModulesScreen), findsOneWidget);
+      expect(find.byType(JourneySummaryCard), findsNothing);
     });
   });
 }

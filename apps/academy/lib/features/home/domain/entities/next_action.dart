@@ -26,6 +26,16 @@ class ContinueLessonAction extends NextAction {
   final int? moduleLessonCount;
   final int? moduleCompletedCount;
 
+  /// The lesson's 1-based place inside its module — `null` while the
+  /// catalog isn't loaded. Powers the "Aula 7 de 10" line, which says where
+  /// the learner is far more concretely than a bare progress bar.
+  final int? lessonPosition;
+
+  /// Minute estimate for this lesson, derived from its step count by the
+  /// caller (`AcademyJourneyBuilder.estimatedMinutesForLesson`) — `0` when
+  /// the lesson has no steps to estimate from, never a made-up default.
+  final int? estimatedMinutes;
+
   /// The user's own onboarding goal, already resolved to display text
   /// (`PetGoalEnum.label`) by the caller — `null` while it hasn't loaded.
   final String? goalLabel;
@@ -35,6 +45,8 @@ class ContinueLessonAction extends NextAction {
     this.moduleTitle,
     this.moduleLessonCount,
     this.moduleCompletedCount,
+    this.lessonPosition,
+    this.estimatedMinutes,
     this.goalLabel,
   });
 }

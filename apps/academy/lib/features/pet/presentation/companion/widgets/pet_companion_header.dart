@@ -13,8 +13,8 @@ import 'package:petrimonium_academy/features/pet/presentation/companion/widgets/
 /// The compact, always-visible companion avatar shown in every major
 /// screen's chrome (see `docs/PRODUCT_VISION.md`'s Pet Companion section).
 /// Deliberately small — a portrait + a subtle "speaking" ring, never a full
-/// scene — the pet's expressive, animated moment is `LearningHeroCard` on
-/// Home; this is the thread that keeps it present everywhere else.
+/// scene — the pet's own block is `HomeCompanionCard` on Home; this is the
+/// thread that keeps it present everywhere else.
 ///
 /// Tapping opens [PetInteractionSheet]. Rendering the speech bubble itself
 /// is the host screen's job (`PetSpeechBubbleOverlay`) since it needs to

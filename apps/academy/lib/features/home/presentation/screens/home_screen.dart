@@ -7,19 +7,18 @@ import 'package:petrimonium_academy/core/utils/translator.dart';
 import 'package:petrimonium_ui/petrimonium_ui.dart';
 import 'package:petrimonium_shared_features/petrimonium_shared_features.dart';
 import 'package:petrimonium_academy/features/academy/domain/entities/academy_recommendation.dart';
-import 'package:petrimonium_academy/features/academy/domain/services/academy_progress_calculator.dart';
+import 'package:petrimonium_academy/features/academy/domain/services/academy_journey_builder.dart';
 import 'package:petrimonium_academy/features/academy/presentation/controllers/academy_controller.dart';
-import 'package:petrimonium_academy/features/academy/presentation/screens/all_modules_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/screens/lesson_screen.dart';
-import 'package:petrimonium_academy/features/academy/presentation/screens/module_detail_screen.dart';
 import 'package:petrimonium_academy/features/academy/presentation/widgets/recommended_for_you_section.dart';
+import 'package:petrimonium_academy/features/home/domain/entities/journey_summary.dart';
 import 'package:petrimonium_academy/features/home/domain/entities/next_action.dart';
+import 'package:petrimonium_academy/features/home/domain/services/journey_summary_resolver.dart';
 import 'package:petrimonium_academy/features/home/domain/services/next_action_resolver.dart';
+import 'package:petrimonium_academy/features/home/presentation/widgets/home_companion_card.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/home_greeting_row.dart';
-import 'package:petrimonium_academy/features/home/presentation/widgets/home_mentor_card.dart';
-import 'package:petrimonium_academy/features/home/presentation/widgets/knowledge_map_strip.dart';
+import 'package:petrimonium_academy/features/home/presentation/widgets/journey_summary_card.dart';
 import 'package:petrimonium_academy/features/home/presentation/widgets/next_action_card.dart';
-import 'package:petrimonium_academy/features/home/presentation/widgets/learning_hero_card.dart';
 import 'package:petrimonium_academy/features/pet/data/models/pet_goal_enum.dart';
 import 'package:petrimonium_academy/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium_academy/features/pet/presentation/mascot/controllers/mascot_controller.dart';
@@ -27,8 +26,19 @@ import 'package:petrimonium_academy/features/portfolio/presentation/models/missi
 import 'package:petrimonium_academy/features/portfolio/presentation/controllers/portfolio_controller.dart';
 
 /// Home — the app's learning-first orchestration layer
-/// (`docs/PRODUCT_VISION.md` §8): where the user is in their learning
-/// journey, what to learn next, XP progress, and knowledge development.
+/// (`docs/PRODUCT_VISION.md` §8), reduced to one question: what should I do
+/// now?
+///
+/// Five blocks, in this order and no more: the greeting, the Pet saying
+/// where the learner is (`HomeCompanionCard`), the single primary action
+/// (`NextActionCard`), where that sits on the journey
+/// (`JourneySummaryCard`), and at most one contextual second step
+/// (`RecommendedForYouSection`, review only). Home used to also list every
+/// school with its progress, which made it a catalog of everything the
+/// learner *could* study; the whole curriculum is the Academia tab's job
+/// now, reached from the journey card. Each block renders only on a real
+/// signal — an empty stretch is the correct Home, not a slot to fill.
+///
 /// `NextActionCard` (see `_nextAction`/`NextActionResolver`) surfaces a
 /// single mission on Home only when it's one lesson away from completing,
 /// since that's a genuine, time-bound signal that would otherwise stay
@@ -48,7 +58,7 @@ class HomeScreen extends StatefulWidget {
     required this.mascotController,
     required this.onOpenAcademyTab,
     required this.companionController,
-    required this.heroAnchor,
+    required this.petAnchor,
   });
 
   final PortfolioController portfolioController;
@@ -61,11 +71,11 @@ class HomeScreen extends StatefulWidget {
   /// `AcademyHomeScreen.companionController`.
   final PetCompanionController companionController;
 
-  /// Where Home's big, animated pet (`LearningHeroCard`) renders, for
+  /// Where Home's Pet (`HomeCompanionCard`) renders, for
   /// `PetSpeechBubbleOverlay` to glue its bubble to — see
   /// `PetSpeechBubbleAnchor`. Owned by `DashboardScreen` so it stays the
   /// same instance across rebuilds.
-  final PetSpeechBubbleAnchor heroAnchor;
+  final PetSpeechBubbleAnchor petAnchor;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -159,15 +169,24 @@ class _HomeScreenState extends State<HomeScreen> {
   NextAction get _nextAction {
     final nextLesson = _academyController.nextLesson;
     final module = nextLesson == null ? null : _academyController.snapshot?.moduleById(nextLesson.moduleId);
+    final lessonIndex = module == null || nextLesson == null ? -1 : module.lessonIds.indexOf(nextLesson.id);
     return NextActionResolver.resolve(
       nextLesson: nextLesson,
       moduleTitle: module?.title,
       missions: widget.portfolioController.missions,
       moduleLessonCount: module?.lessonIds.length,
       moduleCompletedCount: module == null ? null : _academyController.completedLessonCountFor(module),
+      lessonPosition: lessonIndex < 0 ? null : lessonIndex + 1,
+      estimatedMinutes: nextLesson == null ? null : AcademyJourneyBuilder.estimatedMinutesForLesson(nextLesson),
       goalLabel: _goal?.label,
     );
   }
+
+  /// Where the learner stands on the journey, as the compact rail Home
+  /// draws — `null` until the catalog is loaded. The full timeline (19
+  /// schools today) is the Academia tab's, never Home's: see
+  /// [JourneySummaryResolver].
+  JourneySummary? get _journeySummary => JourneySummaryResolver.resolve(_academyController.journey);
 
   /// Real signals, checked in the same priority order as
   /// `AcademyPetBehavior._homeNudge` (returning-user greeting outranks
@@ -176,11 +195,11 @@ class _HomeScreenState extends State<HomeScreen> {
   /// speech bubble, since this card is meant to stay visible in the feed
   /// rather than disappear after a few seconds. `null` when no real signal
   /// applies, in which case the card is simply omitted.
-  ({String textKey, Map<String, String> params, HomeMentorReason reason})? get _mentorInsight {
+  ({String textKey, Map<String, String> params, HomeCompanionReason reason})? get _companionInsight {
     final daysAway = widget.mascotController.daysSinceLastSession;
     if (daysAway != null && daysAway >= kSleepAfterInactiveDays) {
       final pool = [AppStrings.companionHomeReturnGreeting1, AppStrings.companionHomeReturnGreeting2];
-      return (textKey: pool[daysAway % pool.length], params: const {}, reason: HomeMentorReason.returning);
+      return (textKey: pool[daysAway % pool.length], params: const {}, reason: HomeCompanionReason.returning);
     }
 
     final reviewCount = _reviewRecommendations.length;
@@ -188,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return (
         textKey: AppStrings.companionAcademyReviewDue,
         params: {'count': '$reviewCount'},
-        reason: HomeMentorReason.reviewDue,
+        reason: HomeCompanionReason.reviewDue,
       );
     }
 
@@ -197,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return (
         textKey: AppStrings.companionAcademyContinueLesson,
         params: {'lessonTitle': nextLesson.title},
-        reason: HomeMentorReason.continueLesson,
+        reason: HomeCompanionReason.continueLesson,
       );
     }
 
@@ -238,34 +257,12 @@ class _HomeScreenState extends State<HomeScreen> {
     unawaited(_academyController.load());
   }
 
-  Future<void> _openModule(AcademyModule module) async {
-    unawaited(HapticFeedback.selectionClick());
-    await Navigator.of(
-      context,
-    ).push(_fadeRoute(ModuleDetailScreen(module: module, mascotController: widget.mascotController)));
-    unawaited(_academyController.load());
-  }
-
-  Future<void> _openAllModules() async {
-    unawaited(HapticFeedback.selectionClick());
-    await Navigator.of(context).push(_fadeRoute(AllModulesScreen(mascotController: widget.mascotController)));
-    unawaited(_academyController.load());
-  }
-
   /// Only the `review` recommendation, if any — `continueLearning` is
   /// already this screen's `NextActionCard` (when nothing more urgent
   /// outranks it), so showing it again here would be redundant (brief's own
   /// "one primary action per screen" principle).
   List<AcademyRecommendation> get _reviewRecommendations =>
       _academyController.recommendations.where((r) => r.type == RecommendationType.review).toList();
-
-  void _tapModuleChip(AcademyModule module) {
-    final status = _academyController.statusFor(module);
-    if (status == ModuleStatus.comingSoon || status == ModuleStatus.locked) {
-      return;
-    }
-    _openModule(module);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -288,12 +285,13 @@ class _HomeScreenState extends State<HomeScreen> {
             HomeGreetingRow(userName: _userName, streakDays: portfolioController.gamificationSummary?.currentStreak),
             const SizedBox(height: 16),
 
-            if (_mentorInsight != null) ...[
-              HomeMentorCard(
+            if (_companionInsight != null) ...[
+              HomeCompanionCard(
                 mascotController: widget.mascotController,
                 petName: widget.mascotController.profile.name ?? widget.mascotController.profile.specie.name,
-                message: Translator.translate(_mentorInsight!.textKey, params: _mentorInsight!.params),
-                reason: _mentorInsight!.reason,
+                message: Translator.translate(_companionInsight!.textKey, params: _companionInsight!.params),
+                reason: _companionInsight!.reason,
+                anchor: widget.petAnchor,
               ),
               const SizedBox(height: 16),
             ],
@@ -320,17 +318,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
 
-            LearningHeroCard(mascotController: widget.mascotController, anchor: widget.heroAnchor),
-            const SizedBox(height: 16),
-
-            if (!_academyController.isLoading && !_academyController.isCatalogLoading) ...[
-              KnowledgeMapStrip(
-                modules: _academyController.modules,
-                statusFor: _academyController.statusFor,
-                completedLessonCountFor: _academyController.completedLessonCountFor,
-                onTapModule: _tapModuleChip,
-                onViewAll: _openAllModules,
-              ),
+            if (_journeySummary != null) ...[
+              JourneySummaryCard(summary: _journeySummary!, onOpenJourney: widget.onOpenAcademyTab),
               const SizedBox(height: 16),
             ],
 
