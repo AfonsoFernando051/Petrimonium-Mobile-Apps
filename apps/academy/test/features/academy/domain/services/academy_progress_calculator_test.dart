@@ -150,6 +150,94 @@ void main() {
     });
   });
 
+  group('moduleStatus — the school gate', () {
+    // A school-level prerequisite is what the journey timeline shows as a
+    // padlock ("Conclua X primeiro"). The flat module list asks
+    // `moduleStatus` instead, so the same module has to answer the same way
+    // in both places — otherwise the "explore" list hands out a shortcut
+    // into a school the journey says is still closed.
+    const gatedSchool = School(
+      id: 'gated_school',
+      title: 'Gated School',
+      description: 'desc',
+      iconKey: 'savings_outlined',
+      order: 3,
+      prerequisites: ['test_school'],
+      contentAvailable: true,
+    );
+    const gatedSchoolModule = AcademyModule(
+      id: 'gated_school_module',
+      schoolId: 'gated_school',
+      title: 'Gated School Module',
+      description: 'desc',
+      iconKey: 'savings_outlined',
+      order: 9,
+      lessonIds: ['gated_lesson_1'],
+      contentAvailable: true,
+    );
+    const gatedLesson = Lesson(
+      id: 'gated_lesson_1',
+      moduleId: 'gated_school_module',
+      title: 'Gated Lesson',
+      order: 1,
+      xpReward: 20,
+      steps: [ExplanationStep(title: 'Explain', body: 'Body')],
+    );
+    final gatedCatalog = AcademyCatalogSnapshot(
+      domains: const [testDomain],
+      schools: const [testSchool, testComingSoonSchool, gatedSchool],
+      modules: const [testModule, gatedSchoolModule],
+      lessons: const [testLesson1, testLesson2, testLesson3, gatedLesson],
+    );
+
+    test('a module inside a school with an unmet prerequisite is locked, even with no '
+        'prerequisite of its own', () {
+      expect(
+        AcademyProgressCalculator.moduleStatus(catalog: gatedCatalog, module: gatedSchoolModule, completedIds: {}),
+        ModuleStatus.locked,
+      );
+    });
+
+    test('it names the missing school, so the card can explain the lock instead of '
+        'showing a bare padlock', () {
+      expect(
+        AcademyProgressCalculator.missingModulePrerequisiteTitles(
+          catalog: gatedCatalog,
+          module: gatedSchoolModule,
+          completedIds: {},
+        ),
+        [testSchool.title],
+      );
+    });
+
+    test('it unlocks once the prerequisite school is completed', () {
+      final everyLessonOfPrerequisiteSchool = testModule.lessonIds.toSet();
+      expect(
+        AcademyProgressCalculator.moduleStatus(
+          catalog: gatedCatalog,
+          module: gatedSchoolModule,
+          completedIds: everyLessonOfPrerequisiteSchool,
+        ),
+        ModuleStatus.available,
+      );
+      expect(
+        AcademyProgressCalculator.missingModulePrerequisiteTitles(
+          catalog: gatedCatalog,
+          module: gatedSchoolModule,
+          completedIds: everyLessonOfPrerequisiteSchool,
+        ),
+        isEmpty,
+      );
+    });
+
+    test('a module in a school with no prerequisites is unaffected', () {
+      expect(
+        AcademyProgressCalculator.moduleStatus(catalog: gatedCatalog, module: testModule, completedIds: {}),
+        ModuleStatus.available,
+      );
+    });
+  });
+
   group('schoolStatus', () {
     test('a school with no content-available modules is comingSoon', () {
       const emptySchool = School(

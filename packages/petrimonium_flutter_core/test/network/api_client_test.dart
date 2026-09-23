@@ -347,4 +347,73 @@ void main() {
       verify(() => secureStorage.delete(key: ApiClient.refreshTokenKey)).called(1);
     });
   });
+
+  group('response decoding', () {
+    // `http.Response.body` decodes with the charset named in Content-Type and
+    // falls back to latin1 when there is none. The backend answers
+    // `application/json` / `application/problem+json` with no charset — JSON is
+    // UTF-8 by definition (RFC 8259), so it is entitled to — and every accented
+    // byte then came back mangled: "Você" arrived as "VocÃª" in an app whose
+    // copy is Portuguese.
+    final accented = utf8.encode('{"detail":"Você não tem PETR4."}');
+
+    setUp(() {
+      when(() => secureStorage.read(key: any(named: 'key'))).thenAnswer((_) async => 'abc123');
+    });
+
+    test('a JSON body with no charset is read as UTF-8, not latin1', () async {
+      when(
+        () => httpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response.bytes(accented, 400, headers: {'content-type': 'application/json'}));
+
+      final response = await apiClient.get('/anything');
+
+      expect(response.body, contains('Você não tem PETR4.'));
+    });
+
+    test('an RFC 7807 error body is read the same way', () async {
+      when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer(
+        (_) async => http.Response.bytes(accented, 400, headers: {'content-type': 'application/problem+json'}),
+      );
+
+      final response = await apiClient.get('/anything');
+
+      expect(extractErrorDetail(response, fallback: 'x'), 'Você não tem PETR4.');
+    });
+
+    test('an explicit charset is left alone', () async {
+      when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer(
+        (_) async => http.Response.bytes(
+          latin1.encode('{"detail":"olá"}'),
+          400,
+          headers: {'content-type': 'application/json; charset=iso-8859-1'},
+        ),
+      );
+
+      final response = await apiClient.get('/anything');
+
+      expect(response.body, contains('olá'));
+    });
+
+    test('a non-JSON body is left alone', () async {
+      when(
+        () => httpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response.bytes(latin1.encode('olá'), 502, headers: {'content-type': 'text/html'}));
+
+      final response = await apiClient.get('/anything');
+
+      expect(response.body, 'olá');
+    });
+
+    test('bytes that are not valid UTF-8 do not blow up the request', () async {
+      when(() => httpClient.get(any(), headers: any(named: 'headers'))).thenAnswer(
+        (_) async => http.Response.bytes([0xFF, 0xFE, 0x00], 200, headers: {'content-type': 'application/json'}),
+      );
+
+      final response = await apiClient.get('/anything');
+
+      expect(response.statusCode, 200);
+      expect(() => response.body, returnsNormally);
+    });
+  });
 }

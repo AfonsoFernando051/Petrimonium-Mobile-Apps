@@ -35,6 +35,17 @@ class AcademyProgressCalculator {
   /// prerequisites is unaffected, so no pre-existing module can regress from
   /// `available`/`inProgress`/`completed` to `locked` by this check alone.
   ///
+  /// The module's *school* gate is checked too. A school carries its own
+  /// prerequisites, and [schoolStatus] reports `locked` for an unmet one —
+  /// but the journey timeline is not the only way in: `AllModulesScreen`
+  /// lists every module flat and asks *this* function for each one. Checking
+  /// only `module.prerequisites` let a module inside a locked school answer
+  /// `available` there, so the flat list handed out a way into a school the
+  /// timeline was still showing padlocked, against the onboarding's own
+  /// promise that nothing is skipped. The check is written against
+  /// [_isSchoolCompleted] rather than by calling [schoolStatus], which would
+  /// recurse straight back into this function.
+  ///
   /// Bug fix: prerequisite satisfaction is checked via [_isModuleCompleted]
   /// against the catalog, not via `completedIds.contains(prerequisiteId)`
   /// directly — [completedIds] is a set of *lesson* ids, and a prerequisite
@@ -48,6 +59,7 @@ class AcademyProgressCalculator {
   }) {
     if (!module.contentAvailable || module.lessonIds.isEmpty) return ModuleStatus.comingSoon;
     if (module.prerequisites.any((id) => !_isModuleCompleted(catalog, id, completedIds))) return ModuleStatus.locked;
+    if (_unmetSchoolPrerequisiteIds(catalog, module, completedIds).isNotEmpty) return ModuleStatus.locked;
 
     final completedInModule = module.lessonIds.where(completedIds.contains).length;
     if (completedInModule == 0) return ModuleStatus.available;
@@ -170,11 +182,32 @@ class AcademyProgressCalculator {
     required AcademyModule module,
     required Set<String> completedIds,
   }) {
-    return module.prerequisites
-        .where((id) => !_isModuleCompleted(catalog, id, completedIds))
-        .map((id) => catalog.moduleById(id)?.title)
-        .whereType<String>()
-        .toList();
+    return [
+      ...module.prerequisites
+          .where((id) => !_isModuleCompleted(catalog, id, completedIds))
+          .map((id) => catalog.moduleById(id)?.title)
+          .whereType<String>(),
+      // A module can also be locked by the gate on the school it belongs to
+      // (see [moduleStatus]). Naming that school is what keeps the flat
+      // list's explanation identical to the timeline's.
+      ..._unmetSchoolPrerequisiteIds(
+        catalog,
+        module,
+        completedIds,
+      ).map((id) => catalog.schoolById(id)?.title).whereType<String>(),
+    ];
+  }
+
+  /// Ids of the prerequisite schools that [module]'s own school is still
+  /// waiting on — empty when the school has none, or they are all done.
+  static List<String> _unmetSchoolPrerequisiteIds(
+    AcademyCatalogSnapshot catalog,
+    AcademyModule module,
+    Set<String> completedIds,
+  ) {
+    final school = catalog.schoolById(module.schoolId);
+    if (school == null) return const [];
+    return school.prerequisites.where((id) => !_isSchoolCompleted(catalog, id, completedIds)).toList();
   }
 
   /// Same as [missingModulePrerequisiteTitles], for a locked school.

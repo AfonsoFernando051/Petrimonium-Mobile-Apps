@@ -187,7 +187,46 @@ class ApiClient {
           headers: const {'Content-Type': 'application/json'},
           body: jsonEncode(body),
         )
-        .timeout(timeout ?? _requestTimeout);
+        .timeout(timeout ?? _requestTimeout)
+        .then(_withJsonCharset);
+  }
+
+  /// Names UTF-8 on a JSON response that didn't name a charset itself.
+  ///
+  /// `http.Response.body` decodes with whatever charset `Content-Type`
+  /// declares and falls back to **latin1** when it declares none. JSON is
+  /// UTF-8 by definition (RFC 8259), so a server is entitled to omit the
+  /// parameter — and this one does. Every accented byte the backend sent
+  /// therefore arrived mangled: "Você" read back as "VocÃª", in an app whose
+  /// copy is Portuguese. Fixed here, once, rather than in each caller,
+  /// because every data source reads `response.body` directly.
+  ///
+  /// A response that names its own charset is left untouched, as is anything
+  /// that isn't JSON — this only fills in the default the format already
+  /// mandates.
+  static http.Response _withJsonCharset(http.Response response) {
+    final contentType = response.headers['content-type'];
+    if (contentType == null) return response;
+
+    final lower = contentType.toLowerCase();
+    final isJson = lower.contains('application/json') || lower.contains('+json');
+    if (!isJson || lower.contains('charset=')) return response;
+
+    // Decoded and re-encoded rather than just relabelled: the utf8 codec the
+    // relabelled header selects is strict, so a malformed byte would turn a
+    // readable-but-mangled body into a thrown FormatException. Salvaging it
+    // with `allowMalformed` keeps this strictly a decoding fix.
+    final salvaged = utf8.encode(utf8.decode(response.bodyBytes, allowMalformed: true));
+
+    return http.Response.bytes(
+      salvaged,
+      response.statusCode,
+      headers: {...response.headers, 'content-type': '$contentType; charset=utf-8'},
+      request: response.request,
+      isRedirect: response.isRedirect,
+      persistentConnection: response.persistentConnection,
+      reasonPhrase: response.reasonPhrase,
+    );
   }
 
   /// Sends [send] with fresh auth headers; on a 401, attempts exactly one
@@ -207,7 +246,7 @@ class ApiClient {
     bool isRetry = false,
   }) async {
     final headers = await _getHeaders();
-    final response = await send(headers);
+    final response = _withJsonCharset(await send(headers));
 
     if (response.statusCode != 401 || isRetry) {
       return response;
