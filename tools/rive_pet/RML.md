@@ -9,10 +9,12 @@ Language): o projeto é texto, a CLI compila, e `rive push` manda para um arquiv
 então editor e código não divergem.
 
 ```bash
-python3 tools/rive_pet/slice_wolf.py        # camadas (se ainda não rodou)
-python3 tools/rive_pet/build_wolf_rml.py    # gera tools/rive_pet/rml/
+# as camadas: do slicer (precisa de opencv) OU reconstruídas do rml/ versionado
+python3 tools/rive_pet/slice_wolf.py               # ao trocar a arte de origem
+python3 tools/rive_pet/restore_layers_manifest.py  # quando só falta o manifesto
+python3 tools/rive_pet/build_wolf_rml.py           # gera tools/rive_pet/rml/
 
-# instalar a CLI (macOS/Linux; no Windows use o install.ps1 da doc)
+# a CLI (já instalada em ~/.rive/bin, que precisa estar no PATH)
 curl -fsSL https://releases.rive.app/cli/install.sh | sh
 rive doctor
 
@@ -35,21 +37,61 @@ think, sleep, victory, happy), as 6 poses estáticas, o brilho do medalhão e a 
   nome de elemento/atributo da RML não bater com o schema da CLI, corrija o gerador usando
   `rive schema <Tipo>` / `rive docs` e regenere — o spec continua sendo a fonte.
 
-## Atenção: a sintaxe RML não pôde ser validada aqui
+## A sintaxe RML, conferida contra o schema real
 
-Esta sessão não alcança `releases.rive.app`, então a CLI não rodou. A estrutura segue a
-documentação ("cada elemento é um tipo do Rive, cada atributo é uma propriedade dele") e os
-mesmos tipos que o `.riv` já validado usa (`Artboard`, `Node`, `Image`, `LinearAnimation`,
-`KeyedObject`/`KeyedProperty`/`KeyFrameDouble`, `StateMachine`, `StateMachineNumber`,
-`StateMachineBool`, `StateMachineLayer`, `AnyState`/`EntryState`/`ExitState`, `AnimationState`,
-`StateTransition`, `TransitionNumberCondition`, `TransitionBoolCondition`). Pontos mais prováveis
-de ajuste no primeiro `--verify`:
+O gerador emitia uma RML inventada e nenhum elemento passava no `--verify`. O que
+o schema exige de verdade (`rive schema <Tipo>`), e que o gerador agora faz:
 
-- como o artboard aponta a state machine padrão (`defaultStateMachine`);
-- como uma referência é escrita (usei `id`/`objectId`/`assetId` por nome; a doc cita IDs no
-  formato `0:12`);
-- nomes das propriedades chaveadas (`x`, `y`, `rotation`, `scaleX`, `scaleY`, `opacity`);
-- `opValue` das condições (`equal`/`notEqual`) e `flags="32"` (enableEarlyExit) na transição.
+- **Todo id é um par numérico `cliente:objeto`** (`0:12`). Nome não serve como id,
+  e o namespace é único no documento inteiro. `ident()` no gerador aloca um id
+  estável por chave lógica, para o XML sair determinístico.
+- **`ImageAsset` recebe os bytes por `file=`**, não `src=`. `file` é atributo de
+  autoria da RML, não propriedade do core — `rive schema` nunca o lista, em tipo
+  nenhum. É o único lugar em que "procure o nome em vez de chutar" não funciona.
+- **`Artboard` aponta a state machine por `defaultStateMachineId`** (o id, não o nome).
+- **`KeyedProperty` endereça a propriedade pelo número**, não pelo nome:
+  x=13, y=14, rotation=15, scaleX=16, scaleY=17, opacity=18
+  (`rive schema Node --animatable`). São os mesmos números que `build_wolf.py` usa.
+- **`AnimationState` não tem `name`** — o estado se chama como a animação que ele aponta.
+- **`enableEarlyExit` é um bit de `flags`, escrito como atributo próprio**
+  (`enableEarlyExit="true"`), não `flags="32"`.
+- **`AnyState`, `EntryState` e `ExitState` são obrigatórios** em cada
+  `StateMachineLayer`, mesmo sem uso — sem os três o layer não importa.
+
+Duas coisas existem só para o editor e o runtime ignora, mas sem elas o arquivo
+abre inutilizável: um `<LayoutComponentStyle>` no artboard (sem ele nada dentro
+dele faz layout no editor) e um `x`/`y` por estado (sem eles os 14 estados abrem
+empilhados no mesmo ponto do grafo).
+
+**Build limpo é sinal fraco** — a própria doc da CLI avisa. Nome errado a CLI
+pega; fiação errada, não. Confira o que saiu, não que saiu:
+
+```bash
+rive tools/rive_pet/rml --verify                  # 0 erros, 0 avisos
+rive inspect tools/rive_pet/rml --summary         # "problems" vazio + contagem por tipo
+rive tools/rive_pet/rml --screenshot=/tmp/wolf.png --advance=30   # renderiza de verdade
+```
+
+## O arquivo no Rive
+
+O push criou o arquivo **2606100 `wolf-companion`** no projeto **1979092
+(Ecossistema Petrimonium)**, e gravou esse vínculo no bloco `push:` do
+`rive.yaml`. Dali em diante:
+
+- `rive push tools/rive_pet/rml` atualiza **esse** arquivo (nova entrada no
+  histórico de revisões), não cria outro;
+- `rive pull tools/rive_pet/rml` traz de volta o que foi editado no editor.
+
+Duas armadilhas conhecidas:
+
+1. O push grava ~1800 ids de keyframe de volta no `scene.rml` (é assim que a
+   identidade sobrevive entre builds). **Rodar `build_wolf_rml.py` de novo
+   reescreve o `scene.rml` do zero e perde esses ids** — o push seguinte então
+   lê tudo como apagar+criar em vez de editar. Funciona, mas descarta o
+   histórico fino. Enquanto o gerador for a fonte, isso é aceitável; quando o
+   editor virar a fonte, pare de regerar e use `pull`.
+2. Por isso o gerador preserva o bloco `push:` ao reescrever o `rive.yaml` —
+   sem isso o vínculo se perderia e o próximo push criaria um segundo arquivo.
 
 ## Contrato (não muda)
 

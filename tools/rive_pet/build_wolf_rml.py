@@ -19,6 +19,16 @@ import build_wolf as B          # rig, animações e poses vêm daqui (fonte ún
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rml')
 IMG = os.path.join(OUT, 'images')
 PROP = {'x': 'x', 'y': 'y', 'rot': 'rotation', 'sx': 'scaleX', 'sy': 'scaleY', 'op': 'opacity'}
+# A RML endereça uma propriedade chaveada pelo número dela, não pelo nome
+# (`rive schema Node --animatable`). Os mesmos números que build_wolf.py usa.
+PROP_KEY = {'x': 13, 'y': 14, 'rot': 15, 'sx': 16, 'sy': 17, 'op': 18}
+
+# Todo id da RML é um par numérico `cliente:objeto` e vive num namespace único no
+# documento inteiro — nome não serve como id. Este alocador dá um id estável por
+# chave lógica, para que o XML gerado seja determinístico entre execuções.
+_IDS = {}
+def ident(key):
+    return _IDS.setdefault(key, '0:%d' % (len(_IDS) + 2))
 
 def esc(v):
     return str(v).replace('&', '&amp;').replace('<', '&lt;').replace('"', '&quot;')
@@ -38,13 +48,13 @@ def tracks_of(anim, channels=None):
     return out
 
 def animation_xml(anim, channels=None, indent='    '):
-    L = [f'{indent}<LinearAnimation{attrs(name=anim.name, fps=B.FPS, duration=anim.frames, speed=1.0, loopValue=1 if anim.loop else 0)}>']
+    L = [f'{indent}<LinearAnimation{attrs(name=anim.name, fps=B.FPS, duration=anim.frames, speed=1.0, loopValue="loop" if anim.loop else "oneShot", id=ident("anim:" + anim.name))}>']
     for node, chans in tracks_of(anim, channels).items():
-        L.append(f'{indent}  <KeyedObject{attrs(objectId=node)}>')
+        L.append(f'{indent}  <KeyedObject{attrs(objectId=ident("node:" + node))}>')
         for ch, kf in chans:
-            L.append(f'{indent}    <KeyedProperty{attrs(propertyKey=PROP[ch])}>')
+            L.append(f'{indent}    <KeyedProperty{attrs(propertyKey=PROP_KEY[ch])}>')
             for f, v in kf:
-                L.append(f'{indent}      <KeyFrameDouble{attrs(frame=int(f), value=round(float(v), 4), interpolationType=1)}/>')
+                L.append(f'{indent}      <KeyFrameDouble{attrs(frame=int(f), value=round(float(v), 4), interpolationType="linear")}/>')
             L.append(f'{indent}    </KeyedProperty>')
         L.append(f'{indent}  </KeyedObject>')
     L.append(f'{indent}</LinearAnimation>')
@@ -62,10 +72,13 @@ def scene_xml():
     for name, _ in B.IMAGES:
         info = B.L[name]
         src = 'images/' + info['file']
-        L.append('  <ImageAsset' + attrs(id=name, name='wolf_' + name, src=src,
+        # `file` é atributo de autoria da RML, não propriedade do core: `rive schema`
+        # nunca o lista, mas é o único jeito de dar bytes ao asset.
+        L.append('  <ImageAsset' + attrs(id=ident('asset:' + name), name='wolf_' + name, file=src,
                                          width=info['size'][0], height=info['size'][1]) + '/>')
     W, H = B.M['artboard']
-    L.append(f'  <Artboard{attrs(name="Wolf", width=float(W), height=float(H), defaultStateMachine="Companion")}>')
+    L.append(f'  <Artboard{attrs(name="Wolf", width=float(W), height=float(H), defaultStateMachineId=ident("sm"), styleId=ident("style"), id=ident("artboard"))}>')
+    L.append(f'    <LayoutComponentStyle{attrs(name="Artboard Style", id=ident("style"))}/>')
 
     # rig: nós de pivô e imagens (ordem do arquivo = da frente para trás)
     children = {}
@@ -83,58 +96,73 @@ def scene_xml():
         for kind, name in children.get(parent, []):
             x, y = B.local_pos(name)
             if kind == 'node':
-                L.append(f'{indent}<Node{attrs(id=name, name=name, x=x, y=y)}>')
+                L.append(f'{indent}<Node{attrs(id=ident("node:" + name), name=name, x=x, y=y)}>')
                 emit(name, indent + '  ')
                 L.append(f'{indent}</Node>')
             else:
                 op = 0.0 if name in B.HIDDEN else None
-                L.append(f'{indent}<Image{attrs(id=name, name=name, x=x, y=y, assetId=name, originX=0.5, originY=0.5, opacity=op)}/>')
+                L.append(f'{indent}<Image{attrs(id=ident("node:" + name), name=name, x=x, y=y, assetId=ident("asset:" + name), originX=0.5, originY=0.5, opacity=op)}/>')
     emit('artboard', '    ')
 
     for a in B.anims + B.statics: L += animation_xml(a)
     for a in (B.glow, B.glow_off): L += animation_xml(a, B.GLOW_CH)
 
     # state machine
-    L.append('    <StateMachine name="Companion">')
-    L.append('      <StateMachineNumber name="state" value="0"/>')
-    L.append('      <StateMachineBool name="reducedMotion" value="false"/>')
-    L.append('      <StateMachineBool name="interacting" value="false"/>')
-    L.append('      <StateMachineLayer name="Mood">')
-    L.append('        <EntryState><StateTransition stateToId="idle"/></EntryState>')
-    L.append('        <AnyState>')
+    L.append(f'    <StateMachine{attrs(name="Companion", id=ident("sm"))}>')
+    L.append(f'      <StateMachineNumber{attrs(name="state", value=0.0, id=ident("in:state"))}/>')
+    L.append(f'      <StateMachineBool{attrs(name="reducedMotion", value="false", id=ident("in:reducedMotion"))}/>')
+    L.append(f'      <StateMachineBool{attrs(name="interacting", value="false", id=ident("in:interacting"))}/>')
+
+    # Posicao de cada estado no grafo do editor: duas colunas (animado / estatico),
+    # uma linha por humor. So o editor usa isto; o runtime ignora.
+    GRAPH = {}
     for i, m in enumerate(B.MOODS):
-        # `flags="32"` = enableEarlyExit: sem isso a troca só vale depois do crossfade
-        L.append(f'          <StateTransition{attrs(stateToId=m, duration=250, flags=32)}>')
-        L.append(f'            <TransitionNumberCondition{attrs(inputId="state", opValue="equal", value=float(i))}/>')
-        L.append('            <TransitionBoolCondition inputId="reducedMotion" opValue="notEqual"/>')
-        L.append('          </StateTransition>')
-        L.append(f'          <StateTransition{attrs(stateToId=m + "_static", duration=0, flags=32)}>')
-        L.append(f'            <TransitionNumberCondition{attrs(inputId="state", opValue="equal", value=float(i))}/>')
-        L.append('            <TransitionBoolCondition inputId="reducedMotion" opValue="equal"/>')
-        L.append('          </StateTransition>')
+        GRAPH[m] = (40, 40 + i * 90)
+        GRAPH[m + '_static'] = (260, 40 + i * 90)
+    GRAPH['medallion_rest'] = (40, 40)
+    GRAPH['medallion_glow'] = (260, 40)
+
+    def transition(to, duration, conds, indent='          '):
+        # enableEarlyExit é um bit de `flags`, escrito como atributo próprio: sem
+        # ele a troca só vale depois do crossfade e toques rápidos ficam presos.
+        L.append(f'{indent}<StateTransition{attrs(stateToId=ident("state:" + to), duration=duration, enableEarlyExit="true")}>')
+        for c in conds:
+            L.append(indent + '  ' + c)
+        L.append(f'{indent}</StateTransition>')
+
+    def num_cond(value):
+        return f'<TransitionNumberCondition{attrs(inputId=ident("in:state"), opValue="equal", value=float(value))}/>'
+
+    def bool_cond(name, equal):
+        return f'<TransitionBoolCondition{attrs(inputId=ident("in:" + name), opValue="equal" if equal else "notEqual")}/>'
+
+    L.append(f'      <StateMachineLayer{attrs(name="Mood", id=ident("layer:mood"))}>')
+    L.append('        <AnyState x="-180" y="40">')
+    for i, m in enumerate(B.MOODS):
+        transition(m, 250, [num_cond(i), bool_cond('reducedMotion', False)])
+        transition(m + '_static', 0, [num_cond(i), bool_cond('reducedMotion', True)])
     L.append('        </AnyState>')
+    L.append('        <EntryState x="-180" y="-60">')
+    transition('idle', 0, [], indent='          ')
+    L.append('        </EntryState>')
+    L.append('        <ExitState x="480" y="40"/>')
     for m in B.MOODS:
-        L.append(f'        <AnimationState{attrs(name=m, animationId=m)}/>')
-        L.append(f'        <AnimationState{attrs(name=m + "_static", animationId=m + "_static")}/>')
-    L.append('        <ExitState/>')
+        L.append(f'        <AnimationState{attrs(x=GRAPH[m][0], y=GRAPH[m][1], animationId=ident("anim:" + m), id=ident("state:" + m))}/>')
+        L.append(f'        <AnimationState{attrs(x=GRAPH[m + "_static"][0], y=GRAPH[m + "_static"][1], animationId=ident("anim:" + m + "_static"), id=ident("state:" + m + "_static"))}/>')
     L.append('      </StateMachineLayer>')
-    L.append('      <StateMachineLayer name="Interaction">')
-    L.append('        <EntryState><StateTransition stateToId="medallion_rest"/></EntryState>')
-    L.append('        <AnyState>')
-    L.append(f'          <StateTransition{attrs(stateToId="medallion_glow", duration=250, flags=32)}>')
-    L.append('            <TransitionBoolCondition inputId="interacting" opValue="equal"/>')
-    L.append('            <TransitionBoolCondition inputId="reducedMotion" opValue="notEqual"/>')
-    L.append('          </StateTransition>')
-    L.append(f'          <StateTransition{attrs(stateToId="medallion_rest", duration=250, flags=32)}>')
-    L.append('            <TransitionBoolCondition inputId="interacting" opValue="notEqual"/>')
-    L.append('          </StateTransition>')
-    L.append(f'          <StateTransition{attrs(stateToId="medallion_rest", duration=0, flags=32)}>')
-    L.append('            <TransitionBoolCondition inputId="reducedMotion" opValue="equal"/>')
-    L.append('          </StateTransition>')
+
+    L.append(f'      <StateMachineLayer{attrs(name="Interaction", id=ident("layer:interaction"))}>')
+    L.append('        <AnyState x="-180" y="40">')
+    transition('medallion_glow', 250, [bool_cond('interacting', True), bool_cond('reducedMotion', False)])
+    transition('medallion_rest', 250, [bool_cond('interacting', False)])
+    transition('medallion_rest', 0, [bool_cond('reducedMotion', True)])
     L.append('        </AnyState>')
-    L.append('        <AnimationState name="medallion_rest" animationId="medallion_rest"/>')
-    L.append('        <AnimationState name="medallion_glow" animationId="medallion_glow"/>')
-    L.append('        <ExitState/>')
+    L.append('        <EntryState x="-180" y="-60">')
+    transition('medallion_rest', 0, [], indent='          ')
+    L.append('        </EntryState>')
+    L.append('        <ExitState x="480" y="40"/>')
+    L.append(f'        <AnimationState{attrs(x=GRAPH["medallion_rest"][0], y=GRAPH["medallion_rest"][1], animationId=ident("anim:medallion_rest"), id=ident("state:medallion_rest"))}/>')
+    L.append(f'        <AnimationState{attrs(x=GRAPH["medallion_glow"][0], y=GRAPH["medallion_glow"][1], animationId=ident("anim:medallion_glow"), id=ident("state:medallion_glow"))}/>')
     L.append('      </StateMachineLayer>')
     L.append('    </StateMachine>')
     L.append('  </Artboard>')
@@ -176,9 +204,27 @@ sources:
 
 if __name__ == '__main__':
     os.makedirs(IMG, exist_ok=True)
-    for name, _ in B.IMAGES:
-        shutil.copy(os.path.join(B.LAYERS, B.L[name]['file']), IMG)
+    # As camadas vêm do slice_wolf.py. Quando a saída dele não está no disco
+    # (o slicer precisa de opencv, o projeto RML não), reaproveitamos as que já
+    # estão em rml/images/ em vez de falhar — mas só se estiverem todas lá.
+    if os.path.isdir(B.LAYERS):
+        for name, _ in B.IMAGES:
+            shutil.copy(os.path.join(B.LAYERS, B.L[name]['file']), IMG)
+    else:
+        faltando = [B.L[n]['file'] for n, _ in B.IMAGES if not os.path.exists(os.path.join(IMG, B.L[n]['file']))]
+        if faltando:
+            raise SystemExit(f'sem {B.LAYERS} e faltam camadas em {IMG}: {faltando}\nrode slice_wolf.py (pip install opencv-python numpy pillow)')
+        print(f'reusando as camadas ja presentes em {IMG} ({B.LAYERS} nao existe)')
     open(os.path.join(OUT, 'scene.rml'), 'w').write(scene_xml())
-    open(os.path.join(OUT, 'rive.yaml'), 'w').write(RIVE_YAML)
+    # O primeiro `rive push` grava um bloco `push:` (projectId/fileId) no
+    # rive.yaml. Sobrescrever o arquivo aqui perderia esse vínculo e o push
+    # seguinte criaria um arquivo novo no Rive em vez de atualizar o existente.
+    yaml_path = os.path.join(OUT, 'rive.yaml')
+    push_block = ''
+    if os.path.exists(yaml_path):
+        atual = open(yaml_path).read()
+        if '\npush:' in atual:
+            push_block = atual[atual.index('\npush:'):].rstrip() + '\n'
+    open(yaml_path, 'w').write(RIVE_YAML + push_block)
     json.dump(spec_json(), open(os.path.join(OUT, 'wolf_spec.json'), 'w'), indent=1)
     print('ok', OUT)
